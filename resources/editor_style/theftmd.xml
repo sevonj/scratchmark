@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme id="theftmd" name="TheftMD" version="1.0">
+  <author>sevonj</author>
+  <_description>Default Theme for TheftMD</_description>
+
+  <!-- https://gitlab.gnome.org/GNOME/gtksourceview/-/blob/master/data/language-specs/markdown.lang -->
+
+  <style name="text" background="#00000000" />
+
+  <style name="def:heading" foreground="#magenta" scale="xx-large"/>
+  
+  <style name="def:emphasis" italic="true"/>
+  <style name="def:strong-emphasis" bold="true"/>
+
+</style-scheme>

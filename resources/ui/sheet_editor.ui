@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <requires lib="gtk" version="4.14" />
+    <requires lib="libadwaita" version="1.5" />
+    <requires lib="gtksourceview" version="5.0" />
+    <template class="SheetEditor" parent="AdwBin">
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <child>
+            <object class="GtkScrolledWindow" id="scroll">
+                <property name="width-request">800</property>
+                <property name="height-request">600</property>
+
+                <child>
+                    <object class="GtkCenterBox">
+                        <property name="margin-top">32</property>
+                        <property name="margin-bottom">32</property>
+                        <property name="margin-start">32</property>
+                        <property name="margin-end">32</property>
+                        <child type="center">
+                            <object class="GtkSourceView" id="source_view">
+                                <property name="width-request">700</property>
+                                <property name="tab-width">4</property>
+                                <property name="auto-indent">True</property>
+                                <child internal-child="completion">
+                                    <object class="GtkSourceCompletion">
+                                        <property name="select-on-show">False</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>
