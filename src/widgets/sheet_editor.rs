@@ -56,8 +56,6 @@ glib::wrapper! {
 
 impl Default for SheetEditor {
     fn default() -> Self {
-        StyleSchemeManager::default().append_search_path("../resources/editor_style");
-
         let this: Self = Object::builder().build();
         this.init_sheet();
         this
@@ -74,14 +72,33 @@ impl SheetEditor {
         let lang = LanguageManager::default().language("markdown").unwrap();
 
         let buffer = Buffer::with_language(&lang);
-
-        let scheme_id = "theftmd";
-        if let Some(style_scheme) = StyleSchemeManager::default().scheme(scheme_id) {
-            buffer.set_style_scheme(Some(&style_scheme));
-        } else {
-            println!("Failed to load scheme with id '{scheme_id}'.")
-        }
+        self.load_buffer_style_scheme(&buffer);
 
         imp.source_view.set_buffer(Some(&buffer));
+    }
+
+    fn load_buffer_style_scheme(&self, buffer: &Buffer) {
+        let scheme_id = "theftmd";
+
+        // Try fetching the scheme
+        if let Some(style_scheme) = StyleSchemeManager::default().scheme(scheme_id) {
+            buffer.set_style_scheme(Some(&style_scheme));
+            return;
+        }
+
+        // --- ONLY IF NOT PACKAGED
+        // Failed, install path
+        const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
+        StyleSchemeManager::default()
+            .append_search_path(format!("{MANIFEST_DIR}/resources/editor_style").as_str());
+        // --- //
+
+        // Try fetching the scheme again
+        if let Some(style_scheme) = StyleSchemeManager::default().scheme(scheme_id) {
+            buffer.set_style_scheme(Some(&style_scheme));
+            return;
+        }
+
+        println!("Failed to load scheme with id '{scheme_id}'.")
     }
 }
