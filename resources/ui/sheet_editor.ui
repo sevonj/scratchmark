@@ -10,7 +10,6 @@
             <object class="GtkScrolledWindow" id="scroll">
                 <property name="width-request">800</property>
                 <property name="height-request">600</property>
-
                 <child>
                     <object class="GtkCenterBox">
                         <property name="margin-top">32</property>
@@ -22,6 +21,7 @@
                                 <property name="width-request">700</property>
                                 <property name="tab-width">4</property>
                                 <property name="auto-indent">True</property>
+                                <property name="wrap-mode">3</property>
                                 <child internal-child="completion">
                                     <object class="GtkSourceCompletion">
                                         <property name="select-on-show">False</property>
