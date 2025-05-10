@@ -57,6 +57,7 @@ glib::wrapper! {
 impl Default for SheetEditor {
     fn default() -> Self {
         let this: Self = Object::builder().build();
+        this.imp().source_view.set_monospace(true);
         this.init_sheet();
         this
     }

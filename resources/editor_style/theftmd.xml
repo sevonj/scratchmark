@@ -9,7 +9,7 @@
   <style name="text" background="#00000000" />
 
   <!-- formatting: heading -->
-  <style name="def:heading" foreground="#LightSeaGreen" scale="xx-large" />
+  <style name="def:heading" foreground="#LightSeaGreen" scale="xx-large" bold="true" />
   <!-- formatting: italic -->
   <style name="def:emphasis" italic="true" />
   <!-- formatting: bold -->
