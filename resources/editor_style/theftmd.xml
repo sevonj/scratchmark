@@ -5,11 +5,38 @@
 
   <!-- https://gitlab.gnome.org/GNOME/gtksourceview/-/blob/master/data/language-specs/markdown.lang -->
 
+  <!-- transparent bg -->
   <style name="text" background="#00000000" />
 
-  <style name="def:heading" foreground="#magenta" scale="xx-large"/>
-  
-  <style name="def:emphasis" italic="true"/>
-  <style name="def:strong-emphasis" bold="true"/>
+  <!-- formatting: heading -->
+  <style name="def:heading" foreground="#LightSeaGreen" scale="xx-large" />
+  <!-- formatting: italic -->
+  <style name="def:emphasis" italic="true" />
+  <!-- formatting: bold -->
+  <style name="def:strong-emphasis" bold="true" />
+  <!-- formatting: code block -->
+  <style name="def:inline-code" foreground="#gray" />
+  <!-- formatting: code span -->
+  <style name="def:preformatted-section" foreground="#gray" />
+
+  <!-- links: text -->
+  <style name="def:link-text" />
+  <!-- links: url -->
+  <style name="def:link-destination" foreground="#SteelBlue" />
+  <!-- links: reference link id -->
+  <style name="def:preprocessor" foreground="#SteelBlue" />
+  <!-- links: image / link alt text -->
+  <style name="def:constant" />
+
+  <!-- misc: slash escape -->
+  <style name="def:special-char" foreground="#gray" />
+  <!-- misc: image exclamation mark -->
+  <style name="def:link-symbol" foreground="#gray" />
+  <!-- misc: list marker -->
+  <style name="def:list-marker" foreground="#gray" />
+  <!-- misc: block quote marker -->
+  <style name="def:shebang" foreground="#gray" />
+  <!-- misc: horizontal rules -->
+  <style name="def:thematic-break" foreground="#gray" />
 
 </style-scheme>
