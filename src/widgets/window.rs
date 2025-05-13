@@ -5,7 +5,7 @@ mod imp {
     };
     use gtk::{
         Button, CompositeTemplate,
-        glib::{self, *},
+        glib::{self, clone},
         prelude::*,
         subclass::{
             application_window::ApplicationWindowImpl,
@@ -14,6 +14,7 @@ mod imp {
         },
     };
 
+    use super::LibraryBrowser;
     use super::SheetEditor;
 
     #[derive(CompositeTemplate, Default)]
@@ -28,6 +29,8 @@ mod imp {
         pub(super) sidebar_header_bar: TemplateChild<HeaderBar>,
         #[template_child]
         pub(super) sidebar_toggle: TemplateChild<Button>,
+        #[template_child]
+        pub(super) sidebar_toolbar_view: TemplateChild<ToolbarView>,
 
         #[template_child]
         pub(super) main_toolbar_view: TemplateChild<ToolbarView>,
@@ -35,6 +38,7 @@ mod imp {
         #[template_child]
         pub(super) new_sheet_button: TemplateChild<Button>,
 
+        pub(super) library_browser: LibraryBrowser,
         pub(super) sheet_editor: SheetEditor,
     }
 
@@ -48,7 +52,7 @@ mod imp {
             klass.bind_template();
         }
 
-        fn instance_init(obj: &subclass::InitializingObject<Self>) {
+        fn instance_init(obj: &glib::subclass::InitializingObject<Self>) {
             obj.init_template();
         }
     }
@@ -72,6 +76,8 @@ mod imp {
                 }
             ));
 
+            self.sidebar_toolbar_view
+                .set_content(Some(&self.library_browser));
             self.main_toolbar_view.set_content(Some(&self.sheet_editor));
         }
     }
@@ -85,6 +91,7 @@ mod imp {
 use glib::Object;
 use gtk::{gio, glib};
 
+use super::LibraryBrowser;
 use super::SheetEditor;
 
 glib::wrapper! {

@@ -1,3 +1,5 @@
+mod data;
+mod util;
 mod widgets;
 
 use gtk::prelude::*;
