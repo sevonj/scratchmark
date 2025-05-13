@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="LibraryBrowser" parent="AdwBin">
+        <child>
+            <object class="GtkScrolledWindow">
+                <child>
+                    <object class="GtkBox">
+                        <property name="orientation">1</property>
+                        <child> <!-- Content -->
+                            <object class="GtkBox" id="library_root">
+                                <property name="orientation">1</property>
+                            </object>
+                        </child>
+                        <child> <!-- End spacer -->
+                            <object class="GtkBox">
+                                <property name="vexpand">True</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="LibraryFolder" parent="AdwBin">
+        <child>
+            <object class="GtkExpander">
+                <child type="label">
+                    <object class="GtkLabel" id="title">
+                        <property name="margin-top">4</property>
+                        <property name="margin-bottom">4</property>
+                        <property name="label" translatable="no">dir_name_label</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkBox">
+                        <property name="orientation">1</property>
+                        <property name="margin-start">16</property>
+                        <property name="margin-end">16</property>
+                        <child>
+                            <object class="GtkBox" id="subdir_vbox">
+                                <property name="orientation">1</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkBox" id="content_vbox">
+                                <property name="orientation">1</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>
