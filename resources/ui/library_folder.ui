@@ -13,8 +13,7 @@
                 <child>
                     <object class="GtkBox">
                         <property name="orientation">1</property>
-                        <property name="margin-start">16</property>
-                        <property name="margin-end">16</property>
+                        <property name="margin-start">8</property>
                         <child>
                             <object class="GtkBox" id="subdir_vbox">
                                 <property name="orientation">1</property>

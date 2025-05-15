@@ -20,6 +20,8 @@ mod imp {
         pub(super) title: TemplateChild<Label>,
         #[template_child]
         pub(super) subdir_vbox: TemplateChild<gtk::Box>,
+        #[template_child]
+        pub(super) content_vbox: TemplateChild<gtk::Box>,
 
         pub(super) folder_object: RefCell<Option<FolderObject>>,
         pub(super) bindings: RefCell<Vec<Binding>>,
@@ -56,6 +58,9 @@ use gtk::glib;
 use gtk::prelude::*;
 
 use crate::data::FolderObject;
+use crate::data::SheetObject;
+
+use super::LibrarySheet;
 
 glib::wrapper! {
     pub struct LibraryFolder(ObjectSubclass<imp::LibraryFolder>)
@@ -74,14 +79,25 @@ impl LibraryFolder {
         let opt = self.imp().folder_object.borrow();
         let folder = opt.as_ref().expect("FolderObject not bound");
 
-        let paths = folder.subdirs();
+        let entries = folder.content();
 
-        for path in paths {
-            let data = FolderObject::new(path);
-            let folder = LibraryFolder::default();
-            folder.bind(&data);
-            self.imp().subdir_vbox.append(&folder);
-            folder.refresh_content();
+        for entry in entries {
+            let Ok(meta) = entry.metadata() else {
+                return;
+            };
+
+            if meta.is_dir() {
+                let data = FolderObject::new(entry.path());
+                let folder = LibraryFolder::default();
+                folder.bind(&data);
+                self.imp().subdir_vbox.append(&folder);
+                folder.refresh_content();
+            } else if meta.is_file() {
+                let data = SheetObject::new(entry.path());
+                let sheet = LibrarySheet::default();
+                sheet.bind(&data);
+                self.imp().content_vbox.append(&sheet);
+            }
         }
     }
 

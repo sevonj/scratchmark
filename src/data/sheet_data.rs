@@ -7,36 +7,36 @@ mod imp {
     use gtk::prelude::*;
     use gtk::subclass::prelude::*;
 
-    use super::FolderData;
+    use super::SheetData;
 
     #[derive(Properties, Default)]
-    #[properties(wrapper_type = super::FolderObject)]
-    pub struct FolderObject {
+    #[properties(wrapper_type = super::SheetObject)]
+    pub struct SheetObject {
         #[property(name = "path", get, set, type = PathBuf, member = path)]
         #[property(name = "stem", get, set, type = String, member = stem)]
-        pub data: RefCell<FolderData>,
+        pub data: RefCell<SheetData>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for FolderObject {
-        const NAME: &'static str = "LibraryFolderObject";
-        type Type = super::FolderObject;
+    impl ObjectSubclass for SheetObject {
+        const NAME: &'static str = "LibrarySheetObject";
+        type Type = super::SheetObject;
     }
 
     #[glib::derived_properties]
-    impl ObjectImpl for FolderObject {}
+    impl ObjectImpl for SheetObject {}
 }
 
-use std::{fs::DirEntry, path::PathBuf};
+use std::path::PathBuf;
 
 use glib::Object;
 use gtk::glib;
 
 glib::wrapper! {
-    pub struct FolderObject(ObjectSubclass<imp::FolderObject>);
+    pub struct SheetObject(ObjectSubclass<imp::SheetObject>);
 }
 
-impl FolderObject {
+impl SheetObject {
     pub fn new(path: PathBuf) -> Self {
         let stem = path.file_stem().unwrap().to_string_lossy().into_owned();
         Object::builder()
@@ -44,24 +44,10 @@ impl FolderObject {
             .property("stem", stem)
             .build()
     }
-
-    pub fn content(&self) -> Vec<DirEntry> {
-        let mut entries = vec![];
-
-        let Ok(readdir) = self.path().read_dir() else {
-            return entries;
-        };
-
-        for entry in readdir.flatten() {
-            entries.push(entry);
-        }
-
-        entries
-    }
 }
 
 #[derive(Default, Debug)]
-pub struct FolderData {
+pub struct SheetData {
     pub path: PathBuf,
     /// Use for display
     pub stem: String,

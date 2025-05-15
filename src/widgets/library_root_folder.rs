@@ -73,10 +73,13 @@ impl LibraryRootFolder {
         let opt = self.imp().folder_object.borrow();
         let folder = opt.as_ref().expect("FolderObject not bound");
 
-        let paths = folder.subdirs();
+        let entries = folder.content();
 
-        for path in paths {
-            let data = FolderObject::new(path);
+        for entry in entries {
+            if !entry.metadata().is_ok_and(|meta| meta.is_dir()) {
+                return;
+            }
+            let data = FolderObject::new(entry.path());
             let folder = LibraryFolder::default();
             folder.bind(&data);
             self.imp().subdir_vbox.append(&folder);
