@@ -56,7 +56,7 @@ use super::LibraryRootFolder;
 glib::wrapper! {
     pub struct LibraryBrowser(ObjectSubclass<imp::LibraryBrowser>)
         @extends adw::Bin, gtk::Widget,
-        @implements gtk::Accessible;
+        @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
 impl Default for LibraryBrowser {

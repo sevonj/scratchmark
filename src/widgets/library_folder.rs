@@ -65,7 +65,7 @@ use super::LibrarySheet;
 glib::wrapper! {
     pub struct LibraryFolder(ObjectSubclass<imp::LibraryFolder>)
         @extends adw::Bin, gtk::Widget,
-        @implements gtk::Accessible;
+        @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
 impl Default for LibraryFolder {

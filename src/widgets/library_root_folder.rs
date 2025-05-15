@@ -59,7 +59,7 @@ use super::LibraryFolder;
 glib::wrapper! {
     pub struct LibraryRootFolder(ObjectSubclass<imp::LibraryRootFolder>)
         @extends adw::Bin, gtk::Widget,
-        @implements gtk::Accessible;
+        @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
 impl Default for LibraryRootFolder {

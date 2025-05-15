@@ -51,7 +51,7 @@ use sourceview5::{Buffer, LanguageManager, StyleSchemeManager, prelude::BufferEx
 glib::wrapper! {
     pub struct SheetEditor(ObjectSubclass<imp::SheetEditor>)
         @extends adw::Bin, gtk::Widget,
-        @implements gtk::Accessible;
+        @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
 impl Default for SheetEditor {
