@@ -64,14 +64,14 @@ glib::wrapper! {
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl Default for LibrarySheet {
-    fn default() -> Self {
-        Object::builder().build()
-    }
-}
-
 impl LibrarySheet {
-    pub fn bind(&self, data: &SheetObject) {
+    pub fn new(data: &SheetObject) -> Self {
+        let this: Self = Object::builder().build();
+        this.bind(data);
+        this
+    }
+
+    fn bind(&self, data: &SheetObject) {
         self.imp().sheet_object.replace(Some(data.clone()));
 
         let title_label = self.imp().sheet_name_label.get();

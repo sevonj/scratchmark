@@ -19,7 +19,7 @@ mod imp {
         pub(super) subdir_vbox: TemplateChild<gtk::Box>,
 
         pub(super) folder_object: RefCell<Option<FolderObject>>,
-        pub(super) bindings: RefCell<Vec<Binding>>,
+        pub(super) _bindings: RefCell<Vec<Binding>>,
     }
 
     #[glib::object_subclass]
@@ -62,13 +62,13 @@ glib::wrapper! {
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl Default for LibraryRootFolder {
-    fn default() -> Self {
-        Object::builder().build()
-    }
-}
-
 impl LibraryRootFolder {
+    pub fn new(data: &FolderObject) -> Self {
+        let this: Self = Object::builder().build();
+        this.bind(data);
+        this
+    }
+
     pub fn refresh_content(&self) {
         let opt = self.imp().folder_object.borrow();
         let folder = opt.as_ref().expect("FolderObject not bound");
@@ -80,20 +80,13 @@ impl LibraryRootFolder {
                 return;
             }
             let data = FolderObject::new(entry.path());
-            let folder = LibraryFolder::default();
-            folder.bind(&data);
+            let folder = LibraryFolder::new(&data);
             self.imp().subdir_vbox.append(&folder);
             folder.refresh_content();
         }
     }
 
-    pub fn bind(&self, data: &FolderObject) {
+    fn bind(&self, data: &FolderObject) {
         self.imp().folder_object.replace(Some(data.clone()));
-    }
-
-    pub fn unbind(&self) {
-        for binding in self.imp().bindings.borrow_mut().drain(..) {
-            binding.unbind();
-        }
     }
 }

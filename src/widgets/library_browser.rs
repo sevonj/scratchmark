@@ -72,8 +72,7 @@ impl LibraryBrowser {
         let library_root = &self.imp().library_root;
 
         let data = FolderObject::new(path_builtin_library());
-        let folder = LibraryRootFolder::default();
-        folder.bind(&data);
+        let folder = LibraryRootFolder::new(&data);
         folder.refresh_content();
 
         library_root.append(&folder);

@@ -68,13 +68,13 @@ glib::wrapper! {
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl Default for LibraryFolder {
-    fn default() -> Self {
-        Object::builder().build()
-    }
-}
-
 impl LibraryFolder {
+    pub fn new(data: &FolderObject) -> Self {
+        let this: Self = Object::builder().build();
+        this.bind(data);
+        this
+    }
+
     pub fn refresh_content(&self) {
         let opt = self.imp().folder_object.borrow();
         let folder = opt.as_ref().expect("FolderObject not bound");
@@ -88,20 +88,18 @@ impl LibraryFolder {
 
             if meta.is_dir() {
                 let data = FolderObject::new(entry.path());
-                let folder = LibraryFolder::default();
-                folder.bind(&data);
+                let folder = LibraryFolder::new(&data);
                 self.imp().subdir_vbox.append(&folder);
                 folder.refresh_content();
             } else if meta.is_file() {
                 let data = SheetObject::new(entry.path());
-                let sheet = LibrarySheet::default();
-                sheet.bind(&data);
+                let sheet = LibrarySheet::new(&data);
                 self.imp().content_vbox.append(&sheet);
             }
         }
     }
 
-    pub fn bind(&self, data: &FolderObject) {
+    fn bind(&self, data: &FolderObject) {
         self.imp().folder_object.replace(Some(data.clone()));
 
         let title_label = self.imp().title.get();
@@ -112,11 +110,5 @@ impl LibraryFolder {
             .sync_create()
             .build();
         bindings.push(title_binding);
-    }
-
-    pub fn unbind(&self) {
-        for binding in self.imp().bindings.borrow_mut().drain(..) {
-            binding.unbind();
-        }
     }
 }
