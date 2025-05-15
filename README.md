@@ -8,4 +8,6 @@ Built with Rust + GTK4 / Adwaita
 
 Early prototype, lacks fundamental features.
 
+## Development
 
+[➜ Project management](https://github.com/users/sevonj/projects/20)
