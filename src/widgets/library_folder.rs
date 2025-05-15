@@ -3,15 +3,19 @@
 
 mod imp {
     use std::cell::RefCell;
+    use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
     use glib::Binding;
+    use glib::subclass::Signal;
     use gtk::glib;
+    use gtk::prelude::*;
 
     use gtk::Label;
     use gtk::{CompositeTemplate, TemplateChild};
 
     use crate::data::FolderObject;
+    use crate::widgets::LibrarySheetButton;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/fi/sevonj/TheftMD/ui/library_folder.ui")]
@@ -46,6 +50,17 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
         }
+
+        fn signals() -> &'static [Signal] {
+            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
+            SIGNALS.get_or_init(|| {
+                vec![
+                    Signal::builder("sheet-clicked")
+                        .param_types([LibrarySheetButton::static_type()])
+                        .build(),
+                ]
+            })
+        }
     }
 
     impl WidgetImpl for LibraryFolder {}
@@ -54,13 +69,15 @@ mod imp {
 
 use adw::subclass::prelude::*;
 use glib::Object;
+use glib::clone;
+use glib::closure_local;
 use gtk::glib;
 use gtk::prelude::*;
 
 use crate::data::FolderObject;
 use crate::data::SheetObject;
 
-use super::LibrarySheet;
+use super::LibrarySheetButton;
 
 glib::wrapper! {
     pub struct LibraryFolder(ObjectSubclass<imp::LibraryFolder>)
@@ -91,10 +108,32 @@ impl LibraryFolder {
                 let folder = LibraryFolder::new(&data);
                 self.imp().subdir_vbox.append(&folder);
                 folder.refresh_content();
+
+                let this = self;
+                folder.connect_closure(
+                    "sheet-clicked",
+                    false,
+                    closure_local!(
+                        #[weak]
+                        this,
+                        move |_folder: LibraryFolder, button: LibrarySheetButton| {
+                            this.emit_by_name::<()>("sheet-clicked", &[&button]);
+                        }
+                    ),
+                );
             } else if meta.is_file() {
                 let data = SheetObject::new(entry.path());
-                let sheet = LibrarySheet::new(&data);
-                self.imp().content_vbox.append(&sheet);
+                let button = LibrarySheetButton::new(&data);
+                self.imp().content_vbox.append(&button);
+
+                let this = self;
+                button.connect_clicked(clone!(
+                    #[weak]
+                    this,
+                    move |button| {
+                        this.emit_by_name::<()>("sheet-clicked", &[button]);
+                    }
+                ));
             }
         }
     }

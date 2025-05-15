@@ -8,17 +8,14 @@ mod imp {
     use glib::Binding;
     use gtk::glib;
 
-    use gtk::Button;
     use gtk::Label;
     use gtk::{CompositeTemplate, TemplateChild};
 
     use crate::data::SheetObject;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/fi/sevonj/TheftMD/ui/library_sheet.ui")]
-    pub struct LibrarySheet {
-        #[template_child]
-        pub(super) sheet_button: TemplateChild<Button>,
+    #[template(resource = "/fi/sevonj/TheftMD/ui/library_sheet_button.ui")]
+    pub struct LibrarySheetButton {
         #[template_child]
         pub(super) sheet_name_label: TemplateChild<Label>,
 
@@ -27,10 +24,10 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LibrarySheet {
+    impl ObjectSubclass for LibrarySheetButton {
         const NAME: &'static str = "LibrarySheet";
-        type Type = super::LibrarySheet;
-        type ParentType = adw::Bin;
+        type Type = super::LibrarySheetButton;
+        type ParentType = gtk::ToggleButton;
 
         fn class_init(klass: &mut Self::Class) {
             klass.bind_template();
@@ -41,15 +38,18 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for LibrarySheet {
+    impl ObjectImpl for LibrarySheetButton {
         fn constructed(&self) {
             self.parent_constructed();
         }
     }
 
-    impl WidgetImpl for LibrarySheet {}
-    impl BinImpl for LibrarySheet {}
+    impl WidgetImpl for LibrarySheetButton {}
+    impl ButtonImpl for LibrarySheetButton {}
+    impl ToggleButtonImpl for LibrarySheetButton {}
 }
+
+use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use glib::Object;
@@ -59,16 +59,25 @@ use gtk::prelude::*;
 use crate::data::SheetObject;
 
 glib::wrapper! {
-    pub struct LibrarySheet(ObjectSubclass<imp::LibrarySheet>)
-        @extends adw::Bin, gtk::Widget,
-        @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+    pub struct LibrarySheetButton(ObjectSubclass<imp::LibrarySheetButton>)
+        @extends gtk::ToggleButton, gtk::Button, gtk::Widget,
+        @implements gtk::Accessible, gtk::Actionable, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl LibrarySheet {
+impl LibrarySheetButton {
     pub fn new(data: &SheetObject) -> Self {
         let this: Self = Object::builder().build();
         this.bind(data);
         this
+    }
+
+    pub fn path(&self) -> PathBuf {
+        self.imp()
+            .sheet_object
+            .borrow()
+            .as_ref()
+            .expect("LibrarySheetButton data uninitialized")
+            .path()
     }
 
     fn bind(&self, data: &SheetObject) {
@@ -82,11 +91,5 @@ impl LibrarySheet {
             .sync_create()
             .build();
         bindings.push(title_binding);
-    }
-
-    pub fn unbind(&self) {
-        for binding in self.imp().bindings.borrow_mut().drain(..) {
-            binding.unbind();
-        }
     }
 }

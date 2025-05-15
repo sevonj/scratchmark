@@ -40,11 +40,13 @@ mod imp {
     impl BinImpl for SheetEditor {}
 }
 
+use std::{fs::File, io::Read, path::PathBuf};
+
 use adw::subclass::prelude::ObjectSubclassIsExt;
 use glib::Object;
 use gtk::{
     glib::{self},
-    prelude::TextViewExt,
+    prelude::{TextBufferExt, TextViewExt},
 };
 use sourceview5::{Buffer, LanguageManager, StyleSchemeManager, prelude::BufferExt};
 
@@ -58,21 +60,34 @@ impl Default for SheetEditor {
     fn default() -> Self {
         let this: Self = Object::builder().build();
         this.imp().source_view.set_monospace(true);
-        this.init_sheet();
+        this.init_sheet(None);
         this
     }
 }
 
 impl SheetEditor {
     pub fn new_sheet(&self) {
-        self.init_sheet();
+        self.init_sheet(None);
     }
 
-    fn init_sheet(&self) {
+    pub fn load_sheet(&self, path: PathBuf) {
+        match File::open(path) {
+            Ok(f) => self.init_sheet(Some(f)),
+            Err(_) => self.init_sheet(None),
+        };
+    }
+
+    fn init_sheet(&self, f: Option<File>) {
+        let mut text = String::new();
+        if let Some(mut f) = f {
+            let _ = f.read_to_string(&mut text);
+        }
+
         let imp = self.imp();
         let lang = LanguageManager::default().language("markdown").unwrap();
 
         let buffer = Buffer::with_language(&lang);
+        buffer.set_text(&text);
         self.load_buffer_style_scheme(&buffer);
 
         imp.source_view.set_buffer(Some(&buffer));

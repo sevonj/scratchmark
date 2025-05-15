@@ -1,18 +1,15 @@
 mod imp {
-    use adw::{
-        ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView, ToolbarView,
-        subclass::{application_window::AdwApplicationWindowImpl, prelude::*},
-    };
-    use gtk::{
-        Button, CompositeTemplate,
-        glib::{self, clone},
-        prelude::*,
-        subclass::{
-            application_window::ApplicationWindowImpl,
-            widget::{CompositeTemplateClass, CompositeTemplateInitializingExt, WidgetImpl},
-            window::WindowImpl,
-        },
-    };
+    use std::path::PathBuf;
+
+    use adw::prelude::NavigationPageExt;
+    use adw::subclass::prelude::*;
+    use glib::clone;
+    use glib::closure_local;
+    use gtk::glib;
+    use gtk::prelude::*;
+
+    use adw::{ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView, ToolbarView};
+    use gtk::{Button, CompositeTemplate};
 
     use super::LibraryBrowser;
     use super::SheetEditor;
@@ -32,6 +29,8 @@ mod imp {
         #[template_child]
         pub(super) sidebar_toolbar_view: TemplateChild<ToolbarView>,
 
+        #[template_child]
+        pub(super) main_page: TemplateChild<NavigationPage>,
         #[template_child]
         pub(super) main_toolbar_view: TemplateChild<ToolbarView>,
 
@@ -75,6 +74,24 @@ mod imp {
                     sheet_editor.new_sheet();
                 }
             ));
+
+            let this = self;
+            self.library_browser.connect_closure(
+                "sheet-selected",
+                false,
+                closure_local!(
+                    #[weak]
+                    this,
+                    move |_browser: LibraryBrowser, path: PathBuf| {
+                        let stem = path
+                            .file_stem()
+                            .and_then(|s| s.to_str())
+                            .unwrap_or("TheftMD");
+                        this.main_page.set_title(stem);
+                        this.sheet_editor.load_sheet(path);
+                    }
+                ),
+            );
 
             self.sidebar_toolbar_view
                 .set_content(Some(&self.library_browser));

@@ -27,13 +27,12 @@
           </object>
         </property>
         <property name="content">
-          <object class="AdwNavigationPage">
+          <object class="AdwNavigationPage" id="main_page">
             <property name="title" translatable="no">TheftMD</property>
             <property name="child">
               <object class="AdwToolbarView" id="main_toolbar_view">
                 <child type="top">
                   <object class="AdwHeaderBar">
-                    <property name="show-title">False</property>
                     <child type="start">
                       <object class="GtkButton" id="sidebar_toggle">
                         <property name="icon-name">sidebar-show-symbolic</property>

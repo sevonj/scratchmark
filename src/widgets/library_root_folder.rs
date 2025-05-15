@@ -2,15 +2,18 @@
 //!
 
 mod imp {
-    use std::cell::RefCell;
+    use std::{cell::RefCell, sync::OnceLock};
 
     use adw::subclass::prelude::*;
     use glib::Binding;
+    use glib::subclass::Signal;
     use gtk::glib;
+    use gtk::prelude::*;
 
     use gtk::{CompositeTemplate, TemplateChild};
 
     use crate::data::FolderObject;
+    use crate::widgets::LibrarySheetButton;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/fi/sevonj/TheftMD/ui/library_root_folder.ui")]
@@ -41,6 +44,17 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
         }
+
+        fn signals() -> &'static [Signal] {
+            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
+            SIGNALS.get_or_init(|| {
+                vec![
+                    Signal::builder("sheet-clicked")
+                        .param_types([LibrarySheetButton::static_type()])
+                        .build(),
+                ]
+            })
+        }
     }
 
     impl WidgetImpl for LibraryRootFolder {}
@@ -49,10 +63,12 @@ mod imp {
 
 use adw::subclass::prelude::*;
 use glib::Object;
+use glib::closure_local;
 use gtk::glib;
 use gtk::prelude::*;
 
 use crate::data::FolderObject;
+use crate::widgets::LibrarySheetButton;
 
 use super::LibraryFolder;
 
@@ -83,6 +99,19 @@ impl LibraryRootFolder {
             let folder = LibraryFolder::new(&data);
             self.imp().subdir_vbox.append(&folder);
             folder.refresh_content();
+
+            let this = self;
+            folder.connect_closure(
+                "sheet-clicked",
+                false,
+                closure_local!(
+                    #[weak]
+                    this,
+                    move |_folder: LibraryFolder, button: LibrarySheetButton| {
+                        this.emit_by_name::<()>("sheet-clicked", &[&button]);
+                    }
+                ),
+            );
         }
     }
 

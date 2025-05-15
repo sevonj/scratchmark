@@ -2,19 +2,26 @@
 //!
 
 mod imp {
+    use std::cell::RefCell;
+    use std::path::PathBuf;
+    use std::sync::OnceLock;
+
     use adw::subclass::prelude::*;
     use glib::subclass::*;
     use gtk::glib;
-    use gtk::{
-        CompositeTemplate,
-        subclass::widget::{CompositeTemplateClass, CompositeTemplateInitializingExt, WidgetImpl},
-    };
+    use gtk::prelude::*;
+
+    use gtk::CompositeTemplate;
+
+    use crate::widgets::LibrarySheetButton;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/fi/sevonj/TheftMD/ui/library_browser.ui")]
     pub struct LibraryBrowser {
         #[template_child]
         pub(super) library_root: TemplateChild<gtk::Box>,
+
+        pub(super) selected_sheet_button: RefCell<Option<glib::WeakRef<LibrarySheetButton>>>,
     }
 
     #[glib::object_subclass]
@@ -36,6 +43,17 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
         }
+
+        fn signals() -> &'static [Signal] {
+            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
+            SIGNALS.get_or_init(|| {
+                vec![
+                    Signal::builder("sheet-selected")
+                        .param_types([PathBuf::static_type()])
+                        .build(),
+                ]
+            })
+        }
     }
 
     impl WidgetImpl for LibraryBrowser {}
@@ -44,11 +62,11 @@ mod imp {
 
 use adw::subclass::prelude::ObjectSubclassIsExt;
 use glib::Object;
-use gtk::{
-    glib::{self},
-    prelude::BoxExt,
-};
+use glib::closure_local;
+use gtk::glib;
+use gtk::prelude::*;
 
+use crate::widgets::LibrarySheetButton;
 use crate::{data::FolderObject, util::path_builtin_library};
 
 use super::LibraryRootFolder;
@@ -76,5 +94,33 @@ impl LibraryBrowser {
         folder.refresh_content();
 
         library_root.append(&folder);
+
+        let this = self;
+        folder.connect_closure(
+            "sheet-clicked",
+            false,
+            closure_local!(
+                #[weak]
+                this,
+                move |_folder: LibraryRootFolder, button: LibrarySheetButton| {
+                    if let Some(old) = this
+                        .imp()
+                        .selected_sheet_button
+                        .borrow()
+                        .as_ref()
+                        .and_then(|f| f.upgrade())
+                    {
+                        old.set_active(false);
+                    }
+
+                    this.imp()
+                        .selected_sheet_button
+                        .replace(Some(button.downgrade()));
+
+                    let path = button.path();
+                    this.emit_by_name::<()>("sheet-selected", &[&path]);
+                }
+            ),
+        );
     }
 }
