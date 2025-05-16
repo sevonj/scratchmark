@@ -40,7 +40,7 @@
                       </object>
                     </child>
                     <child type="start">
-                      <object class="GtkButton" id="new_sheet_button">
+                      <object class="GtkMenuButton" id="new_sheet_button">
                         <property name="icon-name">document-new-symbolic</property>
                         <property name="tooltip-text" translatable="yes">New sheet</property>
                       </object>

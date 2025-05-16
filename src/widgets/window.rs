@@ -9,8 +9,10 @@ mod imp {
     use gtk::glib;
 
     use adw::{ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView, ToolbarView};
+    use gtk::MenuButton;
     use gtk::{Button, CompositeTemplate};
 
+    use crate::widgets::NewSheetPopover;
     use crate::widgets::SheetEditorPlaceholder;
 
     use super::LibraryBrowser;
@@ -37,7 +39,7 @@ mod imp {
         pub(super) main_toolbar_view: TemplateChild<ToolbarView>,
 
         #[template_child]
-        pub(super) new_sheet_button: TemplateChild<Button>,
+        pub(super) new_sheet_button: TemplateChild<MenuButton>,
 
         pub(super) library_browser: LibraryBrowser,
         pub(super) sheet_editor: RefCell<Option<SheetEditor>>,
@@ -81,6 +83,20 @@ mod imp {
                 ),
             );
 
+            let new_sheet_popover = NewSheetPopover::default();
+            self.new_sheet_button.set_popover(Some(&new_sheet_popover));
+            new_sheet_popover.connect_closure(
+                "committed",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_popover: NewSheetPopover, path: PathBuf| {
+                        obj.create_sheet(path);
+                    }
+                ),
+            );
+
             self.main_toolbar_view
                 .set_content(Some(&SheetEditorPlaceholder::default()));
             self.main_page.set_title("TheftMD");
@@ -95,6 +111,7 @@ mod imp {
     impl AdwApplicationWindowImpl for Window {}
 }
 
+use std::fs::OpenOptions;
 use std::path::PathBuf;
 
 use adw::prelude::*;
@@ -148,6 +165,18 @@ impl Window {
 
         imp.main_toolbar_view.set_content(Some(&editor));
         imp.sheet_editor.replace(Some(editor));
+    }
+
+    fn create_sheet(&self, path: PathBuf) {
+        self.close_sheet();
+
+        let _file = OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&path)
+            .expect("file create fail");
+
+        self.load_sheet(path);
     }
 
     fn close_sheet(&self) {
