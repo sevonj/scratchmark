@@ -122,6 +122,7 @@ impl Window {
 
     fn load_sheet(&self, path: PathBuf) {
         let imp = self.imp();
+        self.close_sheet();
 
         let stem = path
             .file_stem()
@@ -138,7 +139,10 @@ impl Window {
             closure_local!(
                 #[weak]
                 this,
-                move |_: SheetEditor| { this.close_sheet() }
+                move |_: SheetEditor| {
+                    this.close_sheet();
+                    this.imp().library_browser.clear_selected_sheet();
+                }
             ),
         );
 
@@ -148,12 +152,12 @@ impl Window {
 
     fn close_sheet(&self) {
         let imp = self.imp();
-        imp.sheet_editor.replace(None);
+        if let Some(editor) = imp.sheet_editor.borrow_mut().take() {
+            editor.save();
+        }
 
         imp.main_toolbar_view
             .set_content(Some(&SheetEditorPlaceholder::default()));
         imp.main_page.get().set_title("TheftMD");
-
-        imp.library_browser.clear_selected_sheet();
     }
 }

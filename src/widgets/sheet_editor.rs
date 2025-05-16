@@ -1,4 +1,6 @@
 mod imp {
+    use std::cell::RefCell;
+    use std::fs::File;
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
@@ -7,9 +9,8 @@ mod imp {
     use gtk::glib;
     use gtk::prelude::*;
 
-    use gtk::{CompositeTemplate, TemplateChild};
-
     use gtk::Button;
+    use gtk::{CompositeTemplate, TemplateChild};
     use sourceview5::View;
 
     #[derive(CompositeTemplate, Default)]
@@ -20,6 +21,8 @@ mod imp {
 
         #[template_child]
         pub(super) close_sheet_button: TemplateChild<Button>,
+
+        pub(super) file: RefCell<Option<File>>,
     }
 
     #[glib::object_subclass]
@@ -62,7 +65,9 @@ mod imp {
     impl BinImpl for SheetEditor {}
 }
 
-use std::{fs::File, io::Read, path::PathBuf};
+use std::fs::OpenOptions;
+use std::io::{Read, Seek, SeekFrom, Write};
+use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use glib::Object;
@@ -80,29 +85,40 @@ glib::wrapper! {
 
 impl SheetEditor {
     pub fn new(path: PathBuf) -> Self {
+        let mut file = OpenOptions::new()
+            .read(true)
+            .write(true)
+            .open(path)
+            .expect("file open fail");
+        let mut text = String::new();
+        file.read_to_string(&mut text).expect("TODO read to string");
+
+        let lang = LanguageManager::default().language("markdown").unwrap();
+        let buffer = Buffer::with_language(&lang);
+        buffer.set_text(&text);
+
         let this: Self = Object::builder().build();
+        this.load_buffer_style_scheme(&buffer);
+        this.imp().file.replace(Some(file));
         this.imp().source_view.set_monospace(true);
-        match File::open(path) {
-            Ok(f) => this.init_sheet(Some(f)),
-            Err(_) => this.init_sheet(None),
-        };
+        this.imp().source_view.set_buffer(Some(&buffer));
         this
     }
 
-    fn init_sheet(&self, f: Option<File>) {
-        let mut text = String::new();
-        if let Some(mut f) = f {
-            let _ = f.read_to_string(&mut text);
-        }
+    pub fn save(&self) {
+        let buffer = self.imp().source_view.buffer();
+        let start = buffer.start_iter();
+        let end = buffer.end_iter();
+        let text = buffer.text(&start, &end, true).to_string();
+        let bytes = text.as_bytes();
 
-        let imp = self.imp();
-        let lang = LanguageManager::default().language("markdown").unwrap();
+        let Some(ref mut file) = *self.imp().file.borrow_mut() else {
+            panic!("SheetEditor file_lock uninitialized");
+        };
 
-        let buffer = Buffer::with_language(&lang);
-        buffer.set_text(&text);
-        self.load_buffer_style_scheme(&buffer);
-
-        imp.source_view.set_buffer(Some(&buffer));
+        file.seek(SeekFrom::Start(0)).expect("seek failed");
+        file.set_len(0).expect("clear failed");
+        file.write_all(bytes).expect("write failed");
     }
 
     fn load_buffer_style_scheme(&self, buffer: &Buffer) {
