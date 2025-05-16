@@ -123,4 +123,15 @@ impl LibraryBrowser {
             ),
         );
     }
+
+    pub fn clear_selected_sheet(&self) {
+        if let Some(selected) = self
+            .imp()
+            .selected_sheet_button
+            .take()
+            .and_then(|f| f.upgrade())
+        {
+            selected.set_active(false);
+        }
+    }
 }

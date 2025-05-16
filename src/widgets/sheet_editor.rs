@@ -1,11 +1,15 @@
 mod imp {
-    use adw::subclass::prelude::*;
+    use std::sync::OnceLock;
 
-    use gtk::{
-        CompositeTemplate,
-        glib::{self, *},
-        subclass::widget::{CompositeTemplateClass, CompositeTemplateInitializingExt, WidgetImpl},
-    };
+    use adw::subclass::prelude::*;
+    use glib::clone;
+    use glib::subclass::Signal;
+    use gtk::glib;
+    use gtk::prelude::*;
+
+    use gtk::{CompositeTemplate, TemplateChild};
+
+    use gtk::Button;
     use sourceview5::View;
 
     #[derive(CompositeTemplate, Default)]
@@ -13,6 +17,9 @@ mod imp {
     pub struct SheetEditor {
         #[template_child]
         pub(super) source_view: TemplateChild<View>,
+
+        #[template_child]
+        pub(super) close_sheet_button: TemplateChild<Button>,
     }
 
     #[glib::object_subclass]
@@ -25,7 +32,7 @@ mod imp {
             klass.bind_template();
         }
 
-        fn instance_init(obj: &subclass::InitializingObject<Self>) {
+        fn instance_init(obj: &glib::subclass::InitializingObject<Self>) {
             obj.init_template();
         }
     }
@@ -33,6 +40,21 @@ mod imp {
     impl ObjectImpl for SheetEditor {
         fn constructed(&self) {
             self.parent_constructed();
+
+            let close_sheet_button = self.close_sheet_button.get();
+            let obj = self.obj();
+            close_sheet_button.connect_clicked(clone!(
+                #[weak]
+                obj,
+                move |_| {
+                    obj.emit_by_name::<()>("close-requested", &[]);
+                }
+            ));
+        }
+
+        fn signals() -> &'static [Signal] {
+            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
+            SIGNALS.get_or_init(|| vec![Signal::builder("close-requested").build()])
         }
     }
 
@@ -42,13 +64,13 @@ mod imp {
 
 use std::{fs::File, io::Read, path::PathBuf};
 
-use adw::subclass::prelude::ObjectSubclassIsExt;
+use adw::subclass::prelude::*;
 use glib::Object;
-use gtk::{
-    glib::{self},
-    prelude::{TextBufferExt, TextViewExt},
-};
-use sourceview5::{Buffer, LanguageManager, StyleSchemeManager, prelude::BufferExt};
+use gtk::glib;
+use gtk::prelude::*;
+use sourceview5::prelude::*;
+
+use sourceview5::{Buffer, LanguageManager, StyleSchemeManager};
 
 glib::wrapper! {
     pub struct SheetEditor(ObjectSubclass<imp::SheetEditor>)
@@ -56,25 +78,15 @@ glib::wrapper! {
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl Default for SheetEditor {
-    fn default() -> Self {
+impl SheetEditor {
+    pub fn new(path: PathBuf) -> Self {
         let this: Self = Object::builder().build();
         this.imp().source_view.set_monospace(true);
-        this.init_sheet(None);
-        this
-    }
-}
-
-impl SheetEditor {
-    pub fn new_sheet(&self) {
-        self.init_sheet(None);
-    }
-
-    pub fn load_sheet(&self, path: PathBuf) {
         match File::open(path) {
-            Ok(f) => self.init_sheet(Some(f)),
-            Err(_) => self.init_sheet(None),
+            Ok(f) => this.init_sheet(Some(f)),
+            Err(_) => this.init_sheet(None),
         };
+        this
     }
 
     fn init_sheet(&self, f: Option<File>) {

@@ -7,24 +7,49 @@
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <child>
-            <object class="GtkScrolledWindow" id="scroll">
-                <property name="width-request">800</property>
-                <property name="height-request">600</property>
+            <object class="GtkOverlay">
+                <child type="overlay">
+                    <object class="GtkBox" id="sheet_actions_hbox">
+                        <property name="orientation">0</property>
+                        <property
+                            name="halign">GTK_ALIGN_END</property>
+                        <property name="valign">GTK_ALIGN_START</property>
+                        <property name="margin-end">16</property>
+                        <property name="margin-top">16</property>
+                        <child>
+                            <object class="GtkButton" id="close_sheet_button">
+                                <property name="icon-name">window-close-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Close sheet</property>
+                                <style>
+                                    <class name="flat" />
+                                    <class name="dim-label" />
+                                    <class name="circular" />
+                                </style>
+                            </object>
+                        </child>
+                    </object>
+                </child>
                 <child>
-                    <object class="GtkCenterBox">
-                        <property name="margin-top">32</property>
-                        <property name="margin-bottom">32</property>
-                        <property name="margin-start">32</property>
-                        <property name="margin-end">32</property>
-                        <child type="center">
-                            <object class="GtkSourceView" id="source_view">
-                                <property name="width-request">700</property>
-                                <property name="tab-width">4</property>
-                                <property name="auto-indent">True</property>
-                                <property name="wrap-mode">3</property>
-                                <child internal-child="completion">
-                                    <object class="GtkSourceCompletion">
-                                        <property name="select-on-show">False</property>
+                    <object class="GtkScrolledWindow" id="scroll">
+                        <property name="width-request">800</property>
+                        <property name="height-request">600</property>
+                        <child>
+                            <object class="GtkCenterBox">
+                                <property name="margin-top">48</property>
+                                <property name="margin-bottom">32</property>
+                                <property name="margin-start">32</property>
+                                <property name="margin-end">32</property>
+                                <child type="center">
+                                    <object class="GtkSourceView" id="source_view">
+                                        <property name="width-request">700</property>
+                                        <property name="tab-width">4</property>
+                                        <property name="auto-indent">True</property>
+                                        <property name="wrap-mode">3</property>
+                                        <child internal-child="completion">
+                                            <object class="GtkSourceCompletion">
+                                                <property name="select-on-show">False</property>
+                                            </object>
+                                        </child>
                                     </object>
                                 </child>
                             </object>
