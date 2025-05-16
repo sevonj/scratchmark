@@ -1,15 +1,17 @@
 mod imp {
+    use std::cell::RefCell;
     use std::path::PathBuf;
 
-    use adw::prelude::NavigationPageExt;
+    use adw::prelude::*;
     use adw::subclass::prelude::*;
     use glib::clone;
     use glib::closure_local;
     use gtk::glib;
-    use gtk::prelude::*;
 
     use adw::{ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView, ToolbarView};
     use gtk::{Button, CompositeTemplate};
+
+    use crate::widgets::SheetEditorPlaceholder;
 
     use super::LibraryBrowser;
     use super::SheetEditor;
@@ -38,7 +40,7 @@ mod imp {
         pub(super) new_sheet_button: TemplateChild<Button>,
 
         pub(super) library_browser: LibraryBrowser,
-        pub(super) sheet_editor: SheetEditor,
+        pub(super) sheet_editor: RefCell<Option<SheetEditor>>,
     }
 
     #[glib::object_subclass]
@@ -66,36 +68,24 @@ mod imp {
                 top_split.set_collapsed(collapsed);
             }));
 
-            let sheet_editor = &self.sheet_editor;
-            self.new_sheet_button.connect_clicked(clone!(
-                #[weak]
-                sheet_editor,
-                move |_| {
-                    sheet_editor.new_sheet();
-                }
-            ));
-
-            let this = self;
+            let obj = self.obj();
             self.library_browser.connect_closure(
                 "sheet-selected",
                 false,
                 closure_local!(
                     #[weak]
-                    this,
+                    obj,
                     move |_browser: LibraryBrowser, path: PathBuf| {
-                        let stem = path
-                            .file_stem()
-                            .and_then(|s| s.to_str())
-                            .unwrap_or("TheftMD");
-                        this.main_page.set_title(stem);
-                        this.sheet_editor.load_sheet(path);
+                        obj.load_sheet(path);
                     }
                 ),
             );
 
+            self.main_toolbar_view
+                .set_content(Some(&SheetEditorPlaceholder::default()));
+            self.main_page.set_title("TheftMD");
             self.sidebar_toolbar_view
                 .set_content(Some(&self.library_browser));
-            self.main_toolbar_view.set_content(Some(&self.sheet_editor));
         }
     }
 
@@ -105,11 +95,18 @@ mod imp {
     impl AdwApplicationWindowImpl for Window {}
 }
 
+use std::path::PathBuf;
+
+use adw::prelude::*;
+use adw::subclass::prelude::*;
 use glib::Object;
-use gtk::{gio, glib};
+use gtk::gio;
+use gtk::glib;
+use gtk::glib::closure_local;
 
 use super::LibraryBrowser;
 use super::SheetEditor;
+use super::SheetEditorPlaceholder;
 
 glib::wrapper! {
     pub struct Window(ObjectSubclass<imp::Window>)
@@ -121,5 +118,42 @@ glib::wrapper! {
 impl Window {
     pub fn new(app: &adw::Application) -> Self {
         Object::builder().property("application", app).build()
+    }
+
+    fn load_sheet(&self, path: PathBuf) {
+        let imp = self.imp();
+
+        let stem = path
+            .file_stem()
+            .and_then(|s| s.to_str())
+            .unwrap_or("TheftMD");
+        imp.main_page.get().set_title(stem);
+
+        let editor = SheetEditor::new(path);
+
+        let this = self;
+        editor.connect_closure(
+            "close-requested",
+            false,
+            closure_local!(
+                #[weak]
+                this,
+                move |_: SheetEditor| { this.close_sheet() }
+            ),
+        );
+
+        imp.main_toolbar_view.set_content(Some(&editor));
+        imp.sheet_editor.replace(Some(editor));
+    }
+
+    fn close_sheet(&self) {
+        let imp = self.imp();
+        imp.sheet_editor.replace(None);
+
+        imp.main_toolbar_view
+            .set_content(Some(&SheetEditorPlaceholder::default()));
+        imp.main_page.get().set_title("TheftMD");
+
+        imp.library_browser.clear_selected_sheet();
     }
 }

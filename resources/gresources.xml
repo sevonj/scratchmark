@@ -6,6 +6,7 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library_root_folder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_button.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor_placeholder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>
   </gresource>
 </gresources>
