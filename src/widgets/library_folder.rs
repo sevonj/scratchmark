@@ -79,6 +79,9 @@ mod imp {
                     Signal::builder("sheet-clicked")
                         .param_types([LibrarySheetButton::static_type()])
                         .build(),
+                    Signal::builder("sheet-delete-requested")
+                        .param_types([LibrarySheetButton::static_type()])
+                        .build(),
                 ]
             })
         }
@@ -157,38 +160,66 @@ impl LibraryFolder {
             };
 
             if meta.is_dir() {
-                let data = FolderObject::new(entry.path());
-                let folder = LibraryFolder::new(&data);
-                self.imp().subdirs_vbox.append(&folder);
-                folder.refresh_content();
-
-                let this = self;
-                folder.connect_closure(
-                    "sheet-clicked",
-                    false,
-                    closure_local!(
-                        #[weak]
-                        this,
-                        move |_folder: LibraryFolder, button: LibrarySheetButton| {
-                            this.emit_by_name::<()>("sheet-clicked", &[&button]);
-                        }
-                    ),
-                );
+                self.add_subdir(FolderObject::new(entry.path()));
             } else if meta.is_file() {
-                let data = SheetObject::new(entry.path());
-                let button = LibrarySheetButton::new(&data);
-                self.imp().sheets_vbox.append(&button);
-
-                let this = self;
-                button.connect_clicked(clone!(
-                    #[weak]
-                    this,
-                    move |button| {
-                        this.emit_by_name::<()>("sheet-clicked", &[button]);
-                    }
-                ));
+                self.add_sheet(SheetObject::new(entry.path()));
             }
         }
+    }
+
+    fn add_subdir(&self, data: FolderObject) {
+        let folder = LibraryFolder::new(&data);
+        self.imp().subdirs_vbox.append(&folder);
+        folder.refresh_content();
+
+        let this = self;
+        folder.connect_closure(
+            "sheet-clicked",
+            false,
+            closure_local!(
+                #[weak]
+                this,
+                move |_folder: LibraryFolder, button: LibrarySheetButton| {
+                    this.emit_by_name::<()>("sheet-clicked", &[&button]);
+                }
+            ),
+        );
+        folder.connect_closure(
+            "sheet-delete-requested",
+            false,
+            closure_local!(
+                #[weak]
+                this,
+                move |_folder: super::LibraryFolder, button: LibrarySheetButton| {
+                    this.emit_by_name::<()>("sheet-delete-requested", &[&button]);
+                }
+            ),
+        );
+    }
+
+    fn add_sheet(&self, data: SheetObject) {
+        let button = LibrarySheetButton::new(&data);
+        self.imp().sheets_vbox.append(&button);
+
+        let this = self;
+        button.connect_clicked(clone!(
+            #[weak]
+            this,
+            move |button| {
+                this.emit_by_name::<()>("sheet-clicked", &[button]);
+            }
+        ));
+        button.connect_closure(
+            "delete-requested",
+            false,
+            closure_local!(
+                #[weak]
+                this,
+                move |button: LibrarySheetButton| {
+                    this.emit_by_name::<()>("sheet-delete-requested", &[&button]);
+                }
+            ),
+        );
     }
 
     fn bind(&self, data: &FolderObject) {

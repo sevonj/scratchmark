@@ -3,13 +3,20 @@
 
 mod imp {
     use std::cell::RefCell;
+    use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
-    use glib::Binding;
+    use glib::clone;
+    use gtk::gdk;
+    use gtk::gio;
     use gtk::glib;
+    use gtk::prelude::*;
 
-    use gtk::Label;
-    use gtk::{CompositeTemplate, TemplateChild};
+    use gdk::Rectangle;
+    use gio::{MenuModel, SimpleActionGroup};
+    use glib::Binding;
+    use glib::subclass::Signal;
+    use gtk::{Builder, CompositeTemplate, Label, PopoverMenu, TemplateChild};
 
     use crate::data::SheetObject;
 
@@ -21,6 +28,8 @@ mod imp {
 
         pub(super) sheet_object: RefCell<Option<SheetObject>>,
         pub(super) bindings: RefCell<Vec<Binding>>,
+
+        context_menu_popover: RefCell<Option<PopoverMenu>>,
     }
 
     #[glib::object_subclass]
@@ -41,7 +50,61 @@ mod imp {
     impl ObjectImpl for LibrarySheetButton {
         fn constructed(&self) {
             self.parent_constructed();
+            let obj = self.obj();
+
+            let builder = Builder::from_resource(
+                "/fi/sevonj/TheftMD/ui/library_sheet_button_context_menu.ui",
+            );
+            let menu = builder.object::<MenuModel>("context-menu");
+            match menu {
+                Some(popover) => {
+                    let menu = PopoverMenu::builder()
+                        .menu_model(&popover)
+                        .has_arrow(false)
+                        .build();
+                    menu.set_parent(&*obj);
+                    let _ = self.context_menu_popover.replace(Some(menu));
+                }
+                None => panic!(), // error!(" Not a popover"),
+            }
+
+            let gesture = gtk::GestureClick::new();
+            gesture.set_button(gdk::ffi::GDK_BUTTON_SECONDARY as u32);
+            gesture.connect_released(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |gesture, _n, x, y| {
+                    gesture.set_state(gtk::EventSequenceState::Claimed);
+                    if let Some(popover) = this.context_menu_popover.borrow().as_ref() {
+                        popover.set_pointing_to(Some(&Rectangle::new(x as i32, y as i32, 1, 1)));
+                        popover.popup();
+                    };
+                }
+            ));
+            obj.add_controller(gesture);
+
+            setup_actions(obj);
         }
+
+        fn signals() -> &'static [Signal] {
+            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
+            SIGNALS.get_or_init(|| vec![Signal::builder("delete-requested").build()])
+        }
+    }
+
+    fn setup_actions(obj: glib::BorrowedObject<'_, super::LibrarySheetButton>) {
+        let actions = SimpleActionGroup::new();
+        obj.insert_action_group("sheet", Some(&actions));
+
+        let action = gio::SimpleAction::new("delete", None);
+        action.connect_activate(clone!(
+            #[weak]
+            obj,
+            move |_action, _parameter| {
+                obj.emit_by_name::<()>("delete-requested", &[]);
+            }
+        ));
+        actions.add_action(&action);
     }
 
     impl WidgetImpl for LibrarySheetButton {}

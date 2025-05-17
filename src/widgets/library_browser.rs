@@ -122,6 +122,17 @@ impl LibraryBrowser {
                 }
             ),
         );
+
+        folder.connect_closure(
+            "sheet-delete-requested",
+            false,
+            closure_local!(
+                move |_folder: super::LibraryFolder, button: LibrarySheetButton| {
+                    let path = button.path();
+                    std::fs::remove_file(path).expect("file delet failed");
+                }
+            ),
+        );
     }
 
     pub fn clear_selected_sheet(&self) {

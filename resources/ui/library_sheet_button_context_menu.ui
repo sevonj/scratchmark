@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Context menu for Library Sheet Button -->
+<interface>
+  <menu id="context-menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Delete sheet</attribute>
+        <attribute name="action">sheet.delete</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
