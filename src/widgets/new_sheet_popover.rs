@@ -67,6 +67,15 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
             let this = self;
+            let obj = self.obj();
+
+            obj.connect_closed(clone!(
+                #[weak]
+                this,
+                move |_| {
+                    this.clear();
+                }
+            ));
 
             self.name_field.connect_changed(clone!(
                 #[weak]
@@ -103,6 +112,10 @@ mod imp {
     impl PopoverImpl for NewSheetPopover {}
 
     impl NewSheetPopover {
+        fn clear(&self) {
+            self.name_field.set_text("");
+        }
+
         fn refresh(&self) {
             let name_status = self.filename_status();
             self.commit_button.set_sensitive(name_status.is_ok());
