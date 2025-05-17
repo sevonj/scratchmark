@@ -10,30 +10,13 @@
         <property name="width-request">800</property>
         <property name="height-request">600</property>
         <child>
-            <object class="GtkBox">
-                <property name="orientation">1</property>
-                <property name="spacing">8</property>
-                <property name="valign">GTK_ALIGN_CENTER</property>
-                <child>
-                    <object class="GtkImage" id="sheet_icon">
-                        <style>
-                            <class name="dim-label" />
-                        </style>
-                        <property name="icon-name">text-x-generic-symbolic</property>
-                        <property name="icon-size">GTK_ICON_SIZE_LARGE</property>
-                    </object>
-                </child>
-                <child>
-                    <object class="GtkLabel" id="sheet_name_label">
-                        <style>
-                            <class name="dim-label" />
-                        </style>
-                        <property name="label">Start writing!</property>
-                        <attributes>
-                            <attribute name="weight" value="PANGO_WEIGHT_NORMAL" />
-                        </attributes>
-                    </object>
-                </child>
+            <object class="AdwStatusPage">
+                <property name="title">Nothing open</property>
+                <property name="description">Create a new sheet or open an existing one from the sidebar.</property>
+                <property name="icon-name">text-x-generic-symbolic</property>
+                <style>
+                    <class name="compact" />
+                </style>
             </object>
         </child>
     </template>
