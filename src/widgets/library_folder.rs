@@ -9,8 +9,11 @@ mod imp {
     use glib::Binding;
     use glib::subclass::Signal;
     use gtk::glib;
+    use gtk::glib::clone;
     use gtk::prelude::*;
 
+    use gtk::Button;
+    use gtk::Image;
     use gtk::Label;
     use gtk::{CompositeTemplate, TemplateChild};
 
@@ -21,14 +24,21 @@ mod imp {
     #[template(resource = "/fi/sevonj/TheftMD/ui/library_folder.ui")]
     pub struct LibraryFolder {
         #[template_child]
+        pub(super) expand_button: TemplateChild<Button>,
+        #[template_child]
+        pub(super) expand_icon: TemplateChild<Image>,
+        #[template_child]
         pub(super) title: TemplateChild<Label>,
         #[template_child]
-        pub(super) subdir_vbox: TemplateChild<gtk::Box>,
-        #[template_child]
         pub(super) content_vbox: TemplateChild<gtk::Box>,
+        #[template_child]
+        pub(super) subdirs_vbox: TemplateChild<gtk::Box>,
+        #[template_child]
+        pub(super) sheets_vbox: TemplateChild<gtk::Box>,
 
         pub(super) folder_object: RefCell<Option<FolderObject>>,
         pub(super) bindings: RefCell<Vec<Binding>>,
+        pub(super) expanded: RefCell<bool>,
     }
 
     #[glib::object_subclass]
@@ -49,6 +59,17 @@ mod imp {
     impl ObjectImpl for LibraryFolder {
         fn constructed(&self) {
             self.parent_constructed();
+
+            let this = self;
+            self.expand_button.connect_clicked(clone!(
+                #[weak]
+                this,
+                move |_| {
+                    this.toggle_expand();
+                }
+            ));
+
+            self.set_expand(false);
         }
 
         fn signals() -> &'static [Signal] {
@@ -65,6 +86,27 @@ mod imp {
 
     impl WidgetImpl for LibraryFolder {}
     impl BinImpl for LibraryFolder {}
+
+    impl LibraryFolder {
+        fn toggle_expand(&self) {
+            let expand = !*self.expanded.borrow();
+            self.set_expand(expand);
+        }
+
+        pub(super) fn set_expand(&self, expand: bool) {
+            self.expanded.replace(expand);
+
+            if expand {
+                self.expand_icon.set_icon_name("pan-down-symbolic".into());
+                self.subdirs_vbox.set_visible(true);
+                self.sheets_vbox.set_visible(true);
+            } else {
+                self.expand_icon.set_icon_name("pan-end-symbolic".into());
+                self.subdirs_vbox.set_visible(false);
+                self.sheets_vbox.set_visible(false);
+            }
+        }
+    }
 }
 
 use adw::subclass::prelude::*;
@@ -92,6 +134,17 @@ impl LibraryFolder {
         this
     }
 
+    pub fn new_root(data: &FolderObject) -> Self {
+        let this: Self = Object::builder().build();
+        this.bind(data);
+        this.imp().expand_icon.set_visible(false);
+        this.imp().expand_button.set_sensitive(false);
+        this.imp().title.set_label("Library");
+        this.imp().content_vbox.set_margin_start(0);
+        this.imp().set_expand(true);
+        this
+    }
+
     pub fn refresh_content(&self) {
         let opt = self.imp().folder_object.borrow();
         let folder = opt.as_ref().expect("FolderObject not bound");
@@ -106,7 +159,7 @@ impl LibraryFolder {
             if meta.is_dir() {
                 let data = FolderObject::new(entry.path());
                 let folder = LibraryFolder::new(&data);
-                self.imp().subdir_vbox.append(&folder);
+                self.imp().subdirs_vbox.append(&folder);
                 folder.refresh_content();
 
                 let this = self;
@@ -124,7 +177,7 @@ impl LibraryFolder {
             } else if meta.is_file() {
                 let data = SheetObject::new(entry.path());
                 let button = LibrarySheetButton::new(&data);
-                self.imp().content_vbox.append(&button);
+                self.imp().sheets_vbox.append(&button);
 
                 let this = self;
                 button.connect_clicked(clone!(

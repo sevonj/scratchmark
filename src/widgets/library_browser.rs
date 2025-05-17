@@ -69,7 +69,7 @@ use gtk::prelude::*;
 use crate::widgets::LibrarySheetButton;
 use crate::{data::FolderObject, util::path_builtin_library};
 
-use super::LibraryRootFolder;
+use super::LibraryFolder;
 
 glib::wrapper! {
     pub struct LibraryBrowser(ObjectSubclass<imp::LibraryBrowser>)
@@ -90,7 +90,7 @@ impl LibraryBrowser {
         let library_root = &self.imp().library_root;
 
         let data = FolderObject::new(path_builtin_library());
-        let folder = LibraryRootFolder::new(&data);
+        let folder = LibraryFolder::new_root(&data);
         folder.refresh_content();
 
         library_root.append(&folder);
@@ -102,7 +102,7 @@ impl LibraryBrowser {
             closure_local!(
                 #[weak]
                 this,
-                move |_folder: LibraryRootFolder, button: LibrarySheetButton| {
+                move |_folder: LibraryFolder, button: LibrarySheetButton| {
                     if let Some(old) = this
                         .imp()
                         .selected_sheet_button

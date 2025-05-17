@@ -3,7 +3,6 @@
   <gresource prefix="/fi/sevonj/TheftMD">
     <file preprocess="xml-stripblanks" compressed="true">ui/library_browser.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_root_folder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_button.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/new_sheet_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor.ui</file>
