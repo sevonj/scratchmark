@@ -1,3 +1,5 @@
+[![CI](https://github.com/sevonj/theftmd/actions/workflows/ci.yml/badge.svg)](https://github.com/sevonj/theftmd/actions/workflows/ci.yml)
+
 # TheftMD
 
 TheftMD (To be renamed) is a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
