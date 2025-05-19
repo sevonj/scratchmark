@@ -1,6 +1,7 @@
 mod imp {
     use std::cell::RefCell;
     use std::fs::File;
+    use std::path::PathBuf;
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
@@ -23,6 +24,7 @@ mod imp {
         pub(super) close_sheet_button: TemplateChild<Button>,
 
         pub(super) file: RefCell<Option<File>>,
+        pub(super) path: RefCell<Option<PathBuf>>,
     }
 
     #[glib::object_subclass]
@@ -88,7 +90,7 @@ impl SheetEditor {
         let mut file = OpenOptions::new()
             .read(true)
             .write(true)
-            .open(path)
+            .open(&path)
             .expect("file open fail");
         let mut text = String::new();
         file.read_to_string(&mut text).expect("TODO read to string");
@@ -100,6 +102,7 @@ impl SheetEditor {
         let this: Self = Object::builder().build();
         this.load_buffer_style_scheme(&buffer);
         this.imp().file.replace(Some(file));
+        this.imp().path.replace(Some(path));
         this.imp().source_view.set_monospace(true);
         this.imp().source_view.set_buffer(Some(&buffer));
         this
@@ -119,6 +122,13 @@ impl SheetEditor {
         file.seek(SeekFrom::Start(0)).expect("seek failed");
         file.set_len(0).expect("clear failed");
         file.write_all(bytes).expect("write failed");
+    }
+
+    pub fn path(&self) -> PathBuf {
+        let opt = self.imp().path.borrow();
+        opt.as_ref()
+            .expect("SheetEditor: path uninitialized")
+            .clone()
     }
 
     fn load_buffer_style_scheme(&self, buffer: &Buffer) {

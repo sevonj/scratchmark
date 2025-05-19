@@ -47,6 +47,8 @@ mod imp {
     impl ObjectImpl for LibraryBrowser {
         fn constructed(&self) {
             self.parent_constructed();
+            let this = self;
+            let obj = self.obj();
 
             let library_root = &self.library_root;
 
@@ -56,7 +58,6 @@ mod imp {
 
             library_root.append(&folder);
 
-            let this = self;
             folder.connect_closure(
                 "sheet-clicked",
                 false,
@@ -86,11 +87,9 @@ mod imp {
                 false,
                 closure_local!(
                     #[weak]
-                    this,
+                    obj,
                     move |_: LibraryFolder, folder: LibraryFolder| {
-                        let path = folder.path();
-                        std::fs::remove_dir_all(path).expect("folder delet failed");
-                        this.obj().refresh_content();
+                        obj.emit_by_name::<()>("folder-delete-requested", &[&folder]);
                     }
                 ),
             );
@@ -100,11 +99,9 @@ mod imp {
                 false,
                 closure_local!(
                     #[weak]
-                    this,
-                    move |_: LibraryFolder, button: LibrarySheetButton| {
-                        let path = button.path();
-                        std::fs::remove_file(path).expect("file delet failed");
-                        this.obj().refresh_content();
+                    obj,
+                    move |_: LibraryFolder, sheet: LibrarySheetButton| {
+                        obj.emit_by_name::<()>("sheet-delete-requested", &[&sheet]);
                     }
                 ),
             );
@@ -118,6 +115,12 @@ mod imp {
                 vec![
                     Signal::builder("sheet-selected")
                         .param_types([PathBuf::static_type()])
+                        .build(),
+                    Signal::builder("folder-delete-requested")
+                        .param_types([LibraryFolder::static_type()])
+                        .build(),
+                    Signal::builder("sheet-delete-requested")
+                        .param_types([LibrarySheetButton::static_type()])
                         .build(),
                 ]
             })

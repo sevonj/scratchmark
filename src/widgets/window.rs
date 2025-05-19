@@ -12,6 +12,8 @@ mod imp {
     use gtk::MenuButton;
     use gtk::{Button, CompositeTemplate};
 
+    use crate::widgets::LibraryFolder;
+    use crate::widgets::LibrarySheetButton;
     use crate::widgets::NewFolderPopover;
     use crate::widgets::NewSheetPopover;
     use crate::widgets::SheetEditorPlaceholder;
@@ -66,6 +68,7 @@ mod imp {
     impl ObjectImpl for Window {
         fn constructed(&self) {
             self.parent_constructed();
+            let obj = self.obj();
 
             let top_split = self.top_split.get();
             self.sidebar_toggle.connect_clicked(clone!(move |_| {
@@ -73,15 +76,64 @@ mod imp {
                 top_split.set_collapsed(collapsed);
             }));
 
-            let obj = self.obj();
             self.library_browser.connect_closure(
                 "sheet-selected",
                 false,
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_browser: LibraryBrowser, path: PathBuf| {
+                    move |_: LibraryBrowser, path: PathBuf| {
                         obj.load_sheet(path);
+                    }
+                ),
+            );
+
+            self.library_browser.connect_closure(
+                "folder-delete-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |browser: LibraryBrowser, folder: LibraryFolder| {
+                        let path = folder
+                            .path()
+                            .canonicalize()
+                            .expect("folder delet failed to canonicalize folder");
+                        let parent_of_currently_open =
+                            obj.imp().sheet_editor.borrow().as_ref().is_some_and(|e| {
+                                e.path()
+                                    .canonicalize()
+                                    .expect("folder delet failed to canonicalize sheet")
+                                    .starts_with(&path)
+                            });
+                        if parent_of_currently_open {
+                            obj.close_sheet()
+                        }
+                        std::fs::remove_dir_all(path).expect("folder delet failed");
+                        browser.refresh_content();
+                    }
+                ),
+            );
+
+            self.library_browser.connect_closure(
+                "sheet-delete-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |browser: LibraryBrowser, sheet: LibrarySheetButton| {
+                        let path = sheet.path();
+                        let currently_open = obj
+                            .imp()
+                            .sheet_editor
+                            .borrow()
+                            .as_ref()
+                            .is_some_and(|e| e.path() == path);
+                        if currently_open {
+                            obj.close_sheet()
+                        }
+                        std::fs::remove_file(path).expect("file delet failed");
+                        browser.refresh_content();
                     }
                 ),
             );
