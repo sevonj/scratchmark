@@ -82,12 +82,26 @@ mod imp {
             );
 
             folder.connect_closure(
+                "folder-delete-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    this,
+                    move |_: LibraryFolder, folder: LibraryFolder| {
+                        let path = folder.path();
+                        std::fs::remove_dir_all(path).expect("folder delet failed");
+                        this.obj().refresh_content();
+                    }
+                ),
+            );
+
+            folder.connect_closure(
                 "sheet-delete-requested",
                 false,
                 closure_local!(
                     #[weak]
                     this,
-                    move |_folder: super::LibraryFolder, button: LibrarySheetButton| {
+                    move |_: LibraryFolder, button: LibrarySheetButton| {
                         let path = button.path();
                         std::fs::remove_file(path).expect("file delet failed");
                         this.obj().refresh_content();
@@ -118,8 +132,6 @@ use adw::subclass::prelude::*;
 use glib::Object;
 use gtk::glib;
 use gtk::prelude::*;
-
-use super::LibraryFolder;
 
 glib::wrapper! {
     pub struct LibraryBrowser(ObjectSubclass<imp::LibraryBrowser>)

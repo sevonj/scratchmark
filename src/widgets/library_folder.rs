@@ -6,15 +6,17 @@ mod imp {
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
-    use glib::Binding;
-    use glib::subclass::Signal;
+    use glib::clone;
+    use gtk::gdk;
+    use gtk::gio;
     use gtk::glib;
-    use gtk::glib::clone;
     use gtk::prelude::*;
 
-    use gtk::Button;
-    use gtk::Image;
-    use gtk::Label;
+    use gdk::Rectangle;
+    use gio::{MenuModel, SimpleActionGroup};
+    use glib::Binding;
+    use glib::subclass::Signal;
+    use gtk::{Builder, Button, Image, Label, PopoverMenu};
     use gtk::{CompositeTemplate, TemplateChild};
 
     use crate::data::FolderObject;
@@ -41,6 +43,8 @@ mod imp {
         pub(super) expanded: RefCell<bool>,
         pub(super) subdirs: RefCell<Vec<super::LibraryFolder>>,
         pub(super) sheets: RefCell<Vec<LibrarySheetButton>>,
+
+        context_menu_popover: RefCell<Option<PopoverMenu>>,
     }
 
     #[glib::object_subclass]
@@ -61,6 +65,7 @@ mod imp {
     impl ObjectImpl for LibraryFolder {
         fn constructed(&self) {
             self.parent_constructed();
+            let obj = self.obj();
 
             let this = self;
             self.expand_button.connect_clicked(clone!(
@@ -72,12 +77,64 @@ mod imp {
             ));
 
             self.set_expand(false);
+
+            let builder =
+                Builder::from_resource("/fi/sevonj/TheftMD/ui/library_folder_context_menu.ui");
+            let popover = builder
+                .object::<MenuModel>("context-menu")
+                .expect("LibraryFolder context-menu model failed");
+            let menu = PopoverMenu::builder()
+                .menu_model(&popover)
+                .has_arrow(false)
+                .build();
+            menu.set_parent(&*obj);
+            let _ = self.context_menu_popover.replace(Some(menu));
+
+            let gesture = gtk::GestureClick::new();
+            gesture.set_button(gdk::ffi::GDK_BUTTON_SECONDARY as u32);
+            gesture.connect_released(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |gesture, _n, x, y| {
+                    gesture.set_state(gtk::EventSequenceState::Claimed);
+                    if let Some(popover) = this.context_menu_popover.borrow().as_ref() {
+                        popover.set_pointing_to(Some(&Rectangle::new(x as i32, y as i32, 1, 1)));
+                        popover.popup();
+                    };
+                }
+            ));
+            obj.add_controller(gesture);
+
+            let actions = SimpleActionGroup::new();
+            obj.insert_action_group("folder", Some(&actions));
+
+            let action = gio::SimpleAction::new("delete", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    obj.emit_by_name::<()>("folder-delete-requested", &[&obj]);
+                }
+            ));
+            actions.add_action(&action);
+
+            obj.connect_destroy(move |obj| {
+                let popover = obj
+                    .imp()
+                    .context_menu_popover
+                    .take()
+                    .expect("LibraryFolder context menu uninitialized");
+                popover.unparent();
+            });
         }
 
         fn signals() -> &'static [Signal] {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
+                    Signal::builder("folder-delete-requested")
+                        .param_types([super::LibraryFolder::static_type()])
+                        .build(),
                     Signal::builder("sheet-clicked")
                         .param_types([LibrarySheetButton::static_type()])
                         .build(),
@@ -194,15 +251,26 @@ impl LibraryFolder {
         let folder = LibraryFolder::new(&data);
         self.imp().subdirs_vbox.append(&folder);
         folder.refresh_content();
-
         let this = self;
+
+        folder.connect_closure(
+            "folder-delete-requested",
+            false,
+            closure_local!(
+                #[weak]
+                this,
+                move |_: super::LibraryFolder, folder: super::LibraryFolder| {
+                    this.emit_by_name::<()>("folder-delete-requested", &[&folder]);
+                }
+            ),
+        );
         folder.connect_closure(
             "sheet-clicked",
             false,
             closure_local!(
                 #[weak]
                 this,
-                move |_folder: LibraryFolder, button: LibrarySheetButton| {
+                move |_: LibraryFolder, button: LibrarySheetButton| {
                     this.emit_by_name::<()>("sheet-clicked", &[&button]);
                 }
             ),
@@ -213,7 +281,7 @@ impl LibraryFolder {
             closure_local!(
                 #[weak]
                 this,
-                move |_folder: super::LibraryFolder, button: LibrarySheetButton| {
+                move |_: super::LibraryFolder, button: LibrarySheetButton| {
                     this.emit_by_name::<()>("sheet-delete-requested", &[&button]);
                 }
             ),
