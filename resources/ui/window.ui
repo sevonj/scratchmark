@@ -15,9 +15,9 @@
                   <object class="AdwHeaderBar" id="sidebar_header_bar">
                     <property name="show-title">False</property>
                     <child type="start">
-                      <object class="GtkButton" id="add_folder_button">
+                      <object class="GtkMenuButton" id="new_folder_button">
                         <property name="icon-name">folder-new-symbolic</property>
-                        <property name="tooltip-text" translatable="yes">Add folder to library</property>
+                        <property name="tooltip-text" translatable="yes">New sheet</property>
                       </object>
                     </child>
                   </object>

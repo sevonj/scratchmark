@@ -12,6 +12,7 @@ mod imp {
     use gtk::MenuButton;
     use gtk::{Button, CompositeTemplate};
 
+    use crate::widgets::NewFolderPopover;
     use crate::widgets::NewSheetPopover;
     use crate::widgets::SheetEditorPlaceholder;
 
@@ -38,6 +39,8 @@ mod imp {
         #[template_child]
         pub(super) main_toolbar_view: TemplateChild<ToolbarView>,
 
+        #[template_child]
+        pub(super) new_folder_button: TemplateChild<MenuButton>,
         #[template_child]
         pub(super) new_sheet_button: TemplateChild<MenuButton>,
 
@@ -79,6 +82,21 @@ mod imp {
                     obj,
                     move |_browser: LibraryBrowser, path: PathBuf| {
                         obj.load_sheet(path);
+                    }
+                ),
+            );
+
+            let new_folder_popover = NewFolderPopover::default();
+            self.new_folder_button
+                .set_popover(Some(&new_folder_popover));
+            new_folder_popover.connect_closure(
+                "committed",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_popover: NewFolderPopover, path: PathBuf| {
+                        obj.create_folder(path);
                     }
                 ),
             );
@@ -165,6 +183,11 @@ impl Window {
 
         imp.main_toolbar_view.set_content(Some(&editor));
         imp.sheet_editor.replace(Some(editor));
+    }
+
+    fn create_folder(&self, path: PathBuf) {
+        std::fs::create_dir(path).expect("folder create fail");
+        self.imp().library_browser.refresh_content();
     }
 
     fn create_sheet(&self, path: PathBuf) {

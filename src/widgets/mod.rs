@@ -1,6 +1,7 @@
 mod library_browser;
 mod library_folder;
 mod library_sheet_button;
+mod new_folder_popover;
 mod new_sheet_popover;
 mod sheet_editor;
 mod sheet_editor_placeholder;
@@ -9,6 +10,7 @@ mod window;
 pub use library_browser::LibraryBrowser;
 pub use library_folder::LibraryFolder;
 pub use library_sheet_button::LibrarySheetButton;
+pub use new_folder_popover::NewFolderPopover;
 pub use new_sheet_popover::NewSheetPopover;
 pub use sheet_editor::SheetEditor;
 pub use sheet_editor_placeholder::SheetEditorPlaceholder;
