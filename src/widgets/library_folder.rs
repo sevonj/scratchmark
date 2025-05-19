@@ -359,6 +359,7 @@ mod imp {
                 #[weak]
                 obj,
                 move |button| {
+                    button.set_active(false);
                     obj.emit_by_name::<()>("sheet-clicked", &[button]);
                 }
             ));
@@ -388,6 +389,8 @@ use gtk::prelude::*;
 use glib::Object;
 
 use crate::data::FolderObject;
+
+use super::LibrarySheetButton;
 
 glib::wrapper! {
     pub struct LibraryFolder(ObjectSubclass<imp::LibraryFolder>)
@@ -426,6 +429,24 @@ impl LibraryFolder {
     /// Recursively check for new and removed files
     pub fn refresh_content(&self) {
         self.imp().refresh_content();
+    }
+
+    pub fn find_sheet_button(&self, path: &PathBuf) -> Option<LibrarySheetButton> {
+        for subdir in self.imp().subdirs.borrow().iter() {
+            if let Ok(subdir_path) = subdir.path().canonicalize() {
+                if path.starts_with(&subdir_path) {
+                    return subdir.find_sheet_button(path);
+                }
+            }
+        }
+        for sheet in self.imp().sheets.borrow().iter() {
+            if let Ok(sheet_path) = sheet.path().canonicalize() {
+                if *path == sheet_path {
+                    return Some(sheet.clone());
+                }
+            }
+        }
+        None
     }
 
     fn bind(&self, data: &FolderObject) {

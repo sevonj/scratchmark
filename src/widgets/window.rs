@@ -218,7 +218,7 @@ impl Window {
             .unwrap_or("TheftMD");
         imp.main_page.get().set_title(stem);
 
-        let editor = SheetEditor::new(path);
+        let editor = SheetEditor::new(path.clone());
 
         let this = self;
         editor.connect_closure(
@@ -236,6 +236,7 @@ impl Window {
 
         imp.main_toolbar_view.set_content(Some(&editor));
         imp.sheet_editor.replace(Some(editor));
+        imp.library_browser.select_sheet_by_path(&path);
     }
 
     fn create_folder(&self, path: PathBuf) {
@@ -257,8 +258,8 @@ impl Window {
         file.write_all(contents.as_bytes())
             .expect("failed to write template to new file");
 
-        self.load_sheet(path);
         self.imp().library_browser.refresh_content();
+        self.load_sheet(path);
     }
 
     fn close_sheet(&self) {

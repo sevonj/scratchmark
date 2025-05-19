@@ -65,17 +65,6 @@ mod imp {
                     #[weak]
                     this,
                     move |_folder: LibraryFolder, button: LibrarySheetButton| {
-                        if let Some(old) = this
-                            .selected_sheet_button
-                            .borrow()
-                            .as_ref()
-                            .and_then(|f| f.upgrade())
-                        {
-                            old.set_active(false);
-                        }
-
-                        this.selected_sheet_button.replace(Some(button.downgrade()));
-
                         let path = button.path();
                         this.obj().emit_by_name::<()>("sheet-selected", &[&path]);
                     }
@@ -131,10 +120,14 @@ mod imp {
     impl BinImpl for LibraryBrowser {}
 }
 
+use std::path::Path;
+
 use adw::subclass::prelude::*;
 use glib::Object;
 use gtk::glib;
 use gtk::prelude::*;
+
+use super::LibrarySheetButton;
 
 glib::wrapper! {
     pub struct LibraryBrowser(ObjectSubclass<imp::LibraryBrowser>)
@@ -168,6 +161,42 @@ impl LibraryBrowser {
             .and_then(|f| f.upgrade())
         {
             selected.set_active(false);
+        }
+    }
+
+    pub fn select_sheet_button(&self, button: LibrarySheetButton) {
+        if let Some(old) = self
+            .imp()
+            .selected_sheet_button
+            .borrow()
+            .as_ref()
+            .and_then(|f| f.upgrade())
+        {
+            old.set_active(false);
+        }
+        button.set_active(true);
+
+        self.imp()
+            .selected_sheet_button
+            .replace(Some(button.downgrade()));
+    }
+
+    pub fn select_sheet_by_path(&self, path: &Path) {
+        self.clear_selected_sheet();
+
+        let Ok(path) = path.canonicalize() else {
+            return;
+        };
+
+        if let Some(button) = self
+            .imp()
+            .library_folder
+            .borrow()
+            .as_ref()
+            .expect("LibraryBrowser: library folder uninitialized")
+            .find_sheet_button(&path)
+        {
+            self.select_sheet_button(button);
         }
     }
 }
