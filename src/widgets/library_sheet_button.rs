@@ -16,7 +16,7 @@ mod imp {
     use gio::{MenuModel, SimpleActionGroup};
     use glib::Binding;
     use glib::subclass::Signal;
-    use gtk::{Builder, CompositeTemplate, Label, PopoverMenu, TemplateChild};
+    use gtk::{Builder, CompositeTemplate, FileLauncher, Label, PopoverMenu, TemplateChild};
 
     use crate::data::SheetObject;
 
@@ -82,6 +82,21 @@ mod imp {
 
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("sheet", Some(&actions));
+
+            let action = gio::SimpleAction::new("filemanager", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    let file = gio::File::for_path(obj.path());
+                    FileLauncher::new(Some(&file)).open_containing_folder(
+                        None::<&adw::ApplicationWindow>,
+                        None::<&gio::Cancellable>,
+                        |_| {},
+                    );
+                }
+            ));
+            actions.add_action(&action);
 
             let action = gio::SimpleAction::new("delete", None);
             action.connect_activate(clone!(

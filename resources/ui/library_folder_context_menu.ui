@@ -4,6 +4,10 @@
   <menu id="context-menu">
     <section>
       <item>
+        <attribute name="label" translatable="yes">Open in file manager</attribute>
+        <attribute name="action">folder.filemanager</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Delete folder</attribute>
         <attribute name="action">folder.delete</attribute>
       </item>
