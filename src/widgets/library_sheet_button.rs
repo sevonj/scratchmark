@@ -160,6 +160,15 @@ impl LibrarySheetButton {
             .path()
     }
 
+    pub fn stem(&self) -> String {
+        self.imp()
+            .sheet_object
+            .borrow()
+            .as_ref()
+            .expect("LibrarySheetButton data uninitialized")
+            .stem()
+    }
+
     fn bind(&self, data: &SheetObject) {
         self.imp().sheet_object.replace(Some(data.clone()));
 

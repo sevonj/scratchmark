@@ -184,6 +184,39 @@ mod imp {
                 self.sheets_vbox.set_visible(false);
             }
         }
+
+        pub(super) fn sort_children(&self) {
+            let mut sheets = self.sheets.borrow_mut();
+            if !sheets.is_empty() {
+                fn compare(a: &LibrarySheetButton, b: &LibrarySheetButton) -> std::cmp::Ordering {
+                    a.stem().to_lowercase().cmp(&b.stem().to_lowercase())
+                }
+                sheets.sort_unstable_by(compare);
+
+                for i in (0..sheets.len() - 1).rev() {
+                    let child = &sheets[i + 1];
+                    let sibling = Some(&sheets[i]);
+                    self.sheets_vbox.reorder_child_after(child, sibling);
+                }
+            }
+
+            let mut subdirs = self.subdirs.borrow_mut();
+            if !subdirs.is_empty() {
+                fn compare(
+                    a: &super::LibraryFolder,
+                    b: &super::LibraryFolder,
+                ) -> std::cmp::Ordering {
+                    a.name().to_lowercase().cmp(&b.name().to_lowercase())
+                }
+                subdirs.sort_unstable_by(compare);
+
+                for i in (0..subdirs.len() - 1).rev() {
+                    let child = &subdirs[i + 1];
+                    let sibling = Some(&subdirs[i]);
+                    self.subdirs_vbox.reorder_child_after(child, sibling);
+                }
+            }
+        }
     }
 }
 
@@ -234,6 +267,15 @@ impl LibraryFolder {
             .path()
     }
 
+    pub fn name(&self) -> String {
+        self.imp()
+            .folder_object
+            .borrow()
+            .as_ref()
+            .expect("LibraryFolder data uninitialized")
+            .name()
+    }
+
     pub fn refresh_content(&self) {
         self.prune_invalid_children();
 
@@ -264,6 +306,8 @@ impl LibraryFolder {
                 self.add_sheet(SheetObject::new(path));
             }
         }
+
+        self.imp().sort_children();
     }
 
     fn add_subdir(&self, data: FolderObject) {
