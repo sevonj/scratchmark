@@ -177,6 +177,7 @@ impl Window {
             .expect("file create fail");
 
         self.load_sheet(path);
+        self.imp().library_browser.refresh_content();
     }
 
     fn close_sheet(&self) {

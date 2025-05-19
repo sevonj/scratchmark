@@ -39,6 +39,8 @@ mod imp {
         pub(super) folder_object: RefCell<Option<FolderObject>>,
         pub(super) bindings: RefCell<Vec<Binding>>,
         pub(super) expanded: RefCell<bool>,
+        pub(super) subdirs: RefCell<Vec<super::LibraryFolder>>,
+        pub(super) sheets: RefCell<Vec<LibrarySheetButton>>,
     }
 
     #[glib::object_subclass]
@@ -103,6 +105,7 @@ mod imp {
                 self.expand_icon.set_icon_name("pan-down-symbolic".into());
                 self.subdirs_vbox.set_visible(true);
                 self.sheets_vbox.set_visible(true);
+                self.obj().refresh_content();
             } else {
                 self.expand_icon.set_icon_name("pan-end-symbolic".into());
                 self.subdirs_vbox.set_visible(false);
@@ -111,6 +114,8 @@ mod imp {
         }
     }
 }
+
+use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use glib::Object;
@@ -148,21 +153,39 @@ impl LibraryFolder {
         this
     }
 
+    pub fn path(&self) -> PathBuf {
+        self.imp()
+            .folder_object
+            .borrow()
+            .as_ref()
+            .expect("LibraryFolder data uninitialized")
+            .path()
+    }
+
     pub fn refresh_content(&self) {
+        self.prune_invalid_children();
+
+        for subdir in self.imp().subdirs.borrow().iter() {
+            subdir.refresh_content();
+        }
+
         let opt = self.imp().folder_object.borrow();
         let folder = opt.as_ref().expect("FolderObject not bound");
 
         let entries = folder.content();
-
         for entry in entries {
             let Ok(meta) = entry.metadata() else {
-                return;
+                continue;
             };
+            let path = entry.path();
+            if self.has_child(&path) {
+                continue;
+            }
 
             if meta.is_dir() {
-                self.add_subdir(FolderObject::new(entry.path()));
+                self.add_subdir(FolderObject::new(path));
             } else if meta.is_file() {
-                self.add_sheet(SheetObject::new(entry.path()));
+                self.add_sheet(SheetObject::new(path));
             }
         }
     }
@@ -195,6 +218,8 @@ impl LibraryFolder {
                 }
             ),
         );
+
+        self.imp().subdirs.borrow_mut().push(folder);
     }
 
     fn add_sheet(&self, data: SheetObject) {
@@ -220,6 +245,42 @@ impl LibraryFolder {
                 }
             ),
         );
+
+        self.imp().sheets.borrow_mut().push(button);
+    }
+
+    fn has_child(&self, path: &PathBuf) -> bool {
+        for subdir in self.imp().subdirs.borrow().iter() {
+            if subdir.path() == *path {
+                return true;
+            }
+        }
+        for sheet in self.imp().sheets.borrow().iter() {
+            if sheet.path() == *path {
+                return true;
+            }
+        }
+        false
+    }
+
+    fn prune_invalid_children(&self) {
+        let mut sheets = self.imp().sheets.borrow_mut();
+        for i in (0..sheets.len()).rev() {
+            let sheet = &sheets[i];
+            if !sheet.path().exists() {
+                self.imp().sheets_vbox.remove(sheet);
+                sheets.remove(i);
+            }
+        }
+
+        let mut subdirs = self.imp().subdirs.borrow_mut();
+        for i in (0..subdirs.len()).rev() {
+            let subdir = &subdirs[i];
+            if !subdir.path().exists() {
+                self.imp().subdirs_vbox.remove(subdir);
+                subdirs.remove(i);
+            }
+        }
     }
 
     fn bind(&self, data: &FolderObject) {

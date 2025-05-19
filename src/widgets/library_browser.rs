@@ -7,12 +7,16 @@ mod imp {
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
+    use glib::closure_local;
     use glib::subclass::*;
     use gtk::glib;
     use gtk::prelude::*;
 
     use gtk::CompositeTemplate;
 
+    use crate::data::FolderObject;
+    use crate::util::path_builtin_library;
+    use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheetButton;
 
     #[derive(CompositeTemplate, Default)]
@@ -22,6 +26,7 @@ mod imp {
         pub(super) library_root: TemplateChild<gtk::Box>,
 
         pub(super) selected_sheet_button: RefCell<Option<glib::WeakRef<LibrarySheetButton>>>,
+        pub(super) library_folder: RefCell<Option<LibraryFolder>>,
     }
 
     #[glib::object_subclass]
@@ -42,6 +47,55 @@ mod imp {
     impl ObjectImpl for LibraryBrowser {
         fn constructed(&self) {
             self.parent_constructed();
+
+            let library_root = &self.library_root;
+
+            let data = FolderObject::new(path_builtin_library());
+            let folder = LibraryFolder::new_root(&data);
+            folder.refresh_content();
+
+            library_root.append(&folder);
+
+            let this = self;
+            folder.connect_closure(
+                "sheet-clicked",
+                false,
+                closure_local!(
+                    #[weak]
+                    this,
+                    move |_folder: LibraryFolder, button: LibrarySheetButton| {
+                        if let Some(old) = this
+                            .selected_sheet_button
+                            .borrow()
+                            .as_ref()
+                            .and_then(|f| f.upgrade())
+                        {
+                            old.set_active(false);
+                        }
+
+                        this.selected_sheet_button.replace(Some(button.downgrade()));
+
+                        let path = button.path();
+                        this.obj().emit_by_name::<()>("sheet-selected", &[&path]);
+                    }
+                ),
+            );
+
+            folder.connect_closure(
+                "sheet-delete-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    this,
+                    move |_folder: super::LibraryFolder, button: LibrarySheetButton| {
+                        let path = button.path();
+                        std::fs::remove_file(path).expect("file delet failed");
+                        this.obj().refresh_content();
+                    }
+                ),
+            );
+
+            self.library_folder.replace(Some(folder));
         }
 
         fn signals() -> &'static [Signal] {
@@ -60,14 +114,10 @@ mod imp {
     impl BinImpl for LibraryBrowser {}
 }
 
-use adw::subclass::prelude::ObjectSubclassIsExt;
+use adw::subclass::prelude::*;
 use glib::Object;
-use glib::closure_local;
 use gtk::glib;
 use gtk::prelude::*;
-
-use crate::widgets::LibrarySheetButton;
-use crate::{data::FolderObject, util::path_builtin_library};
 
 use super::LibraryFolder;
 
@@ -87,52 +137,12 @@ impl Default for LibraryBrowser {
 
 impl LibraryBrowser {
     pub fn refresh_content(&self) {
-        let library_root = &self.imp().library_root;
-
-        let data = FolderObject::new(path_builtin_library());
-        let folder = LibraryFolder::new_root(&data);
-        folder.refresh_content();
-
-        library_root.append(&folder);
-
-        let this = self;
-        folder.connect_closure(
-            "sheet-clicked",
-            false,
-            closure_local!(
-                #[weak]
-                this,
-                move |_folder: LibraryFolder, button: LibrarySheetButton| {
-                    if let Some(old) = this
-                        .imp()
-                        .selected_sheet_button
-                        .borrow()
-                        .as_ref()
-                        .and_then(|f| f.upgrade())
-                    {
-                        old.set_active(false);
-                    }
-
-                    this.imp()
-                        .selected_sheet_button
-                        .replace(Some(button.downgrade()));
-
-                    let path = button.path();
-                    this.emit_by_name::<()>("sheet-selected", &[&path]);
-                }
-            ),
-        );
-
-        folder.connect_closure(
-            "sheet-delete-requested",
-            false,
-            closure_local!(
-                move |_folder: super::LibraryFolder, button: LibrarySheetButton| {
-                    let path = button.path();
-                    std::fs::remove_file(path).expect("file delet failed");
-                }
-            ),
-        );
+        self.imp()
+            .library_folder
+            .borrow()
+            .as_ref()
+            .expect("LibraryBrowser: library folder uninitialized")
+            .refresh_content();
     }
 
     pub fn clear_selected_sheet(&self) {
