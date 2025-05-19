@@ -13,7 +13,7 @@ mod imp {
     #[properties(wrapper_type = super::FolderObject)]
     pub struct FolderObject {
         #[property(name = "path", get, set, type = PathBuf, member = path)]
-        #[property(name = "stem", get, set, type = String, member = stem)]
+        #[property(name = "name", get, set, type = String, member = name)]
         pub data: RefCell<FolderData>,
     }
 
@@ -38,10 +38,10 @@ glib::wrapper! {
 
 impl FolderObject {
     pub fn new(path: PathBuf) -> Self {
-        let stem = path.file_stem().unwrap().to_string_lossy().into_owned();
+        let name = path.file_name().unwrap().to_string_lossy().into_owned();
         Object::builder()
             .property("path", path)
-            .property("stem", stem)
+            .property("name", name)
             .build()
     }
 
@@ -64,5 +64,5 @@ impl FolderObject {
 pub struct FolderData {
     pub path: PathBuf,
     /// Use for display
-    pub stem: String,
+    pub name: String,
 }

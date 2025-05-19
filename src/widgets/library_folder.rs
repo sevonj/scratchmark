@@ -290,7 +290,7 @@ impl LibraryFolder {
         let mut bindings = self.imp().bindings.borrow_mut();
 
         let title_binding = data
-            .bind_property("stem", &title_label, "label")
+            .bind_property("name", &title_label, "label")
             .sync_create()
             .build();
         bindings.push(title_binding);
