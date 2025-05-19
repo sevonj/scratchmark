@@ -3,6 +3,7 @@
 
 mod imp {
     use std::cell::RefCell;
+    use std::path::PathBuf;
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
@@ -10,6 +11,7 @@ mod imp {
     use gtk::gdk;
     use gtk::gio;
     use gtk::glib;
+    use gtk::glib::closure_local;
     use gtk::prelude::*;
 
     use gdk::Rectangle;
@@ -20,6 +22,7 @@ mod imp {
     use gtk::{CompositeTemplate, TemplateChild};
 
     use crate::data::FolderObject;
+    use crate::data::SheetObject;
     use crate::widgets::LibrarySheetButton;
 
     #[derive(CompositeTemplate, Default)]
@@ -165,9 +168,22 @@ mod imp {
     impl BinImpl for LibraryFolder {}
 
     impl LibraryFolder {
-        fn toggle_expand(&self) {
-            let expand = !*self.expanded.borrow();
-            self.set_expand(expand);
+        /// Filepath
+        pub(super) fn path(&self) -> PathBuf {
+            self.folder_object
+                .borrow()
+                .as_ref()
+                .expect("LibraryFolder data uninitialized")
+                .path()
+        }
+
+        /// Display name
+        pub(super) fn name(&self) -> String {
+            self.folder_object
+                .borrow()
+                .as_ref()
+                .expect("LibraryFolder data uninitialized")
+                .name()
         }
 
         pub(super) fn set_expand(&self, expand: bool) {
@@ -185,7 +201,75 @@ mod imp {
             }
         }
 
-        pub(super) fn sort_children(&self) {
+        pub(super) fn refresh_content(&self) {
+            self.prune_children();
+
+            for subdir in self.subdirs.borrow().iter() {
+                subdir.refresh_content();
+            }
+
+            let opt = self.folder_object.borrow();
+            let folder = opt.as_ref().expect("FolderObject not bound");
+
+            let entries = folder.content();
+            for entry in entries {
+                let Ok(meta) = entry.metadata() else {
+                    continue;
+                };
+                let path = entry.path();
+                if self.is_path_in_children(&path) {
+                    continue;
+                }
+
+                if meta.is_dir() {
+                    self.add_subdir(FolderObject::new(path));
+                } else if meta.is_file()
+                    && path
+                        .extension()
+                        .is_some_and(|ext| ext.eq_ignore_ascii_case("md"))
+                {
+                    self.add_sheet(SheetObject::new(path));
+                }
+            }
+
+            self.sort_children();
+        }
+
+        fn is_path_in_children(&self, path: &PathBuf) -> bool {
+            for subdir in self.subdirs.borrow().iter() {
+                if subdir.path() == *path {
+                    return true;
+                }
+            }
+            for sheet in self.sheets.borrow().iter() {
+                if sheet.path() == *path {
+                    return true;
+                }
+            }
+            false
+        }
+
+        fn prune_children(&self) {
+            let mut sheets = self.sheets.borrow_mut();
+            for i in (0..sheets.len()).rev() {
+                let sheet = &sheets[i];
+                if !sheet.path().exists() {
+                    self.sheets_vbox.remove(sheet);
+                    sheets.remove(i);
+                }
+            }
+
+            let mut subdirs = self.subdirs.borrow_mut();
+            for i in (0..subdirs.len()).rev() {
+                let subdir = &subdirs[i];
+                if !subdir.path().exists() {
+                    self.subdirs_vbox.remove(subdir);
+                    subdirs.remove(i);
+                }
+            }
+        }
+
+        fn sort_children(&self) {
             let mut sheets = self.sheets.borrow_mut();
             if !sheets.is_empty() {
                 fn compare(a: &LibrarySheetButton, b: &LibrarySheetButton) -> std::cmp::Ordering {
@@ -217,22 +301,93 @@ mod imp {
                 }
             }
         }
+
+        fn toggle_expand(&self) {
+            let expand = !*self.expanded.borrow();
+            self.set_expand(expand);
+        }
+
+        fn add_subdir(&self, data: FolderObject) {
+            let folder = super::LibraryFolder::new(&data);
+            self.subdirs_vbox.append(&folder);
+            folder.refresh_content();
+            let obj = self.obj();
+
+            folder.connect_closure(
+                "folder-delete-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: super::LibraryFolder, folder: super::LibraryFolder| {
+                        obj.emit_by_name::<()>("folder-delete-requested", &[&folder]);
+                    }
+                ),
+            );
+            folder.connect_closure(
+                "sheet-clicked",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: super::LibraryFolder, button: LibrarySheetButton| {
+                        obj.emit_by_name::<()>("sheet-clicked", &[&button]);
+                    }
+                ),
+            );
+            folder.connect_closure(
+                "sheet-delete-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: super::LibraryFolder, button: LibrarySheetButton| {
+                        obj.emit_by_name::<()>("sheet-delete-requested", &[&button]);
+                    }
+                ),
+            );
+
+            self.subdirs.borrow_mut().push(folder);
+        }
+
+        fn add_sheet(&self, data: SheetObject) {
+            let button = LibrarySheetButton::new(&data);
+            self.sheets_vbox.append(&button);
+
+            let obj = self.obj();
+            button.connect_clicked(clone!(
+                #[weak]
+                obj,
+                move |button| {
+                    obj.emit_by_name::<()>("sheet-clicked", &[button]);
+                }
+            ));
+            button.connect_closure(
+                "delete-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |button: LibrarySheetButton| {
+                        obj.emit_by_name::<()>("sheet-delete-requested", &[&button]);
+                    }
+                ),
+            );
+
+            self.sheets.borrow_mut().push(button);
+        }
     }
 }
 
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
-use glib::Object;
-use glib::clone;
-use glib::closure_local;
 use gtk::glib;
 use gtk::prelude::*;
 
-use crate::data::FolderObject;
-use crate::data::SheetObject;
+use glib::Object;
 
-use super::LibrarySheetButton;
+use crate::data::FolderObject;
 
 glib::wrapper! {
     pub struct LibraryFolder(ObjectSubclass<imp::LibraryFolder>)
@@ -258,160 +413,19 @@ impl LibraryFolder {
         this
     }
 
+    /// Filepath
     pub fn path(&self) -> PathBuf {
-        self.imp()
-            .folder_object
-            .borrow()
-            .as_ref()
-            .expect("LibraryFolder data uninitialized")
-            .path()
+        self.imp().path()
     }
 
+    /// Display name
     pub fn name(&self) -> String {
-        self.imp()
-            .folder_object
-            .borrow()
-            .as_ref()
-            .expect("LibraryFolder data uninitialized")
-            .name()
+        self.imp().name()
     }
 
+    /// Recursively check for new and removed files
     pub fn refresh_content(&self) {
-        self.prune_invalid_children();
-
-        for subdir in self.imp().subdirs.borrow().iter() {
-            subdir.refresh_content();
-        }
-
-        let opt = self.imp().folder_object.borrow();
-        let folder = opt.as_ref().expect("FolderObject not bound");
-
-        let entries = folder.content();
-        for entry in entries {
-            let Ok(meta) = entry.metadata() else {
-                continue;
-            };
-            let path = entry.path();
-            if self.has_child(&path) {
-                continue;
-            }
-
-            if meta.is_dir() {
-                self.add_subdir(FolderObject::new(path));
-            } else if meta.is_file()
-                && path
-                    .extension()
-                    .is_some_and(|ext| ext.eq_ignore_ascii_case("md"))
-            {
-                self.add_sheet(SheetObject::new(path));
-            }
-        }
-
-        self.imp().sort_children();
-    }
-
-    fn add_subdir(&self, data: FolderObject) {
-        let folder = LibraryFolder::new(&data);
-        self.imp().subdirs_vbox.append(&folder);
-        folder.refresh_content();
-        let this = self;
-
-        folder.connect_closure(
-            "folder-delete-requested",
-            false,
-            closure_local!(
-                #[weak]
-                this,
-                move |_: super::LibraryFolder, folder: super::LibraryFolder| {
-                    this.emit_by_name::<()>("folder-delete-requested", &[&folder]);
-                }
-            ),
-        );
-        folder.connect_closure(
-            "sheet-clicked",
-            false,
-            closure_local!(
-                #[weak]
-                this,
-                move |_: LibraryFolder, button: LibrarySheetButton| {
-                    this.emit_by_name::<()>("sheet-clicked", &[&button]);
-                }
-            ),
-        );
-        folder.connect_closure(
-            "sheet-delete-requested",
-            false,
-            closure_local!(
-                #[weak]
-                this,
-                move |_: super::LibraryFolder, button: LibrarySheetButton| {
-                    this.emit_by_name::<()>("sheet-delete-requested", &[&button]);
-                }
-            ),
-        );
-
-        self.imp().subdirs.borrow_mut().push(folder);
-    }
-
-    fn add_sheet(&self, data: SheetObject) {
-        let button = LibrarySheetButton::new(&data);
-        self.imp().sheets_vbox.append(&button);
-
-        let this = self;
-        button.connect_clicked(clone!(
-            #[weak]
-            this,
-            move |button| {
-                this.emit_by_name::<()>("sheet-clicked", &[button]);
-            }
-        ));
-        button.connect_closure(
-            "delete-requested",
-            false,
-            closure_local!(
-                #[weak]
-                this,
-                move |button: LibrarySheetButton| {
-                    this.emit_by_name::<()>("sheet-delete-requested", &[&button]);
-                }
-            ),
-        );
-
-        self.imp().sheets.borrow_mut().push(button);
-    }
-
-    fn has_child(&self, path: &PathBuf) -> bool {
-        for subdir in self.imp().subdirs.borrow().iter() {
-            if subdir.path() == *path {
-                return true;
-            }
-        }
-        for sheet in self.imp().sheets.borrow().iter() {
-            if sheet.path() == *path {
-                return true;
-            }
-        }
-        false
-    }
-
-    fn prune_invalid_children(&self) {
-        let mut sheets = self.imp().sheets.borrow_mut();
-        for i in (0..sheets.len()).rev() {
-            let sheet = &sheets[i];
-            if !sheet.path().exists() {
-                self.imp().sheets_vbox.remove(sheet);
-                sheets.remove(i);
-            }
-        }
-
-        let mut subdirs = self.imp().subdirs.borrow_mut();
-        for i in (0..subdirs.len()).rev() {
-            let subdir = &subdirs[i];
-            if !subdir.path().exists() {
-                self.imp().subdirs_vbox.remove(subdir);
-                subdirs.remove(i);
-            }
-        }
+        self.imp().refresh_content();
     }
 
     fn bind(&self, data: &FolderObject) {
