@@ -241,7 +241,11 @@ impl LibraryFolder {
 
             if meta.is_dir() {
                 self.add_subdir(FolderObject::new(path));
-            } else if meta.is_file() {
+            } else if meta.is_file()
+                && path
+                    .extension()
+                    .is_some_and(|ext| ext.eq_ignore_ascii_case("md"))
+            {
                 self.add_sheet(SheetObject::new(path));
             }
         }
