@@ -1,4 +1,4 @@
-//! Expandable folder widget for library browser
+//! Sheet button widget for library browser
 //!
 
 mod imp {

@@ -1,3 +1,6 @@
+//! Placeholder status page when editor is not open
+//!
+
 mod imp {
     use adw::subclass::prelude::*;
     use gtk::glib;

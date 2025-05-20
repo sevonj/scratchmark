@@ -1,4 +1,4 @@
-//! Expandable folder widget for library browser
+//! Folder creation menu
 //!
 
 mod imp {
