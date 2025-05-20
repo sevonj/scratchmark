@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="SheetRenamePopover" parent="GtkPopover">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkEntry" id="name_field">
+            <property name="placeholder-text">Filename...</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="commit_button">
+            <property name="label">Rename</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="name_error_label">
+            <style>
+              <class name="error" />
+            </style>
+            <property name="label">complaints-will-be-here</property>
+            <property name="visible">False</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -5,6 +5,7 @@ mod new_folder_popover;
 mod new_sheet_popover;
 mod sheet_editor;
 mod sheet_editor_placeholder;
+mod sheet_rename_popover;
 mod window;
 
 pub use library_browser::LibraryBrowser;
@@ -14,4 +15,5 @@ pub use new_folder_popover::NewFolderPopover;
 pub use new_sheet_popover::NewSheetPopover;
 pub use sheet_editor::SheetEditor;
 pub use sheet_editor_placeholder::SheetEditorPlaceholder;
+pub use sheet_rename_popover::SheetRenamePopover;
 pub use window::Window;

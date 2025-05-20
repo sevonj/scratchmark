@@ -1,12 +1,15 @@
-//! Folder creation menu
+//! Sheet rename menu
 //!
 
 mod imp {
 
+    use std::cell::RefCell;
+    use std::fs;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
+    use glib::GString;
     use glib::clone;
     use glib::subclass::*;
     use gtk::glib;
@@ -21,20 +24,22 @@ mod imp {
     use crate::util::path_builtin_library;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/fi/sevonj/TheftMD/ui/new_folder_popover.ui")]
-    pub struct NewFolderPopover {
+    #[template(resource = "/fi/sevonj/TheftMD/ui/sheet_rename_popover.ui")]
+    pub struct SheetRenamePopover {
         #[template_child]
-        pub(super) name_field: TemplateChild<Entry>,
+        name_field: TemplateChild<Entry>,
         #[template_child]
-        pub(super) commit_button: TemplateChild<Button>,
+        commit_button: TemplateChild<Button>,
         #[template_child]
-        pub(super) name_error_label: TemplateChild<Label>,
+        name_error_label: TemplateChild<Label>,
+
+        pub(super) original_path: RefCell<PathBuf>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for NewFolderPopover {
-        const NAME: &'static str = "NewFolderPopover";
-        type Type = super::NewFolderPopover;
+    impl ObjectSubclass for SheetRenamePopover {
+        const NAME: &'static str = "SheetRenamePopover";
+        type Type = super::SheetRenamePopover;
         type ParentType = gtk::Popover;
 
         fn class_init(klass: &mut Self::Class) {
@@ -46,7 +51,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for NewFolderPopover {
+    impl ObjectImpl for SheetRenamePopover {
         fn constructed(&self) {
             self.parent_constructed();
             let this = self;
@@ -56,15 +61,15 @@ mod imp {
                 #[weak]
                 this,
                 move |_| {
-                    this.clear();
+                    this.reset();
                 }
             ));
 
             self.name_field.connect_changed(clone!(
                 #[weak]
                 this,
-                move |_| {
-                    this.refresh();
+                move |name_field| {
+                    this.refresh(name_field.text());
                 }
             ));
 
@@ -75,8 +80,6 @@ mod imp {
                     this.commit();
                 }
             ));
-
-            self.refresh();
         }
 
         fn signals() -> &'static [Signal] {
@@ -91,17 +94,26 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for NewFolderPopover {}
-    impl PopoverImpl for NewFolderPopover {}
+    impl WidgetImpl for SheetRenamePopover {}
+    impl PopoverImpl for SheetRenamePopover {}
 
-    impl NewFolderPopover {
-        fn clear(&self) {
-            self.name_field.set_text("");
+    impl SheetRenamePopover {
+        pub(super) fn reset(&self) {
+            let stem = self
+                .original_path
+                .borrow()
+                .file_stem()
+                .unwrap()
+                .to_string_lossy()
+                .into_owned();
+            self.name_field.set_text(&stem);
         }
 
-        fn refresh(&self) {
-            let stem = self.name_field.text();
-            let new_path = self.filepath();
+        fn refresh(&self, stem: GString) {
+            let original_path = self.original_path.borrow();
+            let parent_path = original_path.parent().expect("Failed to get path parent.");
+            let name = stem.to_string() + ".md";
+            let new_path = parent_path.join(&name);
             let file_exists = new_path.exists();
 
             let name_status = FilenameStatus::from(stem.as_str());
@@ -112,7 +124,7 @@ mod imp {
 
             match name_status {
                 FilenameStatus::Ok => {
-                    if file_exists {
+                    if file_exists && new_path != *original_path {
                         label.set_text("Already exists");
                         label.set_visible(true);
                     } else {
@@ -132,28 +144,41 @@ mod imp {
 
         fn commit(&self) {
             let filepath = self.filepath();
+            let original_path = self.original_path.borrow();
+            fs::rename(&*original_path, &filepath).expect("File rename failed");
             self.obj().emit_by_name::<()>("committed", &[&filepath]);
             self.obj().popdown();
         }
 
         fn filepath(&self) -> PathBuf {
-            let filename = self.name_field.text().to_string();
+            let filename = self.name_field.text().to_string() + ".md";
             path_builtin_library().join(&filename)
         }
     }
 }
 
-use glib::Object;
+use std::path::PathBuf;
+
+use adw::subclass::prelude::*;
 use gtk::glib;
 
+use glib::Object;
+
 glib::wrapper! {
-    pub struct NewFolderPopover(ObjectSubclass<imp::NewFolderPopover>)
+    pub struct SheetRenamePopover(ObjectSubclass<imp::SheetRenamePopover>)
         @extends gtk::Popover, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Native ,gtk::ShortcutManager;
 }
 
-impl Default for NewFolderPopover {
+impl Default for SheetRenamePopover {
     fn default() -> Self {
         Object::builder().build()
+    }
+}
+
+impl SheetRenamePopover {
+    pub fn set_path(&self, path: PathBuf) {
+        let _ = self.imp().original_path.replace(path);
+        self.imp().reset();
     }
 }

@@ -17,25 +17,8 @@ mod imp {
     use gtk::Label;
     use gtk::{CompositeTemplate, TemplateChild};
 
+    use crate::util::FilenameStatus;
     use crate::util::path_builtin_library;
-
-    enum FilenameStatus {
-        Ok,
-        AlreadyExists,
-        IsEmpty,
-        HasIllegalChars,
-    }
-
-    impl FilenameStatus {
-        pub fn is_ok(&self) -> bool {
-            match self {
-                Self::Ok => true,
-                Self::AlreadyExists => false,
-                Self::IsEmpty => false,
-                Self::HasIllegalChars => false,
-            }
-        }
-    }
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/fi/sevonj/TheftMD/ui/new_sheet_popover.ui")]
@@ -117,41 +100,34 @@ mod imp {
         }
 
         fn refresh(&self) {
-            let name_status = self.filename_status();
-            self.commit_button.set_sensitive(name_status.is_ok());
+            let stem = self.name_field.text();
+            let new_path = self.filepath();
+            let file_exists = new_path.exists();
+
+            let name_status = FilenameStatus::from(stem.as_str());
+            self.commit_button
+                .set_sensitive(name_status.is_ok() && !file_exists);
 
             let label = &self.name_error_label;
 
             match name_status {
-                FilenameStatus::Ok => label.set_visible(false),
-                FilenameStatus::AlreadyExists => {
-                    label.set_text("File exists");
-                    label.set_visible(true);
+                FilenameStatus::Ok => {
+                    if file_exists {
+                        label.set_text("Already exists");
+                        label.set_visible(true);
+                    } else {
+                        label.set_visible(false);
+                    }
                 }
-                FilenameStatus::IsEmpty => label.set_visible(false),
-                FilenameStatus::HasIllegalChars => {
-                    label.set_text("Invalid filename");
-                    label.set_visible(true);
+                _ => {
+                    if let Some(msg) = name_status.complaint_message() {
+                        label.set_visible(true);
+                        label.set_text(msg);
+                    } else {
+                        label.set_visible(false);
+                    }
                 }
             }
-        }
-
-        fn filename_status(&self) -> FilenameStatus {
-            let text = self.name_field.text();
-
-            if text.is_empty() {
-                return FilenameStatus::IsEmpty;
-            }
-
-            if self.filepath().exists() {
-                return FilenameStatus::AlreadyExists;
-            }
-
-            if text.contains("/") {
-                return FilenameStatus::HasIllegalChars;
-            }
-
-            FilenameStatus::Ok
         }
 
         fn commit(&self) {

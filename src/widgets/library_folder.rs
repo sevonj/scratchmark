@@ -364,6 +364,17 @@ mod imp {
                 }
             ));
             button.connect_closure(
+                "renamed",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_button: LibrarySheetButton| {
+                        obj.refresh_content();
+                    }
+                ),
+            );
+            button.connect_closure(
                 "delete-requested",
                 false,
                 closure_local!(

@@ -8,6 +8,10 @@
         <attribute name="action">sheet.filemanager</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">Rename sheet</attribute>
+        <attribute name="action">sheet.rename-begin</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Delete sheet</attribute>
         <attribute name="action">sheet.delete</attribute>
       </item>
