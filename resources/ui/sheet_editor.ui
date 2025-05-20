@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <requires lib="gtk" version="4.14" />
-    <requires lib="libadwaita" version="1.5" />
-    <requires lib="gtksourceview" version="5.0" />
     <template class="SheetEditor" parent="AdwBin">
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
