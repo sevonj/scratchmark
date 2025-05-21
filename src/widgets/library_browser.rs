@@ -3,6 +3,7 @@
 
 mod imp {
     use std::cell::RefCell;
+    use std::collections::HashMap;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
@@ -10,6 +11,7 @@ mod imp {
     use glib::closure_local;
     use glib::subclass::*;
     use gtk::glib;
+    use gtk::glib::clone;
     use gtk::prelude::*;
 
     use gtk::CompositeTemplate;
@@ -23,10 +25,11 @@ mod imp {
     #[template(resource = "/fi/sevonj/TheftMD/ui/library_browser.ui")]
     pub struct LibraryBrowser {
         #[template_child]
-        pub(super) library_root: TemplateChild<gtk::Box>,
+        pub(super) library_root_vbox: TemplateChild<gtk::Box>,
 
-        pub(super) selected_sheet_button: RefCell<Option<glib::WeakRef<LibrarySheetButton>>>,
-        pub(super) library_folder: RefCell<Option<LibraryFolder>>,
+        pub(super) folders: RefCell<HashMap<PathBuf, LibraryFolder>>,
+        pub(super) sheets: RefCell<HashMap<PathBuf, LibrarySheetButton>>,
+        pub(super) selected_sheet: RefCell<Option<PathBuf>>,
     }
 
     #[glib::object_subclass]
@@ -47,67 +50,11 @@ mod imp {
     impl ObjectImpl for LibraryBrowser {
         fn constructed(&self) {
             self.parent_constructed();
-            let this = self;
-            let obj = self.obj();
 
-            let library_root = &self.library_root;
-
-            let data = FolderObject::new(path_builtin_library());
-            let folder = LibraryFolder::new_root(&data);
-            folder.refresh_content();
-
-            library_root.append(&folder);
-
-            folder.connect_closure(
-                "sheet-clicked",
-                false,
-                closure_local!(
-                    #[weak]
-                    this,
-                    move |_folder: LibraryFolder, button: LibrarySheetButton| {
-                        let path = button.path();
-                        this.obj().emit_by_name::<()>("sheet-selected", &[&path]);
-                    }
-                ),
-            );
-
-            folder.connect_closure(
-                "folder-delete-requested",
-                false,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |_: LibraryFolder, folder: LibraryFolder| {
-                        obj.emit_by_name::<()>("folder-delete-requested", &[&folder]);
-                    }
-                ),
-            );
-
-            folder.connect_closure(
-                "sheet-renamed",
-                false,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |_: LibraryFolder, button: LibrarySheetButton, new_path: PathBuf| {
-                        obj.emit_by_name::<()>("sheet-renamed", &[&button, &new_path]);
-                    }
-                ),
-            );
-
-            folder.connect_closure(
-                "sheet-delete-requested",
-                false,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |_: LibraryFolder, sheet: LibrarySheetButton| {
-                        obj.emit_by_name::<()>("sheet-delete-requested", &[&sheet]);
-                    }
-                ),
-            );
-
-            self.library_folder.replace(Some(folder));
+            let vbox = &self.library_root_vbox;
+            let root_folder = LibraryFolder::new_root(&FolderObject::new(path_builtin_library()));
+            vbox.append(&root_folder);
+            self.add_folder(root_folder);
         }
 
         fn signals() -> &'static [Signal] {
@@ -133,16 +80,144 @@ mod imp {
 
     impl WidgetImpl for LibraryBrowser {}
     impl BinImpl for LibraryBrowser {}
+
+    impl LibraryBrowser {
+        fn add_folder(&self, folder: LibraryFolder) {
+            let obj = self.obj();
+
+            folder.connect_closure(
+                "folder-added",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_: LibraryFolder, button: LibraryFolder| {
+                        this.add_folder(button);
+                    }
+                ),
+            );
+
+            folder.connect_closure(
+                "sheet-added",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_: LibraryFolder, button: LibrarySheetButton| {
+                        this.add_sheet(button);
+                    }
+                ),
+            );
+
+            folder.connect_closure(
+                "folder-removed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_: LibraryFolder, path: PathBuf| {
+                        this.unlist_folder(path);
+                    }
+                ),
+            );
+
+            folder.connect_closure(
+                "sheet-removed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_: LibraryFolder, path: PathBuf| {
+                        this.unlist_sheet(path);
+                    }
+                ),
+            );
+
+            folder.connect_closure(
+                "delete-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: LibraryFolder, folder: LibraryFolder| {
+                        obj.emit_by_name::<()>("folder-delete-requested", &[&folder]);
+                    }
+                ),
+            );
+
+            folder.refresh_content();
+            let k = folder.path();
+            self.folders.borrow_mut().insert(k, folder);
+        }
+
+        fn add_sheet(&self, button: LibrarySheetButton) {
+            let obj = self.obj();
+
+            button.connect_clicked(clone!(
+                #[weak]
+                obj,
+                move |button| {
+                    button.set_active(false);
+                    let path = button.path();
+                    obj.emit_by_name::<()>("sheet-selected", &[&path]);
+                }
+            ));
+
+            button.connect_closure(
+                "renamed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |button: LibrarySheetButton, new_path: PathBuf| {
+                        this.on_sheet_rename(button, new_path);
+                    }
+                ),
+            );
+
+            button.connect_closure(
+                "delete-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |button: LibrarySheetButton| {
+                        obj.emit_by_name::<()>("sheet-delete-requested", &[&button]);
+                    }
+                ),
+            );
+
+            let k = button.path();
+            self.sheets.borrow_mut().insert(k, button);
+        }
+
+        fn unlist_folder(&self, path: PathBuf) {
+            self.folders.borrow_mut().remove(&path);
+        }
+
+        fn unlist_sheet(&self, path: PathBuf) {
+            self.sheets.borrow_mut().remove(&path);
+        }
+
+        fn on_sheet_rename(&self, button: LibrarySheetButton, new_path: PathBuf) {
+            let obj = self.obj();
+            obj.emit_by_name::<()>("sheet-renamed", &[&button, &new_path]);
+            obj.refresh_content();
+        }
+    }
 }
 
 use std::path::Path;
 
 use adw::subclass::prelude::*;
-use glib::Object;
 use gtk::glib;
 use gtk::prelude::*;
 
-use super::LibrarySheetButton;
+use glib::Object;
+
+use crate::util::path_builtin_library;
+
+use super::LibraryFolder;
 
 glib::wrapper! {
     pub struct LibraryBrowser(ObjectSubclass<imp::LibraryBrowser>)
@@ -159,59 +234,38 @@ impl Default for LibraryBrowser {
 }
 
 impl LibraryBrowser {
+    pub fn root_folder(&self) -> LibraryFolder {
+        self.imp()
+            .folders
+            .borrow()
+            .get(&path_builtin_library())
+            .unwrap()
+            .clone()
+    }
+
     pub fn refresh_content(&self) {
-        self.imp()
-            .library_folder
-            .borrow()
-            .as_ref()
-            .expect("LibraryBrowser: library folder uninitialized")
-            .refresh_content();
+        self.root_folder().refresh_content();
     }
 
-    pub fn clear_selected_sheet(&self) {
-        if let Some(selected) = self
-            .imp()
-            .selected_sheet_button
-            .take()
-            .and_then(|f| f.upgrade())
-        {
-            selected.set_active(false);
+    pub fn set_selected_sheet(&self, path: Option<&Path>) {
+        if let Some(old_path) = self.imp().selected_sheet.borrow().as_ref() {
+            if let Some(old_button) = self.imp().sheets.borrow().get(old_path) {
+                old_button.set_active(false);
+            } else {
+                panic!("failed to get button for path {path:?}");
+            }
         }
-    }
 
-    pub fn select_sheet_button(&self, button: LibrarySheetButton) {
-        if let Some(old) = self
-            .imp()
-            .selected_sheet_button
-            .borrow()
-            .as_ref()
-            .and_then(|f| f.upgrade())
-        {
-            old.set_active(false);
-        }
-        button.set_active(true);
-
-        self.imp()
-            .selected_sheet_button
-            .replace(Some(button.downgrade()));
-    }
-
-    pub fn select_sheet_by_path(&self, path: &Path) {
-        self.clear_selected_sheet();
-
-        let Ok(path) = path.canonicalize() else {
+        let Some(path) = path else {
+            self.imp().selected_sheet.replace(None);
             return;
         };
 
-        if let Some(button) = self
-            .imp()
-            .library_folder
-            .borrow()
-            .as_ref()
-            .expect("LibraryBrowser: library folder uninitialized")
-            .find_sheet_button(&path)
-        {
-            self.select_sheet_button(button);
+        if let Some(button) = self.imp().sheets.borrow().get(path) {
+            button.set_active(true);
+            self.imp().selected_sheet.replace(Some(button.path()));
+        } else {
+            panic!("failed to get button for path {path:?}");
         }
     }
 }

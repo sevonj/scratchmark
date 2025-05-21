@@ -9,7 +9,7 @@
                         <property name="orientation">1</property>
                         <property name="width-request">256</property>
                         <child> <!-- Content -->
-                            <object class="GtkBox" id="library_root">
+                            <object class="GtkBox" id="library_root_vbox">
                                 <property name="orientation">1</property>
                                 <property name="margin-start">16</property>
                                 <property name="margin-end">16</property>

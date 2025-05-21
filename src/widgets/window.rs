@@ -125,9 +125,10 @@ mod imp {
                           sheet: LibrarySheetButton,
                           new_path: PathBuf| {
                         let sheet_editor_opt = this.sheet_editor.borrow();
-                        let sheet_editor = sheet_editor_opt.as_ref().unwrap();
-                        if sheet_editor.path() == sheet.path() {
-                            sheet_editor.set_path(new_path);
+                        if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
+                            if sheet_editor.path() == sheet.path() {
+                                sheet_editor.set_path(new_path);
+                            }
                         }
                     }
                 ),
@@ -247,14 +248,14 @@ impl Window {
                 this,
                 move |_: SheetEditor| {
                     this.close_sheet();
-                    this.imp().library_browser.clear_selected_sheet();
+                    this.imp().library_browser.set_selected_sheet(None);
                 }
             ),
         );
 
         imp.main_toolbar_view.set_content(Some(&editor));
         imp.sheet_editor.replace(Some(editor));
-        imp.library_browser.select_sheet_by_path(&path);
+        imp.library_browser.set_selected_sheet(Some(&path));
     }
 
     fn create_folder(&self, path: PathBuf) {

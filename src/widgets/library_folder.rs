@@ -11,7 +11,6 @@ mod imp {
     use gtk::gdk;
     use gtk::gio;
     use gtk::glib;
-    use gtk::glib::closure_local;
     use gtk::prelude::*;
 
     use gdk::Rectangle;
@@ -131,7 +130,7 @@ mod imp {
                 #[weak]
                 obj,
                 move |_action, _parameter| {
-                    obj.emit_by_name::<()>("folder-delete-requested", &[&obj]);
+                    obj.emit_by_name::<()>("delete-requested", &[&obj]);
                 }
             ));
             actions.add_action(&action);
@@ -150,17 +149,20 @@ mod imp {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
-                    Signal::builder("folder-delete-requested")
+                    Signal::builder("delete-requested")
                         .param_types([super::LibraryFolder::static_type()])
                         .build(),
-                    Signal::builder("sheet-clicked")
+                    Signal::builder("folder-added")
+                        .param_types([super::LibraryFolder::static_type()])
+                        .build(),
+                    Signal::builder("sheet-added")
                         .param_types([LibrarySheetButton::static_type()])
                         .build(),
-                    Signal::builder("sheet-renamed")
-                        .param_types([LibrarySheetButton::static_type(), PathBuf::static_type()])
+                    Signal::builder("folder-removed")
+                        .param_types([PathBuf::static_type()])
                         .build(),
-                    Signal::builder("sheet-delete-requested")
-                        .param_types([LibrarySheetButton::static_type()])
+                    Signal::builder("sheet-removed")
+                        .param_types([PathBuf::static_type()])
                         .build(),
                 ]
             })
@@ -196,7 +198,6 @@ mod imp {
                 self.expand_icon.set_icon_name("pan-down-symbolic".into());
                 self.subdirs_vbox.set_visible(true);
                 self.sheets_vbox.set_visible(true);
-                self.obj().refresh_content();
             } else {
                 self.expand_icon.set_icon_name("pan-end-symbolic".into());
                 self.subdirs_vbox.set_visible(false);
@@ -256,18 +257,22 @@ mod imp {
             let mut sheets = self.sheets.borrow_mut();
             for i in (0..sheets.len()).rev() {
                 let sheet = &sheets[i];
-                if !sheet.path().exists() {
+                let path = sheet.path();
+                if !path.exists() {
                     self.sheets_vbox.remove(sheet);
                     sheets.remove(i);
+                    self.obj().emit_by_name::<()>("sheet-removed", &[&path]);
                 }
             }
 
             let mut subdirs = self.subdirs.borrow_mut();
             for i in (0..subdirs.len()).rev() {
                 let subdir = &subdirs[i];
+                let path = subdir.path();
                 if !subdir.path().exists() {
                     self.subdirs_vbox.remove(subdir);
                     subdirs.remove(i);
+                    self.obj().emit_by_name::<()>("folder-removed", &[&path]);
                 }
             }
         }
@@ -307,62 +312,18 @@ mod imp {
 
         fn toggle_expand(&self) {
             let expand = !*self.expanded.borrow();
+            if expand {
+                self.obj().refresh_content();
+            }
             self.set_expand(expand);
         }
 
         fn add_subdir(&self, data: FolderObject) {
             let folder = super::LibraryFolder::new(&data);
-            self.subdirs_vbox.append(&folder);
-            folder.refresh_content();
             let obj = self.obj();
 
-            folder.connect_closure(
-                "folder-delete-requested",
-                false,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |_: super::LibraryFolder, folder: super::LibraryFolder| {
-                        obj.emit_by_name::<()>("folder-delete-requested", &[&folder]);
-                    }
-                ),
-            );
-            folder.connect_closure(
-                "sheet-clicked",
-                false,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |_: super::LibraryFolder, button: LibrarySheetButton| {
-                        obj.emit_by_name::<()>("sheet-clicked", &[&button]);
-                    }
-                ),
-            );
-            folder.connect_closure(
-                "sheet-renamed",
-                false,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |_: super::LibraryFolder,
-                          button: LibrarySheetButton,
-                          new_path: PathBuf| {
-                        obj.emit_by_name::<()>("sheet-renamed", &[&button, &new_path]);
-                    }
-                ),
-            );
-            folder.connect_closure(
-                "sheet-delete-requested",
-                false,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |_: super::LibraryFolder, button: LibrarySheetButton| {
-                        obj.emit_by_name::<()>("sheet-delete-requested", &[&button]);
-                    }
-                ),
-            );
-
+            obj.emit_by_name::<()>("folder-added", &[&folder]);
+            self.subdirs_vbox.append(&folder);
             self.subdirs.borrow_mut().push(folder);
         }
 
@@ -371,38 +332,8 @@ mod imp {
             self.sheets_vbox.append(&button);
 
             let obj = self.obj();
-            button.connect_clicked(clone!(
-                #[weak]
-                obj,
-                move |button| {
-                    button.set_active(false);
-                    obj.emit_by_name::<()>("sheet-clicked", &[button]);
-                }
-            ));
-            button.connect_closure(
-                "renamed",
-                false,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |button: LibrarySheetButton, new_path: PathBuf| {
-                        obj.refresh_content();
-                        obj.emit_by_name::<()>("sheet-renamed", &[&button, &new_path]);
-                    }
-                ),
-            );
-            button.connect_closure(
-                "delete-requested",
-                false,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |button: LibrarySheetButton| {
-                        obj.emit_by_name::<()>("sheet-delete-requested", &[&button]);
-                    }
-                ),
-            );
 
+            obj.emit_by_name::<()>("sheet-added", &[&button]);
             self.sheets.borrow_mut().push(button);
         }
     }
@@ -434,8 +365,7 @@ impl LibraryFolder {
     }
 
     pub fn new_root(data: &FolderObject) -> Self {
-        let this: Self = Object::builder().build();
-        this.bind(data);
+        let this = Self::new(data);
         this.imp().expand_icon.set_visible(false);
         this.imp().expand_button.set_sensitive(false);
         this.imp().title.set_label("Library");
