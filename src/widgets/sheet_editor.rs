@@ -1,17 +1,17 @@
 mod imp {
     use std::cell::RefCell;
-    use std::fs::File;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
     use glib::clone;
-    use glib::subclass::Signal;
+    use gtk::gio;
     use gtk::glib;
     use gtk::prelude::*;
 
-    use gtk::Button;
-    use gtk::{CompositeTemplate, TemplateChild};
+    use gio::File;
+    use glib::subclass::Signal;
+    use gtk::{Button, CompositeTemplate, TemplateChild};
     use sourceview5::View;
 
     #[derive(CompositeTemplate, Default)]
@@ -67,17 +67,20 @@ mod imp {
     impl BinImpl for SheetEditor {}
 }
 
-use std::fs::OpenOptions;
-use std::io::{Read, Seek, SeekFrom, Write};
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
-use glib::Object;
+use gtk::gio;
+use gtk::gio::FileCreateFlags;
 use gtk::glib;
 use gtk::prelude::*;
 use sourceview5::prelude::*;
 
+use gio::{Cancellable, File};
+use glib::Object;
 use sourceview5::{Buffer, LanguageManager, StyleSchemeManager};
+
+const NOT_CANCELLABLE: Option<&Cancellable> = None;
 
 glib::wrapper! {
     pub struct SheetEditor(ObjectSubclass<imp::SheetEditor>)
@@ -87,14 +90,11 @@ glib::wrapper! {
 
 impl SheetEditor {
     pub fn new(path: PathBuf) -> Self {
-        let mut file = OpenOptions::new()
-            .read(true)
-            .write(true)
-            .open(&path)
-            .expect("file open fail");
-        let mut text = String::new();
-        file.read_to_string(&mut text).expect("TODO read to string");
-
+        let file = File::for_path(&path);
+        let (slice, _) = file
+            .load_contents(NOT_CANCELLABLE)
+            .expect("Failed to read file");
+        let text = String::from_utf8_lossy(&slice);
         let lang = LanguageManager::default().language("markdown").unwrap();
         let buffer = Buffer::with_language(&lang);
         buffer.set_text(&text);
@@ -116,12 +116,15 @@ impl SheetEditor {
         let bytes = text.as_bytes();
 
         let Some(ref mut file) = *self.imp().file.borrow_mut() else {
-            panic!("SheetEditor file_lock uninitialized");
+            panic!("SheetEditor file uninitialized");
         };
 
-        file.seek(SeekFrom::Start(0)).expect("seek failed");
-        file.set_len(0).expect("clear failed");
-        file.write_all(bytes).expect("write failed");
+        let output_stream = file
+            .replace(None, false, FileCreateFlags::NONE, NOT_CANCELLABLE)
+            .unwrap();
+
+        output_stream.write_all(bytes, NOT_CANCELLABLE).unwrap();
+        output_stream.flush(NOT_CANCELLABLE).unwrap();
     }
 
     pub fn path(&self) -> PathBuf {
