@@ -116,6 +116,24 @@ mod imp {
             );
 
             self.library_browser.connect_closure(
+                "sheet-renamed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_browser: LibraryBrowser,
+                          sheet: LibrarySheetButton,
+                          new_path: PathBuf| {
+                        let sheet_editor_opt = this.sheet_editor.borrow();
+                        let sheet_editor = sheet_editor_opt.as_ref().unwrap();
+                        if sheet_editor.path() == sheet.path() {
+                            sheet_editor.set_path(new_path);
+                        }
+                    }
+                ),
+            );
+
+            self.library_browser.connect_closure(
                 "sheet-delete-requested",
                 false,
                 closure_local!(

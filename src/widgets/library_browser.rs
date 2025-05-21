@@ -84,6 +84,18 @@ mod imp {
             );
 
             folder.connect_closure(
+                "sheet-renamed",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: LibraryFolder, button: LibrarySheetButton, new_path: PathBuf| {
+                        obj.emit_by_name::<()>("sheet-renamed", &[&button, &new_path]);
+                    }
+                ),
+            );
+
+            folder.connect_closure(
                 "sheet-delete-requested",
                 false,
                 closure_local!(
@@ -104,6 +116,9 @@ mod imp {
                 vec![
                     Signal::builder("sheet-selected")
                         .param_types([PathBuf::static_type()])
+                        .build(),
+                    Signal::builder("sheet-renamed")
+                        .param_types([LibrarySheetButton::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
                         .param_types([LibraryFolder::static_type()])

@@ -102,7 +102,9 @@ mod imp {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
-                    Signal::builder("renamed").build(),
+                    Signal::builder("renamed")
+                        .param_types([PathBuf::static_type()])
+                        .build(),
                     Signal::builder("delete-requested").build(),
                 ]
             })
@@ -161,8 +163,8 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_popover: SheetRenamePopover, _path: PathBuf| {
-                        obj.emit_by_name::<()>("renamed", &[]);
+                    move |_popover: SheetRenamePopover, path: PathBuf| {
+                        obj.emit_by_name::<()>("renamed", &[&path]);
                     }
                 ),
             );

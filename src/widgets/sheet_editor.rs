@@ -134,6 +134,12 @@ impl SheetEditor {
             .clone()
     }
 
+    pub fn set_path(&self, path: PathBuf) {
+        let file = File::for_path(&path);
+        self.imp().file.replace(Some(file));
+        self.imp().path.replace(Some(path));
+    }
+
     fn load_buffer_style_scheme(&self, buffer: &Buffer) {
         let scheme_id = "theftmd";
 
