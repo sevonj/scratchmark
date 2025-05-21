@@ -116,6 +116,26 @@ mod imp {
             );
 
             self.library_browser.connect_closure(
+                "folder-renamed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_browser: LibraryBrowser, folder: LibraryFolder, new_path: PathBuf| {
+                        let sheet_editor_opt = this.sheet_editor.borrow();
+                        if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
+                            let selected = sheet_editor.path();
+                            let old_path = folder.path();
+                            if selected.starts_with(&old_path) {
+                                let relative = selected.strip_prefix(&old_path).unwrap();
+                                sheet_editor.set_path(new_path.join(relative));
+                            }
+                        }
+                    }
+                ),
+            );
+
+            self.library_browser.connect_closure(
                 "sheet-renamed",
                 false,
                 closure_local!(

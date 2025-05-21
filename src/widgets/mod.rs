@@ -1,3 +1,4 @@
+mod folder_rename_popover;
 mod library_browser;
 mod library_folder;
 mod library_sheet_button;
@@ -8,6 +9,7 @@ mod sheet_editor_placeholder;
 mod sheet_rename_popover;
 mod window;
 
+pub use folder_rename_popover::FolderRenamePopover;
 pub use library_browser::LibraryBrowser;
 pub use library_folder::LibraryFolder;
 pub use library_sheet_button::LibrarySheetButton;

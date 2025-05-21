@@ -64,6 +64,9 @@ mod imp {
                     Signal::builder("sheet-selected")
                         .param_types([PathBuf::static_type()])
                         .build(),
+                    Signal::builder("folder-renamed")
+                        .param_types([LibraryFolder::static_type(), PathBuf::static_type()])
+                        .build(),
                     Signal::builder("sheet-renamed")
                         .param_types([LibrarySheetButton::static_type(), PathBuf::static_type()])
                         .build(),
@@ -84,6 +87,18 @@ mod imp {
     impl LibraryBrowser {
         fn add_folder(&self, folder: LibraryFolder) {
             let obj = self.obj();
+
+            folder.connect_closure(
+                "renamed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |button: LibraryFolder, new_path: PathBuf| {
+                        this.on_folder_rename(button, new_path);
+                    }
+                ),
+            );
 
             folder.connect_closure(
                 "folder-added",
@@ -203,6 +218,21 @@ mod imp {
 
         fn unlist_sheet(&self, path: PathBuf) {
             self.sheets.borrow_mut().remove(&path);
+        }
+
+        fn on_folder_rename(&self, folder: LibraryFolder, new_path: PathBuf) {
+            let obj = self.obj();
+
+            if let Some(selected) = self.selected_sheet.borrow_mut().as_mut() {
+                let old_path = folder.path();
+                if selected.starts_with(&old_path) {
+                    let relative = selected.strip_prefix(&old_path).unwrap();
+                    *selected = new_path.join(relative);
+                }
+            }
+
+            obj.emit_by_name::<()>("folder-renamed", &[&folder, &new_path]);
+            obj.refresh_content();
         }
 
         fn on_sheet_rename(&self, sheet: LibrarySheetButton, new_path: PathBuf) {

@@ -8,6 +8,10 @@
         <attribute name="action">folder.filemanager</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">Rename folder</attribute>
+        <attribute name="action">folder.rename-begin</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Delete folder</attribute>
         <attribute name="action">folder.delete</attribute>
       </item>

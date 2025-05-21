@@ -11,6 +11,7 @@ mod imp {
     use gtk::gdk;
     use gtk::gio;
     use gtk::glib;
+    use gtk::glib::closure_local;
     use gtk::prelude::*;
 
     use gdk::Rectangle;
@@ -22,6 +23,7 @@ mod imp {
 
     use crate::data::FolderObject;
     use crate::data::SheetObject;
+    use crate::widgets::FolderRenamePopover;
     use crate::widgets::LibrarySheetButton;
 
     #[derive(CompositeTemplate, Default)]
@@ -47,6 +49,7 @@ mod imp {
         pub(super) sheets: RefCell<Vec<LibrarySheetButton>>,
 
         context_menu_popover: RefCell<Option<PopoverMenu>>,
+        pub(super) rename_popover: RefCell<Option<FolderRenamePopover>>,
     }
 
     #[glib::object_subclass]
@@ -69,6 +72,9 @@ mod imp {
             self.parent_constructed();
             let obj = self.obj();
 
+            self.setup_context_menu();
+            self.setup_rename_menu();
+
             let this = self;
             self.expand_button.connect_clicked(clone!(
                 #[weak]
@@ -79,33 +85,6 @@ mod imp {
             ));
 
             self.set_expand(false);
-
-            let builder =
-                Builder::from_resource("/fi/sevonj/TheftMD/ui/library_folder_context_menu.ui");
-            let popover = builder
-                .object::<MenuModel>("context-menu")
-                .expect("LibraryFolder context-menu model failed");
-            let menu = PopoverMenu::builder()
-                .menu_model(&popover)
-                .has_arrow(false)
-                .build();
-            menu.set_parent(&*obj);
-            let _ = self.context_menu_popover.replace(Some(menu));
-
-            let gesture = gtk::GestureClick::new();
-            gesture.set_button(gdk::ffi::GDK_BUTTON_SECONDARY as u32);
-            gesture.connect_released(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |gesture, _n, x, y| {
-                    gesture.set_state(gtk::EventSequenceState::Claimed);
-                    if let Some(popover) = this.context_menu_popover.borrow().as_ref() {
-                        popover.set_pointing_to(Some(&Rectangle::new(x as i32, y as i32, 1, 1)));
-                        popover.popup();
-                    };
-                }
-            ));
-            obj.add_controller(gesture);
 
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("folder", Some(&actions));
@@ -125,6 +104,16 @@ mod imp {
             ));
             actions.add_action(&action);
 
+            let action = gio::SimpleAction::new("rename-begin", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_action, _parameter| {
+                    this.rename_popover.borrow().as_ref().unwrap().popup();
+                }
+            ));
+            actions.add_action(&action);
+
             let action = gio::SimpleAction::new("delete", None);
             action.connect_activate(clone!(
                 #[weak]
@@ -134,21 +123,15 @@ mod imp {
                 }
             ));
             actions.add_action(&action);
-
-            obj.connect_destroy(move |obj| {
-                let popover = obj
-                    .imp()
-                    .context_menu_popover
-                    .take()
-                    .expect("LibraryFolder context menu uninitialized");
-                popover.unparent();
-            });
         }
 
         fn signals() -> &'static [Signal] {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
+                    Signal::builder("renamed")
+                        .param_types([PathBuf::static_type()])
+                        .build(),
                     Signal::builder("delete-requested")
                         .param_types([super::LibraryFolder::static_type()])
                         .build(),
@@ -336,6 +319,68 @@ mod imp {
             obj.emit_by_name::<()>("sheet-added", &[&button]);
             self.sheets.borrow_mut().push(button);
         }
+
+        fn setup_context_menu(&self) {
+            let obj = self.obj();
+
+            let builder =
+                Builder::from_resource("/fi/sevonj/TheftMD/ui/library_folder_context_menu.ui");
+            let popover = builder
+                .object::<MenuModel>("context-menu")
+                .expect("LibraryFolder context-menu model failed");
+            let menu = PopoverMenu::builder()
+                .menu_model(&popover)
+                .has_arrow(false)
+                .build();
+            menu.set_parent(&*obj);
+            let _ = self.context_menu_popover.replace(Some(menu));
+
+            let gesture = gtk::GestureClick::new();
+            gesture.set_button(gdk::ffi::GDK_BUTTON_SECONDARY as u32);
+            gesture.connect_released(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |gesture, _n, x, y| {
+                    gesture.set_state(gtk::EventSequenceState::Claimed);
+                    if let Some(popover) = this.context_menu_popover.borrow().as_ref() {
+                        popover.set_pointing_to(Some(&Rectangle::new(x as i32, y as i32, 1, 1)));
+                        popover.popup();
+                    };
+                }
+            ));
+            obj.add_controller(gesture);
+
+            obj.connect_destroy(move |obj| {
+                let popover = obj.imp().context_menu_popover.take().unwrap();
+                popover.unparent();
+            });
+        }
+
+        fn setup_rename_menu(&self) {
+            let obj = self.obj();
+
+            let menu = FolderRenamePopover::default();
+            menu.set_parent(&*obj);
+
+            menu.connect_closure(
+                "committed",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_popover: FolderRenamePopover, path: PathBuf| {
+                        obj.emit_by_name::<()>("renamed", &[&path]);
+                    }
+                ),
+            );
+
+            let _ = self.rename_popover.replace(Some(menu));
+
+            obj.connect_destroy(move |obj| {
+                let popover = obj.imp().rename_popover.take().unwrap();
+                popover.unparent();
+            });
+        }
     }
 }
 
@@ -409,6 +454,13 @@ impl LibraryFolder {
 
     fn bind(&self, data: &FolderObject) {
         self.imp().folder_object.replace(Some(data.clone()));
+        let path = data.path();
+        self.imp()
+            .rename_popover
+            .borrow()
+            .as_ref()
+            .unwrap()
+            .set_path(path);
 
         let title_label = self.imp().title.get();
         let mut bindings = self.imp().bindings.borrow_mut();
