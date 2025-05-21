@@ -150,10 +150,10 @@ mod imp {
             self.folders.borrow_mut().insert(k, folder);
         }
 
-        fn add_sheet(&self, button: LibrarySheetButton) {
+        fn add_sheet(&self, sheet: LibrarySheetButton) {
             let obj = self.obj();
 
-            button.connect_clicked(clone!(
+            sheet.connect_clicked(clone!(
                 #[weak]
                 obj,
                 move |button| {
@@ -163,7 +163,7 @@ mod imp {
                 }
             ));
 
-            button.connect_closure(
+            sheet.connect_closure(
                 "renamed",
                 false,
                 closure_local!(
@@ -175,7 +175,7 @@ mod imp {
                 ),
             );
 
-            button.connect_closure(
+            sheet.connect_closure(
                 "delete-requested",
                 false,
                 closure_local!(
@@ -187,8 +187,14 @@ mod imp {
                 ),
             );
 
-            let k = button.path();
-            self.sheets.borrow_mut().insert(k, button);
+            if let Some(selected) = self.selected_sheet.borrow().as_ref() {
+                if sheet.path() == *selected {
+                    sheet.set_active(true);
+                }
+            }
+
+            let k = sheet.path();
+            self.sheets.borrow_mut().insert(k, sheet);
         }
 
         fn unlist_folder(&self, path: PathBuf) {
@@ -199,9 +205,17 @@ mod imp {
             self.sheets.borrow_mut().remove(&path);
         }
 
-        fn on_sheet_rename(&self, button: LibrarySheetButton, new_path: PathBuf) {
+        fn on_sheet_rename(&self, sheet: LibrarySheetButton, new_path: PathBuf) {
             let obj = self.obj();
-            obj.emit_by_name::<()>("sheet-renamed", &[&button, &new_path]);
+
+            if let Some(selected) = self.selected_sheet.borrow_mut().as_mut() {
+                let old_path = sheet.path();
+                if old_path == *selected {
+                    *selected = new_path.clone();
+                }
+            }
+
+            obj.emit_by_name::<()>("sheet-renamed", &[&sheet, &new_path]);
             obj.refresh_content();
         }
     }
@@ -251,8 +265,6 @@ impl LibraryBrowser {
         if let Some(old_path) = self.imp().selected_sheet.borrow().as_ref() {
             if let Some(old_button) = self.imp().sheets.borrow().get(old_path) {
                 old_button.set_active(false);
-            } else {
-                panic!("failed to get button for path {path:?}");
             }
         }
 
@@ -264,8 +276,6 @@ impl LibraryBrowser {
         if let Some(button) = self.imp().sheets.borrow().get(path) {
             button.set_active(true);
             self.imp().selected_sheet.replace(Some(button.path()));
-        } else {
-            panic!("failed to get button for path {path:?}");
         }
     }
 }
