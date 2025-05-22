@@ -102,6 +102,8 @@ mod imp {
                     #[weak]
                     obj,
                     move |browser: LibraryBrowser, folder: LibraryFolder| {
+                        assert!(!folder.is_root());
+
                         let path = folder
                             .path()
                             .canonicalize()
@@ -129,6 +131,8 @@ mod imp {
                     #[weak(rename_to = this)]
                     self,
                     move |_browser: LibraryBrowser, folder: LibraryFolder, new_path: PathBuf| {
+                        assert!(!folder.is_root());
+
                         let original_path = folder.path();
                         let new_path = util::incremented_path(new_path);
                         fs::rename(&original_path, &new_path).expect("Folder rename failed");

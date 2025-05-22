@@ -52,7 +52,7 @@ mod imp {
         pub(super) subdirs: RefCell<Vec<super::LibraryFolder>>,
         pub(super) sheets: RefCell<Vec<LibrarySheet>>,
 
-        context_menu_popover: RefCell<Option<PopoverMenu>>,
+        pub(super) context_menu_popover: RefCell<Option<PopoverMenu>>,
         pub(super) rename_popover: RefCell<Option<FolderRenamePopover>>,
         pub(super) drag_source: RefCell<Option<DragSource>>,
     }
@@ -146,6 +146,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
+                    assert!(!this.obj().is_root());
                     this.rename_popover.borrow().as_ref().unwrap().popup();
                 }
             ));
@@ -156,6 +157,7 @@ mod imp {
                 #[weak]
                 obj,
                 move |_action, _parameter| {
+                    assert!(!obj.is_root());
                     obj.emit_by_name::<()>("delete-requested", &[&obj]);
                 }
             ));
@@ -394,8 +396,9 @@ mod imp {
             obj.add_controller(gesture);
 
             obj.connect_destroy(move |obj| {
-                let popover = obj.imp().context_menu_popover.take().unwrap();
-                popover.unparent();
+                if let Some(popover) = obj.imp().context_menu_popover.take() {
+                    popover.unparent();
+                }
             });
         }
 
@@ -420,8 +423,9 @@ mod imp {
             let _ = self.rename_popover.replace(Some(menu));
 
             obj.connect_destroy(move |obj| {
-                let popover = obj.imp().rename_popover.take().unwrap();
-                popover.unparent();
+                if let Some(popover) = obj.imp().rename_popover.take() {
+                    popover.unparent();
+                }
             });
         }
 
@@ -529,6 +533,12 @@ impl LibraryFolder {
         this.imp().title.set_label("Library");
         this.imp().content_vbox.set_margin_start(0);
         this.imp().set_expand(true);
+        if let Some(popover) = this.imp().context_menu_popover.take() {
+            popover.unparent();
+        }
+        if let Some(popover) = this.imp().rename_popover.take() {
+            popover.unparent();
+        }
         this
     }
 
@@ -571,6 +581,7 @@ impl LibraryFolder {
     }
 
     pub fn rename(&self, path: PathBuf) {
+        assert!(!self.is_root());
         assert!(path.parent().is_some_and(|p| p.is_dir()));
         self.emit_by_name::<()>("rename-requested", &[&path]);
     }

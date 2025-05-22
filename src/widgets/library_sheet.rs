@@ -159,8 +159,9 @@ mod imp {
             obj.add_controller(gesture);
 
             obj.connect_destroy(move |obj| {
-                let popover = obj.imp().context_menu_popover.take().unwrap();
-                popover.unparent();
+                if let Some(popover) = obj.imp().context_menu_popover.take() {
+                    popover.unparent();
+                }
             });
         }
 
@@ -185,8 +186,9 @@ mod imp {
             let _ = self.rename_popover.replace(Some(menu));
 
             obj.connect_destroy(move |obj| {
-                let popover = obj.imp().rename_popover.take().unwrap();
-                popover.unparent();
+                if let Some(popover) = obj.imp().rename_popover.take() {
+                    popover.unparent();
+                }
             });
         }
 
