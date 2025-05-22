@@ -72,6 +72,11 @@ mod imp {
             self.parent_constructed();
             let obj = self.obj();
 
+            #[cfg(debug_assertions)]
+            {
+                obj.add_css_class("devel");
+            }
+
             let top_split = self.top_split.get();
             self.sidebar_toggle.connect_clicked(clone!(move |_| {
                 let collapsed = !top_split.is_collapsed();
