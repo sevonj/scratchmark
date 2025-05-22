@@ -103,6 +103,21 @@ mod imp {
                     obj.imp().set_expand(true);
                 }
             ));
+
+            actions.add_action(&action);
+            let action = gio::SimpleAction::new("create-folder", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    let path = util::untitled_folder_path(obj.path());
+                    util::create_folder(&path);
+                    obj.imp().add_subdir(FolderObject::new(path.clone()));
+                    obj.emit_by_name::<()>("folder-created", &[&path]);
+                    obj.imp().sort_children();
+                    obj.imp().set_expand(true);
+                }
+            ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("filemanager", None);
@@ -150,6 +165,9 @@ mod imp {
                         .build(),
                     Signal::builder("delete-requested")
                         .param_types([super::LibraryFolder::static_type()])
+                        .build(),
+                    Signal::builder("folder-created")
+                        .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("sheet-created")
                         .param_types([PathBuf::static_type()])

@@ -58,6 +58,27 @@ pub fn path_builtin_library() -> PathBuf {
 }
 
 /// Returns the first free filepath in series of
+/// "/path/to/New folder",
+/// "/path/to/New folder (2)",
+/// "/path/to/New folder (3)", ...
+pub fn untitled_folder_path(dir: PathBuf) -> PathBuf {
+    assert!(dir.is_dir());
+    let path = dir.join("New folder");
+    if !path.exists() {
+        return path;
+    }
+    let mut attempt = 2;
+    loop {
+        let filename = format!("New folder ({attempt})");
+        let path = dir.join(filename);
+        if !path.exists() {
+            return path;
+        }
+        attempt += 1;
+    }
+}
+
+/// Returns the first free filepath in series of
 /// "/path/to/Untitled.md",
 /// "/path/to/Untitled (2).md",
 /// "/path/to/Untitled (3).md", ...
@@ -76,6 +97,10 @@ pub fn untitled_sheet_path(dir: PathBuf) -> PathBuf {
         }
         attempt += 1;
     }
+}
+
+pub fn create_folder(path: &Path) {
+    std::fs::create_dir(path).expect("folder create fail");
 }
 
 pub fn create_sheet_file(path: &Path) {

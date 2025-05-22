@@ -279,7 +279,7 @@ impl Window {
     }
 
     fn create_folder(&self, path: PathBuf) {
-        std::fs::create_dir(path).expect("folder create fail");
+        util::create_folder(&path);
         self.imp().library_browser.refresh_content();
     }
 

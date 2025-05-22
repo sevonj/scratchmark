@@ -8,6 +8,10 @@
         <attribute name="action">folder.create-sheet</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">New folder</attribute>
+        <attribute name="action">folder.create-folder</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Open in file manager</attribute>
         <attribute name="action">folder.filemanager</attribute>
       </item>
