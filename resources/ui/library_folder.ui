@@ -40,14 +40,17 @@
                     <object class="GtkBox" id="content_vbox">
                         <property name="orientation">1</property>
                         <property name="margin-start">8</property>
+                        <property name="spacing">2</property>
                         <child>
                             <object class="GtkBox" id="subdirs_vbox">
                                 <property name="orientation">1</property>
+                                <property name="spacing">2</property>
                             </object>
                         </child>
                         <child>
                             <object class="GtkBox" id="sheets_vbox">
                                 <property name="orientation">1</property>
+                                <property name="spacing">2</property>
                             </object>
                         </child>
                     </object>
