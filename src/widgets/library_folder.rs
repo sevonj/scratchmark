@@ -26,7 +26,7 @@ mod imp {
     use crate::data::SheetObject;
     use crate::util;
     use crate::widgets::FolderRenamePopover;
-    use crate::widgets::LibrarySheetButton;
+    use crate::widgets::LibrarySheet;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/fi/sevonj/TheftMD/ui/library_folder.ui")]
@@ -50,7 +50,7 @@ mod imp {
         pub(super) bindings: RefCell<Vec<Binding>>,
         pub(super) expanded: RefCell<bool>,
         pub(super) subdirs: RefCell<Vec<super::LibraryFolder>>,
-        pub(super) sheets: RefCell<Vec<LibrarySheetButton>>,
+        pub(super) sheets: RefCell<Vec<LibrarySheet>>,
 
         context_menu_popover: RefCell<Option<PopoverMenu>>,
         pub(super) rename_popover: RefCell<Option<FolderRenamePopover>>,
@@ -182,7 +182,7 @@ mod imp {
                         .param_types([super::LibraryFolder::static_type()])
                         .build(),
                     Signal::builder("sheet-added")
-                        .param_types([LibrarySheetButton::static_type()])
+                        .param_types([LibrarySheet::static_type()])
                         .build(),
                     Signal::builder("folder-removed")
                         .param_types([PathBuf::static_type()])
@@ -306,7 +306,7 @@ mod imp {
         fn sort_children(&self) {
             let mut sheets = self.sheets.borrow_mut();
             if !sheets.is_empty() {
-                fn compare(a: &LibrarySheetButton, b: &LibrarySheetButton) -> std::cmp::Ordering {
+                fn compare(a: &LibrarySheet, b: &LibrarySheet) -> std::cmp::Ordering {
                     a.stem().to_lowercase().cmp(&b.stem().to_lowercase())
                 }
                 sheets.sort_unstable_by(compare);
@@ -354,7 +354,7 @@ mod imp {
         }
 
         fn add_sheet(&self, data: SheetObject) {
-            let sheet = LibrarySheetButton::new(&data);
+            let sheet = LibrarySheet::new(&data);
             self.sheets_vbox.append(&sheet);
 
             let obj = self.obj();
@@ -441,7 +441,7 @@ mod imp {
 
             let drop_target = DropTarget::new(glib::types::Type::INVALID, gdk::DragAction::COPY);
             drop_target.set_types(&[
-                LibrarySheetButton::static_type(),
+                LibrarySheet::static_type(),
                 super::LibraryFolder::static_type(),
             ]);
             drop_target.connect_drop(clone!(
@@ -450,7 +450,7 @@ mod imp {
                 #[upgrade_or]
                 false,
                 move |_: &DropTarget, value: &glib::Value, _: f64, _: f64| {
-                    if let Ok(sheet) = value.get::<LibrarySheetButton>() {
+                    if let Ok(sheet) = value.get::<LibrarySheet>() {
                         let Ok(old_path) = sheet.path().canonicalize() else {
                             return true;
                         };
@@ -507,7 +507,7 @@ use glib::Object;
 
 use crate::data::FolderObject;
 
-use super::LibrarySheetButton;
+use super::LibrarySheet;
 
 glib::wrapper! {
     pub struct LibraryFolder(ObjectSubclass<imp::LibraryFolder>)
@@ -552,7 +552,7 @@ impl LibraryFolder {
         self.imp().refresh_content();
     }
 
-    pub fn find_sheet_button(&self, path: &PathBuf) -> Option<LibrarySheetButton> {
+    pub fn find_sheet_button(&self, path: &PathBuf) -> Option<LibrarySheet> {
         for subdir in self.imp().subdirs.borrow().iter() {
             if let Ok(subdir_path) = subdir.path().canonicalize() {
                 if path.starts_with(&subdir_path) {

@@ -19,14 +19,17 @@ mod imp {
     use glib::Binding;
     use glib::subclass::Signal;
     use gtk::DragSource;
+    use gtk::ToggleButton;
     use gtk::{Builder, CompositeTemplate, FileLauncher, Label, PopoverMenu, TemplateChild};
 
     use crate::data::SheetObject;
     use crate::widgets::SheetRenamePopover;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/fi/sevonj/TheftMD/ui/library_sheet_button.ui")]
-    pub struct LibrarySheetButton {
+    #[template(resource = "/fi/sevonj/TheftMD/ui/library_sheet.ui")]
+    pub struct LibrarySheet {
+        #[template_child]
+        pub(super) button: TemplateChild<ToggleButton>,
         #[template_child]
         pub(super) sheet_name_label: TemplateChild<Label>,
 
@@ -39,10 +42,10 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LibrarySheetButton {
+    impl ObjectSubclass for LibrarySheet {
         const NAME: &'static str = "LibrarySheet";
-        type Type = super::LibrarySheetButton;
-        type ParentType = gtk::ToggleButton;
+        type Type = super::LibrarySheet;
+        type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
             klass.bind_template();
@@ -53,7 +56,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for LibrarySheetButton {
+    impl ObjectImpl for LibrarySheet {
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
@@ -61,6 +64,14 @@ mod imp {
             self.setup_context_menu();
             self.setup_rename_menu();
             self.setup_drag();
+
+            self.button.connect_clicked(clone!(
+                #[weak]
+                obj,
+                move |_| {
+                    obj.emit_by_name::<()>("selected", &[]);
+                }
+            ));
 
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("sheet", Some(&actions));
@@ -105,6 +116,7 @@ mod imp {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
+                    Signal::builder("selected").build(),
                     Signal::builder("rename-requested")
                         .param_types([PathBuf::static_type()])
                         .build(),
@@ -114,17 +126,15 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for LibrarySheetButton {}
-    impl ButtonImpl for LibrarySheetButton {}
-    impl ToggleButtonImpl for LibrarySheetButton {}
+    impl WidgetImpl for LibrarySheet {}
+    impl BinImpl for LibrarySheet {}
 
-    impl LibrarySheetButton {
+    impl LibrarySheet {
         fn setup_context_menu(&self) {
             let obj = self.obj();
 
-            let builder = Builder::from_resource(
-                "/fi/sevonj/TheftMD/ui/library_sheet_button_context_menu.ui",
-            );
+            let builder =
+                Builder::from_resource("/fi/sevonj/TheftMD/ui/library_sheet_context_menu.ui");
             let popover = builder.object::<MenuModel>("context-menu").unwrap();
             let menu = PopoverMenu::builder()
                 .menu_model(&popover)
@@ -204,12 +214,12 @@ use glib::Object;
 use crate::data::SheetObject;
 
 glib::wrapper! {
-    pub struct LibrarySheetButton(ObjectSubclass<imp::LibrarySheetButton>)
-        @extends gtk::ToggleButton, gtk::Button, gtk::Widget,
-        @implements gtk::Accessible, gtk::Actionable, gtk::Buildable, gtk::ConstraintTarget;
+pub struct LibrarySheet(ObjectSubclass<imp::LibrarySheet>)
+    @extends adw::Bin, gtk::Widget,
+    @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl LibrarySheetButton {
+impl LibrarySheet {
     pub fn new(data: &SheetObject) -> Self {
         let this: Self = Object::builder().build();
         this.bind(data);
@@ -221,7 +231,7 @@ impl LibrarySheetButton {
             .sheet_object
             .borrow()
             .as_ref()
-            .expect("LibrarySheetButton data uninitialized")
+            .expect("LibrarySheet data uninitialized")
             .path()
     }
 
@@ -230,13 +240,17 @@ impl LibrarySheetButton {
             .sheet_object
             .borrow()
             .as_ref()
-            .expect("LibrarySheetButton data uninitialized")
+            .expect("LibrarySheet data uninitialized")
             .stem()
     }
 
     pub fn rename(&self, path: PathBuf) {
         assert!(path.parent().is_some_and(|p| p.is_dir()));
         self.emit_by_name::<()>("rename-requested", &[&path]);
+    }
+
+    pub fn set_active(&self, is_active: bool) {
+        self.imp().button.set_active(is_active);
     }
 
     fn bind(&self, data: &SheetObject) {

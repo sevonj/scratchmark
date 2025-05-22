@@ -11,7 +11,6 @@ mod imp {
     use glib::closure_local;
     use glib::subclass::*;
     use gtk::glib;
-    use gtk::glib::clone;
     use gtk::prelude::*;
 
     use gtk::CompositeTemplate;
@@ -19,7 +18,7 @@ mod imp {
     use crate::data::FolderObject;
     use crate::util::path_builtin_library;
     use crate::widgets::LibraryFolder;
-    use crate::widgets::LibrarySheetButton;
+    use crate::widgets::LibrarySheet;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/fi/sevonj/TheftMD/ui/library_browser.ui")]
@@ -28,7 +27,7 @@ mod imp {
         pub(super) library_root_vbox: TemplateChild<gtk::Box>,
 
         pub(super) folders: RefCell<HashMap<PathBuf, LibraryFolder>>,
-        pub(super) sheets: RefCell<HashMap<PathBuf, LibrarySheetButton>>,
+        pub(super) sheets: RefCell<HashMap<PathBuf, LibrarySheet>>,
         pub(super) selected_sheet: RefCell<Option<PathBuf>>,
     }
 
@@ -69,13 +68,13 @@ mod imp {
                         .param_types([LibraryFolder::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("sheet-rename-requested")
-                        .param_types([LibrarySheetButton::static_type(), PathBuf::static_type()])
+                        .param_types([LibrarySheet::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
                         .param_types([LibraryFolder::static_type()])
                         .build(),
                     Signal::builder("sheet-delete-requested")
-                        .param_types([LibrarySheetButton::static_type()])
+                        .param_types([LibrarySheet::static_type()])
                         .build(),
                 ]
             })
@@ -131,7 +130,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryFolder, button: LibrarySheetButton| {
+                    move |_: LibraryFolder, button: LibrarySheet| {
                         this.add_sheet(button);
                     }
                 ),
@@ -178,18 +177,22 @@ mod imp {
             self.folders.borrow_mut().insert(k, folder);
         }
 
-        fn add_sheet(&self, sheet: LibrarySheetButton) {
+        fn add_sheet(&self, sheet: LibrarySheet) {
             let obj = self.obj();
 
-            sheet.connect_clicked(clone!(
-                #[weak]
-                obj,
-                move |button| {
-                    button.set_active(false);
-                    let path = button.path();
-                    obj.emit_by_name::<()>("sheet-selected", &[&path]);
-                }
-            ));
+            sheet.connect_closure(
+                "selected",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |sheet: LibrarySheet| {
+                        sheet.set_active(false);
+                        let path = sheet.path();
+                        obj.emit_by_name::<()>("sheet-selected", &[&path]);
+                    }
+                ),
+            );
 
             sheet.connect_closure(
                 "rename-requested",
@@ -197,7 +200,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |sheet: LibrarySheetButton, new_path: PathBuf| {
+                    move |sheet: LibrarySheet, new_path: PathBuf| {
                         obj.emit_by_name::<()>("sheet-rename-requested", &[&sheet, &new_path]);
                     }
                 ),
@@ -209,7 +212,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |button: LibrarySheetButton| {
+                    move |button: LibrarySheet| {
                         obj.emit_by_name::<()>("sheet-delete-requested", &[&button]);
                     }
                 ),
@@ -239,7 +242,6 @@ use std::path::Path;
 
 use adw::subclass::prelude::*;
 use gtk::glib;
-use gtk::prelude::*;
 
 use glib::Object;
 

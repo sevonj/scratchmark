@@ -15,7 +15,7 @@ mod imp {
 
     use crate::util;
     use crate::widgets::LibraryFolder;
-    use crate::widgets::LibrarySheetButton;
+    use crate::widgets::LibrarySheet;
     use crate::widgets::NewFolderPopover;
     use crate::widgets::NewSheetPopover;
     use crate::widgets::SheetEditorPlaceholder;
@@ -156,9 +156,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_browser: LibraryBrowser,
-                          sheet: LibrarySheetButton,
-                          new_path: PathBuf| {
+                    move |_browser: LibraryBrowser, sheet: LibrarySheet, new_path: PathBuf| {
                         let original_path = sheet.path();
                         let new_path = util::incremented_path(new_path);
                         fs::rename(&original_path, &new_path).expect("File rename failed");
@@ -182,7 +180,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |browser: LibraryBrowser, sheet: LibrarySheetButton| {
+                    move |browser: LibraryBrowser, sheet: LibrarySheet| {
                         let path = sheet.path();
                         let currently_open = obj
                             .imp()
