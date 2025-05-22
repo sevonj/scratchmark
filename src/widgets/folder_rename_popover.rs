@@ -21,7 +21,6 @@ mod imp {
     use gtk::{CompositeTemplate, TemplateChild};
 
     use crate::util::FilenameStatus;
-    use crate::util::path_builtin_library;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/fi/sevonj/TheftMD/ui/folder_rename_popover.ui")]
@@ -111,9 +110,8 @@ mod imp {
 
         fn refresh(&self, stem: GString) {
             let original_path = self.original_path.borrow();
-            let parent_path = original_path.parent().expect("Failed to get path parent.");
             let name = stem.to_string();
-            let new_path = parent_path.join(&name);
+            let new_path = self.parent_path().join(&name);
             let file_exists = new_path.exists();
 
             let name_status = FilenameStatus::from(stem.as_str());
@@ -150,9 +148,15 @@ mod imp {
             self.obj().popdown();
         }
 
+        fn parent_path(&self) -> PathBuf {
+            let original_path = self.original_path.borrow();
+            let parent_path = original_path.parent().expect("Failed to get path parent.");
+            parent_path.to_path_buf()
+        }
+
         fn filepath(&self) -> PathBuf {
             let filename = self.name_field.text().to_string();
-            path_builtin_library().join(&filename)
+            self.parent_path().join(&filename)
         }
     }
 }
