@@ -220,8 +220,6 @@ mod imp {
     impl AdwApplicationWindowImpl for Window {}
 }
 
-use std::fs::OpenOptions;
-use std::io::Write;
 use std::path::PathBuf;
 
 use adw::prelude::*;
@@ -230,6 +228,8 @@ use glib::Object;
 use gtk::gio;
 use gtk::glib;
 use gtk::glib::closure_local;
+
+use crate::util;
 
 use super::LibraryBrowser;
 use super::SheetEditor;
@@ -285,18 +285,7 @@ impl Window {
 
     fn create_sheet(&self, path: PathBuf) {
         self.close_sheet();
-
-        let mut file = OpenOptions::new()
-            .write(true)
-            .create_new(true)
-            .open(&path)
-            .expect("file create fail");
-
-        let stem = path.file_stem().unwrap().to_string_lossy();
-        let contents = format!("# {stem}\n\n");
-        file.write_all(contents.as_bytes())
-            .expect("failed to write template to new file");
-
+        util::create_sheet_file(&path);
         self.imp().library_browser.refresh_content();
         self.load_sheet(path);
     }

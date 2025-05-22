@@ -101,6 +101,18 @@ mod imp {
             );
 
             folder.connect_closure(
+                "sheet-created",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: LibraryFolder, path: PathBuf| {
+                        obj.emit_by_name::<()>("sheet-selected", &[&path]);
+                    }
+                ),
+            );
+
+            folder.connect_closure(
                 "folder-added",
                 false,
                 closure_local!(

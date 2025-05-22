@@ -23,6 +23,7 @@ mod imp {
 
     use crate::data::FolderObject;
     use crate::data::SheetObject;
+    use crate::util;
     use crate::widgets::FolderRenamePopover;
     use crate::widgets::LibrarySheetButton;
 
@@ -89,6 +90,21 @@ mod imp {
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("folder", Some(&actions));
 
+            let action = gio::SimpleAction::new("create-sheet", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    let path = util::untitled_sheet_path(obj.path());
+                    util::create_sheet_file(&path);
+                    obj.imp().add_sheet(SheetObject::new(path.clone()));
+                    obj.emit_by_name::<()>("sheet-created", &[&path]);
+                    obj.imp().sort_children();
+                    obj.imp().set_expand(true);
+                }
+            ));
+            actions.add_action(&action);
+
             let action = gio::SimpleAction::new("filemanager", None);
             action.connect_activate(clone!(
                 #[weak]
@@ -134,6 +150,9 @@ mod imp {
                         .build(),
                     Signal::builder("delete-requested")
                         .param_types([super::LibraryFolder::static_type()])
+                        .build(),
+                    Signal::builder("sheet-created")
+                        .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-added")
                         .param_types([super::LibraryFolder::static_type()])
@@ -311,13 +330,13 @@ mod imp {
         }
 
         fn add_sheet(&self, data: SheetObject) {
-            let button = LibrarySheetButton::new(&data);
-            self.sheets_vbox.append(&button);
+            let sheet = LibrarySheetButton::new(&data);
+            self.sheets_vbox.append(&sheet);
 
             let obj = self.obj();
 
-            obj.emit_by_name::<()>("sheet-added", &[&button]);
-            self.sheets.borrow_mut().push(button);
+            obj.emit_by_name::<()>("sheet-added", &[&sheet]);
+            self.sheets.borrow_mut().push(sheet);
         }
 
         fn setup_context_menu(&self) {
