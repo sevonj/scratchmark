@@ -57,43 +57,44 @@ pub fn path_builtin_library() -> PathBuf {
     path
 }
 
-/// Returns the first free filepath in series of
-/// "/path/to/New folder",
-/// "/path/to/New folder (2)",
-/// "/path/to/New folder (3)", ...
+/// Returns an unused filepath with a placeholder name
 pub fn untitled_folder_path(dir: PathBuf) -> PathBuf {
     assert!(dir.is_dir());
     let path = dir.join("New folder");
-    if !path.exists() {
-        return path;
-    }
-    let mut attempt = 2;
-    loop {
-        let filename = format!("New folder ({attempt})");
-        let path = dir.join(filename);
-        if !path.exists() {
-            return path;
-        }
-        attempt += 1;
-    }
+    incremented_path(path)
 }
 
-/// Returns the first free filepath in series of
-/// "/path/to/Untitled.md",
-/// "/path/to/Untitled (2).md",
-/// "/path/to/Untitled (3).md", ...
+/// Returns an unused filepath with a placeholder name
 pub fn untitled_sheet_path(dir: PathBuf) -> PathBuf {
     assert!(dir.is_dir());
     let path = dir.join("Untitled.md");
+    incremented_path(path)
+}
+
+/// Increments filename until if finds an unused path.
+/// "filename.md" becomes:
+/// "filename.md",
+/// or "filename (2).md",
+/// or "filename (3).md", ...
+/// Also works for folders.
+pub fn incremented_path(path: PathBuf) -> PathBuf {
+    assert!(path.parent().is_some_and(|p| p.is_dir()));
     if !path.exists() {
         return path;
     }
+    let stem = path.file_stem().unwrap().to_string_lossy();
+    let ext = path.extension().map(|e| e.to_string_lossy());
+
     let mut attempt = 2;
     loop {
-        let filename = format!("Untitled ({attempt}).md");
-        let path = dir.join(filename);
-        if !path.exists() {
-            return path;
+        let mut new_name = format!("{stem} ({attempt})");
+        if let Some(ext) = &ext {
+            new_name = format!("{new_name}.{ext}");
+        }
+        let mut new_path = path.clone();
+        new_path.set_file_name(new_name);
+        if !new_path.exists() {
+            return new_path;
         }
         attempt += 1;
     }
@@ -114,4 +115,72 @@ pub fn create_sheet_file(path: &Path) {
     let contents = format!("# {stem}\n\n");
     file.write_all(contents.as_bytes())
         .expect("failed to write template to new file");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const ROOT: &str = env!("CARGO_MANIFEST_DIR");
+
+    fn test_root() -> PathBuf {
+        PathBuf::from(ROOT).join("test")
+    }
+
+    #[test]
+    fn test_incremented_path() {
+        let dir = test_root().join("file_increment");
+        std::fs::create_dir_all(&dir).unwrap();
+
+        let files = vec![
+            "new file.md",
+            "new file (2).md",
+            "new file (3).md",
+            "new file (4).md",
+            // "new file (5).md",
+            "new file (6).md",
+            // "new file (7).md",
+        ];
+
+        let folders = vec![
+            "new folder",
+            "new folder (2)",
+            // "new folder (3)",
+            "new folder (4)",
+        ];
+
+        for file in &files {
+            let path = dir.join(file);
+            OpenOptions::new()
+                .write(true)
+                .create(true)
+                .open(path)
+                .unwrap();
+        }
+        for folder in &folders {
+            let path = dir.join(folder);
+            if path.is_dir() {
+                continue;
+            }
+            std::fs::create_dir(path).unwrap();
+        }
+
+        for file in &files {
+            assert!(dir.join(file).is_file());
+        }
+        for folder in &folders {
+            assert!(dir.join(folder).is_dir());
+        }
+
+        let result_file = incremented_path(dir.join("new file.md"));
+        let expected_file = dir.join("new file (5).md");
+        let result_folder = incremented_path(dir.join("new folder"));
+        let expected_folder = dir.join("new folder (3)");
+
+        assert!(!expected_file.exists());
+        assert!(!expected_folder.exists());
+
+        assert_eq!(result_file, expected_file);
+        assert_eq!(result_folder, expected_folder);
+    }
 }

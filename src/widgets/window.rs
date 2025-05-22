@@ -1,5 +1,6 @@
 mod imp {
     use std::cell::RefCell;
+    use std::fs;
     use std::path::PathBuf;
 
     use adw::prelude::*;
@@ -12,6 +13,7 @@ mod imp {
     use gtk::MenuButton;
     use gtk::{Button, CompositeTemplate};
 
+    use crate::util;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheetButton;
     use crate::widgets::NewFolderPopover;
@@ -116,27 +118,35 @@ mod imp {
             );
 
             self.library_browser.connect_closure(
-                "folder-renamed",
+                "folder-rename-requested",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
                     move |_browser: LibraryBrowser, folder: LibraryFolder, new_path: PathBuf| {
+                        let original_path = folder.path();
+                        let new_path = util::incremented_path(new_path);
+                        fs::rename(&original_path, &new_path).expect("Folder rename failed");
+
                         let sheet_editor_opt = this.sheet_editor.borrow();
                         if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
                             let selected = sheet_editor.path();
                             let old_path = folder.path();
                             if selected.starts_with(&old_path) {
                                 let relative = selected.strip_prefix(&old_path).unwrap();
-                                sheet_editor.set_path(new_path.join(relative));
+                                let sheet_path = new_path.join(relative);
+                                this.library_browser.set_selected_sheet(Some(&sheet_path));
+                                sheet_editor.set_path(sheet_path);
                             }
                         }
+
+                        this.library_browser.refresh_content();
                     }
                 ),
             );
 
             self.library_browser.connect_closure(
-                "sheet-renamed",
+                "sheet-rename-requested",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
@@ -144,12 +154,19 @@ mod imp {
                     move |_browser: LibraryBrowser,
                           sheet: LibrarySheetButton,
                           new_path: PathBuf| {
+                        let original_path = sheet.path();
+                        let new_path = util::incremented_path(new_path);
+                        fs::rename(&original_path, &new_path).expect("File rename failed");
+
                         let sheet_editor_opt = this.sheet_editor.borrow();
                         if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
                             if sheet_editor.path() == sheet.path() {
+                                this.library_browser.set_selected_sheet(Some(&new_path));
                                 sheet_editor.set_path(new_path);
                             }
                         }
+
+                        this.library_browser.refresh_content();
                     }
                 ),
             );

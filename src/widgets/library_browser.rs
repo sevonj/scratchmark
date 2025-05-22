@@ -52,7 +52,8 @@ mod imp {
             self.parent_constructed();
 
             let vbox = &self.library_root_vbox;
-            let root_folder = LibraryFolder::new_root(&FolderObject::new(path_builtin_library()));
+            let root_folder =
+                LibraryFolder::new_root(&FolderObject::new(path_builtin_library(), true));
             vbox.append(&root_folder);
             self.add_folder(root_folder);
         }
@@ -64,10 +65,10 @@ mod imp {
                     Signal::builder("sheet-selected")
                         .param_types([PathBuf::static_type()])
                         .build(),
-                    Signal::builder("folder-renamed")
+                    Signal::builder("folder-rename-requested")
                         .param_types([LibraryFolder::static_type(), PathBuf::static_type()])
                         .build(),
-                    Signal::builder("sheet-renamed")
+                    Signal::builder("sheet-rename-requested")
                         .param_types([LibrarySheetButton::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
@@ -89,13 +90,13 @@ mod imp {
             let obj = self.obj();
 
             folder.connect_closure(
-                "renamed",
+                "rename-requested",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |button: LibraryFolder, new_path: PathBuf| {
-                        this.on_folder_rename(button, new_path);
+                    #[weak]
+                    obj,
+                    move |folder: LibraryFolder, new_path: PathBuf| {
+                        obj.emit_by_name::<()>("folder-rename-requested", &[&folder, &new_path]);
                     }
                 ),
             );
@@ -191,13 +192,13 @@ mod imp {
             ));
 
             sheet.connect_closure(
-                "renamed",
+                "rename-requested",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |button: LibrarySheetButton, new_path: PathBuf| {
-                        this.on_sheet_rename(button, new_path);
+                    #[weak]
+                    obj,
+                    move |sheet: LibrarySheetButton, new_path: PathBuf| {
+                        obj.emit_by_name::<()>("sheet-rename-requested", &[&sheet, &new_path]);
                     }
                 ),
             );
@@ -230,35 +231,6 @@ mod imp {
 
         fn unlist_sheet(&self, path: PathBuf) {
             self.sheets.borrow_mut().remove(&path);
-        }
-
-        fn on_folder_rename(&self, folder: LibraryFolder, new_path: PathBuf) {
-            let obj = self.obj();
-
-            if let Some(selected) = self.selected_sheet.borrow_mut().as_mut() {
-                let old_path = folder.path();
-                if selected.starts_with(&old_path) {
-                    let relative = selected.strip_prefix(&old_path).unwrap();
-                    *selected = new_path.join(relative);
-                }
-            }
-
-            obj.emit_by_name::<()>("folder-renamed", &[&folder, &new_path]);
-            obj.refresh_content();
-        }
-
-        fn on_sheet_rename(&self, sheet: LibrarySheetButton, new_path: PathBuf) {
-            let obj = self.obj();
-
-            if let Some(selected) = self.selected_sheet.borrow_mut().as_mut() {
-                let old_path = sheet.path();
-                if old_path == *selected {
-                    *selected = new_path.clone();
-                }
-            }
-
-            obj.emit_by_name::<()>("sheet-renamed", &[&sheet, &new_path]);
-            obj.refresh_content();
         }
     }
 }

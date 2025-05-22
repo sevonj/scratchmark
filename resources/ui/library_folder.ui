@@ -5,31 +5,36 @@
             <object class="GtkBox">
                 <property name="orientation">1</property>
                 <child>
-                    <object class="GtkButton" id="expand_button">
-                        <style>
-                            <class name="flat" />
-                        </style>
+                    <object class="AdwBin" id="expand_button_cont">
                         <child>
-                            <object class="GtkBox">
-                                <property name="orientation">0</property>
-                                <property name="spacing">4</property>
+                            <object class="GtkButton" id="expand_button">
+                                <style>
+                                    <class name="flat" />
+                                </style>
                                 <child>
-                                    <object class="GtkImage" id="expand_icon">
-                                        <style>
-                                            <class name="dim-label" />
-                                        </style>
-                                        <property name="icon-name">pan-end-symbolic</property>
-                                        <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
-                                    </object>
-                                </child>
-                                <child>
-                                    <object class="GtkLabel" id="title">
-                                        <property name="label">dir-name-here</property>
-                                        <property name="xalign">0</property>
-                                        <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
-                                        <attributes>
-                                            <attribute name="weight" value="PANGO_WEIGHT_NORMAL" />
-                                        </attributes>
+                                    <object class="GtkBox">
+                                        <property name="orientation">0</property>
+                                        <property name="spacing">4</property>
+                                        <child>
+                                            <object class="GtkImage" id="expand_icon">
+                                                <style>
+                                                    <class name="dim-label" />
+                                                </style>
+                                                <property name="icon-name">pan-end-symbolic</property>
+                                                <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="title">
+                                                <property name="label">dir-name-here</property>
+                                                <property name="xalign">0</property>
+                                                <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
+                                                <attributes>
+                                                    <attribute name="weight"
+                                                        value="PANGO_WEIGHT_NORMAL" />
+                                                </attributes>
+                                            </object>
+                                        </child>
                                     </object>
                                 </child>
                             </object>

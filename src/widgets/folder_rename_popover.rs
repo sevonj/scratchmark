@@ -4,7 +4,6 @@
 mod imp {
 
     use std::cell::RefCell;
-    use std::fs;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
@@ -142,8 +141,6 @@ mod imp {
 
         fn commit(&self) {
             let filepath = self.filepath();
-            let original_path = self.original_path.borrow();
-            fs::rename(&*original_path, &filepath).expect("Folder rename failed");
             self.obj().emit_by_name::<()>("committed", &[&filepath]);
             self.obj().popdown();
         }

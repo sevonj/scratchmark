@@ -21,7 +21,7 @@ Early prototype, lacks fundamental features.
 Pull requests are gatekept by [this workflow.](https://github.com/sevonj/theftmd/blob/master/.github/workflows/rust.yml) It will check if the code
 
 - builds
-- ~~passes unit tests (run `cargo test`)~~
+- passes unit tests (run `cargo test`)
 - has linter warnings (run `cargo clippy`)
 - is formatted (run `cargo fmt`)
 

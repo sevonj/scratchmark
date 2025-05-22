@@ -20,6 +20,7 @@ mod imp {
     use glib::subclass::Signal;
     use gtk::{Builder, Button, FileLauncher, Image, Label, PopoverMenu};
     use gtk::{CompositeTemplate, TemplateChild};
+    use gtk::{DragSource, DropTarget};
 
     use crate::data::FolderObject;
     use crate::data::SheetObject;
@@ -30,6 +31,8 @@ mod imp {
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/fi/sevonj/TheftMD/ui/library_folder.ui")]
     pub struct LibraryFolder {
+        #[template_child]
+        pub(super) expand_button_cont: TemplateChild<adw::Bin>,
         #[template_child]
         pub(super) expand_button: TemplateChild<Button>,
         #[template_child]
@@ -51,6 +54,7 @@ mod imp {
 
         context_menu_popover: RefCell<Option<PopoverMenu>>,
         pub(super) rename_popover: RefCell<Option<FolderRenamePopover>>,
+        pub(super) drag_source: RefCell<Option<DragSource>>,
     }
 
     #[glib::object_subclass]
@@ -75,6 +79,8 @@ mod imp {
 
             self.setup_context_menu();
             self.setup_rename_menu();
+            self.setup_drag();
+            self.setup_drop();
 
             let this = self;
             self.expand_button.connect_clicked(clone!(
@@ -112,7 +118,7 @@ mod imp {
                 move |_action, _parameter| {
                     let path = util::untitled_folder_path(obj.path());
                     util::create_folder(&path);
-                    obj.imp().add_subdir(FolderObject::new(path.clone()));
+                    obj.imp().add_subdir(FolderObject::new(path.clone(), false));
                     obj.emit_by_name::<()>("folder-created", &[&path]);
                     obj.imp().sort_children();
                     obj.imp().set_expand(true);
@@ -160,7 +166,7 @@ mod imp {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
-                    Signal::builder("renamed")
+                    Signal::builder("rename-requested")
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("delete-requested")
@@ -246,7 +252,7 @@ mod imp {
                 }
 
                 if meta.is_dir() {
-                    self.add_subdir(FolderObject::new(path));
+                    self.add_subdir(FolderObject::new(path, false));
                 } else if meta.is_file()
                     && path
                         .extension()
@@ -406,7 +412,7 @@ mod imp {
                     #[weak]
                     obj,
                     move |_popover: FolderRenamePopover, path: PathBuf| {
-                        obj.emit_by_name::<()>("renamed", &[&path]);
+                        obj.emit_by_name::<()>("rename-requested", &[&path]);
                     }
                 ),
             );
@@ -417,6 +423,76 @@ mod imp {
                 let popover = obj.imp().rename_popover.take().unwrap();
                 popover.unparent();
             });
+        }
+
+        fn setup_drag(&self) {
+            let obj = self.obj();
+
+            let drag_source = DragSource::new();
+            drag_source.set_actions(gdk::DragAction::COPY);
+            drag_source.set_content(Some(&gdk::ContentProvider::for_value(&obj.to_value())));
+
+            self.expand_button_cont.add_controller(drag_source.clone());
+            let _ = self.drag_source.replace(Some(drag_source));
+        }
+
+        fn setup_drop(&self) {
+            let obj = self.obj();
+
+            let drop_target = DropTarget::new(glib::types::Type::INVALID, gdk::DragAction::COPY);
+            drop_target.set_types(&[
+                LibrarySheetButton::static_type(),
+                super::LibraryFolder::static_type(),
+            ]);
+            drop_target.connect_drop(clone!(
+                #[weak]
+                obj,
+                #[upgrade_or]
+                false,
+                move |_: &DropTarget, value: &glib::Value, _: f64, _: f64| {
+                    if let Ok(sheet) = value.get::<LibrarySheetButton>() {
+                        let Ok(old_path) = sheet.path().canonicalize() else {
+                            return true;
+                        };
+                        let filename = old_path.file_name().unwrap();
+                        let Ok(target_path) = obj.path().canonicalize() else {
+                            return true;
+                        };
+                        let new_path = target_path.join(filename);
+                        if new_path == old_path {
+                            return true;
+                        }
+                        sheet.rename(new_path);
+                        obj.imp().set_expand(true);
+                        return true;
+                    } else if let Ok(folder) = value.get::<super::LibraryFolder>() {
+                        // Under no circumstance accept the library root folder
+                        if folder.is_root() {
+                            return true;
+                        }
+                        let Ok(old_path) = folder.path().canonicalize() else {
+                            return true;
+                        };
+                        let filename = old_path.file_name().unwrap();
+                        let Ok(target_path) = obj.path().canonicalize() else {
+                            return true;
+                        };
+                        if target_path.starts_with(&old_path) {
+                            return true;
+                        }
+                        let new_path = target_path.join(filename);
+                        if new_path == old_path {
+                            return true;
+                        }
+                        folder.rename(new_path);
+                        obj.imp().set_expand(true);
+                        return true;
+                    }
+                    false
+                }
+            ));
+
+            obj.add_controller(drop_target);
         }
     }
 }
@@ -456,6 +532,11 @@ impl LibraryFolder {
         this
     }
 
+    // Is root folder of library
+    pub fn is_root(&self) -> bool {
+        self.imp().folder_object.borrow().as_ref().unwrap().root()
+    }
+
     /// Filepath
     pub fn path(&self) -> PathBuf {
         self.imp().path()
@@ -487,6 +568,11 @@ impl LibraryFolder {
             }
         }
         None
+    }
+
+    pub fn rename(&self, path: PathBuf) {
+        assert!(path.parent().is_some_and(|p| p.is_dir()));
+        self.emit_by_name::<()>("rename-requested", &[&path]);
     }
 
     fn bind(&self, data: &FolderObject) {

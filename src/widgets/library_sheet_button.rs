@@ -18,6 +18,7 @@ mod imp {
     use gio::{MenuModel, SimpleActionGroup};
     use glib::Binding;
     use glib::subclass::Signal;
+    use gtk::DragSource;
     use gtk::{Builder, CompositeTemplate, FileLauncher, Label, PopoverMenu, TemplateChild};
 
     use crate::data::SheetObject;
@@ -34,6 +35,7 @@ mod imp {
 
         context_menu_popover: RefCell<Option<PopoverMenu>>,
         pub(super) rename_popover: RefCell<Option<SheetRenamePopover>>,
+        pub(super) drag_source: RefCell<Option<DragSource>>,
     }
 
     #[glib::object_subclass]
@@ -58,6 +60,7 @@ mod imp {
 
             self.setup_context_menu();
             self.setup_rename_menu();
+            self.setup_drag();
 
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("sheet", Some(&actions));
@@ -102,7 +105,7 @@ mod imp {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
-                    Signal::builder("renamed")
+                    Signal::builder("rename-requested")
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("delete-requested").build(),
@@ -164,7 +167,7 @@ mod imp {
                     #[weak]
                     obj,
                     move |_popover: SheetRenamePopover, path: PathBuf| {
-                        obj.emit_by_name::<()>("renamed", &[&path]);
+                        obj.emit_by_name::<()>("rename-requested", &[&path]);
                     }
                 ),
             );
@@ -176,15 +179,27 @@ mod imp {
                 popover.unparent();
             });
         }
+
+        fn setup_drag(&self) {
+            let obj = self.obj();
+
+            let drag_source = DragSource::new();
+            drag_source.set_actions(gdk::DragAction::COPY);
+            drag_source.set_content(Some(&gdk::ContentProvider::for_value(&obj.to_value())));
+
+            obj.add_controller(drag_source.clone());
+            let _ = self.drag_source.replace(Some(drag_source));
+        }
     }
 }
 
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
-use glib::Object;
 use gtk::glib;
 use gtk::prelude::*;
+
+use glib::Object;
 
 use crate::data::SheetObject;
 
@@ -217,6 +232,11 @@ impl LibrarySheetButton {
             .as_ref()
             .expect("LibrarySheetButton data uninitialized")
             .stem()
+    }
+
+    pub fn rename(&self, path: PathBuf) {
+        assert!(path.parent().is_some_and(|p| p.is_dir()));
+        self.emit_by_name::<()>("rename-requested", &[&path]);
     }
 
     fn bind(&self, data: &SheetObject) {
