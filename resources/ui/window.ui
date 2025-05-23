@@ -30,27 +30,31 @@
           <object class="AdwNavigationPage" id="main_page">
             <property name="title" translatable="no">TheftMD</property>
             <property name="child">
-              <object class="AdwToolbarView" id="main_toolbar_view">
-                <child type="top">
-                  <object class="AdwHeaderBar">
-                    <child type="start">
-                      <object class="GtkButton" id="sidebar_toggle">
-                        <property name="icon-name">sidebar-show-symbolic</property>
-                        <property name="tooltip-text" translatable="yes">Toggle Sidebar</property>
-                      </object>
-                    </child>
-                    <child type="start">
-                      <object class="GtkMenuButton" id="new_sheet_button">
-                        <property name="icon-name">document-new-symbolic</property>
-                        <property name="tooltip-text" translatable="yes">New sheet</property>
-                      </object>
-                    </child>
-                    <child type="end">
-                      <object class="GtkMenuButton">
-                        <property name="primary">True</property>
-                        <property name="icon-name">open-menu-symbolic</property>
-                        <property name="tooltip-text" translatable="yes">Menu</property>
-                        <property name="menu-model">primary_menu</property>
+              <object class="AdwToastOverlay" id="toast_overlay">
+                <child>
+                  <object class="AdwToolbarView" id="main_toolbar_view">
+                    <child type="top">
+                      <object class="AdwHeaderBar">
+                        <child type="start">
+                          <object class="GtkButton" id="sidebar_toggle">
+                            <property name="icon-name">sidebar-show-symbolic</property>
+                            <property name="tooltip-text" translatable="yes">Toggle Sidebar</property>
+                          </object>
+                        </child>
+                        <child type="start">
+                          <object class="GtkMenuButton" id="new_sheet_button">
+                            <property name="icon-name">document-new-symbolic</property>
+                            <property name="tooltip-text" translatable="yes">New sheet</property>
+                          </object>
+                        </child>
+                        <child type="end">
+                          <object class="GtkMenuButton">
+                            <property name="primary">True</property>
+                            <property name="icon-name">open-menu-symbolic</property>
+                            <property name="tooltip-text" translatable="yes">Menu</property>
+                            <property name="menu-model">primary_menu</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>

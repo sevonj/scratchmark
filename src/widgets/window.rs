@@ -9,7 +9,9 @@ mod imp {
     use glib::closure_local;
     use gtk::glib;
 
-    use adw::{ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView, ToolbarView};
+    use adw::{
+        ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView, ToastOverlay, ToolbarView,
+    };
     use gtk::MenuButton;
     use gtk::{Button, CompositeTemplate};
 
@@ -43,6 +45,8 @@ mod imp {
         #[template_child]
         pub(super) main_toolbar_view: TemplateChild<ToolbarView>,
 
+        #[template_child]
+        pub(super) toast_overlay: TemplateChild<ToastOverlay>,
         #[template_child]
         pub(super) new_folder_button: TemplateChild<MenuButton>,
         #[template_child]
@@ -248,10 +252,12 @@ use std::path::PathBuf;
 
 use adw::prelude::*;
 use adw::subclass::prelude::*;
-use glib::Object;
 use gtk::gio;
 use gtk::glib;
 use gtk::glib::closure_local;
+
+use adw::Toast;
+use glib::Object;
 
 use crate::util;
 
@@ -275,13 +281,22 @@ impl Window {
         let imp = self.imp();
         self.close_sheet();
 
+        imp.main_page.get().set_title("TheftMD");
+
+        let editor = match SheetEditor::new(path.clone()) {
+            Ok(editor) => editor,
+            Err(e) => {
+                let toast = Toast::new(&e.to_string());
+                self.imp().toast_overlay.add_toast(toast);
+                return;
+            }
+        };
+
         let stem = path
             .file_stem()
             .and_then(|s| s.to_str())
             .unwrap_or("TheftMD");
         imp.main_page.get().set_title(stem);
-
-        let editor = SheetEditor::new(path.clone());
 
         let this = self;
         editor.connect_closure(

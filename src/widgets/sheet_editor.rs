@@ -67,6 +67,7 @@ mod imp {
     impl BinImpl for SheetEditor {}
 }
 
+use std::error::Error;
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
@@ -77,8 +78,25 @@ use gtk::prelude::*;
 use sourceview5::prelude::*;
 
 use gio::{Cancellable, File};
-use glib::Object;
+use glib::{GString, Object};
 use sourceview5::{Buffer, LanguageManager, StyleSchemeManager};
+
+#[derive(Debug)]
+pub enum SheetEditorError {
+    FileOpenFail,
+    InvalidChars,
+}
+
+impl Error for SheetEditorError {}
+
+impl std::fmt::Display for SheetEditorError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            SheetEditorError::FileOpenFail => write!(f, "Failed to read file."),
+            SheetEditorError::InvalidChars => write!(f, "File contains invalid characters."),
+        }
+    }
+}
 
 const NOT_CANCELLABLE: Option<&Cancellable> = None;
 
@@ -89,12 +107,17 @@ glib::wrapper! {
 }
 
 impl SheetEditor {
-    pub fn new(path: PathBuf) -> Self {
+    pub fn new(path: PathBuf) -> Result<Self, SheetEditorError> {
         let file = File::for_path(&path);
-        let (slice, _) = file
-            .load_contents(NOT_CANCELLABLE)
-            .expect("Failed to read file");
-        let text = String::from_utf8_lossy(&slice);
+        let slice = match file.load_contents(NOT_CANCELLABLE) {
+            Ok((slice, _)) => slice,
+            Err(_) => return Err(SheetEditorError::FileOpenFail),
+        };
+
+        let text = match GString::from_utf8_checked(slice.to_vec()) {
+            Ok(text) => text,
+            Err(_) => return Err(SheetEditorError::InvalidChars),
+        };
         let lang = LanguageManager::default().language("markdown").unwrap();
         let buffer = Buffer::with_language(&lang);
         buffer.set_text(&text);
@@ -105,7 +128,7 @@ impl SheetEditor {
         this.imp().path.replace(Some(path));
         this.imp().source_view.set_monospace(true);
         this.imp().source_view.set_buffer(Some(&buffer));
-        this
+        Ok(this)
     }
 
     pub fn save(&self) {
