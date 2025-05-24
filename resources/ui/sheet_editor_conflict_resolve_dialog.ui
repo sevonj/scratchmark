@@ -26,30 +26,34 @@
 							</object>
 						</child>
 						<child>
-							<object class="GtkListBox">
+							<object class="GtkBox">
+								<property name="orientation">1</property>
+								<property name="spacing">6</property>
 								<style>
 									<class name="boxed-list-separate" />
 								</style>
 								<child>
-									<object class="AdwButtonRow" id="keep_both_button">
-										<property name="title">Keep both</property>
+									<object class="GtkButton" id="keep_both_button">
+										<property name="height-request">48</property>
+										<property name="label">Keep both</property>
 										<style>
-											<class name="raised" />
 											<class name="suggested-action" />
 										</style>
 									</object>
 								</child>
 								<child>
-									<object class="AdwButtonRow" id="overwrite_button">
-										<property name="title">Overwrite file</property>
+									<object class="GtkButton" id="overwrite_button">
+										<property name="height-request">48</property>
+										<property name="label">Overwrite file</property>
 										<style>
 											<class name="destructive-action" />
 										</style>
 									</object>
 								</child>
 								<child>
-									<object class="AdwButtonRow" id="discard_button">
-										<property name="title">Discard changes and reload</property>
+									<object class="GtkButton" id="discard_button">
+										<property name="height-request">48</property>
+										<property name="label">Discard changes and reload</property>
 										<style>
 											<class name="destructive-action" />
 										</style>

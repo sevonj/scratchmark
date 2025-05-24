@@ -6,7 +6,7 @@ mod imp {
     use glib::clone;
     use gtk::glib;
 
-    use adw::ButtonRow;
+    use gtk::Button;
     use gtk::CompositeTemplate;
     use gtk::glib::subclass::Signal;
 
@@ -14,11 +14,11 @@ mod imp {
     #[template(resource = "/fi/sevonj/TheftMD/ui/sheet_editor_conflict_resolve_dialog.ui")]
     pub struct SheetEditorConflictResolveDialog {
         #[template_child]
-        pub(super) keep_both_button: TemplateChild<ButtonRow>,
+        pub(super) keep_both_button: TemplateChild<Button>,
         #[template_child]
-        pub(super) discard_button: TemplateChild<ButtonRow>,
+        pub(super) discard_button: TemplateChild<Button>,
         #[template_child]
-        pub(super) overwrite_button: TemplateChild<ButtonRow>,
+        pub(super) overwrite_button: TemplateChild<Button>,
     }
 
     #[glib::object_subclass]
@@ -41,7 +41,7 @@ mod imp {
             self.parent_constructed();
             let obj = self.obj();
 
-            self.keep_both_button.get().connect_activated(clone!(
+            self.keep_both_button.get().connect_clicked(clone!(
                 #[weak]
                 obj,
                 move |_| {
@@ -49,7 +49,7 @@ mod imp {
                     obj.close();
                 }
             ));
-            self.overwrite_button.get().connect_activated(clone!(
+            self.overwrite_button.get().connect_clicked(clone!(
                 #[weak]
                 obj,
                 move |_| {
@@ -57,7 +57,7 @@ mod imp {
                     obj.close();
                 }
             ));
-            self.discard_button.get().connect_activated(clone!(
+            self.discard_button.get().connect_clicked(clone!(
                 #[weak]
                 obj,
                 move |_| {
