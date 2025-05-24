@@ -238,7 +238,7 @@ mod imp {
     }
 }
 
-use std::path::Path;
+use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use gtk::glib;
@@ -277,21 +277,23 @@ impl LibraryBrowser {
         self.root_folder().refresh_content();
     }
 
-    pub fn set_selected_sheet(&self, path: Option<&Path>) {
+    pub fn selected_sheet(&self) -> Option<PathBuf> {
+        self.imp().selected_sheet.borrow().clone()
+    }
+
+    pub fn set_selected_sheet(&self, path: Option<PathBuf>) {
         if let Some(old_path) = self.imp().selected_sheet.borrow().as_ref() {
             if let Some(old_button) = self.imp().sheets.borrow().get(old_path) {
                 old_button.set_active(false);
             }
         }
 
-        let Some(path) = path else {
-            self.imp().selected_sheet.replace(None);
-            return;
+        if let Some(path) = &path {
+            if let Some(button) = self.imp().sheets.borrow().get(path) {
+                button.set_active(true);
+            }
         };
 
-        if let Some(button) = self.imp().sheets.borrow().get(path) {
-            button.set_active(true);
-            self.imp().selected_sheet.replace(Some(button.path()));
-        }
+        self.imp().selected_sheet.replace(path);
     }
 }

@@ -13,8 +13,7 @@ mod imp {
         ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView, Toast, ToastOverlay,
         ToolbarView,
     };
-    use gtk::MenuButton;
-    use gtk::{Button, CompositeTemplate};
+    use gtk::{Button, CompositeTemplate, MenuButton};
 
     use crate::util;
     use crate::widgets::LibraryFolder;
@@ -153,12 +152,19 @@ mod imp {
                             if selected.starts_with(&old_path) {
                                 let relative = selected.strip_prefix(&old_path).unwrap();
                                 let sheet_path = new_path.join(relative);
-                                this.library_browser.set_selected_sheet(Some(&sheet_path));
+                                this.library_browser
+                                    .set_selected_sheet(Some(sheet_path.clone()));
                                 sheet_editor.set_path(sheet_path);
                             }
                         }
 
+                        assert_eq!(
+                            this.library_browser.selected_sheet(),
+                            this.sheet_editor.borrow().as_ref().map(|e| e.path())
+                        );
+
                         this.library_browser.refresh_content();
+                        this.update_window_title();
                     }
                 ),
             );
@@ -177,12 +183,19 @@ mod imp {
                         let sheet_editor_opt = this.sheet_editor.borrow();
                         if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
                             if sheet_editor.path() == sheet.path() {
-                                this.library_browser.set_selected_sheet(Some(&new_path));
+                                this.library_browser
+                                    .set_selected_sheet(Some(new_path.clone()));
                                 sheet_editor.set_path(new_path);
                             }
                         }
 
+                        assert_eq!(
+                            this.library_browser.selected_sheet(),
+                            this.sheet_editor.borrow().as_ref().map(|e| e.path())
+                        );
+
                         this.library_browser.refresh_content();
+                        this.update_window_title();
                     }
                 ),
             );
@@ -342,7 +355,7 @@ impl Window {
                 imp,
                 move |editor: SheetEditor| {
                     imp.library_browser.refresh_content();
-                    imp.library_browser.set_selected_sheet(Some(&editor.path()));
+                    imp.library_browser.set_selected_sheet(Some(editor.path()));
                     imp.update_window_title();
                 }
             ),
@@ -350,7 +363,7 @@ impl Window {
 
         imp.main_toolbar_view.set_content(Some(&editor));
         imp.sheet_editor.replace(Some(editor));
-        imp.library_browser.set_selected_sheet(Some(&path));
+        imp.library_browser.set_selected_sheet(Some(path));
         imp.update_window_title();
     }
 
