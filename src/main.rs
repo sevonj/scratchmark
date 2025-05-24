@@ -1,4 +1,5 @@
 mod data;
+mod error;
 mod util;
 mod widgets;
 

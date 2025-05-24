@@ -10,7 +10,8 @@ mod imp {
     use gtk::glib;
 
     use adw::{
-        ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView, ToastOverlay, ToolbarView,
+        ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView, Toast, ToastOverlay,
+        ToolbarView,
     };
     use gtk::MenuButton;
     use gtk::{Button, CompositeTemplate};
@@ -120,7 +121,11 @@ mod imp {
                                     .starts_with(&path)
                             });
                         if parent_of_currently_open {
-                            obj.close_sheet()
+                            if let Err(e) = obj.close_sheet() {
+                                let toast = Toast::new(&e.to_string());
+                                obj.imp().toast_overlay.add_toast(toast);
+                                return;
+                            }
                         }
                         std::fs::remove_dir_all(path).expect("folder delet failed");
                         browser.refresh_content();
@@ -197,7 +202,11 @@ mod imp {
                             .as_ref()
                             .is_some_and(|e| e.path() == path);
                         if currently_open {
-                            obj.close_sheet()
+                            if let Err(e) = obj.close_sheet() {
+                                let toast = Toast::new(&e.to_string());
+                                obj.imp().toast_overlay.add_toast(toast);
+                                return;
+                            }
                         }
                         std::fs::remove_file(path).expect("file delet failed");
                         browser.refresh_content();
@@ -259,6 +268,7 @@ use gtk::glib::closure_local;
 use adw::Toast;
 use glib::Object;
 
+use crate::error::TheftMDError;
 use crate::util;
 
 use super::LibraryBrowser;
@@ -279,7 +289,11 @@ impl Window {
 
     fn load_sheet(&self, path: PathBuf) {
         let imp = self.imp();
-        self.close_sheet();
+        if let Err(e) = self.close_sheet() {
+            let toast = Toast::new(&e.to_string());
+            imp.toast_overlay.add_toast(toast);
+            return;
+        }
 
         imp.main_page.get().set_title("TheftMD");
 
@@ -287,7 +301,7 @@ impl Window {
             Ok(editor) => editor,
             Err(e) => {
                 let toast = Toast::new(&e.to_string());
-                self.imp().toast_overlay.add_toast(toast);
+                imp.toast_overlay.add_toast(toast);
                 return;
             }
         };
@@ -298,16 +312,32 @@ impl Window {
             .unwrap_or("TheftMD");
         imp.main_page.get().set_title(stem);
 
-        let this = self;
         editor.connect_closure(
             "close-requested",
             false,
             closure_local!(
-                #[weak]
-                this,
+                #[weak(rename_to = obj)]
+                self,
                 move |_: SheetEditor| {
-                    this.close_sheet();
-                    this.imp().library_browser.set_selected_sheet(None);
+                    if let Err(e) = obj.close_sheet() {
+                        let toast = Toast::new(&e.to_string());
+                        obj.imp().toast_overlay.add_toast(toast);
+                        return;
+                    }
+                    obj.imp().library_browser.set_selected_sheet(None);
+                }
+            ),
+        );
+
+        editor.connect_closure(
+            "saved-as",
+            false,
+            closure_local!(
+                #[weak]
+                imp,
+                move |editor: SheetEditor| {
+                    imp.library_browser.refresh_content();
+                    imp.library_browser.set_selected_sheet(Some(&editor.path()));
                 }
             ),
         );
@@ -323,20 +353,26 @@ impl Window {
     }
 
     fn create_sheet(&self, path: PathBuf) {
-        self.close_sheet();
+        if let Err(e) = self.close_sheet() {
+            let toast = Toast::new(&e.to_string());
+            self.imp().toast_overlay.add_toast(toast);
+            return;
+        }
         util::create_sheet_file(&path);
         self.imp().library_browser.refresh_content();
         self.load_sheet(path);
     }
 
-    fn close_sheet(&self) {
+    fn close_sheet(&self) -> Result<(), TheftMDError> {
         let imp = self.imp();
-        if let Some(editor) = imp.sheet_editor.borrow_mut().take() {
-            editor.save();
+        if let Some(editor) = imp.sheet_editor.borrow_mut().as_ref() {
+            editor.save()?;
         }
+        imp.sheet_editor.replace(None);
 
         imp.main_toolbar_view
             .set_content(Some(&SheetEditorPlaceholder::default()));
         imp.main_page.get().set_title("TheftMD");
+        Ok(())
     }
 }
