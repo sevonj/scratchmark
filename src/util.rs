@@ -2,9 +2,14 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
+use gtk::gio;
 use gtk::glib;
 
+use gio::Cancellable;
+use glib::GString;
+
 use crate::APP_ID;
+use crate::error::TheftMDError;
 
 #[derive(Debug)]
 pub enum FilenameStatus {
@@ -115,6 +120,18 @@ pub fn create_sheet_file(path: &Path) {
     let contents = format!("# {stem}\n\n");
     file.write_all(contents.as_bytes())
         .expect("failed to write template to new file");
+}
+
+pub fn read_file_to_string(file: &gio::File) -> Result<GString, TheftMDError> {
+    let slice = match gio::prelude::FileExtManual::load_contents(file, None::<&Cancellable>) {
+        Ok((slice, _)) => slice,
+        Err(_) => return Err(TheftMDError::FileOpenFail),
+    };
+    let text = match GString::from_utf8_checked(slice.to_vec()) {
+        Ok(text) => text,
+        Err(_) => return Err(TheftMDError::InvalidChars),
+    };
+    Ok(text)
 }
 
 #[cfg(test)]
