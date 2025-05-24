@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-adw = { version = "0.7.2", package = "libadwaita", features = ["v1_5"] }
-gtk = { version = "0.9.6", package = "gtk4", features = ["v4_14"] }
+adw = { version = "0.7.2", package = "libadwaita", features = ["v1_6"] }
+gtk = { version = "0.9.6", package = "gtk4", features = ["v4_18"] }
 sourceview5 = "0.9.1"
 
 [build-dependencies]
