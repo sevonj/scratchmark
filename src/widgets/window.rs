@@ -245,9 +245,9 @@ mod imp {
 
             self.main_toolbar_view
                 .set_content(Some(&SheetEditorPlaceholder::default()));
-            self.main_page.set_title("TheftMD");
             self.sidebar_toolbar_view
                 .set_content(Some(&self.library_browser));
+            self.update_window_title();
         }
     }
 
@@ -255,6 +255,18 @@ mod imp {
     impl WindowImpl for Window {}
     impl ApplicationWindowImpl for Window {}
     impl AdwApplicationWindowImpl for Window {}
+
+    impl Window {
+        pub(super) fn update_window_title(&self) {
+            if let Some(editor) = self.sheet_editor.borrow().as_ref() {
+                if let Some(stem) = editor.path().file_stem() {
+                    self.main_page.set_title(&stem.to_string_lossy());
+                    return;
+                };
+            };
+            self.main_page.set_title("TheftMD");
+        }
+    }
 }
 
 use std::path::PathBuf;
@@ -295,22 +307,15 @@ impl Window {
             return;
         }
 
-        imp.main_page.get().set_title("TheftMD");
-
         let editor = match SheetEditor::new(path.clone()) {
             Ok(editor) => editor,
             Err(e) => {
                 let toast = Toast::new(&e.to_string());
                 imp.toast_overlay.add_toast(toast);
+                imp.update_window_title();
                 return;
             }
         };
-
-        let stem = path
-            .file_stem()
-            .and_then(|s| s.to_str())
-            .unwrap_or("TheftMD");
-        imp.main_page.get().set_title(stem);
 
         editor.connect_closure(
             "close-requested",
@@ -338,6 +343,7 @@ impl Window {
                 move |editor: SheetEditor| {
                     imp.library_browser.refresh_content();
                     imp.library_browser.set_selected_sheet(Some(&editor.path()));
+                    imp.update_window_title();
                 }
             ),
         );
@@ -345,6 +351,7 @@ impl Window {
         imp.main_toolbar_view.set_content(Some(&editor));
         imp.sheet_editor.replace(Some(editor));
         imp.library_browser.set_selected_sheet(Some(&path));
+        imp.update_window_title();
     }
 
     fn create_folder(&self, path: PathBuf) {
@@ -372,7 +379,7 @@ impl Window {
 
         imp.main_toolbar_view
             .set_content(Some(&SheetEditorPlaceholder::default()));
-        imp.main_page.get().set_title("TheftMD");
+        self.imp().update_window_title();
         Ok(())
     }
 }
