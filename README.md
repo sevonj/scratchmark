@@ -4,9 +4,7 @@
 
 (to be renamed)
 
-A minimal-distraction markdown editor for note taking and writing.
-
-It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
+TheftMD is a distraction-free markdown editor. It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
 
 ![image](https://github.com/user-attachments/assets/0cbf3ec6-edc6-414c-ae0d-5cf0804e26b5)
 
