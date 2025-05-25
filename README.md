@@ -13,7 +13,9 @@ It's intended to become a spiritual successor to [ThiefMD](https://github.com/km
 > [!IMPORTANT]  
 > This is an early prototype. It lacks some fundamental features and may eat your homework.
 > 
+![cat](https://github.com/user-attachments/assets/aaa7b417-5e2f-4a87-ad9b-aa29591d6bcd)
 ![cat](https://github.com/user-attachments/assets/eae2e847-a4c3-4cbf-a829-03480cdb266b)
+
 
 ## Development
 
