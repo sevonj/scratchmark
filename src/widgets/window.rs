@@ -10,8 +10,8 @@ mod imp {
     use gtk::glib;
 
     use adw::{
-        ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView, Toast, ToastOverlay,
-        ToolbarView,
+        AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView, Toast,
+        ToastOverlay, ToolbarView,
     };
     use gtk::{Button, CompositeTemplate, MenuButton};
 
@@ -105,29 +105,32 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |browser: LibraryBrowser, folder: LibraryFolder| {
-                        assert!(!folder.is_root());
-
-                        let path = folder
-                            .path()
-                            .canonicalize()
-                            .expect("folder delet failed to canonicalize folder");
-                        let parent_of_currently_open =
-                            obj.imp().sheet_editor.borrow().as_ref().is_some_and(|e| {
-                                e.path()
-                                    .canonicalize()
-                                    .expect("folder delet failed to canonicalize sheet")
-                                    .starts_with(&path)
-                            });
-                        if parent_of_currently_open {
-                            if let Err(e) = obj.close_sheet() {
-                                let toast = Toast::new(&e.to_string());
-                                obj.imp().toast_overlay.add_toast(toast);
-                                return;
-                            }
-                        }
-                        std::fs::remove_dir_all(path).expect("folder delet failed");
-                        browser.refresh_content();
+                    move |_: LibraryBrowser, folder: LibraryFolder| {
+                        let heading = "Delete folder?";
+                        let body = format!("Are you sure you want to delete {}?", folder.name());
+                        let dialog = AlertDialog::new(Some(heading), Some(&body));
+                        dialog.add_response("cancel", "Cancel");
+                        dialog.add_response("commit-delete", "Delete");
+                        dialog.set_response_appearance(
+                            "commit-delete",
+                            adw::ResponseAppearance::Destructive,
+                        );
+                        dialog.connect_closure(
+                            "response",
+                            false,
+                            closure_local!(
+                                #[weak]
+                                obj,
+                                #[weak]
+                                folder,
+                                move |_: AlertDialog, response: String| {
+                                    if response == "commit-delete" {
+                                        obj.imp().force_delete_folder(folder);
+                                    }
+                                }
+                            ),
+                        );
+                        dialog.present(Some(&obj));
                     }
                 ),
             );
@@ -206,23 +209,32 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |browser: LibraryBrowser, sheet: LibrarySheet| {
-                        let path = sheet.path();
-                        let currently_open = obj
-                            .imp()
-                            .sheet_editor
-                            .borrow()
-                            .as_ref()
-                            .is_some_and(|e| e.path() == path);
-                        if currently_open {
-                            if let Err(e) = obj.close_sheet() {
-                                let toast = Toast::new(&e.to_string());
-                                obj.imp().toast_overlay.add_toast(toast);
-                                return;
-                            }
-                        }
-                        std::fs::remove_file(path).expect("file delet failed");
-                        browser.refresh_content();
+                    move |_: LibraryBrowser, sheet: LibrarySheet| {
+                        let heading = "Delete sheet?";
+                        let body = format!("Are you sure you want to delete {}?", sheet.stem());
+                        let dialog = AlertDialog::new(Some(heading), Some(&body));
+                        dialog.add_response("cancel", "Cancel");
+                        dialog.add_response("commit-delete", "Delete");
+                        dialog.set_response_appearance(
+                            "commit-delete",
+                            adw::ResponseAppearance::Destructive,
+                        );
+                        dialog.connect_closure(
+                            "response",
+                            false,
+                            closure_local!(
+                                #[weak]
+                                obj,
+                                #[weak]
+                                sheet,
+                                move |_: AlertDialog, response: String| {
+                                    if response == "commit-delete" {
+                                        obj.imp().force_delete_sheet(sheet);
+                                    }
+                                }
+                            ),
+                        );
+                        dialog.present(Some(&obj));
                     }
                 ),
             );
@@ -278,6 +290,48 @@ mod imp {
                 };
             };
             self.main_page.set_title("TheftMD");
+        }
+
+        fn force_delete_folder(&self, folder: LibraryFolder) {
+            assert!(!folder.is_root());
+
+            let path = folder
+                .path()
+                .canonicalize()
+                .expect("folder delet failed to canonicalize folder");
+            let parent_of_currently_open = self.sheet_editor.borrow().as_ref().is_some_and(|e| {
+                e.path()
+                    .canonicalize()
+                    .expect("folder delet failed to canonicalize sheet")
+                    .starts_with(&path)
+            });
+            if parent_of_currently_open {
+                if let Err(e) = self.obj().close_sheet() {
+                    let toast = Toast::new(&e.to_string());
+                    self.toast_overlay.add_toast(toast);
+                    return;
+                }
+            }
+            std::fs::remove_dir_all(path).expect("folder delet failed");
+            self.library_browser.refresh_content();
+        }
+
+        fn force_delete_sheet(&self, sheet: LibrarySheet) {
+            let path = sheet.path();
+            let currently_open = self
+                .sheet_editor
+                .borrow()
+                .as_ref()
+                .is_some_and(|e| e.path() == path);
+            if currently_open {
+                if let Err(e) = self.obj().close_sheet() {
+                    let toast = Toast::new(&e.to_string());
+                    self.toast_overlay.add_toast(toast);
+                    return;
+                }
+            }
+            std::fs::remove_file(path).expect("file delet failed");
+            self.library_browser.refresh_content();
         }
     }
 }
