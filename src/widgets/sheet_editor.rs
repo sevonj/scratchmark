@@ -193,6 +193,8 @@ use gio::Cancellable;
 use glib::Object;
 use sourceview5::{Buffer, LanguageManager, StyleSchemeManager};
 
+#[cfg(feature = "packaged")]
+use crate::APP_ID;
 use crate::error::TheftMDError;
 use crate::util;
 
@@ -272,12 +274,19 @@ impl SheetEditor {
             return;
         }
 
-        // --- ONLY IF NOT PACKAGED
-        // Failed, install path
-        const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
-        StyleSchemeManager::default()
-            .append_search_path(format!("{MANIFEST_DIR}/resources/editor_style").as_str());
-        // --- //
+        #[cfg(feature = "packaged")]
+        {
+            for dir in glib::system_data_dirs() {
+                let path = dir.join(APP_ID).join("editor_schemes");
+                StyleSchemeManager::default().append_search_path(path.to_str().unwrap());
+            }
+        }
+        #[cfg(not(feature = "packaged"))]
+        {
+            const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
+            StyleSchemeManager::default()
+                .append_search_path(format!("{MANIFEST_DIR}/resources/editor_schemes").as_str());
+        }
 
         // Try fetching the scheme again
         if let Some(style_scheme) = StyleSchemeManager::default().scheme(scheme_id) {

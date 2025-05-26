@@ -8,5 +8,9 @@ adw = { version = "0.7.2", package = "libadwaita", features = ["v1_5"] }
 gtk = { version = "0.9.6", package = "gtk4", features = ["v4_14"] }
 sourceview5 = "0.9.1"
 
+[features]
+# Search for data files in install locations instead of source tree.
+packaged = []
+
 [build-dependencies]
 glib-build-tools = "0.20.0"
