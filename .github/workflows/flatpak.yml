@@ -46,7 +46,7 @@ jobs:
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: TheftMD-x86_64.flatpak.zip
+          artifacts: TheftMD.flatpak
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: ${{ env.PRERELEASE }}
           body: "Release contains a Flatpak."
