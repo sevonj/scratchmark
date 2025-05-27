@@ -11,17 +11,44 @@ jobs:
       image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
       options: --privileged
     steps:
-    - name: checkout
-      uses: actions/checkout@v4
-    - name: flatpak-cargo-generator
-      working-directory: build-aux
-      run: |
-        curl -o flatpak-cargo-generator.py https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/refs/heads/master/cargo/flatpak-cargo-generator.py
-        python3 flatpak-cargo-generator.py ../Cargo.lock -o generated-sources.json
-    - name: Flatpak
-      uses: flatpak/flatpak-github-actions/flatpak-builder@v6
-      with:
-        bundle: TheftMD.flatpak
-        manifest-path: build-aux/fi.sevonj.TheftMD.yml
-        cache-key: flatpak-builder-${{ github.sha }}
-      
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: flatpak-cargo-generator
+        working-directory: build-aux
+        run: |
+          curl -o flatpak-cargo-generator.py https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/refs/heads/master/cargo/flatpak-cargo-generator.py
+          python3 flatpak-cargo-generator.py ../Cargo.lock -o generated-sources.json
+      - name: Flatpak
+        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: TheftMD.flatpak
+          manifest-path: build-aux/fi.sevonj.TheftMD.yml
+          cache-key: flatpak-builder-${{ github.sha }}
+  release:
+    needs: flatpak
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check if prerelase
+        run: |
+          if [[ ${{ github.ref_name }} =~ -(alpha|beta|rc) ]]
+          then
+            echo "PRERELEASE=true" >> $GITHUB_ENV
+          else
+            echo "PRERELEASE=false" >> $GITHUB_ENV
+          fi
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: TheftMD-x86_64.flatpak
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: TheftMD-x86_64.flatpak
+          token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: ${{ env.PRERELEASE }}
+          body: "Release contains a Flatpak."
+          generateReleaseNotes: true
+          artifactErrorsFailBuild: true
