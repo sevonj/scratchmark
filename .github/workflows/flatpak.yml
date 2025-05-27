@@ -1,0 +1,27 @@
+on:
+  push:
+    branches: [master]
+  pull_request:
+name: Flatpak
+jobs:
+  flatpak:
+    name: "Flatpak"
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
+      options: --privileged
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: flatpak-cargo-generator
+      working-directory: build-aux
+      run: |
+        curl -o flatpak-cargo-generator.py https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/refs/heads/master/cargo/flatpak-cargo-generator.py
+        python3 flatpak-cargo-generator.py ../Cargo.lock -o generated-sources.json
+    - name: Flatpak
+      uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+      with:
+        bundle: TheftMD.flatpak
+        manifest-path: build-aux/fi.sevonj.TheftMD.yml
+        cache-key: flatpak-builder-${{ github.sha }}
+      
