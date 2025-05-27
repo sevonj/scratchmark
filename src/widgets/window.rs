@@ -5,16 +5,18 @@ mod imp {
 
     use adw::prelude::*;
     use adw::subclass::prelude::*;
-    use glib::clone;
-    use glib::closure_local;
+    use glib::{clone, closure_local};
+    use gtk::gio;
     use gtk::glib;
 
     use adw::{
-        AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView, Toast,
-        ToastOverlay, ToolbarView,
+        AboutDialog, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView,
+        Toast, ToastOverlay, ToolbarView,
     };
+    use gio::SimpleActionGroup;
     use gtk::{Button, CompositeTemplate, MenuButton};
 
+    use crate::APP_ID;
     use crate::util;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
@@ -51,6 +53,8 @@ mod imp {
         pub(super) new_folder_button: TemplateChild<MenuButton>,
         #[template_child]
         pub(super) new_sheet_button: TemplateChild<MenuButton>,
+        #[template_child]
+        pub(super) primary_menu_button: TemplateChild<MenuButton>,
 
         pub(super) library_browser: LibraryBrowser,
         pub(super) sheet_editor: RefCell<Option<SheetEditor>>,
@@ -288,6 +292,19 @@ mod imp {
                     glib::Propagation::Proceed
                 }
             ));
+
+            let actions = SimpleActionGroup::new();
+            obj.insert_action_group("win", Some(&actions));
+
+            let action = gio::SimpleAction::new("about", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.show_about();
+                }
+            ));
+            actions.add_action(&action);
         }
     }
 
@@ -347,6 +364,20 @@ mod imp {
             }
             std::fs::remove_file(path).expect("file delet failed");
             self.library_browser.refresh_content();
+        }
+
+        fn show_about(&self) {
+            let obj = self.obj();
+            let dialog = AboutDialog::new();
+            dialog.set_application_icon(APP_ID);
+            dialog.set_application_name("TheftMD");
+            dialog.set_comments("To be renamed");
+            dialog.set_developer_name("Sevonj");
+            dialog.set_issue_url("https://github.com/sevonj/theftmd/issues/");
+            dialog.set_version(env!("CARGO_PKG_VERSION"));
+            dialog.set_website("https://github.com/sevonj/theftmd/");
+            dialog.set_support_url("https://github.com/sevonj/theftmd/discussions/");
+            dialog.present(Some(&*obj));
         }
     }
 }
