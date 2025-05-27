@@ -1,7 +1,6 @@
 on:
   push:
-    branches: [master]
-  pull_request:
+  
 name: Flatpak
 jobs:
   flatpak:
@@ -25,6 +24,7 @@ jobs:
           manifest-path: build-aux/fi.sevonj.TheftMD.yml
           cache-key: flatpak-builder-${{ github.sha }}
   release:
+    name: "Generate Release"
     needs: flatpak
     if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
