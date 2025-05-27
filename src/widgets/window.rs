@@ -273,6 +273,21 @@ mod imp {
             self.sidebar_toolbar_view
                 .set_content(Some(&self.library_browser));
             self.update_window_title();
+
+            obj.connect_close_request(clone!(
+                #[weak]
+                obj,
+                #[upgrade_or]
+                glib::Propagation::Proceed,
+                move |_: &super::Window| {
+                    if let Err(e) = obj.close_sheet() {
+                        let toast = Toast::new(&e.to_string());
+                        obj.imp().toast_overlay.add_toast(toast);
+                        return glib::Propagation::Stop;
+                    }
+                    glib::Propagation::Proceed
+                }
+            ));
         }
     }
 
