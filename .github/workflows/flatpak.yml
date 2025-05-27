@@ -1,6 +1,6 @@
 on:
   push:
-  
+
 name: Flatpak
 jobs:
   flatpak:
@@ -46,7 +46,7 @@ jobs:
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: TheftMD-x86_64.flatpak
+          artifacts: TheftMD-x86_64.flatpak.zip
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: ${{ env.PRERELEASE }}
           body: "Release contains a Flatpak."
