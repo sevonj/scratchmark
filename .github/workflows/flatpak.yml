@@ -49,6 +49,6 @@ jobs:
           artifacts: TheftMD.flatpak
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: ${{ env.PRERELEASE }}
-          body: "Release contains a Flatpak."
+          body: "Release contains an x86_64 Flatpak."
           generateReleaseNotes: true
           artifactErrorsFailBuild: true
