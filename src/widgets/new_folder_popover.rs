@@ -21,7 +21,7 @@ mod imp {
     use crate::util::path_builtin_library;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/fi/sevonj/TheftMD/ui/new_folder_popover.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/new_folder_popover.ui")]
     pub struct NewFolderPopover {
         #[template_child]
         pub(super) name_field: TemplateChild<Entry>,

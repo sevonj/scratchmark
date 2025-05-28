@@ -8,7 +8,7 @@ use gtk::{gio, glib};
 
 use widgets::Window;
 
-const APP_ID: &str = "fi.sevonj.TheftMD";
+const APP_ID: &str = "org.scratchmark.Scratchmark";
 
 fn main() -> glib::ExitCode {
     gio::resources_register_include!("gresources.gresource")
@@ -18,7 +18,7 @@ fn main() -> glib::ExitCode {
 
     app.connect_activate(|app| {
         let window = Window::new(app);
-        window.set_title(Some("TheftMD"));
+        window.set_title(Some("Scratchmark"));
         window.present();
     });
 

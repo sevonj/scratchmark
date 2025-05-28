@@ -28,7 +28,7 @@
         </property>
         <property name="content">
           <object class="AdwNavigationPage" id="main_page">
-            <property name="title" translatable="no">TheftMD</property>
+            <property name="title" translatable="no">Scratchmark</property>
             <property name="child">
               <object class="AdwToastOverlay" id="toast_overlay">
                 <child>
@@ -77,7 +77,7 @@
         <attribute name="action">win.show-help-overlay</attribute>
       </item-->
       <item>
-        <attribute name="label" translatable="yes">_About TheftMD</attribute>
+        <attribute name="label" translatable="yes">_About Scratchmark</attribute>
         <attribute name="action">win.about</attribute>
       </item>
     </section>

@@ -23,7 +23,7 @@ mod imp {
 
     #[derive(Debug, Properties, CompositeTemplate, Default)]
     #[properties(wrapper_type = super::SheetEditor)]
-    #[template(resource = "/fi/sevonj/TheftMD/ui/sheet_editor.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/sheet_editor.ui")]
     pub struct SheetEditor {
         #[template_child]
         pub(super) source_view: TemplateChild<View>,
@@ -195,7 +195,7 @@ use sourceview5::{Buffer, LanguageManager, StyleSchemeManager};
 
 #[cfg(feature = "packaged")]
 use crate::APP_ID;
-use crate::error::TheftMDError;
+use crate::error::ScratchmarkError;
 use crate::util;
 
 const NOT_CANCELLABLE: Option<&Cancellable> = None;
@@ -207,7 +207,7 @@ glib::wrapper! {
 }
 
 impl SheetEditor {
-    pub fn new(path: PathBuf) -> Result<Self, TheftMDError> {
+    pub fn new(path: PathBuf) -> Result<Self, ScratchmarkError> {
         let file = gio::File::for_path(&path);
         let text = util::read_file_to_string(&file)?;
         let lang = LanguageManager::default().language("markdown").unwrap();
@@ -224,9 +224,9 @@ impl SheetEditor {
         Ok(this)
     }
 
-    pub fn save(&self) -> Result<(), TheftMDError> {
+    pub fn save(&self) -> Result<(), ScratchmarkError> {
         if self.imp().file_changed.get() {
-            return Err(TheftMDError::FileChanged);
+            return Err(ScratchmarkError::FileChanged);
         }
         self.imp().filemon.borrow().as_ref().unwrap().cancel();
 
@@ -266,7 +266,7 @@ impl SheetEditor {
     }
 
     fn load_buffer_style_scheme(&self, buffer: &Buffer) {
-        let scheme_id = "theftmd";
+        let scheme_id = "scratchmark";
 
         // Try fetching the scheme
         if let Some(style_scheme) = StyleSchemeManager::default().scheme(scheme_id) {

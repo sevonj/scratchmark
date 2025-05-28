@@ -1,10 +1,8 @@
-[![CI](https://github.com/sevonj/theftmd/actions/workflows/ci.yml/badge.svg)](https://github.com/sevonj/theftmd/actions/workflows/ci.yml)
+[![CI](https://github.com/sevonj/scratchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/sevonj/scratchmark/actions/workflows/ci.yml)
 
-# TheftMD
+# Scratchmark
 
-(to be renamed)
-
-TheftMD is a distraction-free markdown editor. It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
+Scratchmark is a distraction-free markdown editor, designed both for keeping notes and writing. It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
 
 ![image](https://github.com/user-attachments/assets/0cbf3ec6-edc6-414c-ae0d-5cf0804e26b5)
 
@@ -17,13 +15,13 @@ TheftMD is a distraction-free markdown editor. It's intended to become a spiritu
 
 ## Development
 
-TheftMD is written in Rust and uses GTK4 + Libadwaita for UI.
+Scratchmark is written in Rust and uses GTK4 + Libadwaita for UI.
 
 [➜ Project management](https://github.com/users/sevonj/projects/20)
 
 ### Continuous Integration
 
-Pull requests are gatekept by [this workflow.](https://github.com/sevonj/theftmd/blob/master/.github/workflows/rust.yml) It will check if the code
+Pull requests are gatekept by [this workflow.](https://github.com/sevonj/scratchmark/blob/master/.github/workflows/rust.yml) It will check if the code
 
 - builds
 - passes unit tests (run `cargo test`)

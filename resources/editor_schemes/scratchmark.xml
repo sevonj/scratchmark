@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<style-scheme id="theftmd" name="TheftMD" version="1.0">
+<style-scheme id="sratchmark" name="Scratchmark" version="1.0">
   <author>sevonj</author>
-  <_description>Default Theme for TheftMD</_description>
+  <_description>Default Theme for Scratchmark</_description>
 
   <!-- https://gitlab.gnome.org/GNOME/gtksourceview/-/blob/master/data/language-specs/markdown.lang -->
 

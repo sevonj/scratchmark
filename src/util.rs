@@ -9,7 +9,7 @@ use gio::Cancellable;
 use glib::GString;
 
 use crate::APP_ID;
-use crate::error::TheftMDError;
+use crate::error::ScratchmarkError;
 
 #[derive(Debug)]
 pub enum FilenameStatus {
@@ -122,14 +122,14 @@ pub fn create_sheet_file(path: &Path) {
         .expect("failed to write template to new file");
 }
 
-pub fn read_file_to_string(file: &gio::File) -> Result<GString, TheftMDError> {
+pub fn read_file_to_string(file: &gio::File) -> Result<GString, ScratchmarkError> {
     let slice = match gio::prelude::FileExtManual::load_contents(file, None::<&Cancellable>) {
         Ok((slice, _)) => slice,
-        Err(_) => return Err(TheftMDError::FileOpenFail),
+        Err(_) => return Err(ScratchmarkError::FileOpenFail),
     };
     let text = match GString::from_utf8_checked(slice.to_vec()) {
         Ok(text) => text,
-        Err(_) => return Err(TheftMDError::InvalidChars),
+        Err(_) => return Err(ScratchmarkError::InvalidChars),
     };
     Ok(text)
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/fi/sevonj/TheftMD">
+  <gresource prefix="/org/scratchmark/Scratchmark">
     <file preprocess="xml-stripblanks" compressed="true">ui/folder_rename_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_browser.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder_context_menu.ui</file>

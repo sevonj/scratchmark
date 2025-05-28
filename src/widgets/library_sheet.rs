@@ -26,7 +26,7 @@ mod imp {
     use crate::widgets::SheetRenamePopover;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/fi/sevonj/TheftMD/ui/library_sheet.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_sheet.ui")]
     pub struct LibrarySheet {
         #[template_child]
         pub(super) button: TemplateChild<ToggleButton>,
@@ -133,8 +133,9 @@ mod imp {
         fn setup_context_menu(&self) {
             let obj = self.obj();
 
-            let builder =
-                Builder::from_resource("/fi/sevonj/TheftMD/ui/library_sheet_context_menu.ui");
+            let builder = Builder::from_resource(
+                "/org/scratchmark/Scratchmark/ui/library_sheet_context_menu.ui",
+            );
             let popover = builder.object::<MenuModel>("context-menu").unwrap();
             let menu = PopoverMenu::builder()
                 .menu_model(&popover)

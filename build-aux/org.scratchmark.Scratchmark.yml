@@ -1,10 +1,10 @@
-id: "fi.sevonj.TheftMD"
+id: "org.scratchmark.Scratchmark"
 runtime: "org.gnome.Platform"
 runtime-version: "48"
 sdk: "org.gnome.Sdk"
 sdk-extensions:
   - "org.freedesktop.Sdk.Extension.rust-stable"
-command: "theftmd"
+command: "scratchmark"
 finish-args:
   - "--share=ipc"
   - "--socket=fallback-x11"
@@ -12,18 +12,18 @@ finish-args:
   - "--device=dri"
   - "--filesystem=host"
 modules:
-  - name: "theftmd"
+  - name: "scratchmark"
     buildsystem: "simple"
     build-options:
       append-path: "/usr/lib/sdk/rust-stable/bin"
       env:
-        CARGO_HOME: "/run/build/theftmd/cargo"
+        CARGO_HOME: "/run/build/scratchmark/cargo"
         PREFIX: "/app"
     build-commands:
       - "cargo --offline fetch --manifest-path Cargo.toml --verbose"
       - "cargo --offline build --release --verbose --features packaged"
-      - "install -Dm755 ./target/release/theftmd -t /app/bin/"
-      - "install -Dm644 ./resources/editor_schemes/theftmd.xml -t /app/share/${FLATPAK_ID}/editor_schemes/"
+      - "install -Dm755 ./target/release/scratchmark -t /app/bin/"
+      - "install -Dm644 ./resources/editor_schemes/scratchmark.xml -t /app/share/${FLATPAK_ID}/editor_schemes/"
       - "install -Dm644 ./resources/${FLATPAK_ID}.desktop /app/share/applications/${FLATPAK_ID}.desktop"
       - "install -Dm644 ./resources/${FLATPAK_ID}.png /app/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.png"
     sources:

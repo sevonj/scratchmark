@@ -1,15 +1,15 @@
 use std::error::Error;
 
 #[derive(Debug)]
-pub enum TheftMDError {
+pub enum ScratchmarkError {
     FileOpenFail,
     InvalidChars,
     FileChanged,
 }
 
-impl Error for TheftMDError {}
+impl Error for ScratchmarkError {}
 
-impl std::fmt::Display for TheftMDError {
+impl std::fmt::Display for ScratchmarkError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::FileOpenFail => write!(f, "Failed to read file."),

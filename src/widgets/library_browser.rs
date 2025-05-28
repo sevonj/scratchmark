@@ -21,7 +21,7 @@ mod imp {
     use crate::widgets::LibrarySheet;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/fi/sevonj/TheftMD/ui/library_browser.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_browser.ui")]
     pub struct LibraryBrowser {
         #[template_child]
         pub(super) library_root_vbox: TemplateChild<gtk::Box>,

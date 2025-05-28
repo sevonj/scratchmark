@@ -29,7 +29,7 @@ mod imp {
     use crate::widgets::LibrarySheet;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/fi/sevonj/TheftMD/ui/library_folder.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_folder.ui")]
     pub struct LibraryFolder {
         #[template_child]
         pub(super) expand_button_cont: TemplateChild<adw::Bin>,
@@ -368,8 +368,9 @@ mod imp {
         fn setup_context_menu(&self) {
             let obj = self.obj();
 
-            let builder =
-                Builder::from_resource("/fi/sevonj/TheftMD/ui/library_folder_context_menu.ui");
+            let builder = Builder::from_resource(
+                "/org/scratchmark/Scratchmark/ui/library_folder_context_menu.ui",
+            );
             let popover = builder
                 .object::<MenuModel>("context-menu")
                 .expect("LibraryFolder context-menu model failed");

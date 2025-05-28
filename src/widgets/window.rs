@@ -28,7 +28,7 @@ mod imp {
     use super::SheetEditor;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/fi/sevonj/TheftMD/ui/window.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/window.ui")]
     pub struct Window {
         #[template_child]
         pub(super) top_split: TemplateChild<OverlaySplitView>,
@@ -321,7 +321,7 @@ mod imp {
                     return;
                 };
             };
-            self.main_page.set_title("TheftMD");
+            self.main_page.set_title("Scratchmark");
         }
 
         fn force_delete_folder(&self, folder: LibraryFolder) {
@@ -370,13 +370,13 @@ mod imp {
             let obj = self.obj();
             let dialog = AboutDialog::new();
             dialog.set_application_icon(APP_ID);
-            dialog.set_application_name("TheftMD");
+            dialog.set_application_name("Scratchmark");
             dialog.set_comments("To be renamed");
             dialog.set_developer_name("Sevonj");
-            dialog.set_issue_url("https://github.com/sevonj/theftmd/issues/");
+            dialog.set_issue_url("https://github.com/sevonj/scratchmark/issues/");
             dialog.set_version(env!("CARGO_PKG_VERSION"));
-            dialog.set_website("https://github.com/sevonj/theftmd/");
-            dialog.set_support_url("https://github.com/sevonj/theftmd/discussions/");
+            dialog.set_website("https://github.com/sevonj/scratchmark/");
+            dialog.set_support_url("https://github.com/sevonj/scratchmark/discussions/");
             dialog.present(Some(&*obj));
         }
     }
@@ -393,7 +393,7 @@ use gtk::glib::closure_local;
 use adw::Toast;
 use glib::Object;
 
-use crate::error::TheftMDError;
+use crate::error::ScratchmarkError;
 use crate::util;
 
 use super::LibraryBrowser;
@@ -483,7 +483,7 @@ impl Window {
         self.load_sheet(path);
     }
 
-    fn close_sheet(&self) -> Result<(), TheftMDError> {
+    fn close_sheet(&self) -> Result<(), ScratchmarkError> {
         let imp = self.imp();
         if let Some(editor) = imp.sheet_editor.borrow_mut().as_ref() {
             editor.save()?;

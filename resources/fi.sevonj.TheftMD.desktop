@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=TheftMD
-Comment=Markdown editor
-GenericName=TheftMD Markdown editor
-Exec=theftmd
-Type=Application
-Icon=fi.sevonj.TheftMD
-Categories=Office;WordProcessor;

@@ -22,7 +22,7 @@ mod imp {
     use crate::util::FilenameStatus;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/fi/sevonj/TheftMD/ui/folder_rename_popover.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/folder_rename_popover.ui")]
     pub struct FolderRenamePopover {
         #[template_child]
         name_field: TemplateChild<Entry>,

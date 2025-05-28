@@ -11,7 +11,9 @@ mod imp {
     use gtk::glib::subclass::Signal;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/fi/sevonj/TheftMD/ui/sheet_editor_conflict_resolve_dialog.ui")]
+    #[template(
+        resource = "/org/scratchmark/Scratchmark/ui/sheet_editor_conflict_resolve_dialog.ui"
+    )]
     pub struct SheetEditorConflictResolveDialog {
         #[template_child]
         pub(super) keep_both_button: TemplateChild<Button>,

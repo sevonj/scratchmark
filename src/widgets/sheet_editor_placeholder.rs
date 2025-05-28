@@ -8,7 +8,7 @@ mod imp {
     use gtk::CompositeTemplate;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/fi/sevonj/TheftMD/ui/sheet_editor_placeholder.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/sheet_editor_placeholder.ui")]
     pub struct SheetEditorPlaceholder {}
 
     #[glib::object_subclass]
