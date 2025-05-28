@@ -6,12 +6,14 @@
 
 Scratchmark is a distraction-free markdown editor, designed both for keeping notes and writing. It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
 
-![image](https://github.com/user-attachments/assets/0cbf3ec6-edc6-414c-ae0d-5cf0804e26b5)
+![screenshot](data/screenshots/screenshot_a.png)
 
 > [!IMPORTANT]  
 > This is an early prototype. It lacks some fundamental features and may eat your homework.
 > 
 ![cat](https://github.com/user-attachments/assets/aaa7b417-5e2f-4a87-ad9b-aa29591d6bcd)
+
+![screenshot](data/screenshots/screenshot_b.png)
 
 ## Development
 
