@@ -24,8 +24,8 @@ modules:
       - "cargo --offline build --release --verbose --features packaged"
       - "install -Dm755 ./target/release/scratchmark -t /app/bin/"
       - "install -Dm644 ./resources/editor_schemes/scratchmark.xml -t /app/share/${FLATPAK_ID}/editor_schemes/"
-      - "install -Dm644 ./resources/${FLATPAK_ID}.desktop /app/share/applications/${FLATPAK_ID}.desktop"
-      - "install -Dm644 ./resources/${FLATPAK_ID}.png /app/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.png"
+      - "install -Dm644 ./resources/${FLATPAK_ID}.desktop -t /app/share/applications/"
+      - "install -Dm644 ./resources/${FLATPAK_ID}.svg -t /app/share/icons/hicolor/scalable/apps/"
     sources:
       - type: "dir"
         path: "../"
