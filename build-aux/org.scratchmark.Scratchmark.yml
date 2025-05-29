@@ -21,7 +21,7 @@ modules:
         PREFIX: "/app"
     build-commands:
       - "cargo --offline fetch --manifest-path Cargo.toml --verbose"
-      - "cargo --offline build --release --verbose --features packaged"
+      - "cargo --offline build --release --verbose --features installed"
       - "install -Dm755 ./target/release/scratchmark -t /app/bin/"
       - "install -Dm644 ./resources/editor_schemes/scratchmark.xml -t /app/share/${FLATPAK_ID}/editor_schemes/"
       - "install -Dm644 ./resources/${FLATPAK_ID}.desktop -t /app/share/applications/"

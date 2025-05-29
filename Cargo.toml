@@ -11,7 +11,7 @@ sourceview5 = "0.9.1"
 
 [features]
 # Search for data files in install locations instead of source tree.
-packaged = []
+installed = []
 
 [build-dependencies]
 glib-build-tools = "0.20.0"

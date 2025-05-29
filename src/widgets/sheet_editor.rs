@@ -193,7 +193,7 @@ use gio::Cancellable;
 use glib::Object;
 use sourceview5::{Buffer, LanguageManager, StyleSchemeManager};
 
-#[cfg(feature = "packaged")]
+#[cfg(feature = "installed")]
 use crate::APP_ID;
 use crate::error::ScratchmarkError;
 use crate::util;
@@ -274,14 +274,14 @@ impl SheetEditor {
             return;
         }
 
-        #[cfg(feature = "packaged")]
+        #[cfg(feature = "installed")]
         {
             for dir in glib::system_data_dirs() {
                 let path = dir.join(APP_ID).join("editor_schemes");
                 StyleSchemeManager::default().append_search_path(path.to_str().unwrap());
             }
         }
-        #[cfg(not(feature = "packaged"))]
+        #[cfg(not(feature = "installed"))]
         {
             const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
             StyleSchemeManager::default()
