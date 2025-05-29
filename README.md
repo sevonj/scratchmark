@@ -34,3 +34,32 @@ Ubuntu
 ```
 libgtk-4-dev build-essential libglib2.0-dev libadwaita-1-dev libgtksourceview-5-dev
 ```
+
+### Flatpak
+
+#### Dependencies
+
+You need Python3 with the following packages: 
+
+```
+aiohttp toml
+```
+
+You need Flatpak w/ Flathub and the following packages:
+
+```
+org.gnome.Sdk//48
+```
+
+#### Building
+
+Build & install:
+
+```sh
+cd build-aux
+sh generate_flatpak.sh && sudo flatpak install -y Scratchmark.flatpak
+```
+
+> [!NOTE]  
+> `generate_flatpak.sh` will download and run a python script from another repository: 
+> https://github.com/flatpak/flatpak-builder-tools/
