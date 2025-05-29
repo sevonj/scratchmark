@@ -110,14 +110,13 @@ mod imp {
 
     impl ItemRenamePopover {
         pub(super) fn reset(&self) {
-            let stem = self
-                .original_path
-                .borrow()
-                .file_stem()
-                .unwrap()
-                .to_string_lossy()
-                .into_owned();
-            self.name_field.set_text(&stem);
+            let path = self.original_path.borrow();
+            let text = match self.kind.get() {
+                Kind::Folder => path.file_name(),
+                Kind::Sheet => path.file_stem(),
+            };
+            let text = text.unwrap().to_string_lossy().into_owned();
+            self.name_field.set_text(&text);
         }
 
         fn refresh(&self, stem: GString) {
