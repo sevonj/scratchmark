@@ -371,7 +371,6 @@ mod imp {
             let dialog = AboutDialog::new();
             dialog.set_application_icon(APP_ID);
             dialog.set_application_name("Scratchmark");
-            dialog.set_comments("To be renamed");
             dialog.set_developer_name("Sevonj");
             dialog.set_issue_url("https://github.com/sevonj/scratchmark/issues/");
             dialog.set_version(env!("CARGO_PKG_VERSION"));
