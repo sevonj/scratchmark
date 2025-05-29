@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.scratchmark.Scratchmark</id>
+
+  <name>Scratchmark</name>
+  <summary>Organized markdown editor</summary>
+
+  <metadata_license>CC-BY-4.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <developer id="fi.sevonj">
+    <name>Sevonj</name>
+  </developer>
+
+  <description>
+    <p>
+      Scratchmark lets you focus on the text without distractions. It&apos;s designed both for keeping notes and writing longer texts, and makes organizing files easy.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">org.scratchmark.Scratchmark.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>
+        https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_a.png?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>
+        https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_b.png?raw=true</image>
+    </screenshot>
+  </screenshots>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#ff00ff</color>
+    <color type="primary" scheme_preference="dark">#993d3d</color>
+  </branding>
+
+  <content_rating type="oars-1.1" />
+
+  <url type="bugtracker">https://github.com/sevonj/scratchmark/issues</url>
+  <url type="homepage">https://github.com/sevonj/scratchmark</url>
+  <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
+  <releases>
+    <release version="v1.0.0" date="2023-08-07"><!-- Change date when released -->
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.0.0</url>
+      <description>
+        <p>Initial relase</p>
+      </description>
+    </release>
+  </releases>
+</component>
