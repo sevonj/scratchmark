@@ -18,10 +18,9 @@ mod imp {
 
     use crate::APP_ID;
     use crate::util;
+    use crate::widgets::ItemCreatePopover;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
-    use crate::widgets::NewFolderPopover;
-    use crate::widgets::NewSheetPopover;
     use crate::widgets::SheetEditorPlaceholder;
 
     use super::LibraryBrowser;
@@ -243,7 +242,7 @@ mod imp {
                 ),
             );
 
-            let new_folder_popover = NewFolderPopover::default();
+            let new_folder_popover = ItemCreatePopover::for_folder();
             self.new_folder_button
                 .set_popover(Some(&new_folder_popover));
             new_folder_popover.connect_closure(
@@ -252,13 +251,13 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_popover: NewFolderPopover, path: PathBuf| {
+                    move |_popover: ItemCreatePopover, path: PathBuf| {
                         obj.create_folder(path);
                     }
                 ),
             );
 
-            let new_sheet_popover = NewSheetPopover::default();
+            let new_sheet_popover = ItemCreatePopover::for_sheet();
             self.new_sheet_button.set_popover(Some(&new_sheet_popover));
             new_sheet_popover.connect_closure(
                 "committed",
@@ -266,7 +265,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_popover: NewSheetPopover, path: PathBuf| {
+                    move |_popover: ItemCreatePopover, path: PathBuf| {
                         obj.create_sheet(path);
                     }
                 ),

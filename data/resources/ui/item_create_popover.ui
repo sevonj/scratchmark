@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="FolderRenamePopover" parent="GtkPopover">
+  <template class="ItemCreatePopover" parent="GtkPopover">
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
@@ -12,7 +12,7 @@
         </child>
         <child>
           <object class="GtkButton" id="commit_button">
-            <property name="label">Rename</property>
+            <property name="label">Create</property>
           </object>
         </child>
         <child>

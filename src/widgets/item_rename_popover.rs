@@ -1,9 +1,6 @@
-//! Sheet rename menu
-//!
-
 mod imp {
 
-    use std::cell::RefCell;
+    use std::cell::{Cell, RefCell};
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
@@ -21,9 +18,16 @@ mod imp {
 
     use crate::util::FilenameStatus;
 
+    #[derive(Debug, Default, Clone, Copy)]
+    pub(super) enum Kind {
+        #[default]
+        Folder,
+        Sheet,
+    }
+
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/folder_rename_popover.ui")]
-    pub struct FolderRenamePopover {
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/item_rename_popover.ui")]
+    pub struct ItemRenamePopover {
         #[template_child]
         name_field: TemplateChild<Entry>,
         #[template_child]
@@ -31,13 +35,17 @@ mod imp {
         #[template_child]
         name_error_label: TemplateChild<Label>,
 
+        pub(super) kind: Cell<Kind>,
+
         pub(super) original_path: RefCell<PathBuf>,
+
+        can_commit: Cell<bool>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for FolderRenamePopover {
-        const NAME: &'static str = "FolderRenamePopover";
-        type Type = super::FolderRenamePopover;
+    impl ObjectSubclass for ItemRenamePopover {
+        const NAME: &'static str = "ItemRenamePopover";
+        type Type = super::ItemRenamePopover;
         type ParentType = gtk::Popover;
 
         fn class_init(klass: &mut Self::Class) {
@@ -49,7 +57,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for FolderRenamePopover {
+    impl ObjectImpl for ItemRenamePopover {
         fn constructed(&self) {
             self.parent_constructed();
             let this = self;
@@ -62,7 +70,6 @@ mod imp {
                     this.reset();
                 }
             ));
-
             self.name_field.connect_changed(clone!(
                 #[weak]
                 this,
@@ -70,7 +77,13 @@ mod imp {
                     this.refresh(name_field.text());
                 }
             ));
-
+            self.name_field.connect_activate(clone!(
+                #[weak]
+                this,
+                move |_| {
+                    this.commit();
+                }
+            ));
             self.commit_button.connect_clicked(clone!(
                 #[weak]
                 this,
@@ -92,10 +105,10 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for FolderRenamePopover {}
-    impl PopoverImpl for FolderRenamePopover {}
+    impl WidgetImpl for ItemRenamePopover {}
+    impl PopoverImpl for ItemRenamePopover {}
 
-    impl FolderRenamePopover {
+    impl ItemRenamePopover {
         pub(super) fn reset(&self) {
             let stem = self
                 .original_path
@@ -114,8 +127,8 @@ mod imp {
             let file_exists = new_path.exists();
 
             let name_status = FilenameStatus::from(stem.as_str());
-            self.commit_button
-                .set_sensitive(name_status.is_ok() && !file_exists);
+            self.can_commit.replace(name_status.is_ok() && !file_exists);
+            self.commit_button.set_sensitive(self.can_commit.get());
 
             let label = &self.name_error_label;
 
@@ -140,6 +153,9 @@ mod imp {
         }
 
         fn commit(&self) {
+            if !self.can_commit.get() {
+                return;
+            }
             let filepath = self.filepath();
             self.obj().emit_by_name::<()>("committed", &[&filepath]);
             self.obj().popdown();
@@ -152,7 +168,10 @@ mod imp {
         }
 
         fn filepath(&self) -> PathBuf {
-            let filename = self.name_field.text().to_string();
+            let filename = match self.kind.get() {
+                Kind::Folder => self.name_field.text().to_string(),
+                Kind::Sheet => self.name_field.text().to_string() + ".md",
+            };
             self.parent_path().join(&filename)
         }
     }
@@ -166,18 +185,26 @@ use gtk::glib;
 use glib::Object;
 
 glib::wrapper! {
-    pub struct FolderRenamePopover(ObjectSubclass<imp::FolderRenamePopover>)
+    pub struct ItemRenamePopover(ObjectSubclass<imp::ItemRenamePopover>)
         @extends gtk::Popover, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Native ,gtk::ShortcutManager;
 }
 
-impl Default for FolderRenamePopover {
-    fn default() -> Self {
-        Object::builder().build()
+impl ItemRenamePopover {
+    pub fn for_folder() -> Self {
+        let this: Self = Object::builder().build();
+        this.imp().kind.replace(imp::Kind::Folder);
+        this
+    }
+
+    pub fn for_sheet() -> Self {
+        let this: Self = Object::builder().build();
+        this.imp().kind.replace(imp::Kind::Sheet);
+        this
     }
 }
 
-impl FolderRenamePopover {
+impl ItemRenamePopover {
     pub fn set_path(&self, path: PathBuf) {
         let _ = self.imp().original_path.replace(path);
         self.imp().reset();

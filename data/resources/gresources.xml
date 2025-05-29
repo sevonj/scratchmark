@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/scratchmark/Scratchmark">
-    <file preprocess="xml-stripblanks" compressed="true">ui/folder_rename_popover.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/item_create_popover.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/item_rename_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_browser.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/new_folder_popover.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/new_sheet_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor_conflict_resolve_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor_placeholder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/sheet_rename_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>
   </gresource>
 </gresources>

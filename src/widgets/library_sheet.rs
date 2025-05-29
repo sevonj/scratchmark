@@ -23,7 +23,7 @@ mod imp {
     use gtk::{Builder, CompositeTemplate, FileLauncher, Label, PopoverMenu, TemplateChild};
 
     use crate::data::SheetObject;
-    use crate::widgets::SheetRenamePopover;
+    use crate::widgets::ItemRenamePopover;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library_sheet.ui")]
@@ -37,7 +37,7 @@ mod imp {
         pub(super) bindings: RefCell<Vec<Binding>>,
 
         context_menu_popover: RefCell<Option<PopoverMenu>>,
-        pub(super) rename_popover: RefCell<Option<SheetRenamePopover>>,
+        pub(super) rename_popover: RefCell<Option<ItemRenamePopover>>,
         pub(super) drag_source: RefCell<Option<DragSource>>,
     }
 
@@ -169,7 +169,7 @@ mod imp {
         fn setup_rename_menu(&self) {
             let obj = self.obj();
 
-            let menu = SheetRenamePopover::default();
+            let menu = ItemRenamePopover::for_sheet();
             menu.set_parent(&*obj);
 
             menu.connect_closure(
@@ -178,7 +178,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_popover: SheetRenamePopover, path: PathBuf| {
+                    move |_popover: ItemRenamePopover, path: PathBuf| {
                         obj.emit_by_name::<()>("rename-requested", &[&path]);
                     }
                 ),

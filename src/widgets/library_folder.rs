@@ -25,7 +25,7 @@ mod imp {
     use crate::data::FolderObject;
     use crate::data::SheetObject;
     use crate::util;
-    use crate::widgets::FolderRenamePopover;
+    use crate::widgets::ItemRenamePopover;
     use crate::widgets::LibrarySheet;
 
     #[derive(CompositeTemplate, Default)]
@@ -53,7 +53,7 @@ mod imp {
         pub(super) sheets: RefCell<Vec<LibrarySheet>>,
 
         pub(super) context_menu_popover: RefCell<Option<PopoverMenu>>,
-        pub(super) rename_popover: RefCell<Option<FolderRenamePopover>>,
+        pub(super) rename_popover: RefCell<Option<ItemRenamePopover>>,
         pub(super) drag_source: RefCell<Option<DragSource>>,
     }
 
@@ -406,7 +406,7 @@ mod imp {
         fn setup_rename_menu(&self) {
             let obj = self.obj();
 
-            let menu = FolderRenamePopover::default();
+            let menu = ItemRenamePopover::for_folder();
             menu.set_parent(&*obj);
 
             menu.connect_closure(
@@ -415,7 +415,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_popover: FolderRenamePopover, path: PathBuf| {
+                    move |_popover: ItemRenamePopover, path: PathBuf| {
                         obj.emit_by_name::<()>("rename-requested", &[&path]);
                     }
                 ),

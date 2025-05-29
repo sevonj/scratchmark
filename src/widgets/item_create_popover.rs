@@ -1,8 +1,6 @@
-//! Sheet creation menu
-//!
-
 mod imp {
 
+    use std::cell::Cell;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
@@ -20,21 +18,32 @@ mod imp {
     use crate::util::FilenameStatus;
     use crate::util::path_builtin_library;
 
+    #[derive(Debug, Default, Clone, Copy)]
+    pub(super) enum Kind {
+        #[default]
+        Folder,
+        Sheet,
+    }
+
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/new_sheet_popover.ui")]
-    pub struct NewSheetPopover {
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/item_create_popover.ui")]
+    pub struct ItemCreatePopover {
         #[template_child]
         pub(super) name_field: TemplateChild<Entry>,
         #[template_child]
         pub(super) commit_button: TemplateChild<Button>,
         #[template_child]
         pub(super) name_error_label: TemplateChild<Label>,
+
+        pub(super) kind: Cell<Kind>,
+
+        can_commit: Cell<bool>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for NewSheetPopover {
-        const NAME: &'static str = "NewSheetPopover";
-        type Type = super::NewSheetPopover;
+    impl ObjectSubclass for ItemCreatePopover {
+        const NAME: &'static str = "ItemCreatePopover";
+        type Type = super::ItemCreatePopover;
         type ParentType = gtk::Popover;
 
         fn class_init(klass: &mut Self::Class) {
@@ -46,12 +55,11 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for NewSheetPopover {
+    impl ObjectImpl for ItemCreatePopover {
         fn constructed(&self) {
             self.parent_constructed();
             let this = self;
             let obj = self.obj();
-
             obj.connect_closed(clone!(
                 #[weak]
                 this,
@@ -59,7 +67,6 @@ mod imp {
                     this.clear();
                 }
             ));
-
             self.name_field.connect_changed(clone!(
                 #[weak]
                 this,
@@ -67,7 +74,13 @@ mod imp {
                     this.refresh();
                 }
             ));
-
+            self.name_field.connect_activate(clone!(
+                #[weak]
+                this,
+                move |_| {
+                    this.commit();
+                }
+            ));
             self.commit_button.connect_clicked(clone!(
                 #[weak]
                 this,
@@ -75,7 +88,6 @@ mod imp {
                     this.commit();
                 }
             ));
-
             self.refresh();
         }
 
@@ -91,10 +103,10 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for NewSheetPopover {}
-    impl PopoverImpl for NewSheetPopover {}
+    impl WidgetImpl for ItemCreatePopover {}
+    impl PopoverImpl for ItemCreatePopover {}
 
-    impl NewSheetPopover {
+    impl ItemCreatePopover {
         fn clear(&self) {
             self.name_field.set_text("");
         }
@@ -105,8 +117,8 @@ mod imp {
             let file_exists = new_path.exists();
 
             let name_status = FilenameStatus::from(stem.as_str());
-            self.commit_button
-                .set_sensitive(name_status.is_ok() && !file_exists);
+            self.can_commit.replace(name_status.is_ok() && !file_exists);
+            self.commit_button.set_sensitive(self.can_commit.get());
 
             let label = &self.name_error_label;
 
@@ -131,29 +143,45 @@ mod imp {
         }
 
         fn commit(&self) {
+            if !self.can_commit.get() {
+                return;
+            }
             let filepath = self.filepath();
             self.obj().emit_by_name::<()>("committed", &[&filepath]);
             self.obj().popdown();
         }
 
         fn filepath(&self) -> PathBuf {
-            let filename = self.name_field.text().to_string() + ".md";
+            let filename = match self.kind.get() {
+                Kind::Folder => self.name_field.text().to_string(),
+                Kind::Sheet => self.name_field.text().to_string() + ".md",
+            };
             path_builtin_library().join(&filename)
         }
     }
 }
 
-use glib::Object;
+use adw::subclass::prelude::*;
 use gtk::glib;
 
+use glib::Object;
+
 glib::wrapper! {
-    pub struct NewSheetPopover(ObjectSubclass<imp::NewSheetPopover>)
+    pub struct ItemCreatePopover(ObjectSubclass<imp::ItemCreatePopover>)
         @extends gtk::Popover, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Native ,gtk::ShortcutManager;
 }
 
-impl Default for NewSheetPopover {
-    fn default() -> Self {
-        Object::builder().build()
+impl ItemCreatePopover {
+    pub fn for_folder() -> Self {
+        let this: Self = Object::builder().build();
+        this.imp().kind.replace(imp::Kind::Folder);
+        this
+    }
+
+    pub fn for_sheet() -> Self {
+        let this: Self = Object::builder().build();
+        this.imp().kind.replace(imp::Kind::Sheet);
+        this
     }
 }
