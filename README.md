@@ -2,7 +2,7 @@
 
 # Scratchmark
 
-![app icon](resources/org.scratchmark.Scratchmark.svg)
+![app icon](data/icons/org.scratchmark.Scratchmark.svg)
 
 Scratchmark is a markdown editor designed both for keeping notes and writing. It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
 
@@ -59,7 +59,4 @@ Build & install:
 cd build-aux
 sh generate_flatpak.sh && sudo flatpak install -y Scratchmark.flatpak
 ```
-
-> [!NOTE]  
-> `generate_flatpak.sh` will download and run a python script from another repository: 
-> https://github.com/flatpak/flatpak-builder-tools/
+`generate_flatpak.sh` will download and run a python script from Flatpak's builder tools repository.
