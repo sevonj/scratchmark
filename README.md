@@ -4,7 +4,7 @@
 
 ![app icon](resources/org.scratchmark.Scratchmark.svg)
 
-Scratchmark is a distraction-free markdown editor, designed both for keeping notes and writing. It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
+Scratchmark is a markdown editor designed both for keeping notes and writing. It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
 
 ![screenshot](data/screenshots/screenshot_a.png)
 
