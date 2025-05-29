@@ -285,7 +285,7 @@ impl SheetEditor {
         {
             const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
             StyleSchemeManager::default()
-                .append_search_path(format!("{MANIFEST_DIR}/resources/editor_schemes").as_str());
+                .append_search_path(format!("{MANIFEST_DIR}/data/editor_schemes").as_str());
         }
 
         // Try fetching the scheme again
