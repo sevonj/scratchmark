@@ -38,7 +38,7 @@
                         <child type="start">
                           <object class="GtkButton" id="sidebar_toggle">
                             <property name="icon-name">sidebar-show-symbolic</property>
-                            <property name="tooltip-text" translatable="yes">Toggle Sidebar</property>
+                            <property name="tooltip-text" translatable="yes">Toggle Sidebar (F9)</property>
                           </object>
                         </child>
                         <child type="start">

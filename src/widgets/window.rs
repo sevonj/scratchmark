@@ -85,10 +85,14 @@ mod imp {
             }
 
             let top_split = self.top_split.get();
-            self.sidebar_toggle.connect_clicked(clone!(move |_| {
-                let collapsed = !top_split.is_collapsed();
-                top_split.set_collapsed(collapsed);
-            }));
+            self.sidebar_toggle.connect_clicked(clone!(
+                #[weak]
+                top_split,
+                move |_| {
+                    let collapsed = !top_split.is_collapsed();
+                    top_split.set_collapsed(collapsed);
+                }
+            ));
 
             self.library_browser.connect_closure(
                 "sheet-selected",
@@ -338,6 +342,16 @@ mod imp {
                         let toast = Toast::new(&e.to_string());
                         obj.imp().toast_overlay.add_toast(toast);
                     }
+                }
+            ));
+            actions.add_action(&action);
+            let action = gio::SimpleAction::new("toggle-sidebar", None);
+            action.connect_activate(clone!(
+                #[weak]
+                top_split,
+                move |_, _| {
+                    let collapsed = !top_split.is_collapsed();
+                    top_split.set_collapsed(collapsed);
                 }
             ));
             actions.add_action(&action);
