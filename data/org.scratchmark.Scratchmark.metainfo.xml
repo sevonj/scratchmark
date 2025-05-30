@@ -13,9 +13,7 @@
   </developer>
 
   <description>
-    <p>
-      Scratchmark lets you focus on the text without distractions. It&apos;s designed both for keeping notes and writing longer texts, and makes organizing files easy.
-    </p>
+    <p>Scratchmark lets you focus on the text without distractions. It&apos;s designed both for keeping notes and writing longer texts, and makes organizing files easy.</p>
   </description>
 
   <launchable type="desktop-id">org.scratchmark.Scratchmark.desktop</launchable>
@@ -41,6 +39,20 @@
   <url type="homepage">https://github.com/sevonj/scratchmark</url>
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.0.1" date="2025-05-30">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.0.1</url>
+      <description>
+        <p>Polish patch</p>
+        <ul>
+          <li>Keyboard shortcuts for many operations</li>
+          <li>Keyboard shortcut helper dialog</li>
+          <li>Duplicate file context menu option</li>
+          <li>Distinction between deletion and moving to trash</li>
+          <li>Fixed bug where folder rename dialog tries to filter file extension</li>
+          <li>UI code cleanup</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.0.0" date="2025-05-29">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.0.0</url>
       <description>
