@@ -338,4 +338,14 @@ impl LibraryBrowser {
 
         self.imp().selected_sheet.replace(path);
     }
+
+    pub fn rename_selected_sheet(&self) {
+        let Some(selected_path) = self.selected_sheet() else {
+            return;
+        };
+
+        if let Some(sheet) = self.imp().sheets.borrow().get(&selected_path) {
+            sheet.prompt_rename();
+        }
+    }
 }

@@ -29,4 +29,5 @@ fn main() -> glib::ExitCode {
 fn setup_accels(app: &adw::Application) {
     app.set_accels_for_action("win.close-editor", &["<Ctrl>W"]);
     app.set_accels_for_action("win.toggle-sidebar", &["F9"]);
+    app.set_accels_for_action("win.rename-open-sheet", &["F2"]);
 }

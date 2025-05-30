@@ -344,6 +344,14 @@ mod imp {
                     }
                 }
             ));
+            let action = gio::SimpleAction::new("rename-open-sheet", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.library_browser.rename_selected_sheet();
+                }
+            ));
             actions.add_action(&action);
             let action = gio::SimpleAction::new("toggle-sidebar", None);
             action.connect_activate(clone!(

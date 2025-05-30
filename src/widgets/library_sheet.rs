@@ -95,9 +95,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_action, _parameter| {
-                    this.rename_popover.borrow().as_ref().unwrap().popup();
-                }
+                move |_action, _parameter| this.prompt_rename()
             ));
             actions.add_action(&action);
 
@@ -152,6 +150,10 @@ mod imp {
     impl BinImpl for LibrarySheet {}
 
     impl LibrarySheet {
+        pub(super) fn prompt_rename(&self) {
+            self.rename_popover.borrow().as_ref().unwrap().popup();
+        }
+
         fn setup_context_menu(&self) {
             let obj = self.obj();
 
@@ -270,6 +272,10 @@ impl LibrarySheet {
             .as_ref()
             .expect("LibrarySheet data uninitialized")
             .stem()
+    }
+
+    pub fn prompt_rename(&self) {
+        self.imp().prompt_rename();
     }
 
     pub fn rename(&self, path: PathBuf) {
