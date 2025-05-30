@@ -13,8 +13,8 @@ mod imp {
         AboutDialog, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView,
         Toast, ToastOverlay, ToolbarView,
     };
-    use gio::{Cancellable, SimpleActionGroup};
-    use gtk::{Button, CompositeTemplate, MenuButton};
+    use gio::Cancellable;
+    use gtk::{Builder, Button, CompositeTemplate, MenuButton};
 
     use crate::APP_ID;
     use crate::util;
@@ -83,6 +83,10 @@ mod imp {
             {
                 obj.add_css_class("devel");
             }
+
+            let builder = Builder::from_resource("/org/scratchmark/Scratchmark/ui/shortcuts.ui");
+            let shortcuts = builder.object("help_overlay").unwrap();
+            obj.set_help_overlay(Some(&shortcuts));
 
             let top_split = self.top_split.get();
             self.sidebar_toggle.connect_clicked(clone!(
@@ -320,9 +324,6 @@ mod imp {
                 }
             ));
 
-            let actions = SimpleActionGroup::new();
-            obj.insert_action_group("win", Some(&actions));
-
             let action = gio::SimpleAction::new("about", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
@@ -331,7 +332,7 @@ mod imp {
                     this.show_about();
                 }
             ));
-            actions.add_action(&action);
+            obj.add_action(&action);
             let action = gio::SimpleAction::new("new-sheet", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
@@ -340,7 +341,7 @@ mod imp {
                     this.new_sheet_button.popup();
                 }
             ));
-            actions.add_action(&action);
+            obj.add_action(&action);
             let action = gio::SimpleAction::new("close-editor", None);
             action.connect_activate(clone!(
                 #[weak]
@@ -352,7 +353,7 @@ mod imp {
                     }
                 }
             ));
-            actions.add_action(&action);
+            obj.add_action(&action);
             let action = gio::SimpleAction::new("rename-open-sheet", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
@@ -361,7 +362,7 @@ mod imp {
                     this.library_browser.rename_selected_sheet();
                 }
             ));
-            actions.add_action(&action);
+            obj.add_action(&action);
             let action = gio::SimpleAction::new("toggle-sidebar", None);
             action.connect_activate(clone!(
                 #[weak]
@@ -371,7 +372,7 @@ mod imp {
                     top_split.set_collapsed(collapsed);
                 }
             ));
-            actions.add_action(&action);
+            obj.add_action(&action);
         }
     }
 

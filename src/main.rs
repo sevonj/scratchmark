@@ -31,4 +31,5 @@ fn setup_accels(app: &adw::Application) {
     app.set_accels_for_action("win.toggle-sidebar", &["F9"]);
     app.set_accels_for_action("win.new-sheet", &["<Ctrl>N"]);
     app.set_accels_for_action("win.rename-open-sheet", &["F2"]);
+    app.set_accels_for_action("win.show-help-overlay", &["<Control>question"]);
 }
