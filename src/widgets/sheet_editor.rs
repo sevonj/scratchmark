@@ -9,7 +9,7 @@ mod imp {
     use gtk::gio;
     use gtk::glib;
 
-    use adw::Banner;
+    use adw::{AlertDialog, Banner};
     use gio::{File, FileMonitor, FileMonitorFlags, SimpleActionGroup};
     use glib::Properties;
     use glib::subclass::Signal;
@@ -17,7 +17,6 @@ mod imp {
     use sourceview5::View;
 
     use crate::util;
-    use crate::widgets::SheetEditorConflictResolveDialog;
 
     use super::NOT_CANCELLABLE;
 
@@ -77,64 +76,57 @@ mod imp {
                 #[weak]
                 obj,
                 move |_| {
-                    let dialog = SheetEditorConflictResolveDialog::default();
-
+                    let heading = "File changed";
+                    let body = "The file has changed on disk.";
+                    let dialog = AlertDialog::new(Some(heading), Some(body));
+                    dialog.add_response("discard", "Discard changes");
+                    dialog.add_response("overwrite", "Overwrite file");
+                    dialog.add_response("keep-both", "Keep both");
+                    dialog.set_response_appearance("keep-both", adw::ResponseAppearance::Suggested);
+                    dialog
+                        .set_response_appearance("overwrite", adw::ResponseAppearance::Destructive);
+                    dialog.set_response_appearance("discard", adw::ResponseAppearance::Destructive);
                     dialog.connect_closure(
-                        "keep-both",
+                        "response",
                         false,
                         closure_local!(
                             #[weak]
                             obj,
-                            move |_: SheetEditorConflictResolveDialog| {
-                                let new_path = util::incremented_path(obj.path());
-                                obj.set_path(new_path);
-                                obj.imp().file_changed.set(false);
-                                obj.imp().file_changed_banner.set_revealed(false);
-                                if let Err(e) = obj.save() {
-                                    obj.emit_by_name::<()>("toast", &[&e.to_string()]);
-                                    return;
-                                };
-                                obj.emit_by_name::<()>("saved-as", &[]);
-                            }
-                        ),
-                    );
-                    dialog.connect_closure(
-                        "discard",
-                        false,
-                        closure_local!(
-                            #[weak]
-                            obj,
-                            move |_: SheetEditorConflictResolveDialog| {
-                                let file = gio::File::for_path(obj.path());
-                                match util::read_file_to_string(&file) {
-                                    Ok(text) => {
-                                        obj.imp().source_view.buffer().set_text(&text);
-                                        obj.imp().file_changed.set(false);
-                                        obj.imp().file_changed_banner.set_revealed(false);
+                            move |_: AlertDialog, response: String| {
+                                if response == "keep-both" {
+                                    let new_path = util::incremented_path(obj.path());
+                                    obj.set_path(new_path);
+                                    obj.imp().file_changed.set(false);
+                                    obj.imp().file_changed_banner.set_revealed(false);
+                                    if let Err(e) = obj.save() {
+                                        obj.emit_by_name::<()>("toast", &[&e.to_string()]);
+                                        return;
+                                    };
+                                    obj.emit_by_name::<()>("saved-as", &[]);
+                                } else if response == "overwrite" {
+                                    obj.imp().file_changed.set(false);
+                                    if let Err(e) = obj.save() {
+                                        obj.emit_by_name::<()>("toast", &[&e.to_string()]);
+                                        return;
+                                    };
+                                    obj.imp().file_changed.set(false);
+                                    obj.imp().file_changed_banner.set_revealed(false);
+                                } else if response == "discard" {
+                                    let file = gio::File::for_path(obj.path());
+                                    match util::read_file_to_string(&file) {
+                                        Ok(text) => {
+                                            obj.imp().source_view.buffer().set_text(&text);
+                                            obj.imp().file_changed.set(false);
+                                            obj.imp().file_changed_banner.set_revealed(false);
+                                        }
+                                        Err(e) => {
+                                            obj.emit_by_name::<()>("toast", &[&e.to_string()])
+                                        }
                                     }
-                                    Err(e) => obj.emit_by_name::<()>("toast", &[&e.to_string()]),
                                 }
                             }
                         ),
                     );
-                    dialog.connect_closure(
-                        "overwrite",
-                        false,
-                        closure_local!(
-                            #[weak]
-                            obj,
-                            move |_: SheetEditorConflictResolveDialog| {
-                                obj.imp().file_changed.set(false);
-                                if let Err(e) = obj.save() {
-                                    obj.emit_by_name::<()>("toast", &[&e.to_string()]);
-                                    return;
-                                };
-                                obj.imp().file_changed.set(false);
-                                obj.imp().file_changed_banner.set_revealed(false);
-                            }
-                        ),
-                    );
-
                     dialog.present(Some(&obj));
                 }
             ));

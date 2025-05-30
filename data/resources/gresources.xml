@@ -8,7 +8,6 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor_conflict_resolve_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor_placeholder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>
