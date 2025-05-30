@@ -307,7 +307,7 @@ mod imp {
                 #[upgrade_or]
                 glib::Propagation::Proceed,
                 move |_: &super::Window| {
-                    if let Err(e) = obj.close_sheet() {
+                    if let Err(e) = obj.close_editor() {
                         let toast = Toast::new(&e.to_string());
                         obj.imp().toast_overlay.add_toast(toast);
                         return glib::Propagation::Stop;
@@ -325,6 +325,19 @@ mod imp {
                 self,
                 move |_, _| {
                     this.show_about();
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("close-editor", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_, _| {
+                    if let Err(e) = obj.close_editor() {
+                        let toast = Toast::new(&e.to_string());
+                        obj.imp().toast_overlay.add_toast(toast);
+                    }
                 }
             ));
             actions.add_action(&action);
@@ -361,7 +374,7 @@ mod imp {
                     .starts_with(&path)
             });
             if parent_of_currently_open {
-                if let Err(e) = self.obj().close_sheet() {
+                if let Err(e) = self.obj().close_editor() {
                     let toast = Toast::new(&e.to_string());
                     self.toast_overlay.add_toast(toast);
                     return;
@@ -382,7 +395,7 @@ mod imp {
                 .as_ref()
                 .is_some_and(|e| e.path() == path);
             if currently_open {
-                if let Err(e) = self.obj().close_sheet() {
+                if let Err(e) = self.obj().close_editor() {
                     let toast = Toast::new(&e.to_string());
                     self.toast_overlay.add_toast(toast);
                     return;
@@ -409,7 +422,7 @@ mod imp {
                     .starts_with(&path)
             });
             if parent_of_currently_open {
-                if let Err(e) = self.obj().close_sheet() {
+                if let Err(e) = self.obj().close_editor() {
                     let toast = Toast::new(&e.to_string());
                     self.toast_overlay.add_toast(toast);
                     return;
@@ -427,7 +440,7 @@ mod imp {
                 .as_ref()
                 .is_some_and(|e| e.path() == path);
             if currently_open {
-                if let Err(e) = self.obj().close_sheet() {
+                if let Err(e) = self.obj().close_editor() {
                     let toast = Toast::new(&e.to_string());
                     self.toast_overlay.add_toast(toast);
                     return;
@@ -484,7 +497,7 @@ impl Window {
 
     fn load_sheet(&self, path: PathBuf) {
         let imp = self.imp();
-        if let Err(e) = self.close_sheet() {
+        if let Err(e) = self.close_editor() {
             let toast = Toast::new(&e.to_string());
             imp.toast_overlay.add_toast(toast);
             return;
@@ -507,7 +520,7 @@ impl Window {
                 #[weak(rename_to = obj)]
                 self,
                 move |_: SheetEditor| {
-                    if let Err(e) = obj.close_sheet() {
+                    if let Err(e) = obj.close_editor() {
                         let toast = Toast::new(&e.to_string());
                         obj.imp().toast_overlay.add_toast(toast);
                         return;
@@ -543,7 +556,7 @@ impl Window {
     }
 
     fn create_sheet(&self, path: PathBuf) {
-        if let Err(e) = self.close_sheet() {
+        if let Err(e) = self.close_editor() {
             let toast = Toast::new(&e.to_string());
             self.imp().toast_overlay.add_toast(toast);
             return;
@@ -553,7 +566,7 @@ impl Window {
         self.load_sheet(path);
     }
 
-    fn close_sheet(&self) -> Result<(), ScratchmarkError> {
+    fn close_editor(&self) -> Result<(), ScratchmarkError> {
         let imp = self.imp();
         if let Some(editor) = imp.sheet_editor.borrow_mut().as_ref() {
             editor.save()?;

@@ -15,6 +15,7 @@ fn main() -> glib::ExitCode {
         .expect("Failed to register resources.");
 
     let app = adw::Application::builder().application_id(APP_ID).build();
+    setup_accels(&app);
 
     app.connect_activate(|app| {
         let window = Window::new(app);
@@ -23,4 +24,8 @@ fn main() -> glib::ExitCode {
     });
 
     app.run()
+}
+
+fn setup_accels(app: &adw::Application) {
+    app.set_accels_for_action("win.close-editor", &["<Ctrl>W"]);
 }

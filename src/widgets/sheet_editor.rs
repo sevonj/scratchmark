@@ -69,9 +69,6 @@ mod imp {
                 }
             ));
 
-            let actions = SimpleActionGroup::new();
-            obj.insert_action_group("editor", Some(&actions));
-
             self.file_changed_banner.connect_button_clicked(clone!(
                 #[weak]
                 obj,
@@ -130,6 +127,19 @@ mod imp {
                     dialog.present(Some(&obj));
                 }
             ));
+
+            let actions = SimpleActionGroup::new();
+            obj.insert_action_group("editor", Some(&actions));
+
+            let action = gio::SimpleAction::new("close", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    obj.emit_by_name::<()>("close-requested", &[]);
+                }
+            ));
+            actions.add_action(&action);
         }
 
         fn signals() -> &'static [Signal] {
