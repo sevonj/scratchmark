@@ -101,6 +101,16 @@ mod imp {
             ));
             actions.add_action(&action);
 
+            let action = gio::SimpleAction::new("duplicate", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    obj.duplicate();
+                }
+            ));
+            actions.add_action(&action);
+
             let action = gio::SimpleAction::new("trash", None);
             action.connect_activate(clone!(
                 #[weak]
@@ -127,6 +137,7 @@ mod imp {
             SIGNALS.get_or_init(|| {
                 vec![
                     Signal::builder("selected").build(),
+                    Signal::builder("duplicated").build(),
                     Signal::builder("rename-requested")
                         .param_types([PathBuf::static_type()])
                         .build(),
@@ -220,12 +231,15 @@ mod imp {
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
+use gtk::gio;
 use gtk::glib;
 use gtk::prelude::*;
 
+use gio::{Cancellable, FileCopyFlags};
 use glib::Object;
 
 use crate::data::SheetObject;
+use crate::util;
 
 glib::wrapper! {
 pub struct LibrarySheet(ObjectSubclass<imp::LibrarySheet>)
@@ -261,6 +275,18 @@ impl LibrarySheet {
     pub fn rename(&self, path: PathBuf) {
         assert!(path.parent().is_some_and(|p| p.is_dir()));
         self.emit_by_name::<()>("rename-requested", &[&path]);
+    }
+
+    /// Create a copy of this file
+    pub fn duplicate(&self) {
+        let self_path = self.path();
+        let self_file = gio::File::for_path(&self_path);
+        let dupe_path = util::incremented_path(self_path);
+        let dupe_file = gio::File::for_path(&dupe_path);
+        self_file
+            .copy(&dupe_file, FileCopyFlags::NONE, None::<&Cancellable>, None)
+            .expect("File dupe failed");
+        self.emit_by_name::<()>("duplicated", &[]);
     }
 
     pub fn set_active(&self, is_active: bool) {

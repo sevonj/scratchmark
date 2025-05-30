@@ -213,6 +213,18 @@ mod imp {
             );
 
             sheet.connect_closure(
+                "duplicated",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: LibrarySheet| {
+                        obj.refresh_content();
+                    }
+                ),
+            );
+
+            sheet.connect_closure(
                 "rename-requested",
                 false,
                 closure_local!(

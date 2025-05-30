@@ -12,6 +12,10 @@
         <attribute name="action">sheet.rename-begin</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">Duplicate</attribute>
+        <attribute name="action">sheet.duplicate</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Move to Trash</attribute>
         <attribute name="action">sheet.trash</attribute>
       </item>
