@@ -76,6 +76,12 @@ mod imp {
                     Signal::builder("sheet-delete-requested")
                         .param_types([LibrarySheet::static_type()])
                         .build(),
+                    Signal::builder("folder-trash-requested")
+                        .param_types([LibraryFolder::static_type()])
+                        .build(),
+                    Signal::builder("sheet-trash-requested")
+                        .param_types([LibrarySheet::static_type()])
+                        .build(),
                 ]
             })
         }
@@ -161,6 +167,18 @@ mod imp {
             );
 
             folder.connect_closure(
+                "trash-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: LibraryFolder, folder: LibraryFolder| {
+                        obj.emit_by_name::<()>("folder-trash-requested", &[&folder]);
+                    }
+                ),
+            );
+
+            folder.connect_closure(
                 "delete-requested",
                 false,
                 closure_local!(
@@ -202,6 +220,18 @@ mod imp {
                     obj,
                     move |sheet: LibrarySheet, new_path: PathBuf| {
                         obj.emit_by_name::<()>("sheet-rename-requested", &[&sheet, &new_path]);
+                    }
+                ),
+            );
+
+            sheet.connect_closure(
+                "trash-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |button: LibrarySheet| {
+                        obj.emit_by_name::<()>("sheet-trash-requested", &[&button]);
                     }
                 ),
             );

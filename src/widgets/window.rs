@@ -13,7 +13,7 @@ mod imp {
         AboutDialog, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView,
         Toast, ToastOverlay, ToolbarView,
     };
-    use gio::SimpleActionGroup;
+    use gio::{Cancellable, SimpleActionGroup};
     use gtk::{Button, CompositeTemplate, MenuButton};
 
     use crate::APP_ID;
@@ -98,6 +98,30 @@ mod imp {
                     obj,
                     move |_: LibraryBrowser, path: PathBuf| {
                         obj.load_sheet(path);
+                    }
+                ),
+            );
+
+            self.library_browser.connect_closure(
+                "folder-trash-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: LibraryBrowser, folder: LibraryFolder| {
+                        obj.imp().trash_folder(folder);
+                    }
+                ),
+            );
+
+            self.library_browser.connect_closure(
+                "sheet-trash-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: LibraryBrowser, sheet: LibrarySheet| {
+                        obj.imp().trash_sheet(sheet);
                     }
                 ),
             );
@@ -321,6 +345,54 @@ mod imp {
                 };
             };
             self.main_page.set_title("Scratchmark");
+        }
+
+        fn trash_folder(&self, folder: LibraryFolder) {
+            assert!(!folder.is_root());
+
+            let path = folder
+                .path()
+                .canonicalize()
+                .expect("folder trash failed to canonicalize folder");
+            let parent_of_currently_open = self.sheet_editor.borrow().as_ref().is_some_and(|e| {
+                e.path()
+                    .canonicalize()
+                    .expect("folder delet trash to canonicalize sheet")
+                    .starts_with(&path)
+            });
+            if parent_of_currently_open {
+                if let Err(e) = self.obj().close_sheet() {
+                    let toast = Toast::new(&e.to_string());
+                    self.toast_overlay.add_toast(toast);
+                    return;
+                }
+            }
+            gio::File::for_path(path)
+                .trash(None::<&Cancellable>)
+                .expect("folder trash failed");
+            self.toast_overlay.add_toast(Toast::new("Moved to trash"));
+            self.library_browser.refresh_content();
+        }
+
+        fn trash_sheet(&self, sheet: LibrarySheet) {
+            let path = sheet.path();
+            let currently_open = self
+                .sheet_editor
+                .borrow()
+                .as_ref()
+                .is_some_and(|e| e.path() == path);
+            if currently_open {
+                if let Err(e) = self.obj().close_sheet() {
+                    let toast = Toast::new(&e.to_string());
+                    self.toast_overlay.add_toast(toast);
+                    return;
+                }
+            }
+            gio::File::for_path(path)
+                .trash(None::<&Cancellable>)
+                .expect("folder trash failed");
+            self.toast_overlay.add_toast(Toast::new("Moved to trash"));
+            self.library_browser.refresh_content();
         }
 
         fn force_delete_folder(&self, folder: LibraryFolder) {

@@ -101,6 +101,16 @@ mod imp {
             ));
             actions.add_action(&action);
 
+            let action = gio::SimpleAction::new("trash", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    obj.emit_by_name::<()>("trash-requested", &[]);
+                }
+            ));
+            actions.add_action(&action);
+
             let action = gio::SimpleAction::new("delete", None);
             action.connect_activate(clone!(
                 #[weak]
@@ -120,6 +130,7 @@ mod imp {
                     Signal::builder("rename-requested")
                         .param_types([PathBuf::static_type()])
                         .build(),
+                    Signal::builder("trash-requested").build(),
                     Signal::builder("delete-requested").build(),
                 ]
             })

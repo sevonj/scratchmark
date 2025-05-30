@@ -20,6 +20,10 @@
         <attribute name="action">folder.rename-begin</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">Move to Trash</attribute>
+        <attribute name="action">folder.trash</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Delete folder</attribute>
         <attribute name="action">folder.delete</attribute>
       </item>
