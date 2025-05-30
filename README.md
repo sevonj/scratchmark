@@ -12,11 +12,15 @@ Scratchmark is a markdown editor designed both for keeping notes and writing. It
 
 ![cat](https://github.com/user-attachments/assets/aaa7b417-5e2f-4a87-ad9b-aa29591d6bcd)
 
-## Development
+## Developers
 
 Scratchmark is written in Rust and uses GTK4 + Libadwaita for UI.
 
 [➜ Project management](https://github.com/users/sevonj/projects/20)
+
+### License
+
+Scratchmark is licensed GPL-3.0-or-later. Some parts may *additionally* be available under other licenses, such as MIT.
 
 ### Continuous Integration
 
