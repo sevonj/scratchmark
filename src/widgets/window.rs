@@ -549,7 +549,12 @@ impl Window {
     fn load_state(&self) {
         let open_sheet_path = self.settings().string("open-sheet-path");
         if !open_sheet_path.is_empty() {
-            self.load_sheet(open_sheet_path.into());
+            let open_sheet_path = PathBuf::from(open_sheet_path);
+            if !open_sheet_path.exists() {
+                let toast = Toast::new("Last open sheet has been moved or deleted.");
+                self.imp().toast_overlay.add_toast(toast);
+            }
+            self.load_sheet(open_sheet_path);
         }
     }
 
