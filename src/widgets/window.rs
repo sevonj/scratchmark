@@ -1,5 +1,5 @@
 mod imp {
-    use std::cell::RefCell;
+    use std::cell::{OnceCell, RefCell};
     use std::fs;
     use std::path::PathBuf;
 
@@ -13,7 +13,7 @@ mod imp {
         AboutDialog, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView,
         Toast, ToastOverlay, ToolbarView,
     };
-    use gio::Cancellable;
+    use gio::{Cancellable, Settings};
     use gtk::{Builder, Button, CompositeTemplate, MenuButton};
 
     use crate::APP_ID;
@@ -57,6 +57,8 @@ mod imp {
 
         pub(super) library_browser: LibraryBrowser,
         pub(super) sheet_editor: RefCell<Option<SheetEditor>>,
+
+        pub(super) settings: OnceCell<Settings>,
     }
 
     #[glib::object_subclass]
@@ -78,7 +80,7 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
-
+            obj.setup_settings();
             #[cfg(debug_assertions)]
             {
                 obj.add_css_class("devel");
@@ -315,6 +317,7 @@ mod imp {
                 #[upgrade_or]
                 glib::Propagation::Proceed,
                 move |_: &super::Window| {
+                    obj.save_state().expect("Failed to save app state");
                     if let Err(e) = obj.close_editor() {
                         let toast = Toast::new(&e.to_string());
                         obj.imp().toast_overlay.add_toast(toast);
@@ -373,6 +376,8 @@ mod imp {
                 }
             ));
             obj.add_action(&action);
+
+            obj.load_state();
         }
     }
 
@@ -501,13 +506,15 @@ use std::path::PathBuf;
 
 use adw::prelude::*;
 use adw::subclass::prelude::*;
+use glib::closure_local;
 use gtk::gio;
 use gtk::glib;
-use gtk::glib::closure_local;
 
 use adw::Toast;
+use gio::Settings;
 use glib::Object;
 
+use crate::APP_ID;
 use crate::error::ScratchmarkError;
 use crate::util;
 
@@ -525,6 +532,34 @@ glib::wrapper! {
 impl Window {
     pub fn new(app: &adw::Application) -> Self {
         Object::builder().property("application", app).build()
+    }
+
+    fn settings(&self) -> &Settings {
+        self.imp().settings.get().expect("Settings uninitialized.")
+    }
+
+    fn setup_settings(&self) {
+        let settings = Settings::new(APP_ID);
+        self.imp()
+            .settings
+            .set(settings)
+            .expect("`settings` should not be set before calling `setup_settings`.");
+    }
+
+    fn load_state(&self) {
+        let open_sheet_path = self.settings().string("open-sheet-path");
+        if !open_sheet_path.is_empty() {
+            self.load_sheet(open_sheet_path.into());
+        }
+    }
+
+    fn save_state(&self) -> Result<(), glib::BoolError> {
+        if let Some(editor) = self.imp().sheet_editor.borrow().as_ref() {
+            let open_sheet_path = editor.path();
+            self.settings()
+                .set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
+        }
+        Ok(())
     }
 
     fn load_sheet(&self, path: PathBuf) {

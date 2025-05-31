@@ -22,6 +22,17 @@ Scratchmark is written in Rust and uses GTK4 + Libadwaita for UI.
 
 Scratchmark is licensed GPL-3.0-or-later. Some parts may *additionally* be available under other licenses, such as MIT.
 
+### Building
+
+When running from the source directory, there's an additional step to the usual `cargo run` command. You need to set this env var:
+
+```sh
+# In repository root
+export GSETTINGS_SCHEMA_DIR=$PWD/data
+```
+
+The app needs its settings schema, and the lookup path seemingly can't be set in the program itself.
+
 ### Continuous Integration
 
 Pull requests are gatekept by [this workflow.](https://github.com/sevonj/scratchmark/blob/master/.github/workflows/rust.yml) It will check if the code

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schemalist>
+  <schema id="org.scratchmark.Scratchmark" path="/org/scratchmark/Scratchmark/">
+    <key name="open-sheet-path" type="s">
+      <default>""</default>
+    </key>
+  </schema>
+</schemalist>
