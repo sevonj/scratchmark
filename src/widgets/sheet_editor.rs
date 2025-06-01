@@ -75,7 +75,10 @@ mod imp {
                 move |_| {
                     let heading = "File changed";
                     let body = "The file has changed on disk.";
-                    let dialog = AlertDialog::new(Some(heading), Some(body));
+                    let dialog = AlertDialog::new(
+                        Some(heading),
+                        Some(body), // once told me the world is gonna roll me
+                    );
                     dialog.add_response("discard", "Discard changes");
                     dialog.add_response("overwrite", "Overwrite file");
                     dialog.add_response("keep-both", "Keep both");
