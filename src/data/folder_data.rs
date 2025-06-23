@@ -28,7 +28,7 @@ mod imp {
     impl ObjectImpl for FolderObject {}
 }
 
-use std::{fs::DirEntry, path::PathBuf};
+use std::path::PathBuf;
 
 use glib::Object;
 use gtk::glib;
@@ -45,20 +45,6 @@ impl FolderObject {
             .property("root", root)
             .property("name", name)
             .build()
-    }
-
-    pub fn content(&self) -> Vec<DirEntry> {
-        let mut entries = vec![];
-
-        let Ok(readdir) = self.path().read_dir() else {
-            return entries;
-        };
-
-        for entry in readdir.flatten() {
-            entries.push(entry);
-        }
-
-        entries
     }
 }
 

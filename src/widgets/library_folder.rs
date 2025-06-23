@@ -23,7 +23,6 @@ mod imp {
     use gtk::{DragSource, DropTarget};
 
     use crate::data::FolderObject;
-    use crate::data::SheetObject;
     use crate::util;
     use crate::widgets::ItemRenamePopover;
     use crate::widgets::LibrarySheet;
@@ -103,14 +102,13 @@ mod imp {
                 move |_action, _parameter| {
                     let path = util::untitled_sheet_path(obj.path());
                     util::create_sheet_file(&path);
-                    obj.imp().add_sheet(SheetObject::new(path.clone()));
                     obj.emit_by_name::<()>("sheet-created", &[&path]);
                     obj.imp().sort_children();
                     obj.imp().set_expand(true);
                 }
             ));
-
             actions.add_action(&action);
+
             let action = gio::SimpleAction::new("create-folder", None);
             action.connect_activate(clone!(
                 #[weak]
@@ -118,7 +116,6 @@ mod imp {
                 move |_action, _parameter| {
                     let path = util::untitled_folder_path(obj.path());
                     util::create_folder(&path);
-                    obj.imp().add_subdir(FolderObject::new(path.clone(), false));
                     obj.emit_by_name::<()>("folder-created", &[&path]);
                     obj.imp().sort_children();
                     obj.imp().set_expand(true);
@@ -194,18 +191,6 @@ mod imp {
                     Signal::builder("sheet-created")
                         .param_types([PathBuf::static_type()])
                         .build(),
-                    Signal::builder("folder-added")
-                        .param_types([super::LibraryFolder::static_type()])
-                        .build(),
-                    Signal::builder("sheet-added")
-                        .param_types([LibrarySheet::static_type()])
-                        .build(),
-                    Signal::builder("folder-removed")
-                        .param_types([PathBuf::static_type()])
-                        .build(),
-                    Signal::builder("sheet-removed")
-                        .param_types([PathBuf::static_type()])
-                        .build(),
                 ]
             })
         }
@@ -247,78 +232,6 @@ mod imp {
             }
         }
 
-        pub(super) fn refresh_content(&self) {
-            self.prune_children();
-
-            for subdir in self.subdirs.borrow().iter() {
-                subdir.refresh_content();
-            }
-
-            let opt = self.folder_object.borrow();
-            let folder = opt.as_ref().expect("FolderObject not bound");
-
-            let entries = folder.content();
-            for entry in entries {
-                let Ok(meta) = entry.metadata() else {
-                    continue;
-                };
-                let path = entry.path();
-                if self.is_path_in_children(&path) {
-                    continue;
-                }
-
-                if meta.is_dir() {
-                    self.add_subdir(FolderObject::new(path, false));
-                } else if meta.is_file()
-                    && path
-                        .extension()
-                        .is_some_and(|ext| ext.eq_ignore_ascii_case("md"))
-                {
-                    self.add_sheet(SheetObject::new(path));
-                }
-            }
-
-            self.sort_children();
-        }
-
-        fn is_path_in_children(&self, path: &PathBuf) -> bool {
-            for subdir in self.subdirs.borrow().iter() {
-                if subdir.path() == *path {
-                    return true;
-                }
-            }
-            for sheet in self.sheets.borrow().iter() {
-                if sheet.path() == *path {
-                    return true;
-                }
-            }
-            false
-        }
-
-        fn prune_children(&self) {
-            let mut sheets = self.sheets.borrow_mut();
-            for i in (0..sheets.len()).rev() {
-                let sheet = &sheets[i];
-                let path = sheet.path();
-                if !path.exists() {
-                    self.sheets_vbox.remove(sheet);
-                    sheets.remove(i);
-                    self.obj().emit_by_name::<()>("sheet-removed", &[&path]);
-                }
-            }
-
-            let mut subdirs = self.subdirs.borrow_mut();
-            for i in (0..subdirs.len()).rev() {
-                let subdir = &subdirs[i];
-                let path = subdir.path();
-                if !subdir.path().exists() {
-                    self.subdirs_vbox.remove(subdir);
-                    subdirs.remove(i);
-                    self.obj().emit_by_name::<()>("folder-removed", &[&path]);
-                }
-            }
-        }
-
         fn sort_children(&self) {
             let mut sheets = self.sheets.borrow_mut();
             if !sheets.is_empty() {
@@ -354,28 +267,16 @@ mod imp {
 
         fn toggle_expand(&self) {
             let expand = !*self.expanded.borrow();
-            if expand {
-                self.obj().refresh_content();
-            }
             self.set_expand(expand);
         }
 
-        fn add_subdir(&self, data: FolderObject) {
-            let folder = super::LibraryFolder::new(&data);
-            let obj = self.obj();
-
-            obj.emit_by_name::<()>("folder-added", &[&folder]);
+        pub(super) fn add_subfolder(&self, folder: super::LibraryFolder) {
             self.subdirs_vbox.append(&folder);
             self.subdirs.borrow_mut().push(folder);
         }
 
-        fn add_sheet(&self, data: SheetObject) {
-            let sheet = LibrarySheet::new(&data);
+        pub(super) fn add_sheet(&self, sheet: LibrarySheet) {
             self.sheets_vbox.append(&sheet);
-
-            let obj = self.obj();
-
-            obj.emit_by_name::<()>("sheet-added", &[&sheet]);
             self.sheets.borrow_mut().push(sheet);
         }
 
@@ -525,6 +426,7 @@ use gtk::prelude::*;
 use glib::Object;
 
 use crate::data::FolderObject;
+use crate::widgets::LibrarySheet;
 
 glib::wrapper! {
     pub struct LibraryFolder(ObjectSubclass<imp::LibraryFolder>)
@@ -570,9 +472,20 @@ impl LibraryFolder {
         self.imp().name()
     }
 
-    /// Recursively check for new and removed files
-    pub fn refresh_content(&self) {
-        self.imp().refresh_content();
+    pub fn add_subfolder(&self, folder: LibraryFolder) {
+        self.imp().add_subfolder(folder);
+    }
+
+    pub fn add_sheet(&self, sheet: LibrarySheet) {
+        self.imp().add_sheet(sheet);
+    }
+
+    pub fn remove_subfolder(&self, folder: &LibraryFolder) {
+        self.imp().subdirs_vbox.remove(folder);
+    }
+
+    pub fn remove_sheet(&self, sheet: &LibrarySheet) {
+        self.imp().sheets_vbox.remove(sheet);
     }
 
     pub fn rename(&self, path: PathBuf) {

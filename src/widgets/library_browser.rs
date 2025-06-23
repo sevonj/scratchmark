@@ -16,6 +16,8 @@ mod imp {
     use gtk::CompositeTemplate;
 
     use crate::data::FolderObject;
+    use crate::data::LibraryObject;
+    use crate::data::SheetObject;
     use crate::util::path_builtin_library;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
@@ -29,6 +31,7 @@ mod imp {
         pub(super) folders: RefCell<HashMap<PathBuf, LibraryFolder>>,
         pub(super) sheets: RefCell<HashMap<PathBuf, LibrarySheet>>,
         pub(super) selected_sheet: RefCell<Option<PathBuf>>,
+        pub(super) library_object: RefCell<Option<LibraryObject>>,
     }
 
     #[glib::object_subclass]
@@ -49,12 +52,19 @@ mod imp {
     impl ObjectImpl for LibraryBrowser {
         fn constructed(&self) {
             self.parent_constructed();
+            self.library_object
+                .replace(Some(LibraryObject::new(path_builtin_library())));
+            self.library_object
+                .borrow()
+                .as_ref()
+                .unwrap()
+                .refresh_content();
 
             let vbox = &self.library_root_vbox;
             let root_folder =
                 LibraryFolder::new_root(&FolderObject::new(path_builtin_library(), true));
             vbox.append(&root_folder);
-            self.add_folder(root_folder);
+            self.connect_folder(root_folder);
         }
 
         fn signals() -> &'static [Signal] {
@@ -91,7 +101,88 @@ mod imp {
     impl BinImpl for LibraryBrowser {}
 
     impl LibraryBrowser {
-        fn add_folder(&self, folder: LibraryFolder) {
+        pub(super) fn refresh_content(&self) {
+            self.library_object
+                .borrow()
+                .as_ref()
+                .unwrap()
+                .refresh_content();
+
+            self.prune();
+
+            let binding = self.library_object.borrow();
+            let lib = binding.as_ref().unwrap();
+
+            // Add new
+            let mut added_folders = vec![];
+            for (path, _folder_state) in lib.data().folders.iter() {
+                if !self.folders.borrow().contains_key(path) {
+                    let folder = LibraryFolder::new(&FolderObject::new(path.clone(), false));
+                    self.connect_folder(folder.clone());
+                    added_folders.push(folder);
+                }
+            }
+            for folder in &added_folders {
+                let path = folder.path();
+                let parent_path = path.parent().unwrap();
+                let parent = self.folders.borrow().get(parent_path).unwrap().clone();
+                parent.add_subfolder(folder.clone());
+            }
+
+            for path in lib.data().sheets.iter() {
+                if !self.sheets.borrow().contains_key(path) {
+                    let sheet = LibrarySheet::new(&SheetObject::new(path.clone()));
+                    self.connect_sheet(sheet.clone());
+
+                    let parent_path = path.parent().unwrap();
+                    let parent = self.folders.borrow().get(parent_path).unwrap().clone();
+                    parent.add_sheet(sheet);
+                }
+            }
+        }
+
+        /// Remove widgets for entries that don't exist in the library anymore
+        fn prune(&self) {
+            let binding = self.library_object.borrow();
+            let lib = binding.as_ref().unwrap();
+
+            let mut folders = self.folders.borrow_mut();
+            let mut sheets = self.sheets.borrow_mut();
+            let mut dead_folders = vec![];
+            let mut dead_sheets = vec![];
+            for (path, folder) in folders.iter() {
+                // Do not delete library root
+                if *path == lib.path() {
+                    continue;
+                }
+                if !lib.data().folders.contains_key(path) {
+                    dead_folders.push(path.clone());
+
+                    let parent_path = path.parent().unwrap();
+                    let parent = folders.get(parent_path).unwrap().clone();
+                    parent.remove_subfolder(folder)
+                }
+            }
+            for (path, sheet) in sheets.iter() {
+                if !lib.data().sheets.contains(path) {
+                    dead_sheets.push(path.clone());
+
+                    let parent_path = path.parent().unwrap();
+                    let parent = folders.get(parent_path).unwrap().clone();
+                    parent.remove_sheet(sheet)
+                }
+            }
+            for path in dead_folders {
+                folders
+                    .remove(&path)
+                    .expect("dead folder entry disappeared?");
+            }
+            for path in dead_sheets {
+                sheets.remove(&path).expect("dead sheet entry disappeared?");
+            }
+        }
+
+        fn connect_folder(&self, folder: LibraryFolder) {
             let obj = self.obj();
 
             folder.connect_closure(
@@ -119,49 +210,25 @@ mod imp {
             );
 
             folder.connect_closure(
-                "folder-added",
+                "folder-created",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryFolder, button: LibraryFolder| {
-                        this.add_folder(button);
+                    move |_: LibraryFolder, _path: PathBuf| {
+                        this.refresh_content();
                     }
                 ),
             );
 
             folder.connect_closure(
-                "sheet-added",
+                "sheet-created",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryFolder, button: LibrarySheet| {
-                        this.add_sheet(button);
-                    }
-                ),
-            );
-
-            folder.connect_closure(
-                "folder-removed",
-                false,
-                closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |_: LibraryFolder, path: PathBuf| {
-                        this.unlist_folder(path);
-                    }
-                ),
-            );
-
-            folder.connect_closure(
-                "sheet-removed",
-                false,
-                closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |_: LibraryFolder, path: PathBuf| {
-                        this.unlist_sheet(path);
+                    move |_: LibraryFolder, _path: PathBuf| {
+                        this.refresh_content();
                     }
                 ),
             );
@@ -190,12 +257,11 @@ mod imp {
                 ),
             );
 
-            folder.refresh_content();
             let k = folder.path();
             self.folders.borrow_mut().insert(k, folder);
         }
 
-        fn add_sheet(&self, sheet: LibrarySheet) {
+        fn connect_sheet(&self, sheet: LibrarySheet) {
             let obj = self.obj();
 
             sheet.connect_closure(
@@ -269,14 +335,6 @@ mod imp {
             let k = sheet.path();
             self.sheets.borrow_mut().insert(k, sheet);
         }
-
-        fn unlist_folder(&self, path: PathBuf) {
-            self.folders.borrow_mut().remove(&path);
-        }
-
-        fn unlist_sheet(&self, path: PathBuf) {
-            self.sheets.borrow_mut().remove(&path);
-        }
     }
 }
 
@@ -316,7 +374,7 @@ impl LibraryBrowser {
     }
 
     pub fn refresh_content(&self) {
-        self.root_folder().refresh_content();
+        self.imp().refresh_content();
     }
 
     pub fn selected_sheet(&self) -> Option<PathBuf> {
