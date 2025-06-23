@@ -565,6 +565,13 @@ impl Window {
             }
             self.load_sheet(open_sheet_path);
         }
+
+        let library_expanded_folders = self.settings().strv("library-expanded-folders");
+        for path in library_expanded_folders {
+            if let Some(folder) = self.imp().library_browser.get_folder(&PathBuf::from(path)) {
+                folder.set_expanded(true);
+            }
+        }
     }
 
     fn save_state(&self) -> Result<(), glib::BoolError> {
@@ -573,6 +580,11 @@ impl Window {
             self.settings()
                 .set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
         }
+
+        let expanded_folders = self.imp().library_browser.expanded_folder_paths();
+        self.settings()
+            .set_strv("library-expanded-folders", expanded_folders)?;
+
         Ok(())
     }
 

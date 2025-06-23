@@ -4,5 +4,9 @@
     <key name="open-sheet-path" type="s">
       <default>""</default>
     </key>
+    <key name="library-expanded-folders" type="as">
+      <default>[]</default>
+      <summary>Remember expanded folders. Entries are folder paths.</summary>
+    </key>
   </schema>
 </schemalist>

@@ -338,7 +338,7 @@ mod imp {
     }
 }
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use adw::subclass::prelude::*;
 use gtk::glib;
@@ -371,6 +371,20 @@ impl LibraryBrowser {
             .get(&path_builtin_library())
             .unwrap()
             .clone()
+    }
+
+    pub fn expanded_folder_paths(&self) -> Vec<String> {
+        let mut paths = vec![];
+        for (path, folder) in self.imp().folders.borrow().iter() {
+            if folder.is_expanded() {
+                paths.push(path.to_str().unwrap().to_owned());
+            }
+        }
+        paths
+    }
+
+    pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
+        self.imp().folders.borrow().get(path).cloned()
     }
 
     pub fn refresh_content(&self) {

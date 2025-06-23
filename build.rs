@@ -1,4 +1,3 @@
-#[cfg(not(feature = "installed"))]
 use std::process::Command;
 
 fn main() {
@@ -8,12 +7,9 @@ fn main() {
         "gresources.gresource",
     );
 
-    #[cfg(not(feature = "installed"))]
-    {
-        let output = Command::new("glib-compile-schemas")
-            .arg("data")
-            .output()
-            .expect("failed to compile settings schema");
-        println!("{:?}", output.stdout);
-    }
+    let output = Command::new("glib-compile-schemas")
+        .arg("data")
+        .output()
+        .expect("failed to compile settings schema");
+    println!("{:?}", output.stdout);
 }

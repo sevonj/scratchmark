@@ -90,7 +90,7 @@ mod imp {
                 }
             ));
 
-            self.set_expand(false);
+            self.set_expanded(false);
 
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("folder", Some(&actions));
@@ -104,7 +104,7 @@ mod imp {
                     util::create_sheet_file(&path);
                     obj.emit_by_name::<()>("sheet-created", &[&path]);
                     obj.imp().sort_children();
-                    obj.imp().set_expand(true);
+                    obj.imp().set_expanded(true);
                 }
             ));
             actions.add_action(&action);
@@ -118,7 +118,7 @@ mod imp {
                     util::create_folder(&path);
                     obj.emit_by_name::<()>("folder-created", &[&path]);
                     obj.imp().sort_children();
-                    obj.imp().set_expand(true);
+                    obj.imp().set_expanded(true);
                 }
             ));
             actions.add_action(&action);
@@ -218,10 +218,10 @@ mod imp {
                 .name()
         }
 
-        pub(super) fn set_expand(&self, expand: bool) {
-            self.expanded.replace(expand);
+        pub(super) fn set_expanded(&self, expanded: bool) {
+            self.expanded.replace(expanded);
 
-            if expand {
+            if expanded {
                 self.expand_icon.set_icon_name("pan-down-symbolic".into());
                 self.subdirs_vbox.set_visible(true);
                 self.sheets_vbox.set_visible(true);
@@ -266,8 +266,8 @@ mod imp {
         }
 
         fn toggle_expand(&self) {
-            let expand = !*self.expanded.borrow();
-            self.set_expand(expand);
+            let expanded = !*self.expanded.borrow();
+            self.set_expanded(expanded);
         }
 
         pub(super) fn add_subfolder(&self, folder: super::LibraryFolder) {
@@ -383,7 +383,7 @@ mod imp {
                             return true;
                         }
                         sheet.rename(new_path);
-                        obj.imp().set_expand(true);
+                        obj.imp().set_expanded(true);
                         return true;
                     } else if let Ok(folder) = value.get::<super::LibraryFolder>() {
                         // Under no circumstance accept the library root folder
@@ -405,7 +405,7 @@ mod imp {
                             return true;
                         }
                         folder.rename(new_path);
-                        obj.imp().set_expand(true);
+                        obj.imp().set_expanded(true);
                         return true;
                     }
                     false
@@ -447,7 +447,7 @@ impl LibraryFolder {
         this.imp().expand_button.set_sensitive(false);
         this.imp().title.set_label("Library");
         this.imp().content_vbox.set_margin_start(0);
-        this.imp().set_expand(true);
+        this.imp().set_expanded(true);
         if let Some(popover) = this.imp().context_menu_popover.take() {
             popover.unparent();
         }
@@ -470,6 +470,14 @@ impl LibraryFolder {
     /// Display name
     pub fn name(&self) -> String {
         self.imp().name()
+    }
+
+    pub fn is_expanded(&self) -> bool {
+        self.imp().expanded.borrow().to_owned()
+    }
+
+    pub fn set_expanded(&self, expanded: bool) {
+        self.imp().set_expanded(expanded);
     }
 
     pub fn add_subfolder(&self, folder: LibraryFolder) {
