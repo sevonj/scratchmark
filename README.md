@@ -24,10 +24,9 @@ Scratchmark is licensed GPL-3.0-or-later. Some parts may *additionally* be avail
 
 ### Building
 
-When running from the source directory, there's an additional step to the usual `cargo run` command. You need to set this env var:
+When running from the repository, there's an additional step to the usual `cargo run` command. You need to set this env var:
 
 ```sh
-# In repository root
 export GSETTINGS_SCHEMA_DIR=$PWD/data
 ```
 
