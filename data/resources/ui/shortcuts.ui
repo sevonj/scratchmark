@@ -40,6 +40,17 @@
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="title" translatable="yes" context="shortcut window">Library</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Refresh library</property>
+                <property name="action-name">win.refresh-library</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </object>

@@ -376,6 +376,15 @@ mod imp {
                 }
             ));
             obj.add_action(&action);
+            let action = gio::SimpleAction::new("refresh-library", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.library_browser.refresh_content();
+                }
+            ));
+            obj.add_action(&action);
 
             obj.load_state();
         }
