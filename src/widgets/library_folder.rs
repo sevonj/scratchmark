@@ -447,6 +447,8 @@ impl LibraryFolder {
         this.imp().expand_button.set_sensitive(false);
         this.imp().title.set_label("Library");
         this.imp().content_vbox.set_margin_start(0);
+        // Bottom margin: provide some area to drag items to
+        this.imp().content_vbox.set_margin_bottom(32);
         this.imp().set_expanded(true);
         if let Some(popover) = this.imp().context_menu_popover.take() {
             popover.unparent();
