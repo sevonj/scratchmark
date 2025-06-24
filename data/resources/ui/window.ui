@@ -78,7 +78,7 @@
       </item>
       <item>
         <attribute name="label" translatable="yes">_About Scratchmark</attribute>
-        <attribute name="action">win.about</attribute>
+        <attribute name="action">win.show-about</attribute>
       </item>
     </section>
   </menu>

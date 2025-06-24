@@ -327,16 +327,7 @@ mod imp {
                 }
             ));
 
-            let action = gio::SimpleAction::new("about", None);
-            action.connect_activate(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |_, _| {
-                    this.show_about();
-                }
-            ));
-            obj.add_action(&action);
-            let action = gio::SimpleAction::new("new-sheet", None);
+            let action = gio::SimpleAction::new("file-new", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
@@ -345,7 +336,7 @@ mod imp {
                 }
             ));
             obj.add_action(&action);
-            let action = gio::SimpleAction::new("close-editor", None);
+            let action = gio::SimpleAction::new("file-close", None);
             action.connect_activate(clone!(
                 #[weak]
                 obj,
@@ -357,12 +348,21 @@ mod imp {
                 }
             ));
             obj.add_action(&action);
-            let action = gio::SimpleAction::new("rename-open-sheet", None);
+            let action = gio::SimpleAction::new("file-rename-open", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
                 move |_, _| {
                     this.library_browser.rename_selected_sheet();
+                }
+            ));
+            obj.add_action(&action);
+            let action = gio::SimpleAction::new("library-refresh", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.library_browser.refresh_content();
                 }
             ));
             obj.add_action(&action);
@@ -376,12 +376,12 @@ mod imp {
                 }
             ));
             obj.add_action(&action);
-            let action = gio::SimpleAction::new("refresh-library", None);
+            let action = gio::SimpleAction::new("show-about", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
                 move |_, _| {
-                    this.library_browser.refresh_content();
+                    this.show_about();
                 }
             ));
             obj.add_action(&action);
@@ -618,7 +618,6 @@ impl Window {
                         obj.imp().toast_overlay.add_toast(toast);
                         return;
                     }
-                    obj.imp().library_browser.set_selected_sheet(None);
                 }
             ),
         );
@@ -669,6 +668,7 @@ impl Window {
         imp.main_toolbar_view
             .set_content(Some(&SheetEditorPlaceholder::default()));
         self.imp().update_window_title();
+        self.imp().library_browser.set_selected_sheet(None);
         Ok(())
     }
 }

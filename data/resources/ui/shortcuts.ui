@@ -19,23 +19,23 @@
         </child>
         <child>
           <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes" context="shortcut window">Documents</property>
+            <property name="title" translatable="yes" context="shortcut window">Document</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">New Sheet</property>
-                <property name="action-name">win.new-sheet</property>
+                <property name="title" translatable="yes" context="shortcut window">New sheet</property>
+                <property name="action-name">win.file-new</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Close Sheet</property>
-                <property name="action-name">win.close-editor</property>
+                <property name="title" translatable="yes" context="shortcut window">Close sheet</property>
+                <property name="action-name">win.file-close</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Rename Sheet</property>
-                <property name="action-name">win.rename-open-sheet</property>
+                <property name="title" translatable="yes" context="shortcut window">Rename sheet</property>
+                <property name="action-name">win.file-rename-open</property>
               </object>
             </child>
           </object>
@@ -45,8 +45,8 @@
             <property name="title" translatable="yes" context="shortcut window">Library</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Refresh library</property>
-                <property name="action-name">win.refresh-library</property>
+                <property name="title" translatable="yes" context="shortcut window">Manual refresh</property>
+                <property name="action-name">win.library-refresh</property>
               </object>
             </child>
           </object>
