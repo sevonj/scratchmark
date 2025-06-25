@@ -34,25 +34,38 @@
                 <child>
                   <object class="AdwToolbarView" id="main_toolbar_view">
                     <child type="top">
-                      <object class="AdwHeaderBar">
-                        <child type="start">
-                          <object class="GtkButton" id="sidebar_toggle">
-                            <property name="icon-name">sidebar-show-symbolic</property>
-                            <property name="tooltip-text" translatable="yes">Toggle Sidebar (F9)</property>
-                          </object>
-                        </child>
-                        <child type="start">
-                          <object class="GtkMenuButton" id="new_sheet_button">
-                            <property name="icon-name">document-new-symbolic</property>
-                            <property name="tooltip-text" translatable="yes">New sheet</property>
-                          </object>
-                        </child>
-                        <child type="end">
-                          <object class="GtkMenuButton" id="primary_menu_button">
-                            <property name="primary">True</property>
-                            <property name="icon-name">open-menu-symbolic</property>
-                            <property name="tooltip-text" translatable="yes">Menu</property>
-                            <property name="menu-model">primary_menu</property>
+                      <object class="GtkRevealer" id="main_header_revealer">
+                        <property name="reveal-child" translatable="no">True</property>
+                        <child>
+                          <object class="AdwHeaderBar">
+                            <child type="start">
+                              <object class="GtkButton" id="sidebar_toggle">
+                                <property name="icon-name">sidebar-show-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Toggle Sidebar (F9)</property>
+                              </object>
+                            </child>
+                            <child type="start">
+                              <object class="GtkMenuButton" id="new_sheet_button">
+                                <property name="icon-name">document-new-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">New sheet</property>
+                              </object>
+                            </child>
+                            <child type="end">
+                              <object class="GtkButton" id="unfullscreen_button">
+                                <property name="icon-name">view-restore-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Exit fullscreen</property>
+                                <property name="action-name">win.unfullscreen</property>
+                                <property name="visible">False</property>
+                              </object>
+                            </child>
+                            <child type="end">
+                              <object class="GtkMenuButton" id="primary_menu_button">
+                                <property name="primary">True</property>
+                                <property name="icon-name">open-menu-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Menu</property>
+                                <property name="menu-model">primary_menu</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -67,6 +80,18 @@
     </child>
   </template>
   <menu id="primary_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Enter fullscreen</attribute>
+        <attribute name="action">win.fullscreen</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Exit fullscreen</attribute>
+        <attribute name="action">win.unfullscreen</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+    </section>
     <section>
       <!--item>
         <attribute name="label" translatable="yes">_Preferences</attribute>

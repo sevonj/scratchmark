@@ -14,7 +14,7 @@ mod imp {
         Toast, ToastOverlay, ToolbarView,
     };
     use gio::{Cancellable, Settings, SimpleActionGroup};
-    use gtk::{Builder, Button, CompositeTemplate, MenuButton};
+    use gtk::{Builder, Button, CompositeTemplate, EventControllerMotion, MenuButton, Revealer};
 
     use crate::APP_ID;
     use crate::util;
@@ -45,6 +45,8 @@ mod imp {
         pub(super) main_page: TemplateChild<NavigationPage>,
         #[template_child]
         pub(super) main_toolbar_view: TemplateChild<ToolbarView>,
+        #[template_child]
+        pub(super) main_header_revealer: TemplateChild<Revealer>,
 
         #[template_child]
         pub(super) toast_overlay: TemplateChild<ToastOverlay>,
@@ -54,6 +56,8 @@ mod imp {
         pub(super) new_sheet_button: TemplateChild<MenuButton>,
         #[template_child]
         pub(super) primary_menu_button: TemplateChild<MenuButton>,
+        #[template_child]
+        pub(super) unfullscreen_button: TemplateChild<Button>,
 
         pub(super) library_browser: LibraryBrowser,
         pub(super) sheet_editor: RefCell<Option<SheetEditor>>,
@@ -326,6 +330,65 @@ mod imp {
                     glib::Propagation::Proceed
                 }
             ));
+
+            let motion_controller = EventControllerMotion::new();
+            motion_controller.connect_motion(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_controller, _x, y| {
+                    if !this.obj().is_fullscreen() {
+                        return;
+                    }
+                    this.main_header_revealer.set_reveal_child(y < 50.0);
+                }
+            ));
+            obj.add_controller(motion_controller);
+
+            let action_fullscreen = gio::SimpleAction::new("fullscreen", None);
+            let action_unfullscreen = gio::SimpleAction::new("unfullscreen", None);
+            obj.connect_fullscreened_notify(clone!(
+                #[weak]
+                action_fullscreen,
+                #[weak]
+                action_unfullscreen,
+                move |window| {
+                    if window.is_fullscreen() {
+                        window.imp().unfullscreen_button.set_visible(true);
+                        window.imp().main_header_revealer.set_reveal_child(false);
+                        window
+                            .imp()
+                            .main_toolbar_view
+                            .set_top_bar_style(adw::ToolbarStyle::Raised);
+                        action_fullscreen.set_enabled(false);
+                        action_unfullscreen.set_enabled(true);
+                    } else {
+                        window.imp().unfullscreen_button.set_visible(false);
+                        window.imp().main_header_revealer.set_reveal_child(true);
+                        window
+                            .imp()
+                            .main_toolbar_view
+                            .set_top_bar_style(adw::ToolbarStyle::Flat);
+                        action_fullscreen.set_enabled(true);
+                        action_unfullscreen.set_enabled(false);
+                    }
+                }
+            ));
+            action_fullscreen.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_, _| {
+                    obj.fullscreen();
+                }
+            ));
+            action_unfullscreen.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_, _| {
+                    obj.unfullscreen();
+                }
+            ));
+            obj.add_action(&action_fullscreen);
+            obj.add_action(&action_unfullscreen);
 
             let action = gio::SimpleAction::new("file-new", None);
             action.connect_activate(clone!(
