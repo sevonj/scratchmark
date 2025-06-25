@@ -8,17 +8,25 @@ mod imp {
     use glib::{clone, closure_local};
     use gtk::gio;
     use gtk::glib;
+    use sourceview5::prelude::*;
 
     use adw::{AlertDialog, Banner};
     use gio::{File, FileMonitor, FileMonitorFlags, SimpleActionGroup};
     use glib::Properties;
     use glib::subclass::Signal;
-    use gtk::{Button, CompositeTemplate, TemplateChild};
-    use sourceview5::View;
+    use gtk::{Button, CompositeTemplate, Label, SearchBar, SearchEntry, TemplateChild, TextIter};
+    use sourceview5::{SearchContext, SearchSettings, View};
 
     use crate::util;
 
     use super::NOT_CANCELLABLE;
+
+    #[derive(Debug, Default, Clone, Copy)]
+    enum SearchMode {
+        #[default]
+        None,
+        Search,
+    }
 
     #[derive(Debug, Properties, CompositeTemplate, Default)]
     #[properties(wrapper_type = super::SheetEditor)]
@@ -27,6 +35,16 @@ mod imp {
         #[template_child]
         pub(super) source_view: TemplateChild<View>,
 
+        #[template_child]
+        search_bar: TemplateChild<SearchBar>,
+        #[template_child]
+        search_entry: TemplateChild<SearchEntry>,
+        #[template_child]
+        search_occurrences_label: TemplateChild<Label>,
+        #[template_child]
+        search_prev_button: TemplateChild<Button>,
+        #[template_child]
+        search_next_button: TemplateChild<Button>,
         #[template_child]
         pub(super) file_changed_banner: TemplateChild<Banner>,
         #[template_child]
@@ -38,6 +56,11 @@ mod imp {
 
         #[property(get, set)]
         pub(super) file_changed: Cell<bool>,
+        search_mode: Cell<SearchMode>,
+        search_settings: RefCell<Option<SearchSettings>>,
+        search_context: RefCell<Option<SearchContext>>,
+        search_position: Cell<Option<i32>>,
+        search_occurrences: Cell<Option<i32>>,
     }
 
     #[glib::object_subclass]
@@ -60,6 +83,42 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
+
+            self.search_entry.connect_search_changed(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |search_entry: &SearchEntry| {
+                    this.search_settings
+                        .borrow()
+                        .as_ref()
+                        .unwrap()
+                        .set_search_text(Some(&search_entry.text()));
+                }
+            ));
+
+            // TODO: This works when cursor is moved with keyboard, but not clicked.
+            self.source_view.connect_move_cursor(clone!(
+                #[weak (rename_to = this)]
+                self,
+                move |_, _, _, _| {
+                    let search_context_bind = this.search_context.borrow();
+                    let search_context = search_context_bind.as_ref().unwrap();
+                    let (start, end) =
+                        search_context
+                            .buffer()
+                            .selection_bounds()
+                            .unwrap_or_else(|| {
+                                let start_mark = search_context.buffer().get_insert();
+                                let end_mark = search_context.buffer().selection_bound();
+                                (
+                                    search_context.buffer().iter_at_mark(&start_mark),
+                                    search_context.buffer().iter_at_mark(&end_mark),
+                                )
+                            });
+                    this.update_search_position(Some((start, end)));
+                    this.update_search_occurrence_text();
+                }
+            ));
 
             self.close_sheet_button.get().connect_clicked(clone!(
                 #[weak]
@@ -143,6 +202,108 @@ mod imp {
                 }
             ));
             actions.add_action(&action);
+
+            let action =
+                gio::SimpleAction::new("search-toggle", Some(&bool::static_variant_type()));
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_action, ignore_focus: Option<&glib::Variant>| {
+                    match this.search_mode.get() {
+                        SearchMode::None => {
+                            this.search_mode.set(SearchMode::Search);
+                            this.search_bar.set_search_mode(true);
+                            this.search_entry.grab_focus();
+                            this.search_context
+                                .borrow()
+                                .as_ref()
+                                .unwrap()
+                                .set_highlight(true);
+                        }
+                        SearchMode::Search => {
+                            fn is_search_focused(this: &SheetEditor) -> Option<bool> {
+                                Some(
+                                    this.obj()
+                                        .root()?
+                                        .focus()?
+                                        .is_ancestor(&this.search_entry.get()),
+                                )
+                            }
+                            let ignore_focus = ignore_focus.unwrap().get().unwrap();
+                            if ignore_focus || is_search_focused(&this).unwrap_or(true) {
+                                this.search_mode.set(SearchMode::None);
+                                this.search_bar.set_search_mode(false);
+                                this.search_context
+                                    .borrow()
+                                    .as_ref()
+                                    .unwrap()
+                                    .set_highlight(false);
+                            } else {
+                                this.search_entry.grab_focus();
+                            }
+                        }
+                    }
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("search-prev", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_action, _| {
+                    let search_context_bind = this.search_context.borrow();
+                    let search_context = search_context_bind.as_ref().unwrap();
+                    let mark = search_context.buffer().get_insert();
+                    let iter = search_context.buffer().iter_at_mark(&mark);
+                    search_context.backward_async(
+                        &iter,
+                        NOT_CANCELLABLE,
+                        clone!(
+                            #[weak]
+                            this,
+                            move |result| {
+                                match result {
+                                    Ok((start, end, _wrapped)) => {
+                                        this.update_search_position(Some((start, end)))
+                                    }
+                                    Err(_) => this.update_search_position(None),
+                                }
+                            }
+                        ),
+                    );
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("search-next", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_action, _| {
+                    let search_context_bind = this.search_context.borrow();
+                    let search_context = search_context_bind.as_ref().unwrap();
+                    let mark = search_context.buffer().selection_bound();
+                    let iter = search_context.buffer().iter_at_mark(&mark);
+                    search_context.forward_async(
+                        &iter,
+                        NOT_CANCELLABLE,
+                        clone!(
+                            #[weak]
+                            this,
+                            move |result| {
+                                match result {
+                                    Ok((start, end, _wrapped)) => {
+                                        this.update_search_position(Some((start, end)))
+                                    }
+                                    Err(_) => this.update_search_position(None),
+                                }
+                            }
+                        ),
+                    );
+                }
+            ));
+            actions.add_action(&action);
         }
 
         fn signals() -> &'static [Signal] {
@@ -163,6 +324,49 @@ mod imp {
     impl BinImpl for SheetEditor {}
 
     impl SheetEditor {
+        pub(super) fn set_search_context(&self, search_context: SearchContext) {
+            search_context.connect_occurrences_count_notify(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |search_context: &SearchContext| {
+                    let cnt = search_context.occurrences_count();
+                    this.search_occurrences.replace(Some(cnt));
+
+                    let has_occurrences = cnt > 0;
+                    this.search_prev_button.set_sensitive(has_occurrences);
+                    this.search_next_button.set_sensitive(has_occurrences);
+                    if !has_occurrences {
+                        this.search_position.replace(None);
+                        this.update_search_occurrence_text();
+                        return;
+                    }
+
+                    let mark = search_context.buffer().get_insert();
+                    let iter = search_context.buffer().iter_at_mark(&mark);
+                    search_context.forward_async(
+                        &iter,
+                        NOT_CANCELLABLE,
+                        clone!(
+                            #[weak]
+                            this,
+                            move |result| {
+                                match result {
+                                    Ok((start, end, _wrapped)) => {
+                                        this.update_search_position(Some((start, end)))
+                                    }
+                                    Err(_) => this.update_search_position(None),
+                                }
+                            }
+                        ),
+                    );
+                    this.update_search_occurrence_text();
+                }
+            ));
+            let search_settings = search_context.settings();
+            self.search_context.replace(Some(search_context));
+            self.search_settings.replace(Some(search_settings));
+        }
+
         pub(super) fn setup_filemon(&self) {
             let Some(ref mut file) = *self.file.borrow_mut() else {
                 panic!("SheetEditor file uninitialized");
@@ -182,6 +386,40 @@ mod imp {
             self.file_changed.set(false);
             self.filemon.replace(Some(filemon));
         }
+
+        fn update_search_position(&self, result: Option<(TextIter, TextIter)>) {
+            let Some((match_start, match_end)) = result else {
+                self.search_position.replace(None);
+                self.update_search_occurrence_text();
+                return;
+            };
+
+            let search_context_bind = self.search_context.borrow();
+            let search_context = search_context_bind.as_ref().unwrap();
+            let pos = search_context.occurrence_position(&match_start, &match_end);
+            self.search_position.replace(Some(pos));
+            self.update_search_occurrence_text();
+
+            search_context
+                .buffer()
+                .select_range(&match_start, &match_end);
+
+            let mark = search_context.buffer().get_insert();
+            self.source_view.scroll_to_mark(&mark, 0.0, false, 0.5, 0.5);
+        }
+
+        fn update_search_occurrence_text(&self) {
+            let pos = match self.search_position.get() {
+                Some(value) if value >= 1 => value.to_string(),
+                _ => "?".into(),
+            };
+            let cnt = match self.search_occurrences.get() {
+                Some(value) if value >= 0 => value.to_string(),
+                _ => "?".into(),
+            };
+            self.search_occurrences_label
+                .set_text(&format!("{pos} of {cnt}"));
+        }
     }
 }
 
@@ -189,14 +427,13 @@ use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use gtk::gio;
-use gtk::gio::FileCreateFlags;
 use gtk::glib;
 use gtk::prelude::*;
 use sourceview5::prelude::*;
 
-use gio::Cancellable;
+use gio::{Cancellable, FileCreateFlags};
 use glib::Object;
-use sourceview5::{Buffer, LanguageManager, StyleSchemeManager};
+use sourceview5::{Buffer, LanguageManager, SearchContext, SearchSettings, StyleSchemeManager};
 
 #[cfg(feature = "installed")]
 use crate::APP_ID;
@@ -219,12 +456,17 @@ impl SheetEditor {
         let buffer = Buffer::with_language(&lang);
         buffer.set_text(&text);
 
+        let search_settings = SearchSettings::default();
+        search_settings.set_wrap_around(true);
+        let search_context = SearchContext::new(&buffer, Some(&search_settings));
+
         let this: Self = Object::builder().build();
         this.load_buffer_style_scheme(&buffer);
         this.imp().file.replace(Some(file));
         this.imp().path.replace(Some(path));
         this.imp().source_view.set_monospace(true);
         this.imp().source_view.set_buffer(Some(&buffer));
+        this.imp().set_search_context(search_context);
         this.imp().setup_filemon();
         Ok(this)
     }
