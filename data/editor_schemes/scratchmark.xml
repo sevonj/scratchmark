@@ -5,6 +5,9 @@
 
   <!-- https://gitlab.gnome.org/GNOME/gtksourceview/-/blob/master/data/language-specs/markdown.lang -->
 
+  <!--style name="selection" foreground="#" background="#" /-->
+  <style name="search-match" foreground="#000000" background="#e5a50a77" /> 
+
   <!-- transparent bg -->
   <style name="text" background="#00000000" />
 

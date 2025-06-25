@@ -13,7 +13,7 @@ mod imp {
         AboutDialog, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView,
         Toast, ToastOverlay, ToolbarView,
     };
-    use gio::{Cancellable, Settings};
+    use gio::{Cancellable, Settings, SimpleActionGroup};
     use gtk::{Builder, Button, CompositeTemplate, MenuButton};
 
     use crate::APP_ID;
@@ -385,6 +385,23 @@ mod imp {
                 }
             ));
             obj.add_action(&action);
+
+            let editor_actions = SimpleActionGroup::new();
+            obj.insert_action_group("editor", Some(&editor_actions));
+            let action = gio::SimpleAction::new("search-toggle", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_action, _parameter| {
+                    let sheet_editor_opt = this.sheet_editor.borrow();
+                    if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
+                        sheet_editor
+                            .activate_action("editor.search-toggle", Some(&false.to_variant()))
+                            .unwrap();
+                    }
+                }
+            ));
+            editor_actions.add_action(&action);
 
             obj.load_state();
         }

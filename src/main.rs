@@ -30,6 +30,7 @@ fn setup_accels(app: &adw::Application) {
     app.set_accels_for_action("win.file-close", &["<Ctrl>W"]);
     app.set_accels_for_action("win.file-new", &["<Ctrl>N"]);
     app.set_accels_for_action("win.file-rename-open", &["F2"]);
+    app.set_accels_for_action("editor.search-toggle", &["<Ctrl>F"]);
     app.set_accels_for_action("win.library-refresh", &["F5"]);
 
     app.set_accels_for_action("win.toggle-sidebar", &["F9"]);
