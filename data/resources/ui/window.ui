@@ -41,9 +41,10 @@
                             <property name="show-start-title-buttons">False</property>
                             <property name="show-end-title-buttons">True</property>
                             <child type="start">
-                              <object class="GtkButton" id="sidebar_toggle">
+                              <object class="GtkButton">
                                 <property name="icon-name">sidebar-show-symbolic</property>
                                 <property name="tooltip-text" translatable="yes">Toggle Sidebar (F9)</property>
+                                <property name="action-name">win.toggle-sidebar</property>
                               </object>
                             </child>
                             <child type="start">
@@ -61,7 +62,7 @@
                               </object>
                             </child>
                             <child type="end">
-                              <object class="GtkMenuButton" id="primary_menu_button">
+                              <object class="GtkMenuButton">
                                 <property name="primary">True</property>
                                 <property name="icon-name">open-menu-symbolic</property>
                                 <property name="tooltip-text" translatable="yes">Menu</property>

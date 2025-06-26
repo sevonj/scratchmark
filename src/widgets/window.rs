@@ -30,36 +30,32 @@ mod imp {
     #[template(resource = "/org/scratchmark/Scratchmark/ui/window.ui")]
     pub struct Window {
         #[template_child]
-        pub(super) top_split: TemplateChild<OverlaySplitView>,
+        top_split: TemplateChild<OverlaySplitView>,
 
         #[template_child]
-        pub(super) sidebar_page: TemplateChild<NavigationPage>,
+        sidebar_page: TemplateChild<NavigationPage>,
         #[template_child]
-        pub(super) sidebar_header_bar: TemplateChild<HeaderBar>,
+        sidebar_header_bar: TemplateChild<HeaderBar>,
         #[template_child]
-        pub(super) sidebar_toggle: TemplateChild<Button>,
-        #[template_child]
-        pub(super) sidebar_toolbar_view: TemplateChild<ToolbarView>,
+        sidebar_toolbar_view: TemplateChild<ToolbarView>,
 
         #[template_child]
-        pub(super) main_page: TemplateChild<NavigationPage>,
+        main_page: TemplateChild<NavigationPage>,
         #[template_child]
         pub(super) main_toolbar_view: TemplateChild<ToolbarView>,
         #[template_child]
-        pub(super) main_header_revealer: TemplateChild<Revealer>,
+        main_header_revealer: TemplateChild<Revealer>,
         #[template_child]
         main_header_bar: TemplateChild<HeaderBar>,
 
         #[template_child]
         pub(super) toast_overlay: TemplateChild<ToastOverlay>,
         #[template_child]
-        pub(super) new_folder_button: TemplateChild<MenuButton>,
+        new_folder_button: TemplateChild<MenuButton>,
         #[template_child]
-        pub(super) new_sheet_button: TemplateChild<MenuButton>,
+        new_sheet_button: TemplateChild<MenuButton>,
         #[template_child]
-        pub(super) primary_menu_button: TemplateChild<MenuButton>,
-        #[template_child]
-        pub(super) unfullscreen_button: TemplateChild<Button>,
+        unfullscreen_button: TemplateChild<Button>,
 
         pub(super) library_browser: LibraryBrowser,
         pub(super) sheet_editor: RefCell<Option<SheetEditor>>,
@@ -97,14 +93,6 @@ mod imp {
             obj.set_help_overlay(Some(&shortcuts));
 
             let top_split = self.top_split.get();
-            self.sidebar_toggle.connect_clicked(clone!(
-                #[weak]
-                top_split,
-                move |_| {
-                    let collapsed = !top_split.is_collapsed();
-                    top_split.set_collapsed(collapsed);
-                }
-            ));
 
             self.library_browser.connect_closure(
                 "sheet-selected",
