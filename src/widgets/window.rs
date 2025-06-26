@@ -663,11 +663,15 @@ impl Window {
     }
 
     fn save_state(&self) -> Result<(), glib::BoolError> {
-        if let Some(editor) = self.imp().sheet_editor.borrow().as_ref() {
-            let open_sheet_path = editor.path();
-            self.settings()
-                .set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
-        }
+        let open_sheet_path = self
+            .imp()
+            .sheet_editor
+            .borrow()
+            .as_ref()
+            .map(|e| e.path())
+            .unwrap_or_default();
+        self.settings()
+            .set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
 
         let expanded_folders = self.imp().library_browser.expanded_folder_paths();
         self.settings()
