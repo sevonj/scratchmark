@@ -47,6 +47,8 @@ mod imp {
         pub(super) main_toolbar_view: TemplateChild<ToolbarView>,
         #[template_child]
         pub(super) main_header_revealer: TemplateChild<Revealer>,
+        #[template_child]
+        main_header_bar: TemplateChild<HeaderBar>,
 
         #[template_child]
         pub(super) toast_overlay: TemplateChild<ToastOverlay>,
@@ -335,11 +337,22 @@ mod imp {
             motion_controller.connect_motion(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_controller, _x, y| {
+                move |_controller, x, y| {
                     if !this.obj().is_fullscreen() {
                         return;
                     }
-                    const REVEAL_THRESHOLD: f64 = 1.0;
+
+                    let root = this.obj().root().unwrap();
+                    let bounds = this.main_header_bar.compute_bounds(&root).unwrap();
+                    let x_start = bounds.x() as f64;
+                    let x_end = (bounds.x() + bounds.width()) as f64;
+
+                    if x < x_start || x_end < x {
+                        this.main_header_revealer.set_reveal_child(false);
+                        return;
+                    }
+
+                    const REVEAL_THRESHOLD: f64 = 50.0;
                     const HIDE_THRESHOLD: f64 = 120.0;
                     let revealed = this.main_header_revealer.reveals_child();
 
@@ -360,22 +373,21 @@ mod imp {
                 #[weak]
                 action_unfullscreen,
                 move |window| {
+                    let imp = window.imp();
                     if window.is_fullscreen() {
-                        window.imp().unfullscreen_button.set_visible(true);
-                        window.imp().main_header_revealer.set_reveal_child(false);
-                        window
-                            .imp()
-                            .main_toolbar_view
+                        imp.unfullscreen_button.set_visible(true);
+                        imp.main_header_revealer.set_reveal_child(false);
+                        imp.main_toolbar_view
                             .set_top_bar_style(adw::ToolbarStyle::Raised);
+                        imp.main_header_bar.set_show_end_title_buttons(false);
                         action_fullscreen.set_enabled(false);
                         action_unfullscreen.set_enabled(true);
                     } else {
-                        window.imp().unfullscreen_button.set_visible(false);
-                        window.imp().main_header_revealer.set_reveal_child(true);
-                        window
-                            .imp()
-                            .main_toolbar_view
+                        imp.unfullscreen_button.set_visible(false);
+                        imp.main_header_revealer.set_reveal_child(true);
+                        imp.main_toolbar_view
                             .set_top_bar_style(adw::ToolbarStyle::Flat);
+                        imp.main_header_bar.set_show_end_title_buttons(true);
                         action_fullscreen.set_enabled(true);
                         action_unfullscreen.set_enabled(false);
                     }

@@ -37,7 +37,9 @@
                       <object class="GtkRevealer" id="main_header_revealer">
                         <property name="reveal-child" translatable="no">True</property>
                         <child>
-                          <object class="AdwHeaderBar">
+                          <object class="AdwHeaderBar" id="main_header_bar">
+                            <property name="show-start-title-buttons">False</property>
+                            <property name="show-end-title-buttons">True</property>
                             <child type="start">
                               <object class="GtkButton" id="sidebar_toggle">
                                 <property name="icon-name">sidebar-show-symbolic</property>
