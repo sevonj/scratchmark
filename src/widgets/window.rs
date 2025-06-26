@@ -464,6 +464,9 @@ mod imp {
                 self.load_sheet(open_sheet_path);
             }
 
+            let show_sidebar = settings.boolean("library-sidebar-open");
+            self.top_split.set_collapsed(!show_sidebar);
+
             let library_expanded_folders = settings.strv("library-expanded-folders");
             for path in library_expanded_folders {
                 if let Some(folder) = self.library_browser.get_folder(&PathBuf::from(path)) {
@@ -482,6 +485,9 @@ mod imp {
                 .map(|e| e.path())
                 .unwrap_or_default();
             settings.set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
+
+            let show_sidebar = self.top_split.is_collapsed();
+            settings.set_boolean("library-sidebar-open", !show_sidebar)?;
 
             let expanded_folders = self.library_browser.expanded_folder_paths();
             settings.set_strv("library-expanded-folders", expanded_folders)?;
