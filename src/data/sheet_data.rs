@@ -13,6 +13,7 @@ mod imp {
     #[properties(wrapper_type = super::SheetObject)]
     pub struct SheetObject {
         #[property(name = "path", get, set, type = PathBuf, member = path)]
+        #[property(name = "depth", get, set, type = u32, member = depth)]
         #[property(name = "stem", get, set, type = String, member = stem)]
         pub data: RefCell<SheetData>,
     }
@@ -37,10 +38,11 @@ glib::wrapper! {
 }
 
 impl SheetObject {
-    pub fn new(path: PathBuf) -> Self {
+    pub fn new(path: PathBuf, depth: u32) -> Self {
         let stem = path.file_stem().unwrap().to_string_lossy().into_owned();
         Object::builder()
             .property("path", path)
+            .property("depth", depth)
             .property("stem", stem)
             .build()
     }
@@ -49,6 +51,7 @@ impl SheetObject {
 #[derive(Default, Debug)]
 pub struct SheetData {
     pub path: PathBuf,
+    pub depth: u32,
     /// Use for display
     pub stem: String,
 }

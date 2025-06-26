@@ -13,7 +13,7 @@ mod imp {
     #[properties(wrapper_type = super::FolderObject)]
     pub struct FolderObject {
         #[property(name = "path", get, set, type = PathBuf, member = path)]
-        #[property(name = "root", get, set, type = bool, member = root)]
+        #[property(name = "depth", get, set, type = u32, member = depth)]
         #[property(name = "name", get, set, type = String, member = name)]
         pub data: RefCell<FolderData>,
     }
@@ -38,21 +38,24 @@ glib::wrapper! {
 }
 
 impl FolderObject {
-    pub fn new(path: PathBuf, root: bool) -> Self {
+    pub fn new(path: PathBuf, depth: u32) -> Self {
         let name = path.file_name().unwrap().to_string_lossy().into_owned();
         Object::builder()
             .property("path", path)
-            .property("root", root)
+            .property("depth", depth)
             .property("name", name)
             .build()
+    }
+
+    pub fn is_root(&self) -> bool {
+        self.depth() == 0
     }
 }
 
 #[derive(Default, Debug)]
 pub struct FolderData {
     pub path: PathBuf,
-    /// Root dir of library
-    pub root: bool,
+    pub depth: u32,
     /// Use for display
     pub name: String,
 }

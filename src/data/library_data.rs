@@ -27,7 +27,7 @@ mod imp {
     impl ObjectImpl for LibraryObject {}
 }
 
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::path::PathBuf;
 
 use adw::subclass::prelude::ObjectSubclassIsExt;
@@ -57,12 +57,12 @@ impl LibraryObject {
         self.prune();
 
         let library_path = imp.data.borrow().path.clone();
-        let mut search_stack = vec![library_path];
-        let mut found_folders = vec![];
-        let mut found_files = vec![];
+        let mut search_stack: Vec<(PathBuf, u32)> = vec![(library_path, 0)];
+        let mut found_folders: Vec<(PathBuf, u32)> = vec![];
+        let mut found_files: Vec<(PathBuf, u32)> = vec![];
 
         loop {
-            let Some(folder) = search_stack.pop() else {
+            let Some((folder, depth)) = search_stack.pop() else {
                 break;
             };
             let Ok(entries) = folder.read_dir() else {
@@ -76,33 +76,33 @@ impl LibraryObject {
                     continue;
                 };
                 if metadata.is_dir() {
-                    search_stack.push(entry.path());
-                    found_folders.push(entry.path());
+                    search_stack.push((entry.path(), depth + 1));
+                    found_folders.push((entry.path(), depth + 1));
                 } else {
-                    found_files.push(entry.path());
+                    found_files.push((entry.path(), depth + 1));
                 }
             }
         }
 
         let mut data = imp.data.borrow_mut();
-        for path in found_folders {
+        for (path, depth) in found_folders {
             if data.folders.contains_key(&path) {
                 continue;
             }
-            data.folders.insert(path, FolderState::default());
+            data.folders.insert(path, FolderState::new(depth));
         }
 
-        for path in found_files {
+        for (path, depth) in found_files {
             if !path
                 .extension()
                 .is_some_and(|ext| ext.eq_ignore_ascii_case("md"))
             {
                 continue;
             }
-            if data.sheets.contains(&path) {
+            if data.sheets.contains_key(&path) {
                 continue;
             }
-            data.sheets.insert(path);
+            data.sheets.insert(path, SheetState::new(depth));
         }
     }
 
@@ -117,7 +117,7 @@ impl LibraryObject {
             self.imp().data.borrow_mut().folders.remove(&path);
         }
         let mut dead_sheets = vec![];
-        for path in self.imp().data.borrow_mut().sheets.iter() {
+        for (path, _) in self.imp().data.borrow_mut().sheets.iter() {
             if !path.exists() {
                 dead_sheets.push(path.clone());
             }
@@ -128,14 +128,25 @@ impl LibraryObject {
     }
 }
 
-#[derive(Default, Debug)]
+#[derive(Debug)]
 pub struct FolderState {
-    pub expanded: bool,
+    pub depth: u32,
 }
 
 impl FolderState {
-    pub fn expanded() -> Self {
-        Self { expanded: true }
+    pub fn new(depth: u32) -> Self {
+        Self { depth }
+    }
+}
+
+#[derive(Debug)]
+pub struct SheetState {
+    pub depth: u32,
+}
+
+impl SheetState {
+    pub fn new(depth: u32) -> Self {
+        Self { depth }
     }
 }
 
@@ -146,5 +157,5 @@ pub struct LibraryData {
     /// Every folder in the library, except root
     pub folders: HashMap<PathBuf, FolderState>,
     /// Every sheet in the library
-    pub sheets: HashSet<PathBuf>,
+    pub sheets: HashMap<PathBuf, SheetState>,
 }

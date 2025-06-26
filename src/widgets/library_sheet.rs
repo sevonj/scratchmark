@@ -32,6 +32,8 @@ mod imp {
         pub(super) button: TemplateChild<ToggleButton>,
         #[template_child]
         pub(super) sheet_name_label: TemplateChild<Label>,
+        #[template_child]
+        pub(super) title_row: TemplateChild<gtk::Box>,
 
         pub(super) sheet_object: RefCell<Option<SheetObject>>,
         pub(super) bindings: RefCell<Vec<Binding>>,
@@ -309,6 +311,9 @@ impl LibrarySheet {
             .unwrap()
             .set_path(path);
 
+        self.imp()
+            .title_row
+            .set_margin_start(8 * data.depth() as i32);
         let title_label = self.imp().sheet_name_label.get();
         let mut bindings = self.imp().bindings.borrow_mut();
 

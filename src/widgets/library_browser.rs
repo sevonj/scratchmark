@@ -62,7 +62,7 @@ mod imp {
 
             let vbox = &self.library_root_vbox;
             let root_folder =
-                LibraryFolder::new_root(&FolderObject::new(path_builtin_library(), true));
+                LibraryFolder::new_root(&FolderObject::new(path_builtin_library(), 0));
             vbox.append(&root_folder);
             self.connect_folder(root_folder);
         }
@@ -115,9 +115,10 @@ mod imp {
 
             // Add new
             let mut added_folders = vec![];
-            for (path, _folder_state) in lib.data().folders.iter() {
+            for (path, folder_state) in lib.data().folders.iter() {
                 if !self.folders.borrow().contains_key(path) {
-                    let folder = LibraryFolder::new(&FolderObject::new(path.clone(), false));
+                    let folder =
+                        LibraryFolder::new(&FolderObject::new(path.clone(), folder_state.depth));
                     self.connect_folder(folder.clone());
                     added_folders.push(folder);
                 }
@@ -129,9 +130,10 @@ mod imp {
                 parent.add_subfolder(folder.clone());
             }
 
-            for path in lib.data().sheets.iter() {
+            for (path, sheet_state) in lib.data().sheets.iter() {
                 if !self.sheets.borrow().contains_key(path) {
-                    let sheet = LibrarySheet::new(&SheetObject::new(path.clone()));
+                    let sheet =
+                        LibrarySheet::new(&SheetObject::new(path.clone(), sheet_state.depth));
                     self.connect_sheet(sheet.clone());
 
                     let parent_path = path.parent().unwrap();
@@ -164,7 +166,7 @@ mod imp {
                 }
             }
             for (path, sheet) in sheets.iter() {
-                if !lib.data().sheets.contains(path) {
+                if !lib.data().sheets.contains_key(path) {
                     dead_sheets.push(path.clone());
 
                     let parent_path = path.parent().unwrap();

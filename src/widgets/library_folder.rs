@@ -44,6 +44,8 @@ mod imp {
         pub(super) subdirs_vbox: TemplateChild<gtk::Box>,
         #[template_child]
         pub(super) sheets_vbox: TemplateChild<gtk::Box>,
+        #[template_child]
+        pub(super) title_row: TemplateChild<gtk::Box>,
 
         pub(super) folder_object: RefCell<Option<FolderObject>>,
         pub(super) bindings: RefCell<Vec<Binding>>,
@@ -461,7 +463,12 @@ impl LibraryFolder {
 
     // Is root folder of library
     pub fn is_root(&self) -> bool {
-        self.imp().folder_object.borrow().as_ref().unwrap().root()
+        self.imp()
+            .folder_object
+            .borrow()
+            .as_ref()
+            .unwrap()
+            .is_root()
     }
 
     /// Filepath
@@ -514,6 +521,9 @@ impl LibraryFolder {
             .unwrap()
             .set_path(path);
 
+        self.imp()
+            .title_row
+            .set_margin_start(8 * data.depth() as i32);
         let title_label = self.imp().title.get();
         let mut bindings = self.imp().bindings.borrow_mut();
 
