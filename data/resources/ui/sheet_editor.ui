@@ -82,10 +82,10 @@
                                 <property name="spacing">6</property>
                                 <child>
                                     <object class="GtkButton">
-                                        <property name="action-name">editor.search-toggle</property>
-                                        <property name="action-target">true</property>
                                         <property name="icon-name">system-search-symbolic</property>
                                         <property name="tooltip-text" translatable="yes">Search text</property>
+                                        <property name="action-name">editor.search-toggle</property>
+                                        <property name="action-target">true</property>
                                         <style>
                                             <class name="flat" />
                                             <class name="dim-label" />
@@ -94,9 +94,10 @@
                                     </object>
                                 </child>
                                 <child>
-                                    <object class="GtkButton" id="close_sheet_button">
+                                    <object class="GtkButton">
                                         <property name="icon-name">window-close-symbolic</property>
                                         <property name="tooltip-text" translatable="yes">Close sheet</property>
+                                        <property name="action-name">editor.close</property>
                                         <style>
                                             <class name="flat" />
                                             <class name="dim-label" />

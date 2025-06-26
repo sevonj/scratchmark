@@ -47,8 +47,6 @@ mod imp {
         search_next_button: TemplateChild<Button>,
         #[template_child]
         pub(super) file_changed_banner: TemplateChild<Banner>,
-        #[template_child]
-        pub(super) close_sheet_button: TemplateChild<Button>,
 
         pub(super) file: RefCell<Option<File>>,
         pub(super) filemon: RefCell<Option<FileMonitor>>,
@@ -117,14 +115,6 @@ mod imp {
                             });
                     this.update_search_position(Some((start, end)));
                     this.update_search_occurrence_text();
-                }
-            ));
-
-            self.close_sheet_button.get().connect_clicked(clone!(
-                #[weak]
-                obj,
-                move |_| {
-                    obj.emit_by_name::<()>("close-requested", &[]);
                 }
             ));
 
@@ -333,8 +323,8 @@ mod imp {
                     this.search_occurrences.replace(Some(cnt));
 
                     let has_occurrences = cnt > 0;
-                    this.search_prev_button.set_sensitive(has_occurrences);
-                    this.search_next_button.set_sensitive(has_occurrences);
+                    this.search_prev_button.set_sensitive(has_occurrences); // TODO: Disable action instead
+                    this.search_next_button.set_sensitive(has_occurrences); // TODO: Disable action instead
                     if !has_occurrences {
                         this.search_position.replace(None);
                         this.update_search_occurrence_text();
