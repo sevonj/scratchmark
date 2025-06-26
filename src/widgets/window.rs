@@ -13,18 +13,20 @@ mod imp {
         AboutDialog, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView,
         Toast, ToastOverlay, ToolbarView,
     };
-    use gio::{Cancellable, Settings, SimpleActionGroup};
+    use gio::{Cancellable, Settings, SimpleAction, SimpleActionGroup};
     use gtk::{Builder, Button, CompositeTemplate, EventControllerMotion, MenuButton, Revealer};
 
     use crate::APP_ID;
+    use crate::error::ScratchmarkError;
     use crate::util;
-    use crate::widgets::ItemCreatePopover;
-    use crate::widgets::LibraryFolder;
-    use crate::widgets::LibrarySheet;
-    use crate::widgets::SheetEditorPlaceholder;
+    use crate::widgets;
 
-    use super::LibraryBrowser;
-    use super::SheetEditor;
+    use widgets::ItemCreatePopover;
+    use widgets::LibraryBrowser;
+    use widgets::LibraryFolder;
+    use widgets::LibrarySheet;
+    use widgets::SheetEditor;
+    use widgets::SheetEditorPlaceholder;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/window.ui")]
@@ -42,14 +44,14 @@ mod imp {
         #[template_child]
         main_page: TemplateChild<NavigationPage>,
         #[template_child]
-        pub(super) main_toolbar_view: TemplateChild<ToolbarView>,
+        main_toolbar_view: TemplateChild<ToolbarView>,
         #[template_child]
         main_header_revealer: TemplateChild<Revealer>,
         #[template_child]
         main_header_bar: TemplateChild<HeaderBar>,
 
         #[template_child]
-        pub(super) toast_overlay: TemplateChild<ToastOverlay>,
+        toast_overlay: TemplateChild<ToastOverlay>,
         #[template_child]
         new_folder_button: TemplateChild<MenuButton>,
         #[template_child]
@@ -57,10 +59,10 @@ mod imp {
         #[template_child]
         unfullscreen_button: TemplateChild<Button>,
 
-        pub(super) library_browser: LibraryBrowser,
-        pub(super) sheet_editor: RefCell<Option<SheetEditor>>,
+        library_browser: LibraryBrowser,
+        sheet_editor: RefCell<Option<SheetEditor>>,
 
-        pub(super) settings: OnceCell<Settings>,
+        settings: OnceCell<Settings>,
     }
 
     #[glib::object_subclass]
@@ -82,11 +84,17 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
-            obj.setup_settings();
+
             #[cfg(debug_assertions)]
             {
                 obj.add_css_class("devel");
             }
+
+            let settings = Settings::new(APP_ID);
+            self.settings.set(settings).expect(
+                "`settings` should not be set before calling `setup_settings`.
+                ",
+            );
 
             let builder = Builder::from_resource("/org/scratchmark/Scratchmark/ui/shortcuts.ui");
             let shortcuts = builder.object("help_overlay").unwrap();
@@ -98,10 +106,10 @@ mod imp {
                 "sheet-selected",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
+                    #[weak(rename_to = this)]
+                    self,
                     move |_: LibraryBrowser, path: PathBuf| {
-                        obj.load_sheet(path);
+                        this.load_sheet(path);
                     }
                 ),
             );
@@ -156,7 +164,7 @@ mod imp {
                                 folder,
                                 move |_: AlertDialog, response: String| {
                                     if response == "commit-delete" {
-                                        obj.imp().force_delete_folder(folder);
+                                        obj.imp().delete_folder(folder);
                                     }
                                 }
                             ),
@@ -260,7 +268,7 @@ mod imp {
                                 sheet,
                                 move |_: AlertDialog, response: String| {
                                     if response == "commit-delete" {
-                                        obj.imp().force_delete_sheet(sheet);
+                                        obj.imp().delete_sheet(sheet);
                                     }
                                 }
                             ),
@@ -277,11 +285,9 @@ mod imp {
                 "committed",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
-                    move |_popover: ItemCreatePopover, path: PathBuf| {
-                        obj.create_folder(path);
-                    }
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_popover: ItemCreatePopover, path: PathBuf| this.create_folder(path)
                 ),
             );
 
@@ -291,11 +297,9 @@ mod imp {
                 "committed",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
-                    move |_popover: ItemCreatePopover, path: PathBuf| {
-                        obj.create_sheet(path);
-                    }
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_popover: ItemCreatePopover, path: PathBuf| this.create_sheet(path)
                 ),
             );
 
@@ -306,21 +310,406 @@ mod imp {
             self.update_window_title();
 
             obj.connect_close_request(clone!(
-                #[weak]
-                obj,
+                #[weak(rename_to = this)]
+                self,
                 #[upgrade_or]
                 glib::Propagation::Proceed,
-                move |_: &super::Window| {
-                    obj.save_state().expect("Failed to save app state");
-                    if let Err(e) = obj.close_editor() {
-                        let toast = Toast::new(&e.to_string());
-                        obj.imp().toast_overlay.add_toast(toast);
-                        return glib::Propagation::Stop;
-                    }
-                    glib::Propagation::Proceed
-                }
+                move |_| this.on_close_request()
             ));
 
+            let action_fullscreen = gio::SimpleAction::new("fullscreen", None);
+            action_fullscreen.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_, _| obj.fullscreen()
+            ));
+            obj.add_action(&action_fullscreen);
+
+            let action_unfullscreen = gio::SimpleAction::new("unfullscreen", None);
+            action_unfullscreen.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_, _| obj.unfullscreen()
+            ));
+            obj.add_action(&action_unfullscreen);
+
+            obj.connect_fullscreened_notify(clone!(
+                #[weak (rename_to = this)]
+                self,
+                #[weak]
+                action_fullscreen,
+                #[weak]
+                action_unfullscreen,
+                move |_| this.on_fullscreen_changed(action_fullscreen, action_unfullscreen)
+            ));
+            self.on_fullscreen_changed(action_fullscreen, action_unfullscreen);
+            self.setup_fullscreen_headerbar();
+
+            let action = gio::SimpleAction::new("file-new", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.new_sheet_button.popup();
+                }
+            ));
+            obj.add_action(&action);
+
+            let action = gio::SimpleAction::new("file-close", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    if let Err(e) = this.close_editor() {
+                        let toast = Toast::new(&e.to_string());
+                        this.toast_overlay.add_toast(toast);
+                    }
+                }
+            ));
+            obj.add_action(&action);
+
+            let action = gio::SimpleAction::new("file-rename-open", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.library_browser.rename_selected_sheet();
+                }
+            ));
+            obj.add_action(&action);
+
+            let action = gio::SimpleAction::new("library-refresh", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.library_browser.refresh_content();
+                }
+            ));
+            obj.add_action(&action);
+
+            let action = gio::SimpleAction::new("toggle-sidebar", None);
+            action.connect_activate(clone!(
+                #[weak]
+                top_split,
+                move |_, _| {
+                    let collapsed = !top_split.is_collapsed();
+                    top_split.set_collapsed(collapsed);
+                }
+            ));
+            obj.add_action(&action);
+
+            let action = gio::SimpleAction::new("show-about", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.show_about();
+                }
+            ));
+            obj.add_action(&action);
+
+            let editor_actions = SimpleActionGroup::new();
+            obj.insert_action_group("editor", Some(&editor_actions));
+
+            let action = gio::SimpleAction::new("search-toggle", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_action, _parameter| {
+                    let sheet_editor_opt = this.sheet_editor.borrow();
+                    if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
+                        sheet_editor
+                            .activate_action("editor.search-toggle", Some(&false.to_variant()))
+                            .unwrap();
+                    }
+                }
+            ));
+            editor_actions.add_action(&action);
+
+            self.load_state();
+        }
+    }
+
+    impl WidgetImpl for Window {}
+    impl WindowImpl for Window {}
+    impl ApplicationWindowImpl for Window {}
+    impl AdwApplicationWindowImpl for Window {}
+
+    impl Window {
+        fn settings(&self) -> &Settings {
+            self.settings.get().expect("Settings uninitialized.")
+        }
+
+        fn update_window_title(&self) {
+            if let Some(editor) = self.sheet_editor.borrow().as_ref() {
+                if let Some(stem) = editor.path().file_stem() {
+                    self.main_page.set_title(&stem.to_string_lossy());
+                    return;
+                };
+            };
+            self.main_page.set_title("Scratchmark");
+        }
+
+        fn load_state(&self) {
+            let settings = self.settings();
+
+            let open_sheet_path = settings.string("open-sheet-path");
+            if !open_sheet_path.is_empty() {
+                let open_sheet_path = PathBuf::from(open_sheet_path);
+                if !open_sheet_path.exists() {
+                    let toast = Toast::new("Last open sheet has been moved or deleted.");
+                    self.toast_overlay.add_toast(toast);
+                }
+                self.load_sheet(open_sheet_path);
+            }
+
+            let library_expanded_folders = settings.strv("library-expanded-folders");
+            for path in library_expanded_folders {
+                if let Some(folder) = self.library_browser.get_folder(&PathBuf::from(path)) {
+                    folder.set_expanded(true);
+                }
+            }
+        }
+
+        fn save_state(&self) -> Result<(), glib::BoolError> {
+            let settings = self.settings();
+
+            let open_sheet_path = self
+                .sheet_editor
+                .borrow()
+                .as_ref()
+                .map(|e| e.path())
+                .unwrap_or_default();
+            settings.set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
+
+            let expanded_folders = self.library_browser.expanded_folder_paths();
+            settings.set_strv("library-expanded-folders", expanded_folders)?;
+
+            Ok(())
+        }
+
+        fn create_folder(&self, path: PathBuf) {
+            util::create_folder(&path);
+            self.library_browser.refresh_content();
+        }
+
+        fn create_sheet(&self, path: PathBuf) {
+            if let Err(e) = self.close_editor() {
+                let toast = Toast::new(&e.to_string());
+                self.toast_overlay.add_toast(toast);
+                return;
+            }
+            util::create_sheet_file(&path);
+            self.library_browser.refresh_content();
+            self.load_sheet(path);
+        }
+
+        fn load_sheet(&self, path: PathBuf) {
+            if let Err(e) = self.close_editor() {
+                let toast = Toast::new(&e.to_string());
+                self.toast_overlay.add_toast(toast);
+                return;
+            }
+
+            let editor = match SheetEditor::new(path.clone()) {
+                Ok(editor) => editor,
+                Err(e) => {
+                    let toast = Toast::new(&e.to_string());
+                    self.toast_overlay.add_toast(toast);
+                    self.update_window_title();
+                    return;
+                }
+            };
+
+            editor.connect_closure(
+                "close-requested",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_: SheetEditor| {
+                        if let Err(e) = this.close_editor() {
+                            let toast = Toast::new(&e.to_string());
+                            this.toast_overlay.add_toast(toast);
+                            return;
+                        }
+                    }
+                ),
+            );
+
+            editor.connect_closure(
+                "saved-as",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |editor: SheetEditor| {
+                        this.library_browser.refresh_content();
+                        this.library_browser.set_selected_sheet(Some(editor.path()));
+                        this.update_window_title();
+                    }
+                ),
+            );
+
+            self.main_toolbar_view.set_content(Some(&editor));
+            self.sheet_editor.replace(Some(editor));
+            self.library_browser.set_selected_sheet(Some(path));
+            self.update_window_title();
+        }
+
+        fn trash_folder(&self, folder: LibraryFolder) {
+            assert!(!folder.is_root());
+
+            let path = folder
+                .path()
+                .canonicalize()
+                .expect("folder trash failed to canonicalize folder");
+            let parent_of_currently_open = self.sheet_editor.borrow().as_ref().is_some_and(|e| {
+                e.path()
+                    .canonicalize()
+                    .expect("folder delet trash to canonicalize sheet")
+                    .starts_with(&path)
+            });
+            if parent_of_currently_open {
+                if let Err(e) = self.close_editor() {
+                    let toast = Toast::new(&e.to_string());
+                    self.toast_overlay.add_toast(toast);
+                    return;
+                }
+            }
+            gio::File::for_path(path)
+                .trash(None::<&Cancellable>)
+                .expect("folder trash failed");
+            self.toast_overlay.add_toast(Toast::new("Moved to trash"));
+            self.library_browser.refresh_content();
+        }
+
+        fn trash_sheet(&self, sheet: LibrarySheet) {
+            let path = sheet.path();
+            let currently_open = self
+                .sheet_editor
+                .borrow()
+                .as_ref()
+                .is_some_and(|e| e.path() == path);
+            if currently_open {
+                if let Err(e) = self.close_editor() {
+                    let toast = Toast::new(&e.to_string());
+                    self.toast_overlay.add_toast(toast);
+                    return;
+                }
+            }
+            gio::File::for_path(path)
+                .trash(None::<&Cancellable>)
+                .expect("folder trash failed");
+            self.toast_overlay.add_toast(Toast::new("Moved to trash"));
+            self.library_browser.refresh_content();
+        }
+
+        fn delete_folder(&self, folder: LibraryFolder) {
+            assert!(!folder.is_root());
+
+            let path = folder
+                .path()
+                .canonicalize()
+                .expect("folder delet failed to canonicalize folder");
+            let parent_of_currently_open = self.sheet_editor.borrow().as_ref().is_some_and(|e| {
+                e.path()
+                    .canonicalize()
+                    .expect("folder delet failed to canonicalize sheet")
+                    .starts_with(&path)
+            });
+            if parent_of_currently_open {
+                if let Err(e) = self.close_editor() {
+                    let toast = Toast::new(&e.to_string());
+                    self.toast_overlay.add_toast(toast);
+                    return;
+                }
+            }
+            std::fs::remove_dir_all(path).expect("folder delet failed");
+            self.library_browser.refresh_content();
+        }
+
+        fn delete_sheet(&self, sheet: LibrarySheet) {
+            let path = sheet.path();
+            let currently_open = self
+                .sheet_editor
+                .borrow()
+                .as_ref()
+                .is_some_and(|e| e.path() == path);
+            if currently_open {
+                if let Err(e) = self.close_editor() {
+                    let toast = Toast::new(&e.to_string());
+                    self.toast_overlay.add_toast(toast);
+                    return;
+                }
+            }
+            std::fs::remove_file(path).expect("file delet failed");
+            self.library_browser.refresh_content();
+        }
+
+        fn close_editor(&self) -> Result<(), ScratchmarkError> {
+            if let Some(editor) = self.sheet_editor.borrow_mut().as_ref() {
+                editor.save()?;
+            }
+            self.sheet_editor.replace(None);
+
+            self.main_toolbar_view
+                .set_content(Some(&SheetEditorPlaceholder::default()));
+            self.update_window_title();
+            self.library_browser.set_selected_sheet(None);
+            Ok(())
+        }
+
+        fn show_about(&self) {
+            let obj = self.obj();
+            let dialog = AboutDialog::new();
+            dialog.set_application_icon(APP_ID);
+            dialog.set_application_name("Scratchmark");
+            dialog.set_developer_name("Sevonj");
+            dialog.set_issue_url("https://github.com/sevonj/scratchmark/issues/");
+            dialog.set_version(env!("CARGO_PKG_VERSION"));
+            dialog.set_website("https://github.com/sevonj/scratchmark/");
+            dialog.set_support_url("https://github.com/sevonj/scratchmark/discussions/");
+            dialog.present(Some(&*obj));
+        }
+
+        /// App quit
+        fn on_close_request(&self) -> glib::Propagation {
+            self.save_state().expect("Failed to save app state");
+            if let Err(e) = self.close_editor() {
+                let toast = Toast::new(&e.to_string());
+                self.toast_overlay.add_toast(toast);
+                return glib::Propagation::Stop;
+            }
+            glib::Propagation::Proceed
+        }
+
+        fn on_fullscreen_changed(
+            &self,
+            action_fullscreen: SimpleAction,
+            action_unfullscreen: SimpleAction,
+        ) {
+            if self.obj().is_fullscreen() {
+                self.unfullscreen_button.set_visible(true);
+                self.main_header_revealer.set_reveal_child(false);
+                self.main_toolbar_view
+                    .set_top_bar_style(adw::ToolbarStyle::Raised);
+                self.main_header_bar.set_show_end_title_buttons(false);
+                action_fullscreen.set_enabled(false);
+                action_unfullscreen.set_enabled(true);
+            } else {
+                self.unfullscreen_button.set_visible(false);
+                self.main_header_revealer.set_reveal_child(true);
+                self.main_toolbar_view
+                    .set_top_bar_style(adw::ToolbarStyle::Flat);
+                self.main_header_bar.set_show_end_title_buttons(true);
+                action_fullscreen.set_enabled(true);
+                action_unfullscreen.set_enabled(false);
+            }
+        }
+
+        fn setup_fullscreen_headerbar(&self) {
             let motion_controller = EventControllerMotion::new();
             motion_controller.connect_motion(clone!(
                 #[weak(rename_to = this)]
@@ -351,273 +740,15 @@ mod imp {
                     }
                 }
             ));
-            obj.add_controller(motion_controller);
-
-            let action_fullscreen = gio::SimpleAction::new("fullscreen", None);
-            let action_unfullscreen = gio::SimpleAction::new("unfullscreen", None);
-            obj.connect_fullscreened_notify(clone!(
-                #[weak]
-                action_fullscreen,
-                #[weak]
-                action_unfullscreen,
-                move |window| {
-                    let imp = window.imp();
-                    if window.is_fullscreen() {
-                        imp.unfullscreen_button.set_visible(true);
-                        imp.main_header_revealer.set_reveal_child(false);
-                        imp.main_toolbar_view
-                            .set_top_bar_style(adw::ToolbarStyle::Raised);
-                        imp.main_header_bar.set_show_end_title_buttons(false);
-                        action_fullscreen.set_enabled(false);
-                        action_unfullscreen.set_enabled(true);
-                    } else {
-                        imp.unfullscreen_button.set_visible(false);
-                        imp.main_header_revealer.set_reveal_child(true);
-                        imp.main_toolbar_view
-                            .set_top_bar_style(adw::ToolbarStyle::Flat);
-                        imp.main_header_bar.set_show_end_title_buttons(true);
-                        action_fullscreen.set_enabled(true);
-                        action_unfullscreen.set_enabled(false);
-                    }
-                }
-            ));
-            action_fullscreen.connect_activate(clone!(
-                #[weak]
-                obj,
-                move |_, _| {
-                    obj.fullscreen();
-                }
-            ));
-            action_unfullscreen.connect_activate(clone!(
-                #[weak]
-                obj,
-                move |_, _| {
-                    obj.unfullscreen();
-                }
-            ));
-            obj.add_action(&action_fullscreen);
-            obj.add_action(&action_unfullscreen);
-
-            let action = gio::SimpleAction::new("file-new", None);
-            action.connect_activate(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |_, _| {
-                    this.new_sheet_button.popup();
-                }
-            ));
-            obj.add_action(&action);
-            let action = gio::SimpleAction::new("file-close", None);
-            action.connect_activate(clone!(
-                #[weak]
-                obj,
-                move |_, _| {
-                    if let Err(e) = obj.close_editor() {
-                        let toast = Toast::new(&e.to_string());
-                        obj.imp().toast_overlay.add_toast(toast);
-                    }
-                }
-            ));
-            obj.add_action(&action);
-            let action = gio::SimpleAction::new("file-rename-open", None);
-            action.connect_activate(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |_, _| {
-                    this.library_browser.rename_selected_sheet();
-                }
-            ));
-            obj.add_action(&action);
-            let action = gio::SimpleAction::new("library-refresh", None);
-            action.connect_activate(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |_, _| {
-                    this.library_browser.refresh_content();
-                }
-            ));
-            obj.add_action(&action);
-            let action = gio::SimpleAction::new("toggle-sidebar", None);
-            action.connect_activate(clone!(
-                #[weak]
-                top_split,
-                move |_, _| {
-                    let collapsed = !top_split.is_collapsed();
-                    top_split.set_collapsed(collapsed);
-                }
-            ));
-            obj.add_action(&action);
-            let action = gio::SimpleAction::new("show-about", None);
-            action.connect_activate(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |_, _| {
-                    this.show_about();
-                }
-            ));
-            obj.add_action(&action);
-
-            let editor_actions = SimpleActionGroup::new();
-            obj.insert_action_group("editor", Some(&editor_actions));
-            let action = gio::SimpleAction::new("search-toggle", None);
-            action.connect_activate(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |_action, _parameter| {
-                    let sheet_editor_opt = this.sheet_editor.borrow();
-                    if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
-                        sheet_editor
-                            .activate_action("editor.search-toggle", Some(&false.to_variant()))
-                            .unwrap();
-                    }
-                }
-            ));
-            editor_actions.add_action(&action);
-
-            obj.load_state();
-        }
-    }
-
-    impl WidgetImpl for Window {}
-    impl WindowImpl for Window {}
-    impl ApplicationWindowImpl for Window {}
-    impl AdwApplicationWindowImpl for Window {}
-
-    impl Window {
-        pub(super) fn update_window_title(&self) {
-            if let Some(editor) = self.sheet_editor.borrow().as_ref() {
-                if let Some(stem) = editor.path().file_stem() {
-                    self.main_page.set_title(&stem.to_string_lossy());
-                    return;
-                };
-            };
-            self.main_page.set_title("Scratchmark");
-        }
-
-        fn trash_folder(&self, folder: LibraryFolder) {
-            assert!(!folder.is_root());
-
-            let path = folder
-                .path()
-                .canonicalize()
-                .expect("folder trash failed to canonicalize folder");
-            let parent_of_currently_open = self.sheet_editor.borrow().as_ref().is_some_and(|e| {
-                e.path()
-                    .canonicalize()
-                    .expect("folder delet trash to canonicalize sheet")
-                    .starts_with(&path)
-            });
-            if parent_of_currently_open {
-                if let Err(e) = self.obj().close_editor() {
-                    let toast = Toast::new(&e.to_string());
-                    self.toast_overlay.add_toast(toast);
-                    return;
-                }
-            }
-            gio::File::for_path(path)
-                .trash(None::<&Cancellable>)
-                .expect("folder trash failed");
-            self.toast_overlay.add_toast(Toast::new("Moved to trash"));
-            self.library_browser.refresh_content();
-        }
-
-        fn trash_sheet(&self, sheet: LibrarySheet) {
-            let path = sheet.path();
-            let currently_open = self
-                .sheet_editor
-                .borrow()
-                .as_ref()
-                .is_some_and(|e| e.path() == path);
-            if currently_open {
-                if let Err(e) = self.obj().close_editor() {
-                    let toast = Toast::new(&e.to_string());
-                    self.toast_overlay.add_toast(toast);
-                    return;
-                }
-            }
-            gio::File::for_path(path)
-                .trash(None::<&Cancellable>)
-                .expect("folder trash failed");
-            self.toast_overlay.add_toast(Toast::new("Moved to trash"));
-            self.library_browser.refresh_content();
-        }
-
-        fn force_delete_folder(&self, folder: LibraryFolder) {
-            assert!(!folder.is_root());
-
-            let path = folder
-                .path()
-                .canonicalize()
-                .expect("folder delet failed to canonicalize folder");
-            let parent_of_currently_open = self.sheet_editor.borrow().as_ref().is_some_and(|e| {
-                e.path()
-                    .canonicalize()
-                    .expect("folder delet failed to canonicalize sheet")
-                    .starts_with(&path)
-            });
-            if parent_of_currently_open {
-                if let Err(e) = self.obj().close_editor() {
-                    let toast = Toast::new(&e.to_string());
-                    self.toast_overlay.add_toast(toast);
-                    return;
-                }
-            }
-            std::fs::remove_dir_all(path).expect("folder delet failed");
-            self.library_browser.refresh_content();
-        }
-
-        fn force_delete_sheet(&self, sheet: LibrarySheet) {
-            let path = sheet.path();
-            let currently_open = self
-                .sheet_editor
-                .borrow()
-                .as_ref()
-                .is_some_and(|e| e.path() == path);
-            if currently_open {
-                if let Err(e) = self.obj().close_editor() {
-                    let toast = Toast::new(&e.to_string());
-                    self.toast_overlay.add_toast(toast);
-                    return;
-                }
-            }
-            std::fs::remove_file(path).expect("file delet failed");
-            self.library_browser.refresh_content();
-        }
-
-        fn show_about(&self) {
-            let obj = self.obj();
-            let dialog = AboutDialog::new();
-            dialog.set_application_icon(APP_ID);
-            dialog.set_application_name("Scratchmark");
-            dialog.set_developer_name("Sevonj");
-            dialog.set_issue_url("https://github.com/sevonj/scratchmark/issues/");
-            dialog.set_version(env!("CARGO_PKG_VERSION"));
-            dialog.set_website("https://github.com/sevonj/scratchmark/");
-            dialog.set_support_url("https://github.com/sevonj/scratchmark/discussions/");
-            dialog.present(Some(&*obj));
+            self.obj().add_controller(motion_controller);
         }
     }
 }
 
-use std::path::PathBuf;
-
-use adw::prelude::*;
-use adw::subclass::prelude::*;
-use glib::closure_local;
 use gtk::gio;
 use gtk::glib;
 
-use adw::Toast;
-use gio::Settings;
 use glib::Object;
-
-use crate::APP_ID;
-use crate::error::ScratchmarkError;
-use crate::util;
-
-use super::LibraryBrowser;
-use super::SheetEditor;
-use super::SheetEditorPlaceholder;
 
 glib::wrapper! {
     pub struct Window(ObjectSubclass<imp::Window>)
@@ -629,138 +760,5 @@ glib::wrapper! {
 impl Window {
     pub fn new(app: &adw::Application) -> Self {
         Object::builder().property("application", app).build()
-    }
-
-    fn settings(&self) -> &Settings {
-        self.imp().settings.get().expect("Settings uninitialized.")
-    }
-
-    fn setup_settings(&self) {
-        let settings = Settings::new(APP_ID);
-        self.imp()
-            .settings
-            .set(settings)
-            .expect("`settings` should not be set before calling `setup_settings`.");
-    }
-
-    fn load_state(&self) {
-        let open_sheet_path = self.settings().string("open-sheet-path");
-        if !open_sheet_path.is_empty() {
-            let open_sheet_path = PathBuf::from(open_sheet_path);
-            if !open_sheet_path.exists() {
-                let toast = Toast::new("Last open sheet has been moved or deleted.");
-                self.imp().toast_overlay.add_toast(toast);
-            }
-            self.load_sheet(open_sheet_path);
-        }
-
-        let library_expanded_folders = self.settings().strv("library-expanded-folders");
-        for path in library_expanded_folders {
-            if let Some(folder) = self.imp().library_browser.get_folder(&PathBuf::from(path)) {
-                folder.set_expanded(true);
-            }
-        }
-    }
-
-    fn save_state(&self) -> Result<(), glib::BoolError> {
-        let open_sheet_path = self
-            .imp()
-            .sheet_editor
-            .borrow()
-            .as_ref()
-            .map(|e| e.path())
-            .unwrap_or_default();
-        self.settings()
-            .set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
-
-        let expanded_folders = self.imp().library_browser.expanded_folder_paths();
-        self.settings()
-            .set_strv("library-expanded-folders", expanded_folders)?;
-
-        Ok(())
-    }
-
-    fn load_sheet(&self, path: PathBuf) {
-        let imp = self.imp();
-        if let Err(e) = self.close_editor() {
-            let toast = Toast::new(&e.to_string());
-            imp.toast_overlay.add_toast(toast);
-            return;
-        }
-
-        let editor = match SheetEditor::new(path.clone()) {
-            Ok(editor) => editor,
-            Err(e) => {
-                let toast = Toast::new(&e.to_string());
-                imp.toast_overlay.add_toast(toast);
-                imp.update_window_title();
-                return;
-            }
-        };
-
-        editor.connect_closure(
-            "close-requested",
-            false,
-            closure_local!(
-                #[weak(rename_to = obj)]
-                self,
-                move |_: SheetEditor| {
-                    if let Err(e) = obj.close_editor() {
-                        let toast = Toast::new(&e.to_string());
-                        obj.imp().toast_overlay.add_toast(toast);
-                        return;
-                    }
-                }
-            ),
-        );
-
-        editor.connect_closure(
-            "saved-as",
-            false,
-            closure_local!(
-                #[weak]
-                imp,
-                move |editor: SheetEditor| {
-                    imp.library_browser.refresh_content();
-                    imp.library_browser.set_selected_sheet(Some(editor.path()));
-                    imp.update_window_title();
-                }
-            ),
-        );
-
-        imp.main_toolbar_view.set_content(Some(&editor));
-        imp.sheet_editor.replace(Some(editor));
-        imp.library_browser.set_selected_sheet(Some(path));
-        imp.update_window_title();
-    }
-
-    fn create_folder(&self, path: PathBuf) {
-        util::create_folder(&path);
-        self.imp().library_browser.refresh_content();
-    }
-
-    fn create_sheet(&self, path: PathBuf) {
-        if let Err(e) = self.close_editor() {
-            let toast = Toast::new(&e.to_string());
-            self.imp().toast_overlay.add_toast(toast);
-            return;
-        }
-        util::create_sheet_file(&path);
-        self.imp().library_browser.refresh_content();
-        self.load_sheet(path);
-    }
-
-    fn close_editor(&self) -> Result<(), ScratchmarkError> {
-        let imp = self.imp();
-        if let Some(editor) = imp.sheet_editor.borrow_mut().as_ref() {
-            editor.save()?;
-        }
-        imp.sheet_editor.replace(None);
-
-        imp.main_toolbar_view
-            .set_content(Some(&SheetEditorPlaceholder::default()));
-        self.imp().update_window_title();
-        self.imp().library_browser.set_selected_sheet(None);
-        Ok(())
     }
 }
