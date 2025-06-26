@@ -339,7 +339,15 @@ mod imp {
                     if !this.obj().is_fullscreen() {
                         return;
                     }
-                    this.main_header_revealer.set_reveal_child(y < 50.0);
+                    const REVEAL_THRESHOLD: f64 = 1.0;
+                    const HIDE_THRESHOLD: f64 = 120.0;
+                    let revealed = this.main_header_revealer.reveals_child();
+
+                    if revealed && y > HIDE_THRESHOLD {
+                        this.main_header_revealer.set_reveal_child(false);
+                    } else if !revealed && y < REVEAL_THRESHOLD {
+                        this.main_header_revealer.set_reveal_child(true);
+                    }
                 }
             ));
             obj.add_controller(motion_controller);
