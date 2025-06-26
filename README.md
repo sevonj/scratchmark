@@ -16,7 +16,7 @@ Scratchmark is a markdown editor designed both for keeping notes and writing. It
 
 Scratchmark is written in Rust and uses GTK4 + Libadwaita for UI.
 
-[➜ Project management](https://github.com/users/sevonj/projects/20)
+[➜ Project backlog](https://github.com/users/sevonj/projects/20)
 
 ### License
 
@@ -51,6 +51,8 @@ libgtk-4-dev build-essential libglib2.0-dev libadwaita-1-dev libgtksourceview-5-
 
 ### Flatpak
 
+Generating a Flatpak
+
 #### Dependencies
 
 You need Python3 with the following packages: 
@@ -73,4 +75,4 @@ Build & install:
 cd build-aux
 sh generate_flatpak.sh && sudo flatpak install -y Scratchmark.flatpak
 ```
-`generate_flatpak.sh` will download and run a python script from Flatpak's builder tools repository.
+Note: `generate_flatpak.sh` will download and run a python script from Flatpak's builder tools repository.
