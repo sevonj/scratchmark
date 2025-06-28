@@ -52,7 +52,13 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes" context="shortcut window">Search text</property>
-                <property name="action-name">editor.search-toggle</property>
+                <property name="action-name">editor.show-search</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Search and replace text</property>
+                <property name="action-name">editor.show-search-replace</property>
               </object>
             </child>
           </object>

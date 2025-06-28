@@ -412,20 +412,31 @@ mod imp {
             let editor_actions = SimpleActionGroup::new();
             obj.insert_action_group("editor", Some(&editor_actions));
 
-            let action = gio::SimpleAction::new("search-toggle", None);
-            action.connect_activate(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |_action, _parameter| {
-                    let sheet_editor_opt = this.sheet_editor.borrow();
-                    if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
-                        sheet_editor
-                            .activate_action("editor.search-toggle", Some(&false.to_variant()))
-                            .unwrap();
+            fn forward_action_to_editor(
+                this: &Window,
+                name: &str,
+                parameter_type: Option<&glib::VariantTy>,
+                editor_actions: &SimpleActionGroup,
+            ) {
+                let action = gio::SimpleAction::new(name, parameter_type);
+                let name = format!("editor.{name}");
+                action.connect_activate(clone!(
+                    #[weak]
+                    this,
+                    move |_action, param| {
+                        let sheet_editor_opt = this.sheet_editor.borrow();
+                        if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
+                            sheet_editor.activate_action(&name, param).expect(&name);
+                        }
                     }
-                }
-            ));
-            editor_actions.add_action(&action);
+                ));
+                editor_actions.add_action(&action);
+            }
+
+            forward_action_to_editor(self, "show-search", None, &editor_actions);
+            forward_action_to_editor(self, "show-search-replace", None, &editor_actions);
+            forward_action_to_editor(self, "hide-search", None, &editor_actions);
+            forward_action_to_editor(self, "shiftreturn", None, &editor_actions);
 
             self.load_state();
         }
