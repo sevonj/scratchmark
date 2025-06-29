@@ -3,8 +3,9 @@ mod error;
 mod util;
 mod widgets;
 
+use gtk::gio;
+use gtk::glib;
 use gtk::prelude::*;
-use gtk::{gio, glib};
 
 use widgets::Window;
 
