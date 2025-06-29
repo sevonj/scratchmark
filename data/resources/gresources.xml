@@ -13,4 +13,9 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/shortcuts.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>
   </gresource>
+  <gresource prefix="/org/scratchmark/Scratchmark">
+    <file preprocess="xml-stripblanks">icons/scalable/actions/match-words-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/regex-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/uppercase-symbolic.svg</file>
+  </gresource>
 </gresources>

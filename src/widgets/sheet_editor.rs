@@ -35,6 +35,12 @@ mod imp {
         #[template_child]
         search_entry: TemplateChild<Entry>,
         #[template_child]
+        search_match_case_toggle: TemplateChild<ToggleButton>,
+        #[template_child]
+        search_match_whole_words_toggle: TemplateChild<ToggleButton>,
+        #[template_child]
+        search_match_regex_toggle: TemplateChild<ToggleButton>,
+        #[template_child]
         search_replace_entry: TemplateChild<Entry>,
         #[template_child]
         search_occurrences_label: TemplateChild<Label>,
@@ -449,6 +455,21 @@ mod imp {
                 }
             ));
             let search_settings = search_context.settings();
+            self.search_match_case_toggle
+                .bind_property("active", &search_settings, "case-sensitive")
+                .bidirectional()
+                .sync_create()
+                .build();
+            self.search_match_whole_words_toggle
+                .bind_property("active", &search_settings, "at-word-boundaries")
+                .bidirectional()
+                .sync_create()
+                .build();
+            self.search_match_regex_toggle
+                .bind_property("active", &search_settings, "regex-enabled")
+                .bidirectional()
+                .sync_create()
+                .build();
             self.search_context.replace(Some(search_context));
             self.search_settings.replace(Some(search_settings));
         }

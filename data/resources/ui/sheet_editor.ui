@@ -25,18 +25,22 @@
                                         <property name="spacing">4</property>
                                         <child>
                                             <object class="GtkBox">
-                                                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-                                                <style>
-                                                    <class name="linked" />
-                                                </style>
+                                                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                                                 <child>
-                                                    <object class="GtkEntry" id="search_entry">
-                                                        <property name="primary-icon-name">edit-find-symbolic</property>
-                                                        <property name="placeholder-text" translatable="yes">Search</property>
+                                                    <object class="GtkBox">
+                                                        <style>
+                                                            <class name="linked" />
+                                                        </style>
+                                                        <child>
+                                                            <object class="GtkEntry" id="search_entry">
+                                                                <property name="primary-icon-name">edit-find-symbolic</property>
+                                                                <property name="placeholder-text" translatable="yes">Search</property>
+                                                            </object>
+                                                        </child>
+                                                        <child>
+                                                            <object class="AdwBin" />
+                                                        </child>
                                                     </object>
-                                                </child>
-                                                <child>
-                                                    <object class="AdwBin" />
                                                 </child>
                                             </object>
                                         </child>
@@ -55,7 +59,7 @@
                                         <child>
                                             <object class="GtkBox">
                                                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-                                                <property name="spacing">6</property>
+                                                <property name="spacing">4</property>
                                                 <child>
                                                     <object class="GtkBox">
                                                         <style>
@@ -64,6 +68,40 @@
                                                         <child>
                                                             <object class="AdwBin" />
                                                         </child>
+                                                        <child>
+                                                            <object class="GtkToggleButton" id="search_match_case_toggle">
+                                                                <property name="icon-name">uppercase-symbolic</property>
+                                                                <property name="tooltip-text" translatable="yes">Match case</property>
+                                                            </object>
+                                                        </child>
+                                                        <child>
+                                                            <object class="GtkToggleButton" id="search_match_whole_words_toggle">
+                                                                <property name="icon-name">match-words-symbolic</property>
+                                                                <property name="tooltip-text" translatable="yes">Whole words</property>
+                                                            </object>
+                                                        </child>
+                                                        <child>
+                                                            <object class="GtkToggleButton" id="search_match_regex_toggle">
+                                                                <property name="icon-name">regex-symbolic</property>
+                                                                <property name="tooltip-text" translatable="yes">Use regex</property>
+                                                            </object>
+                                                        </child>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkLabel" id="search_occurrences_label">
+                                                        <style>
+                                                            <class name="dimmed" />
+                                                        </style>
+                                                        <property name="label">?</property>
+                                                        <property name="width-request">72</property>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkBox">
+                                                        <style>
+                                                            <class name="linked" />
+                                                        </style>
                                                         <child>
                                                             <object class="GtkButton" id="search_prev_button">
                                                                 <property name="icon-name">go-up-symbolic</property>
@@ -78,15 +116,6 @@
                                                                 <property name="tooltip-text" translatable="yes">Next match (Return)</property>
                                                             </object>
                                                         </child>
-                                                    </object>
-                                                </child>
-                                                <child>
-                                                    <object class="GtkLabel" id="search_occurrences_label">
-                                                        <style>
-                                                            <class name="dimmed" />
-                                                        </style>
-                                                        <property name="label">?</property>
-                                                        <property name="width-request">96</property>
                                                     </object>
                                                 </child>
                                                 <child>
