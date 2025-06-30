@@ -121,7 +121,7 @@
                                                 <child>
                                                     <object class="GtkToggleButton" id="search_replace_toggle">
                                                         <property name="icon-name">edit-find-replace-symbolic</property>
-                                                        <property name="tooltip-text" translatable="yes">Search and replace</property>
+                                                        <property name="tooltip-text" translatable="yes">Search and replace (Ctrl+F)</property>
                                                     </object>
                                                 </child>
                                                 <child>
@@ -164,59 +164,21 @@
                     </object>
                 </child>
                 <child>
-                    <object class="GtkOverlay">
-                        <child type="overlay">
-                            <object class="GtkBox">
-                                <property name="orientation">0</property>
-                                <property name="halign">GTK_ALIGN_END</property>
-                                <property name="valign">GTK_ALIGN_START</property>
-                                <property name="margin-end">16</property>
-                                <property name="margin-top">16</property>
-                                <property name="spacing">6</property>
-                                <child>
-                                    <object class="GtkButton">
-                                        <property name="icon-name">system-search-symbolic</property>
-                                        <property name="tooltip-text" translatable="yes">Search text</property>
-                                        <property name="action-name">editor.show-search</property>
-                                        <style>
-                                            <class name="flat" />
-                                            <class name="dim-label" />
-                                            <class name="circular" />
-                                        </style>
-                                    </object>
-                                </child>
-                                <child>
-                                    <object class="GtkButton">
-                                        <property name="icon-name">window-close-symbolic</property>
-                                        <property name="tooltip-text" translatable="yes">Close sheet</property>
-                                        <property name="action-name">editor.close</property>
-                                        <style>
-                                            <class name="flat" />
-                                            <class name="dim-label" />
-                                            <class name="circular" />
-                                        </style>
-                                    </object>
-                                </child>
-                            </object>
-                        </child>
+                    <object class="GtkScrolledWindow">
+                        <property name="width-request">800</property>
+                        <property name="height-request">600</property>
                         <child>
-                            <object class="GtkScrolledWindow">
-                                <property name="width-request">800</property>
-                                <property name="height-request">600</property>
-                                <child>
-                                    <object class="GtkSourceView" id="source_view">
-                                        <property name="margin-start">32</property>
-                                        <property name="margin-end">32</property>
-                                        <property name="left-margin">52</property>
-                                        <property name="right-margin">52</property>
-                                        <property name="tab-width">4</property>
-                                        <property name="auto-indent">True</property>
-                                        <property name="wrap-mode">3</property>
-                                        <child internal-child="completion">
-                                            <object class="GtkSourceCompletion">
-                                                <property name="select-on-show">False</property>
-                                            </object>
-                                        </child>
+                            <object class="GtkSourceView" id="source_view">
+                                <property name="margin-start">32</property>
+                                <property name="margin-end">32</property>
+                                <property name="left-margin">52</property>
+                                <property name="right-margin">52</property>
+                                <property name="tab-width">4</property>
+                                <property name="auto-indent">True</property>
+                                <property name="wrap-mode">3</property>
+                                <child internal-child="completion">
+                                    <object class="GtkSourceCompletion">
+                                        <property name="select-on-show">False</property>
                                     </object>
                                 </child>
                             </object>

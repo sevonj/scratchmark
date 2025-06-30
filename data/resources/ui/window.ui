@@ -85,6 +85,22 @@
   <menu id="primary_menu">
     <section>
       <item>
+        <attribute name="label" translatable="yes">Close</attribute>
+        <attribute name="action">win.file-close</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Search text</attribute>
+        <attribute name="action">editor.show-search</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Search and replace</attribute>
+        <attribute name="action">editor.show-search-replace</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
         <attribute name="label" translatable="yes">Enter fullscreen</attribute>
         <attribute name="action">win.fullscreen</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
