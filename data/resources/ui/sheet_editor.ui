@@ -5,7 +5,6 @@
         <property name="vexpand">True</property>
         <child>
             <object class="AdwToolbarView">
-                <property name="bottom-bar-style">ADW_TOOLBAR_RAISED</property>
                 <child type="top">
                     <object class="AdwBanner" id="file_changed_banner">
                         <property name="title" translatable="yes">File changed on disk</property>

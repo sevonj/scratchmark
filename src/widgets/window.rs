@@ -11,10 +11,14 @@ mod imp {
 
     use adw::{
         AboutDialog, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView,
-        Toast, ToastOverlay, ToolbarView,
+        Toast, ToastOverlay, ToolbarStyle, ToolbarView,
     };
     use gio::{Cancellable, Settings, SimpleAction, SimpleActionGroup};
-    use gtk::{Builder, Button, CompositeTemplate, EventControllerMotion, MenuButton, Revealer};
+    use glib::VariantTy;
+    use gtk::{
+        ActionBar, Builder, Button, CompositeTemplate, EventControllerMotion, MenuButton, Revealer,
+        ToggleButton,
+    };
 
     use crate::APP_ID;
     use crate::error::ScratchmarkError;
@@ -58,6 +62,11 @@ mod imp {
         new_sheet_button: TemplateChild<MenuButton>,
         #[template_child]
         unfullscreen_button: TemplateChild<Button>,
+
+        #[template_child]
+        format_bar: TemplateChild<ActionBar>,
+        #[template_child]
+        format_bar_toggle: TemplateChild<ToggleButton>,
 
         library_browser: LibraryBrowser,
         sheet_editor: RefCell<Option<SheetEditor>>,
@@ -433,6 +442,15 @@ mod imp {
                 editor_actions.add_action(&action);
             }
 
+            forward_action_to_editor(self, "format-bold", None, &editor_actions);
+            forward_action_to_editor(self, "format-italic", None, &editor_actions);
+            forward_action_to_editor(
+                self,
+                "format-heading",
+                Some(VariantTy::INT32),
+                &editor_actions,
+            );
+            forward_action_to_editor(self, "format-code", None, &editor_actions);
             forward_action_to_editor(self, "show-search", None, &editor_actions);
             forward_action_to_editor(self, "show-search-replace", None, &editor_actions);
             forward_action_to_editor(self, "hide-search", None, &editor_actions);
@@ -538,6 +556,26 @@ mod imp {
                     return;
                 }
             };
+
+            let format_bar_toggle: &ToggleButton = self.format_bar_toggle.as_ref();
+            self.format_bar
+                .bind_property("visible", format_bar_toggle, "active")
+                .bidirectional()
+                .sync_create()
+                .build();
+
+            format_bar_toggle.connect_active_notify(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |toggle| {
+                    let style = if toggle.is_active() {
+                        ToolbarStyle::Raised
+                    } else {
+                        ToolbarStyle::Flat
+                    };
+                    this.main_toolbar_view.set_top_bar_style(style);
+                }
+            ));
 
             editor.connect_closure(
                 "close-requested",
