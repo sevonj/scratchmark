@@ -14,7 +14,17 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>
   </gresource>
   <gresource prefix="/org/scratchmark/Scratchmark">
+    <file preprocess="xml-stripblanks">icons/scalable/actions/down-smaller-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/draw-text-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/list-compact-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/match-words-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/markdown-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/md-code-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/md-codeblock-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/md-format-h1-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/md-format-h2-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/md-horizontal-rule-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/quotation-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/regex-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/uppercase-symbolic.svg</file>
   </gresource>
