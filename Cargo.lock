@@ -537,7 +537,7 @@ dependencies = [
 
 [[package]]
 name = "scratchmark"
-version = "1.0.1"
+version = "1.1.0"
 dependencies = [
  "glib-build-tools",
  "gtk4",
