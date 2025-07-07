@@ -39,6 +39,20 @@
   <url type="homepage">https://github.com/sevonj/scratchmark</url>
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.1.0" date="2025-07-7">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.1.0</url>
+      <description>
+        <p>Editor improvement round</p>
+        <ul>
+          <li>Remember opened sheet</li>
+          <li>Remember expanded folders</li>
+          <li>Manual library refresh</li>
+          <li>Search and replace</li>
+          <li>Fullscreen</li>
+          <li>Add formatting options</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.0.1" date="2025-05-30">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.0.1</url>
       <description>
