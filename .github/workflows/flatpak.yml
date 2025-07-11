@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Install flatpak
         run: |
-          sudo apt-get install flatpak
+          sudo apt-get update && sudo apt-get install flatpak
           sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
           sudo flatpak install -y org.flatpak.Builder
       - name: checkout
