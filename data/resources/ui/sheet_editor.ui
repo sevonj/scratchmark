@@ -164,20 +164,22 @@
                 </child>
                 <child>
                     <object class="GtkScrolledWindow">
-                        <property name="width-request">800</property>
-                        <property name="height-request">600</property>
                         <child>
-                            <object class="GtkSourceView" id="source_view">
-                                <property name="margin-start">32</property>
-                                <property name="margin-end">32</property>
-                                <property name="left-margin">52</property>
-                                <property name="right-margin">52</property>
-                                <property name="tab-width">4</property>
-                                <property name="auto-indent">True</property>
-                                <property name="wrap-mode">3</property>
-                                <child internal-child="completion">
-                                    <object class="GtkSourceCompletion">
-                                        <property name="select-on-show">False</property>
+                            <object class="AdwClampScrollable">
+                                <property name="maximum-size">768</property>
+                                <property name="tightening-threshold">640</property>
+                                <child>
+                                    <object class="GtkSourceView" id="source_view">
+                                        <property name="margin-start">32</property>
+                                        <property name="margin-end">32</property>
+                                        <property name="tab-width">4</property>
+                                        <property name="auto-indent">True</property>
+                                        <property name="wrap-mode">3</property>
+                                        <child internal-child="completion">
+                                            <object class="GtkSourceCompletion">
+                                                <property name="select-on-show">False</property>
+                                            </object>
+                                        </child>
                                     </object>
                                 </child>
                             </object>
