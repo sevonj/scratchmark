@@ -210,6 +210,9 @@ mod imp {
         fn connect_sheet(&self, sheet: LibrarySheet) {
             let obj = self.obj();
 
+            let is_selected = Some(sheet.path()) == *obj.imp().selected_sheet.borrow();
+            sheet.set_active(is_selected);
+
             sheet.connect_closure(
                 "selected",
                 false,
