@@ -172,6 +172,8 @@
                                     <object class="GtkSourceView" id="source_view">
                                         <property name="margin-start">32</property>
                                         <property name="margin-end">32</property>
+                                        <property name="top-margin">96</property>
+                                        <property name="bottom-margin">192</property>
                                         <property name="tab-width">4</property>
                                         <property name="auto-indent">True</property>
                                         <property name="wrap-mode">3</property>
