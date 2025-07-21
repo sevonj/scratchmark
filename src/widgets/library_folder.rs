@@ -453,7 +453,9 @@ impl LibraryFolder {
     pub fn new_root(data: &FolderObject) -> Self {
         let this = Self::new(data);
         this.imp().is_project_root.replace(true);
-        this.imp().folder_icon.set_visible(false);
+        this.imp()
+            .folder_icon
+            .set_icon_name(Some("library-symbolic"));
         this.imp().expand_icon.set_visible(false);
         this.imp().expand_button.set_sensitive(false);
         this.imp().title.set_label("Library");

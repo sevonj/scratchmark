@@ -16,6 +16,7 @@
   <gresource prefix="/org/scratchmark/Scratchmark">
     <file preprocess="xml-stripblanks">icons/scalable/actions/down-smaller-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/draw-text-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/library-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/list-compact-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/match-words-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/markdown-symbolic.svg</file>
