@@ -457,7 +457,7 @@ impl LibraryFolder {
     }
 
     /// Project root folder
-    pub fn new_root(data: &FolderObject) -> Self {
+    pub fn new_project_root(data: &FolderObject) -> Self {
         let this = Self::new(data);
         this.imp().is_project_root.replace(true);
         this.imp()
