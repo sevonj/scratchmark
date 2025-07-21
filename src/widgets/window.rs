@@ -98,6 +98,7 @@ mod imp {
             {
                 obj.add_css_class("devel");
             }
+            obj.set_default_size(1200, 800);
 
             let settings = Settings::new(APP_ID);
             self.settings.set(settings).expect(
