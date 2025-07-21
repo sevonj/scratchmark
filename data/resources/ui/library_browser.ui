@@ -6,7 +6,7 @@
                 <property name="width-request">256</property>
                 <child>
                     <object class="GtkBox">
-                        <property name="orientation">1</property>
+                        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                         <property name="width-request">256</property>
                         <child> <!-- Content -->
                             <object class="GtkBox" id="library_root_vbox">

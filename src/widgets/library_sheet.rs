@@ -313,7 +313,7 @@ impl LibrarySheet {
 
         self.imp()
             .title_row
-            .set_margin_start(8 * data.depth() as i32);
+            .set_margin_start(20 + 12 * data.depth() as i32);
         let title_label = self.imp().sheet_name_label.get();
         let mut bindings = self.imp().bindings.borrow_mut();
 

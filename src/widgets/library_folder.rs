@@ -2,7 +2,7 @@
 //!
 
 mod imp {
-    use std::cell::RefCell;
+    use std::cell::{Cell, RefCell};
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
@@ -37,6 +37,8 @@ mod imp {
         #[template_child]
         pub(super) expand_icon: TemplateChild<Image>,
         #[template_child]
+        pub(super) folder_icon: TemplateChild<Image>,
+        #[template_child]
         pub(super) title: TemplateChild<Label>,
         #[template_child]
         pub(super) content_vbox: TemplateChild<gtk::Box>,
@@ -47,6 +49,7 @@ mod imp {
         #[template_child]
         pub(super) title_row: TemplateChild<gtk::Box>,
 
+        pub(super) is_project_root: Cell<bool>,
         pub(super) folder_object: RefCell<Option<FolderObject>>,
         pub(super) bindings: RefCell<Vec<Binding>>,
         pub(super) expanded: RefCell<bool>,
@@ -225,12 +228,16 @@ mod imp {
 
             if expanded {
                 self.expand_icon.set_icon_name("pan-down-symbolic".into());
-                self.subdirs_vbox.set_visible(true);
-                self.sheets_vbox.set_visible(true);
+                self.content_vbox.set_visible(true);
+                if !self.is_project_root.get() {
+                    self.folder_icon.set_icon_name(Some("folder-open-symbolic"));
+                }
             } else {
                 self.expand_icon.set_icon_name("pan-end-symbolic".into());
-                self.subdirs_vbox.set_visible(false);
-                self.sheets_vbox.set_visible(false);
+                self.content_vbox.set_visible(false);
+                if !self.is_project_root.get() {
+                    self.folder_icon.set_icon_name(Some("folder-symbolic"));
+                }
             }
         }
 
@@ -445,30 +452,24 @@ impl LibraryFolder {
 
     pub fn new_root(data: &FolderObject) -> Self {
         let this = Self::new(data);
+        this.imp().is_project_root.replace(true);
+        this.imp().folder_icon.set_visible(false);
         this.imp().expand_icon.set_visible(false);
         this.imp().expand_button.set_sensitive(false);
         this.imp().title.set_label("Library");
         this.imp().content_vbox.set_margin_start(0);
         // Bottom margin: provide some area to drag items to
-        this.imp().content_vbox.set_margin_bottom(32);
+        this.imp().content_vbox.set_margin_bottom(8); // Provide some empty space to aid dragging
         this.imp().set_expanded(true);
-        if let Some(popover) = this.imp().context_menu_popover.take() {
-            popover.unparent();
-        }
         if let Some(popover) = this.imp().rename_popover.take() {
             popover.unparent();
         }
         this
     }
 
-    // Is root folder of library
+    /// Is root folder of library
     pub fn is_root(&self) -> bool {
-        self.imp()
-            .folder_object
-            .borrow()
-            .as_ref()
-            .unwrap()
-            .is_root()
+        self.imp().is_project_root.get()
     }
 
     /// Filepath
@@ -523,7 +524,7 @@ impl LibraryFolder {
 
         self.imp()
             .title_row
-            .set_margin_start(8 * data.depth() as i32);
+            .set_margin_start(std::cmp::max(12 * data.depth() as i32, 0));
         let title_label = self.imp().title.get();
         let mut bindings = self.imp().bindings.borrow_mut();
 
