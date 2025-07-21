@@ -14,4 +14,4 @@ sourceview5 = "0.9.1"
 installed = []
 
 [build-dependencies]
-glib-build-tools = "0.20.0"
+glib-build-tools = "0.21.0"
