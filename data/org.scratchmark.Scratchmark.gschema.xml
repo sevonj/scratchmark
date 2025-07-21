@@ -12,5 +12,14 @@
       <default>true</default>
       <summary>Remember whether the sidebar was left open.</summary>
     </key>
+    <key name="win-width" type="i">
+      <default>1200</default>
+    </key>
+    <key name="win-height" type="i">
+      <default>800</default>
+    </key>
+    <key name="is-maximized" type="b">
+      <default>false</default>
+    </key>
   </schema>
 </schemalist>

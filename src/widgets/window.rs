@@ -98,9 +98,17 @@ mod imp {
             {
                 obj.add_css_class("devel");
             }
-            obj.set_default_size(1200, 800);
 
             let settings = Settings::new(APP_ID);
+            settings
+                .bind("win-width", obj.as_ref(), "default-width")
+                .build();
+            settings
+                .bind("win-height", obj.as_ref(), "default-height")
+                .build();
+            settings
+                .bind("is-maximized", obj.as_ref(), "maximized")
+                .build();
             self.settings.set(settings).expect(
                 "`settings` should not be set before calling `setup_settings`.
                 ",
