@@ -17,7 +17,7 @@
                     <child type="start">
                       <object class="GtkMenuButton" id="new_folder_button">
                         <property name="icon-name">folder-new-symbolic</property>
-                        <property name="tooltip-text" translatable="yes">New folder</property>
+                        <property name="tooltip-text" translatable="yes">Create folder</property>
                       </object>
                     </child>
                   </object>

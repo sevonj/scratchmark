@@ -57,9 +57,13 @@ pub fn path_userdata() -> PathBuf {
 
 /// Library directory inside userdata
 pub fn path_builtin_library() -> PathBuf {
-    let path = path_userdata().join("library");
+    path_userdata().join("library")
+}
+
+/// Create if doesn't exist
+pub fn create_builtin_library() {
+    let path = path_builtin_library();
     std::fs::create_dir_all(&path).expect("Couldn't create dir for builtin_library");
-    path
 }
 
 /// Returns an unused filepath with a placeholder name

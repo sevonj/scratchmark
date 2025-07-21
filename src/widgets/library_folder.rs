@@ -2,7 +2,7 @@
 //!
 
 mod imp {
-    use std::cell::RefCell;
+    use std::cell::{Cell, RefCell};
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
@@ -37,6 +37,8 @@ mod imp {
         #[template_child]
         pub(super) expand_icon: TemplateChild<Image>,
         #[template_child]
+        pub(super) folder_icon: TemplateChild<Image>,
+        #[template_child]
         pub(super) title: TemplateChild<Label>,
         #[template_child]
         pub(super) content_vbox: TemplateChild<gtk::Box>,
@@ -47,6 +49,7 @@ mod imp {
         #[template_child]
         pub(super) title_row: TemplateChild<gtk::Box>,
 
+        pub(super) is_project_root: Cell<bool>,
         pub(super) folder_object: RefCell<Option<FolderObject>>,
         pub(super) bindings: RefCell<Vec<Binding>>,
         pub(super) expanded: RefCell<bool>,
@@ -76,7 +79,6 @@ mod imp {
     impl ObjectImpl for LibraryFolder {
         fn constructed(&self) {
             self.parent_constructed();
-            let obj = self.obj();
 
             self.setup_context_menu();
             self.setup_rename_menu();
@@ -93,85 +95,6 @@ mod imp {
             ));
 
             self.set_expanded(false);
-
-            let actions = SimpleActionGroup::new();
-            obj.insert_action_group("folder", Some(&actions));
-
-            let action = gio::SimpleAction::new("create-sheet", None);
-            action.connect_activate(clone!(
-                #[weak]
-                obj,
-                move |_action, _parameter| {
-                    let path = util::untitled_sheet_path(obj.path());
-                    util::create_sheet_file(&path);
-                    obj.emit_by_name::<()>("sheet-created", &[&path]);
-                    obj.imp().sort_children();
-                    obj.imp().set_expanded(true);
-                }
-            ));
-            actions.add_action(&action);
-
-            let action = gio::SimpleAction::new("create-folder", None);
-            action.connect_activate(clone!(
-                #[weak]
-                obj,
-                move |_action, _parameter| {
-                    let path = util::untitled_folder_path(obj.path());
-                    util::create_folder(&path);
-                    obj.emit_by_name::<()>("folder-created", &[&path]);
-                    obj.imp().sort_children();
-                    obj.imp().set_expanded(true);
-                }
-            ));
-            actions.add_action(&action);
-
-            let action = gio::SimpleAction::new("filemanager", None);
-            action.connect_activate(clone!(
-                #[weak]
-                obj,
-                move |_action, _parameter| {
-                    let file = gio::File::for_path(obj.path());
-                    FileLauncher::new(Some(&file)).open_containing_folder(
-                        None::<&adw::ApplicationWindow>,
-                        None::<&gio::Cancellable>,
-                        |_| {},
-                    );
-                }
-            ));
-            actions.add_action(&action);
-
-            let action = gio::SimpleAction::new("rename-begin", None);
-            action.connect_activate(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |_action, _parameter| {
-                    assert!(!this.obj().is_root());
-                    this.rename_popover.borrow().as_ref().unwrap().popup();
-                }
-            ));
-            actions.add_action(&action);
-
-            let action = gio::SimpleAction::new("trash", None);
-            action.connect_activate(clone!(
-                #[weak]
-                obj,
-                move |_action, _parameter| {
-                    assert!(!obj.is_root());
-                    obj.emit_by_name::<()>("trash-requested", &[&obj]);
-                }
-            ));
-            actions.add_action(&action);
-
-            let action = gio::SimpleAction::new("delete", None);
-            action.connect_activate(clone!(
-                #[weak]
-                obj,
-                move |_action, _parameter| {
-                    assert!(!obj.is_root());
-                    obj.emit_by_name::<()>("delete-requested", &[&obj]);
-                }
-            ));
-            actions.add_action(&action);
         }
 
         fn signals() -> &'static [Signal] {
@@ -225,12 +148,16 @@ mod imp {
 
             if expanded {
                 self.expand_icon.set_icon_name("pan-down-symbolic".into());
-                self.subdirs_vbox.set_visible(true);
-                self.sheets_vbox.set_visible(true);
+                self.content_vbox.set_visible(true);
+                if !self.is_project_root.get() {
+                    self.folder_icon.set_icon_name(Some("folder-open-symbolic"));
+                }
             } else {
                 self.expand_icon.set_icon_name("pan-end-symbolic".into());
-                self.subdirs_vbox.set_visible(false);
-                self.sheets_vbox.set_visible(false);
+                self.content_vbox.set_visible(false);
+                if !self.is_project_root.get() {
+                    self.folder_icon.set_icon_name(Some("folder-symbolic"));
+                }
             }
         }
 
@@ -295,7 +222,8 @@ mod imp {
                 .menu_model(&popover)
                 .has_arrow(false)
                 .build();
-            menu.set_parent(&*obj);
+            let expand_button: &Button = self.expand_button.as_ref();
+            menu.set_parent(expand_button);
             let _ = self.context_menu_popover.replace(Some(menu));
 
             let gesture = gtk::GestureClick::new();
@@ -311,7 +239,7 @@ mod imp {
                     };
                 }
             ));
-            obj.add_controller(gesture);
+            self.expand_button.add_controller(gesture);
 
             obj.connect_destroy(move |obj| {
                 if let Some(popover) = obj.imp().context_menu_popover.take() {
@@ -416,6 +344,89 @@ mod imp {
 
             obj.add_controller(drop_target);
         }
+
+        pub(super) fn setup_actions(&self) {
+            let obj = self.obj();
+
+            let actions = SimpleActionGroup::new();
+            obj.insert_action_group("folder", Some(&actions));
+
+            let action = gio::SimpleAction::new("create-sheet", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    let path = util::untitled_sheet_path(obj.path());
+                    util::create_sheet_file(&path);
+                    obj.emit_by_name::<()>("sheet-created", &[&path]);
+                    obj.imp().sort_children();
+                    obj.imp().set_expanded(true);
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("create-folder", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    let path = util::untitled_folder_path(obj.path());
+                    util::create_folder(&path);
+                    obj.emit_by_name::<()>("folder-created", &[&path]);
+                    obj.imp().sort_children();
+                    obj.imp().set_expanded(true);
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("filemanager", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    let file = gio::File::for_path(obj.path());
+                    FileLauncher::new(Some(&file)).open_containing_folder(
+                        None::<&adw::ApplicationWindow>,
+                        None::<&gio::Cancellable>,
+                        |_| {},
+                    );
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("rename-begin", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_action, _parameter| {
+                    assert!(!this.obj().is_root());
+                    this.rename_popover.borrow().as_ref().unwrap().popup();
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("trash", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    assert!(!obj.is_root());
+                    obj.emit_by_name::<()>("trash-requested", &[&obj]);
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("delete", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    assert!(!obj.is_root());
+                    obj.emit_by_name::<()>("delete-requested", &[&obj]);
+                }
+            ));
+            actions.add_action(&action);
+        }
     }
 }
 
@@ -437,38 +448,36 @@ glib::wrapper! {
 }
 
 impl LibraryFolder {
+    /// Normal folder
     pub fn new(data: &FolderObject) -> Self {
         let this: Self = Object::builder().build();
+        this.imp().setup_actions();
         this.bind(data);
         this
     }
 
-    pub fn new_root(data: &FolderObject) -> Self {
+    /// Project root folder
+    pub fn new_project_root(data: &FolderObject) -> Self {
         let this = Self::new(data);
+        this.imp().is_project_root.replace(true);
+        this.imp()
+            .folder_icon
+            .set_icon_name(Some("library-symbolic"));
         this.imp().expand_icon.set_visible(false);
         this.imp().expand_button.set_sensitive(false);
         this.imp().title.set_label("Library");
         this.imp().content_vbox.set_margin_start(0);
-        // Bottom margin: provide some area to drag items to
-        this.imp().content_vbox.set_margin_bottom(32);
+        this.imp().content_vbox.set_margin_bottom(8); // Provide some empty space to aid dragging
         this.imp().set_expanded(true);
-        if let Some(popover) = this.imp().context_menu_popover.take() {
-            popover.unparent();
-        }
         if let Some(popover) = this.imp().rename_popover.take() {
             popover.unparent();
         }
         this
     }
 
-    // Is root folder of library
+    /// Is root folder of library
     pub fn is_root(&self) -> bool {
-        self.imp()
-            .folder_object
-            .borrow()
-            .as_ref()
-            .unwrap()
-            .is_root()
+        self.imp().is_project_root.get()
     }
 
     /// Filepath
@@ -523,7 +532,7 @@ impl LibraryFolder {
 
         self.imp()
             .title_row
-            .set_margin_start(8 * data.depth() as i32);
+            .set_margin_start(std::cmp::max(12 * data.depth() as i32, 0));
         let title_label = self.imp().title.get();
         let mut bindings = self.imp().bindings.borrow_mut();
 

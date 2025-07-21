@@ -6,6 +6,7 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library_browser.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library_project.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor_placeholder.ui</file>
@@ -16,6 +17,7 @@
   <gresource prefix="/org/scratchmark/Scratchmark">
     <file preprocess="xml-stripblanks">icons/scalable/actions/down-smaller-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/draw-text-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/library-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/list-compact-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/match-words-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/markdown-symbolic.svg</file>

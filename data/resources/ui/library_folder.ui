@@ -25,6 +25,15 @@
                                             </object>
                                         </child>
                                         <child>
+                                            <object class="GtkImage" id="folder_icon">
+                                                <style>
+                                                    <class name="dim-label" />
+                                                </style>
+                                                <property name="icon-name">folder-symbolic</property>
+                                                <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
+                                            </object>
+                                        </child>
+                                        <child>
                                             <object class="GtkLabel" id="title">
                                                 <property name="label">dir-name-here</property>
                                                 <property name="xalign">0</property>

@@ -12,6 +12,8 @@ use widgets::Window;
 const APP_ID: &str = "org.scratchmark.Scratchmark";
 
 fn main() -> glib::ExitCode {
+    util::create_builtin_library();
+
     gio::resources_register_include!("gresources.gresource")
         .expect("Failed to register resources.");
 

@@ -56,8 +56,8 @@ impl LibraryObject {
 
         self.prune();
 
-        let library_path = imp.data.borrow().path.clone();
-        let mut search_stack: Vec<(PathBuf, u32)> = vec![(library_path, 0)];
+        let root_path = imp.data.borrow().path.clone();
+        let mut search_stack: Vec<(PathBuf, u32)> = vec![(root_path, 0)];
         let mut found_folders: Vec<(PathBuf, u32)> = vec![];
         let mut found_files: Vec<(PathBuf, u32)> = vec![];
 
@@ -154,8 +154,8 @@ impl SheetState {
 pub struct LibraryData {
     pub path: PathBuf,
     pub display_name: String,
-    /// Every folder in the library, except root
+    /// Every folder in the project, except root
     pub folders: HashMap<PathBuf, FolderState>,
-    /// Every sheet in the library
+    /// Every sheet in the project
     pub sheets: HashMap<PathBuf, SheetState>,
 }

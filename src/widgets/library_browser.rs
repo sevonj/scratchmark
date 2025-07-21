@@ -3,35 +3,33 @@
 
 mod imp {
     use std::cell::RefCell;
-    use std::collections::HashMap;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
-    use glib::closure_local;
     use glib::subclass::*;
     use gtk::glib;
+    use gtk::glib::closure_local;
     use gtk::prelude::*;
 
-    use gtk::CompositeTemplate;
-
-    use crate::data::FolderObject;
-    use crate::data::LibraryObject;
-    use crate::data::SheetObject;
-    use crate::util::path_builtin_library;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
+    use crate::widgets::library_project::LibraryProject;
+    use gtk::CompositeTemplate;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library_browser.ui")]
     pub struct LibraryBrowser {
         #[template_child]
-        pub(super) library_root_vbox: TemplateChild<gtk::Box>,
+        pub(super) library_container: TemplateChild<gtk::Box>,
+        #[template_child]
+        pub(super) projects_container: TemplateChild<gtk::Box>,
+        #[template_child]
+        no_projects_status: TemplateChild<adw::Bin>,
 
-        pub(super) folders: RefCell<HashMap<PathBuf, LibraryFolder>>,
-        pub(super) sheets: RefCell<HashMap<PathBuf, LibrarySheet>>,
         pub(super) selected_sheet: RefCell<Option<PathBuf>>,
-        pub(super) library_object: RefCell<Option<LibraryObject>>,
+
+        pub(super) projects: RefCell<Vec<LibraryProject>>,
     }
 
     #[glib::object_subclass]
@@ -52,19 +50,6 @@ mod imp {
     impl ObjectImpl for LibraryBrowser {
         fn constructed(&self) {
             self.parent_constructed();
-            self.library_object
-                .replace(Some(LibraryObject::new(path_builtin_library())));
-            self.library_object
-                .borrow()
-                .as_ref()
-                .unwrap()
-                .refresh_content();
-
-            let vbox = &self.library_root_vbox;
-            let root_folder =
-                LibraryFolder::new_root(&FolderObject::new(path_builtin_library(), 0));
-            vbox.append(&root_folder);
-            self.connect_folder(root_folder);
         }
 
         fn signals() -> &'static [Signal] {
@@ -102,86 +87,48 @@ mod imp {
 
     impl LibraryBrowser {
         pub(super) fn refresh_content(&self) {
-            self.library_object
-                .borrow()
-                .as_ref()
-                .unwrap()
-                .refresh_content();
-
-            self.prune();
-
-            let binding = self.library_object.borrow();
-            let lib = binding.as_ref().unwrap();
-
-            // Add new
-            let mut added_folders = vec![];
-            for (path, folder_state) in lib.data().folders.iter() {
-                if !self.folders.borrow().contains_key(path) {
-                    let folder =
-                        LibraryFolder::new(&FolderObject::new(path.clone(), folder_state.depth));
-                    self.connect_folder(folder.clone());
-                    added_folders.push(folder);
-                }
-            }
-            for folder in &added_folders {
-                let path = folder.path();
-                let parent_path = path.parent().unwrap();
-                let parent = self.folders.borrow().get(parent_path).unwrap().clone();
-                parent.add_subfolder(folder.clone());
-            }
-
-            for (path, sheet_state) in lib.data().sheets.iter() {
-                if !self.sheets.borrow().contains_key(path) {
-                    let sheet =
-                        LibrarySheet::new(&SheetObject::new(path.clone(), sheet_state.depth));
-                    self.connect_sheet(sheet.clone());
-
-                    let parent_path = path.parent().unwrap();
-                    let parent = self.folders.borrow().get(parent_path).unwrap().clone();
-                    parent.add_sheet(sheet);
-                }
+            let binding = self.projects.borrow();
+            let projects: &Vec<LibraryProject> = binding.as_ref();
+            for project in projects {
+                project.refresh_content();
             }
         }
 
-        /// Remove widgets for entries that don't exist in the library anymore
-        fn prune(&self) {
-            let binding = self.library_object.borrow();
-            let lib = binding.as_ref().unwrap();
-
-            let mut folders = self.folders.borrow_mut();
-            let mut sheets = self.sheets.borrow_mut();
-            let mut dead_folders = vec![];
-            let mut dead_sheets = vec![];
-            for (path, folder) in folders.iter() {
-                // Do not delete library root
-                if *path == lib.path() {
-                    continue;
-                }
-                if !lib.data().folders.contains_key(path) {
-                    dead_folders.push(path.clone());
-
-                    let parent_path = path.parent().unwrap();
-                    let parent = folders.get(parent_path).unwrap().clone();
-                    parent.remove_subfolder(folder)
+        pub(super) fn add_project(&self, project: LibraryProject) {
+            let path = project.path();
+            for project in self.projects.borrow_mut().iter() {
+                if project.root_folder().path() == path {
+                    return;
                 }
             }
-            for (path, sheet) in sheets.iter() {
-                if !lib.data().sheets.contains_key(path) {
-                    dead_sheets.push(path.clone());
 
-                    let parent_path = path.parent().unwrap();
-                    let parent = folders.get(parent_path).unwrap().clone();
-                    parent.remove_sheet(sheet)
-                }
-            }
-            for path in dead_folders {
-                folders
-                    .remove(&path)
-                    .expect("dead folder entry disappeared?");
-            }
-            for path in dead_sheets {
-                sheets.remove(&path).expect("dead sheet entry disappeared?");
-            }
+            project.connect_closure(
+                "folder-added",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_: LibraryProject, folder: LibraryFolder| {
+                        this.connect_folder(folder);
+                    }
+                ),
+            );
+            project.connect_closure(
+                "sheet-added",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_: LibraryProject, sheet: LibrarySheet| {
+                        this.connect_sheet(sheet);
+                    }
+                ),
+            );
+
+            self.projects_container.append(&project);
+            self.projects.borrow_mut().push(project.clone());
+            project.refresh_content();
+            self.no_projects_status.set_visible(false);
         }
 
         fn connect_folder(&self, folder: LibraryFolder) {
@@ -258,9 +205,6 @@ mod imp {
                     }
                 ),
             );
-
-            let k = folder.path();
-            self.folders.borrow_mut().insert(k, folder);
         }
 
         fn connect_sheet(&self, sheet: LibrarySheet) {
@@ -327,15 +271,6 @@ mod imp {
                     }
                 ),
             );
-
-            if let Some(selected) = self.selected_sheet.borrow().as_ref() {
-                if sheet.path() == *selected {
-                    sheet.set_active(true);
-                }
-            }
-
-            let k = sheet.path();
-            self.sheets.borrow_mut().insert(k, sheet);
         }
     }
 }
@@ -347,7 +282,8 @@ use gtk::glib;
 
 use glib::Object;
 
-use crate::util::path_builtin_library;
+use crate::widgets::LibraryProject;
+use crate::widgets::LibrarySheet;
 
 use super::LibraryFolder;
 
@@ -360,33 +296,61 @@ glib::wrapper! {
 impl Default for LibraryBrowser {
     fn default() -> Self {
         let this: Self = Object::builder().build();
+        this.imp().add_project(LibraryProject::new_appdata());
         this.refresh_content();
         this
     }
 }
 
 impl LibraryBrowser {
-    pub fn root_folder(&self) -> LibraryFolder {
-        self.imp()
-            .folders
-            .borrow()
-            .get(&path_builtin_library())
-            .unwrap()
-            .clone()
+    pub fn project_paths(&self) -> Vec<String> {
+        let mut paths = vec![];
+
+        let binding = self.imp().projects.borrow();
+        let projects: &Vec<LibraryProject> = binding.as_ref();
+        for project in &projects[1..] {
+            paths.push(project.root_folder().path().to_str().unwrap().to_owned());
+        }
+        paths
     }
 
     pub fn expanded_folder_paths(&self) -> Vec<String> {
         let mut paths = vec![];
-        for (path, folder) in self.imp().folders.borrow().iter() {
-            if folder.is_expanded() {
-                paths.push(path.to_str().unwrap().to_owned());
-            }
+
+        let binding = self.imp().projects.borrow();
+        let projects: &Vec<LibraryProject> = binding.as_ref();
+        for project in projects {
+            paths.append(&mut project.expanded_folder_paths());
         }
         paths
     }
 
     pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
-        self.imp().folders.borrow().get(path).cloned()
+        let binding = self.imp().projects.borrow();
+        let projects: &Vec<LibraryProject> = binding.as_ref();
+        for project in projects {
+            let opt = project.get_folder(path);
+            if opt.is_some() {
+                return opt;
+            }
+        }
+        None
+    }
+
+    pub fn get_sheet(&self, path: &Path) -> Option<LibrarySheet> {
+        let binding = self.imp().projects.borrow();
+        let projects: &Vec<LibraryProject> = binding.as_ref();
+        for project in projects {
+            let opt = project.get_sheet(path);
+            if opt.is_some() {
+                return opt;
+            }
+        }
+        None
+    }
+
+    pub fn add_project(&self, path: PathBuf) {
+        self.imp().add_project(LibraryProject::new(path));
     }
 
     pub fn refresh_content(&self) {
@@ -399,13 +363,13 @@ impl LibraryBrowser {
 
     pub fn set_selected_sheet(&self, path: Option<PathBuf>) {
         if let Some(old_path) = self.imp().selected_sheet.borrow().as_ref() {
-            if let Some(old_button) = self.imp().sheets.borrow().get(old_path) {
+            if let Some(old_button) = self.get_sheet(old_path) {
                 old_button.set_active(false);
             }
         }
 
         if let Some(path) = &path {
-            if let Some(button) = self.imp().sheets.borrow().get(path) {
+            if let Some(button) = self.get_sheet(path) {
                 button.set_active(true);
             }
         };
@@ -418,7 +382,7 @@ impl LibraryBrowser {
             return;
         };
 
-        if let Some(sheet) = self.imp().sheets.borrow().get(&selected_path) {
+        if let Some(sheet) = self.get_sheet(&selected_path) {
             sheet.prompt_rename();
         }
     }
