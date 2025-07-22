@@ -15,7 +15,8 @@ mod imp {
     use glib::subclass::Signal;
     use glib::{Properties, Regex, RegexCompileFlags, RegexMatchFlags, VariantTy};
     use gtk::{
-        Button, CompositeTemplate, Entry, Label, SearchBar, TemplateChild, TextIter, ToggleButton,
+        Button, CompositeTemplate, CssProvider, Entry, Label, SearchBar, TemplateChild, TextIter,
+        ToggleButton,
     };
     use sourceview5::{SearchContext, SearchSettings, View};
 
@@ -29,6 +30,7 @@ mod imp {
     pub struct SheetEditor {
         #[template_child]
         pub(super) source_view: TemplateChild<View>,
+        pub(super) source_view_css_provider: CssProvider,
 
         #[template_child]
         search_bar: TemplateChild<SearchBar>,
@@ -91,6 +93,14 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
+
+            // Deprecated, but the only way to do this at the moment?
+            // https://gnome.pages.gitlab.gnome.org/gtksourceview/gtksourceview5/class.View.html#changing-the-font
+            #[allow(deprecated)]
+            self.source_view.style_context().add_provider(
+                &self.source_view_css_provider,
+                gtk::ffi::GTK_STYLE_PROVIDER_PRIORITY_USER as u32,
+            );
 
             self.search_entry.connect_changed(clone!(
                 #[weak(rename_to = this)]
@@ -785,6 +795,13 @@ impl SheetEditor {
         self.imp().file.replace(Some(file));
         self.imp().path.replace(Some(path));
         self.imp().setup_filemon();
+    }
+
+    pub fn set_font(&self, family: &str, size: u32) {
+        let formatted = format!("textview {{font-family: {family}; font-size: {size}pt;}}");
+        self.imp()
+            .source_view_css_provider
+            .load_from_string(&formatted);
     }
 
     fn load_buffer_style_scheme(&self, buffer: &Buffer) {

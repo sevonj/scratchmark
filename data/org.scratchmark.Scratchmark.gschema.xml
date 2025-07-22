@@ -21,5 +21,11 @@
     <key name="is-maximized" type="b">
       <default>false</default>
     </key>
+    <key name="editor-font-family" type="s">
+      <default>"Monospace"</default>
+    </key>
+    <key name="editor-font-size" type="u">
+      <default>12</default>
+    </key>
   </schema>
 </schemalist>

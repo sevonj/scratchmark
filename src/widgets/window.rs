@@ -8,6 +8,7 @@ mod imp {
     use glib::{clone, closure_local};
     use gtk::gio;
     use gtk::glib;
+    use gtk::pango;
 
     use adw::{
         AboutDialog, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView,
@@ -16,9 +17,10 @@ mod imp {
     use gio::{Cancellable, Settings, SimpleAction, SimpleActionGroup};
     use glib::VariantTy;
     use gtk::{
-        ActionBar, Builder, Button, CompositeTemplate, EventControllerMotion, MenuButton, Revealer,
-        ToggleButton,
+        ActionBar, Builder, Button, CompositeTemplate, EventControllerMotion, FontDialog,
+        MenuButton, Revealer, ToggleButton,
     };
+    use pango::FontDescription;
 
     use crate::APP_ID;
     use crate::error::ScratchmarkError;
@@ -427,6 +429,16 @@ mod imp {
             ));
             obj.add_action(&action);
 
+            let action = gio::SimpleAction::new("show-font-dialog", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.show_font_dialog();
+                }
+            ));
+            obj.add_action(&action);
+
             let editor_actions = SimpleActionGroup::new();
             obj.insert_action_group("editor", Some(&editor_actions));
 
@@ -565,6 +577,10 @@ mod imp {
                     return;
                 }
             };
+
+            let font_family = self.settings().string("editor-font-family");
+            let font_size = self.settings().uint("editor-font-size");
+            editor.set_font(font_family.as_str(), font_size);
 
             let format_bar_toggle: &ToggleButton = self.format_bar_toggle.as_ref();
             self.format_bar
@@ -736,6 +752,50 @@ mod imp {
             dialog.set_website("https://github.com/sevonj/scratchmark/");
             dialog.set_support_url("https://github.com/sevonj/scratchmark/discussions/");
             dialog.present(Some(&*obj));
+        }
+
+        fn show_font_dialog(&self) {
+            let obj = self.obj();
+
+            let font_family = self.settings().string("editor-font-family");
+            let font_size = self.settings().uint("editor-font-size");
+            let mut initial = FontDescription::new();
+            initial.set_family(&font_family);
+            initial.set_size(font_size as i32 * pango::SCALE);
+
+            FontDialog::builder().modal(true).build().choose_font(
+                Some(obj.as_ref()),
+                Some(&initial),
+                None::<&Cancellable>,
+                clone!(
+                    #[weak (rename_to = this)]
+                    self,
+                    move |result| {
+                        let Ok(font) = result else {
+                            return;
+                        };
+
+                        if let Err(e) = this.set_editor_font(font) {
+                            let toast = Toast::new(&e.to_string());
+                            this.toast_overlay.add_toast(toast);
+                        }
+                    }
+                ),
+            );
+        }
+
+        fn set_editor_font(&self, font: FontDescription) -> Result<(), glib::error::BoolError> {
+            let family = font.family().unwrap_or_default();
+            let size = (font.size() / pango::SCALE) as u32;
+
+            self.settings().set_uint("editor-font-size", size)?;
+            self.settings().set_string("editor-font-family", &family)?;
+
+            if let Some(editor) = self.sheet_editor.borrow().as_ref() {
+                editor.set_font(family.as_str(), size);
+            };
+
+            Ok(())
         }
 
         /// App quit

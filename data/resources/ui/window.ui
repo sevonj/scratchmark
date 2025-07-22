@@ -252,6 +252,10 @@
         <attribute name="action">app.preferences</attribute>
       </item-->
       <item>
+        <attribute name="label" translatable="yes">_Change Font</attribute>
+        <attribute name="action">win.show-font-dialog</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
         <attribute name="action">win.show-help-overlay</attribute>
       </item>
