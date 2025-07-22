@@ -83,8 +83,8 @@
                                     <object class="AdwBin" id="no_projects_status">
                                         <child>
                                             <object class="AdwStatusPage">
-                                                <property name="title">No folders</property>
-                                                <property name="description">Select a folder to add it into the library.</property>
+                                                <property name="title">No Folders</property>
+                                                <property name="description">Select a folder to add it into the library</property>
                                                 <property name="margin-start">32</property>
                                                 <property name="margin-end">32</property>
                                                 <style>

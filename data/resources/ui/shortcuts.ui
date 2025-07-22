@@ -11,13 +11,13 @@
             <property name="title" translatable="yes" context="shortcut window">General</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Toggle fullscreen</property>
+                <property name="title" translatable="yes" context="shortcut window">Toggle Fullscreen</property>
                 <property name="action-name">win.fullscreen</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Show shortcuts</property>
+                <property name="title" translatable="yes" context="shortcut window">Show Shortcuts</property>
                 <property name="action-name">win.show-help-overlay</property>
               </object>
             </child>
@@ -28,19 +28,19 @@
             <property name="title" translatable="yes" context="shortcut window">Document</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">New sheet</property>
+                <property name="title" translatable="yes" context="shortcut window">New Sheet</property>
                 <property name="action-name">win.file-new</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Close sheet</property>
+                <property name="title" translatable="yes" context="shortcut window">Close Sheet</property>
                 <property name="action-name">win.file-close</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Rename sheet</property>
+                <property name="title" translatable="yes" context="shortcut window">Rename Sheet</property>
                 <property name="action-name">win.file-rename-open</property>
               </object>
             </child>
@@ -51,13 +51,13 @@
             <property name="title" translatable="yes" context="shortcut window">Editor</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Search text</property>
+                <property name="title" translatable="yes" context="shortcut window">Search Text</property>
                 <property name="action-name">editor.show-search</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Search and replace text</property>
+                <property name="title" translatable="yes" context="shortcut window">Search and Replace Text</property>
                 <property name="action-name">editor.show-search-replace</property>
               </object>
             </child>
@@ -68,7 +68,7 @@
             <property name="title" translatable="yes" context="shortcut window">Library</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Manual refresh</property>
+                <property name="title" translatable="yes" context="shortcut window">Manual Refresh</property>
                 <property name="action-name">win.library-refresh</property>
               </object>
             </child>

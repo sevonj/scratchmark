@@ -17,7 +17,7 @@
                     <child type="start">
                       <object class="GtkMenuButton" id="new_folder_button">
                         <property name="icon-name">folder-new-symbolic</property>
-                        <property name="tooltip-text" translatable="yes">Create folder</property>
+                        <property name="tooltip-text" translatable="yes">Create Folder</property>
                       </object>
                     </child>
                   </object>
@@ -50,13 +50,13 @@
                             <child type="start">
                               <object class="GtkMenuButton" id="new_sheet_button">
                                 <property name="icon-name">document-new-symbolic</property>
-                                <property name="tooltip-text" translatable="yes">New sheet (Ctrl+N)</property>
+                                <property name="tooltip-text" translatable="yes">New Sheet (Ctrl+N)</property>
                               </object>
                             </child>
                             <child type="end">
                               <object class="GtkButton" id="unfullscreen_button">
                                 <property name="icon-name">view-restore-symbolic</property>
-                                <property name="tooltip-text" translatable="yes">Exit fullscreen</property>
+                                <property name="tooltip-text" translatable="yes">Exit Fullscreen</property>
                                 <property name="action-name">win.unfullscreen</property>
                                 <property name="visible">False</property>
                               </object>
@@ -72,7 +72,7 @@
                             <child type="end">
                               <object class="GtkToggleButton" id="format_bar_toggle">
                                 <property name="icon-name">draw-text-symbolic</property>
-                                <property name="tooltip-text" translatable="yes">Formatting toolbar</property>
+                                <property name="tooltip-text" translatable="yes">Formatting Toolbar</property>
                               </object>
                             </child>
                           </object>
@@ -146,13 +146,13 @@
                                   <child>
                                     <object class="GtkToggleButton">
                                       <property name="icon-name">insert-link-symbolic</property>
-                                      <property name="tooltip-text" translatable="yes">Insert link</property>
+                                      <property name="tooltip-text" translatable="yes">Insert Link</property>
                                     </object>
                                   </child>
                                   <child>
                                     <object class="GtkToggleButton">
                                       <property name="icon-name">insert-image-symbolic</property>
-                                      <property name="tooltip-text" translatable="yes">Insert image</property>
+                                      <property name="tooltip-text" translatable="yes">Insert Image</property>
                                     </object>
                                   </child>
                                 </object>
@@ -175,7 +175,7 @@
                                 <child>
                                   <object class="GtkToggleButton">
                                     <property name="icon-name">view-list-ordered-symbolic</property>
-                                    <property name="tooltip-text" translatable="yes">Ordered list</property>
+                                    <property name="tooltip-text" translatable="yes">Ordered List</property>
                                   </object>
                                 </child>
                               </object>
@@ -226,22 +226,22 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Search text</attribute>
+        <attribute name="label" translatable="yes">Search Text</attribute>
         <attribute name="action">editor.show-search</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Search and replace</attribute>
+        <attribute name="label" translatable="yes">Search and Replace</attribute>
         <attribute name="action">editor.show-search-replace</attribute>
       </item>
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Enter fullscreen</attribute>
+        <attribute name="label" translatable="yes">Enter Fullscreen</attribute>
         <attribute name="action">win.fullscreen</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Exit fullscreen</attribute>
+        <attribute name="label" translatable="yes">Exit Fullscreen</attribute>
         <attribute name="action">win.unfullscreen</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
       </item>
@@ -252,15 +252,15 @@
         <attribute name="action">app.preferences</attribute>
       </item-->
       <item>
-        <attribute name="label" translatable="yes">_Change Font</attribute>
+        <attribute name="label" translatable="yes">Change Font</attribute>
         <attribute name="action">win.show-font-dialog</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
+        <attribute name="label" translatable="yes">Keyboard Shortcuts</attribute>
         <attribute name="action">win.show-help-overlay</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_About Scratchmark</attribute>
+        <attribute name="label" translatable="yes">About Scratchmark</attribute>
         <attribute name="action">win.show-about</attribute>
       </item>
     </section>

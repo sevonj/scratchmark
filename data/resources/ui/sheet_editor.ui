@@ -70,19 +70,19 @@
                                                         <child>
                                                             <object class="GtkToggleButton" id="search_match_case_toggle">
                                                                 <property name="icon-name">uppercase-symbolic</property>
-                                                                <property name="tooltip-text" translatable="yes">Match case</property>
+                                                                <property name="tooltip-text" translatable="yes">Match Case</property>
                                                             </object>
                                                         </child>
                                                         <child>
                                                             <object class="GtkToggleButton" id="search_match_whole_words_toggle">
                                                                 <property name="icon-name">match-words-symbolic</property>
-                                                                <property name="tooltip-text" translatable="yes">Whole words</property>
+                                                                <property name="tooltip-text" translatable="yes">Whole Words</property>
                                                             </object>
                                                         </child>
                                                         <child>
                                                             <object class="GtkToggleButton" id="search_match_regex_toggle">
                                                                 <property name="icon-name">regex-symbolic</property>
-                                                                <property name="tooltip-text" translatable="yes">Use regex</property>
+                                                                <property name="tooltip-text" translatable="yes">Use Regex</property>
                                                             </object>
                                                         </child>
                                                     </object>
@@ -105,14 +105,14 @@
                                                             <object class="GtkButton" id="search_prev_button">
                                                                 <property name="icon-name">go-up-symbolic</property>
                                                                 <property name="action-name">editor.search-prev</property>
-                                                                <property name="tooltip-text" translatable="yes">Previous match (Shift + Return)</property>
+                                                                <property name="tooltip-text" translatable="yes">Previous Match (Shift + Return)</property>
                                                             </object>
                                                         </child>
                                                         <child>
                                                             <object class="GtkButton" id="search_next_button">
                                                                 <property name="icon-name">go-down-symbolic</property>
                                                                 <property name="action-name">editor.search-next</property>
-                                                                <property name="tooltip-text" translatable="yes">Next match (Return)</property>
+                                                                <property name="tooltip-text" translatable="yes">Next Match (Return)</property>
                                                             </object>
                                                         </child>
                                                     </object>
@@ -120,13 +120,13 @@
                                                 <child>
                                                     <object class="GtkToggleButton" id="search_replace_toggle">
                                                         <property name="icon-name">edit-find-replace-symbolic</property>
-                                                        <property name="tooltip-text" translatable="yes">Search and replace (Ctrl+F)</property>
+                                                        <property name="tooltip-text" translatable="yes">Search and Replace (Ctrl+F)</property>
                                                     </object>
                                                 </child>
                                                 <child>
                                                     <object class="GtkButton">
                                                         <property name="icon-name">window-close-symbolic</property>
-                                                        <property name="tooltip-text" translatable="yes">Close search</property>
+                                                        <property name="tooltip-text" translatable="yes">Close Search</property>
                                                         <property name="action-name">editor.hide-search</property>
                                                     </object>
                                                 </child>
@@ -150,8 +150,8 @@
                                                 <child>
                                                     <object class="GtkButton" id="search_replace_all_button">
                                                         <property name="action-name">editor.commit-replace-all</property>
-                                                        <property name="label" translatable="yes">Replace all</property>
-                                                        <property name="tooltip-text" translatable="yes">Replace all (Shift + Return)</property>
+                                                        <property name="label" translatable="yes">Replace All</property>
+                                                        <property name="tooltip-text" translatable="yes">Replace All (Shift + Return)</property>
                                                     </object>
                                                 </child>
                                             </object>

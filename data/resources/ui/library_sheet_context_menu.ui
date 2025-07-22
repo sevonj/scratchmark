@@ -4,11 +4,11 @@
   <menu id="context-menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">Show in file manager</attribute>
+        <attribute name="label" translatable="yes">Show in File Manager</attribute>
         <attribute name="action">sheet.filemanager</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Rename sheet</attribute>
+        <attribute name="label" translatable="yes">Rename Sheet</attribute>
         <attribute name="action">sheet.rename-begin</attribute>
       </item>
       <item>
@@ -20,7 +20,7 @@
         <attribute name="action">sheet.trash</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Delete sheet</attribute>
+        <attribute name="label" translatable="yes">Delete Sheet</attribute>
         <attribute name="action">sheet.delete</attribute>
       </item>
     </section>
