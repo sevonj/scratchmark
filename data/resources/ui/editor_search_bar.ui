@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="EditorSearchBar" parent="AdwBin">
+    <child>
+      <object class="GtkSearchBar" id="search_bar">
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">0</property>
+            <property name="halign">GTK_ALIGN_END</property>
+            <property name="hexpand">true</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <property name="spacing">4</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                    <child>
+                      <object class="GtkBox">
+                        <style>
+                          <class name="linked" />
+                        </style>
+                        <child>
+                          <object class="GtkEntry" id="search_entry">
+                            <property name="primary-icon-name">edit-find-symbolic</property>
+                            <property name="placeholder-text" translatable="yes">Search</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwBin" />
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="search_replace_entry">
+                    <property name="primary-icon-name">edit-find-replace-symbolic</property>
+                    <property name="placeholder-text" translatable="yes">Replace</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <property name="spacing">4</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                    <property name="spacing">4</property>
+                    <child>
+                      <object class="GtkBox">
+                        <style>
+                          <class name="linked" />
+                        </style>
+                        <child>
+                          <object class="AdwBin" />
+                        </child>
+                        <child>
+                          <object class="GtkToggleButton" id="search_match_case_toggle">
+                            <property name="icon-name">uppercase-symbolic</property>
+                            <property name="tooltip-text" translatable="yes">Match Case</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkToggleButton" id="search_match_whole_words_toggle">
+                            <property name="icon-name">match-words-symbolic</property>
+                            <property name="tooltip-text" translatable="yes">Whole Words</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkToggleButton" id="search_match_regex_toggle">
+                            <property name="icon-name">regex-symbolic</property>
+                            <property name="tooltip-text" translatable="yes">Use Regex</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="search_occurrences_label">
+                        <style>
+                          <class name="dimmed" />
+                        </style>
+                        <property name="label">?</property>
+                        <property name="width-request">72</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <style>
+                          <class name="linked" />
+                        </style>
+                        <child>
+                          <object class="GtkButton" id="search_prev_button">
+                            <property name="icon-name">go-up-symbolic</property>
+                            <property name="action-name">search.search-prev</property>
+                            <property name="tooltip-text" translatable="yes">Previous Match (Shift + Return)</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="search_next_button">
+                            <property name="icon-name">go-down-symbolic</property>
+                            <property name="action-name">search.search-next</property>
+                            <property name="tooltip-text" translatable="yes">Next Match (Return)</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="search_replace_toggle">
+                        <property name="icon-name">edit-find-replace-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Search and Replace (Ctrl+F)</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="icon-name">window-close-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Close Search</property>
+                        <property name="action-name">search.hide</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="search_replace_buttons_container">
+                    <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                    <property name="visible">false</property>
+                    <property name="spacing">4</property>
+                    <child>
+                      <object class="AdwBin" />
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="search_replace_button">
+                        <property name="action-name">search.commit-replace</property>
+                        <property name="label" translatable="yes">Replace</property>
+                        <property name="tooltip-text" translatable="yes">Replace (Return)</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="search_replace_all_button">
+                        <property name="action-name">search.commit-replace-all</property>
+                        <property name="label" translatable="yes">Replace All</property>
+                        <property name="tooltip-text" translatable="yes">Replace All (Shift + Return)</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
