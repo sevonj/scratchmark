@@ -46,6 +46,8 @@ mod imp {
         sidebar_header_bar: TemplateChild<HeaderBar>,
         #[template_child]
         sidebar_toolbar_view: TemplateChild<ToolbarView>,
+        #[template_child]
+        sidebar_toggle: TemplateChild<ToggleButton>,
 
         #[template_child]
         main_page: TemplateChild<NavigationPage>,
@@ -332,6 +334,12 @@ mod imp {
                 ),
             );
 
+            let sidebar_toggle: &ToggleButton = self.sidebar_toggle.as_ref();
+            self.top_split
+                .bind_property("show-sidebar", sidebar_toggle, "active")
+                .bidirectional()
+                .sync_create()
+                .build();
             self.main_toolbar_view
                 .set_content(Some(&SheetEditorPlaceholder::default()));
             self.sidebar_toolbar_view
