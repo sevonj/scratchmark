@@ -422,8 +422,8 @@ mod imp {
                 #[weak]
                 top_split,
                 move |_, _| {
-                    let collapsed = !top_split.is_collapsed();
-                    top_split.set_collapsed(collapsed);
+                    let show = !top_split.shows_sidebar();
+                    top_split.set_show_sidebar(show);
                 }
             ));
             obj.add_action(&action);
@@ -524,7 +524,7 @@ mod imp {
             }
 
             let show_sidebar = settings.boolean("library-sidebar-open");
-            self.top_split.set_collapsed(!show_sidebar);
+            self.top_split.set_show_sidebar(!show_sidebar);
 
             let library_expanded_folders = settings.strv("library-expanded-folders");
             for path in library_expanded_folders {
@@ -545,7 +545,7 @@ mod imp {
                 .unwrap_or_default();
             settings.set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
 
-            let show_sidebar = self.top_split.is_collapsed();
+            let show_sidebar = self.top_split.shows_sidebar();
             settings.set_boolean("library-sidebar-open", !show_sidebar)?;
 
             let expanded_folders = self.library_browser.expanded_folder_paths();

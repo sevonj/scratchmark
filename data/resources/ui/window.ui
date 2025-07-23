@@ -5,6 +5,12 @@
   <requires lib="gtksourceview" version="5.0" />
   <template class="Window" parent="AdwApplicationWindow">
     <child>
+      <object class="AdwBreakpoint">
+        <condition>max-width: 800sp</condition>
+        <setter object="top_split" property="collapsed">True</setter>
+      </object>
+    </child>
+    <child>
       <object class="AdwOverlaySplitView" id="top_split">
         <property name="sidebar">
           <object class="AdwNavigationPage" id="sidebar_page">
