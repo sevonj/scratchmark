@@ -218,7 +218,7 @@ mod imp {
                         fs::rename(&original_path, &new_path).expect("Folder rename failed");
                         if open_sheet_affected {
                             let selected_sheet = sheet_editor_opt.as_ref().unwrap().path();
-                            let relative = selected_sheet.strip_prefix(&folder.path()).unwrap();
+                            let relative = selected_sheet.strip_prefix(folder.path()).unwrap();
                             let sheet_path = new_path.join(relative);
                             this.library_browser
                                 .set_selected_sheet(Some(sheet_path.clone()));
