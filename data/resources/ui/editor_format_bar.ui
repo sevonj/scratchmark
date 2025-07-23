@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="EditorFormatBar" parent="AdwBin">
+    <child>
+      <object class="GtkActionBar">
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <property name="spacing">8</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">format-text-bold-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Bold (Ctrl+B)</property>
+                    <property name="action-name">formatbar.bold</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">format-text-italic-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Italic (Ctrl+I)</property>
+                    <property name="action-name">formatbar.italic</property>
+                  </object>
+                </child>
+                <!--child>
+                  <object class="GtkButton">
+                    <property name="icon-name">format-text-underline-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Underline</property>
+                    <property name="action-name">formatbar.underline</property>
+                  </object>
+                </child-->
+                <!--child>
+                  <object class="GtkButton">
+                    <property name="icon-name">format-text-strikethrough-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Strikethrough</property>
+                    <property name="action-name">formatbar.strikethrough</property>
+                  </object>
+                </child-->
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">md-format-h1-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Heading 1</property>
+                    <property name="action-name">formatbar.heading</property>
+                    <property name="action-target">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">md-format-h2-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Heading 2</property>
+                    <property name="action-name">formatbar.heading</property>
+                    <property name="action-target">2</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <!--child>
+            <object class="GtkBox">
+              <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <child>
+                  <object class="GtkToggleButton">
+                    <property name="icon-name">insert-link-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Insert Link</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkToggleButton">
+                    <property name="icon-name">insert-image-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Insert Image</property>
+                  </object>
+                </child>
+              </object>
+            </child-->
+            <!--child>
+              <object class="GtkToggleButton">
+                <property name="icon-name">quotation-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Blockquote</property>
+              </object>
+            </child-->
+            <!--child>
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <child>
+                  <object class="GtkToggleButton">
+                      <property name="icon-name">view-list-symbolic</property>
+                      <property name="tooltip-text" translatable="yes">List</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkToggleButton">
+                    <property name="icon-name">view-list-ordered-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Ordered List</property>
+                  </object>
+                </child>
+              </object>
+            </child-->
+            <!--child>
+              <object class="GtkToggleButton">
+                <property name="icon-name">md-horizontal-rule-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Horizontal Rule</property>
+              </object>
+            </child-->
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <child>
+                  <object class="GtkToggleButton">
+                    <property name="icon-name">md-code-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Code</property>
+                    <property name="action-name">formatbar.code</property>
+                  </object>
+                </child>
+                <!--child>
+                  <object class="GtkToggleButton">
+                      <property name="icon-name">md-codeblock-symbolic</property>
+                      <property name="tooltip-text" translatable="yes">Codeblock</property>
+                  </object>
+                </child-->
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

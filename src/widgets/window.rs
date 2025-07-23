@@ -17,22 +17,22 @@ mod imp {
     use gio::{Cancellable, Settings, SimpleAction, SimpleActionGroup};
     use glib::VariantTy;
     use gtk::{
-        ActionBar, Builder, Button, CompositeTemplate, EventControllerMotion, FontDialog,
-        MenuButton, Revealer, ToggleButton,
+        Builder, Button, CompositeTemplate, EventControllerMotion, FontDialog, MenuButton,
+        Revealer, ToggleButton,
     };
     use pango::FontDescription;
 
     use crate::APP_ID;
     use crate::error::ScratchmarkError;
     use crate::util;
-    use crate::widgets;
 
-    use widgets::ItemCreatePopover;
-    use widgets::LibraryBrowser;
-    use widgets::LibraryFolder;
-    use widgets::LibrarySheet;
-    use widgets::SheetEditor;
-    use widgets::SheetEditorPlaceholder;
+    use crate::widgets::EditorFormatBar;
+    use crate::widgets::ItemCreatePopover;
+    use crate::widgets::LibraryBrowser;
+    use crate::widgets::LibraryFolder;
+    use crate::widgets::LibrarySheet;
+    use crate::widgets::SheetEditor;
+    use crate::widgets::SheetEditorPlaceholder;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/window.ui")]
@@ -66,7 +66,7 @@ mod imp {
         unfullscreen_button: TemplateChild<Button>,
 
         #[template_child]
-        format_bar: TemplateChild<ActionBar>,
+        format_bar: TemplateChild<EditorFormatBar>,
         #[template_child]
         format_bar_toggle: TemplateChild<ToggleButton>,
 
@@ -83,6 +83,8 @@ mod imp {
         type ParentType = ApplicationWindow;
 
         fn class_init(klass: &mut Self::Class) {
+            EditorFormatBar::ensure_type();
+
             klass.bind_template();
         }
 
@@ -633,6 +635,7 @@ mod imp {
             );
 
             self.main_toolbar_view.set_content(Some(&editor));
+            self.format_bar.bind_editor(Some(editor.clone()));
             self.sheet_editor.replace(Some(editor));
             self.library_browser.set_selected_sheet(Some(path));
             self.update_window_title();
@@ -738,6 +741,7 @@ mod imp {
                 .set_content(Some(&SheetEditorPlaceholder::default()));
             self.update_window_title();
             self.library_browser.set_selected_sheet(None);
+            self.format_bar.bind_editor(None);
             Ok(())
         }
 
