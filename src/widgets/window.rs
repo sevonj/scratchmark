@@ -207,19 +207,22 @@ mod imp {
 
                         let original_path = folder.path();
                         let new_path = util::incremented_path(new_path);
-                        fs::rename(&original_path, &new_path).expect("Folder rename failed");
 
                         let sheet_editor_opt = this.sheet_editor.borrow();
-                        if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
-                            let selected = sheet_editor.path();
-                            let old_path = folder.path();
-                            if selected.starts_with(&old_path) {
-                                let relative = selected.strip_prefix(&old_path).unwrap();
-                                let sheet_path = new_path.join(relative);
-                                this.library_browser
-                                    .set_selected_sheet(Some(sheet_path.clone()));
-                                sheet_editor.set_path(sheet_path);
-                            }
+                        let open_sheet_affected = sheet_editor_opt
+                            .as_ref()
+                            .is_some_and(|e| e.path().starts_with(&original_path));
+                        if open_sheet_affected {
+                            sheet_editor_opt.as_ref().unwrap().cancel_filemon();
+                        }
+                        fs::rename(&original_path, &new_path).expect("Folder rename failed");
+                        if open_sheet_affected {
+                            let selected_sheet = sheet_editor_opt.as_ref().unwrap().path();
+                            let relative = selected_sheet.strip_prefix(&folder.path()).unwrap();
+                            let sheet_path = new_path.join(relative);
+                            this.library_browser
+                                .set_selected_sheet(Some(sheet_path.clone()));
+                            sheet_editor_opt.as_ref().unwrap().set_path(sheet_path);
                         }
 
                         assert_eq!(
@@ -242,15 +245,19 @@ mod imp {
                     move |_browser: LibraryBrowser, sheet: LibrarySheet, new_path: PathBuf| {
                         let original_path = sheet.path();
                         let new_path = util::incremented_path(new_path);
-                        fs::rename(&original_path, &new_path).expect("File rename failed");
 
                         let sheet_editor_opt = this.sheet_editor.borrow();
-                        if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
-                            if sheet_editor.path() == sheet.path() {
-                                this.library_browser
-                                    .set_selected_sheet(Some(new_path.clone()));
-                                sheet_editor.set_path(new_path);
-                            }
+                        let open_sheet_affected = sheet_editor_opt
+                            .as_ref()
+                            .is_some_and(|e| e.path() == sheet.path());
+                        if open_sheet_affected {
+                            sheet_editor_opt.as_ref().unwrap().cancel_filemon();
+                        }
+                        fs::rename(&original_path, &new_path).expect("File rename failed");
+                        if open_sheet_affected {
+                            this.library_browser
+                                .set_selected_sheet(Some(new_path.clone()));
+                            sheet_editor_opt.as_ref().unwrap().set_path(new_path);
                         }
 
                         assert_eq!(

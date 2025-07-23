@@ -521,6 +521,11 @@ impl SheetEditor {
         self.imp().setup_filemon();
     }
 
+    /// For preventing "file changed" banner when renaming the file or such.
+    pub fn cancel_filemon(&self) {
+        self.imp().filemon.borrow().as_ref().unwrap().cancel();
+    }
+
     pub fn set_font(&self, family: &str, size: u32) {
         let formatted = format!("textview {{font-family: {family}; font-size: {size}pt;}}");
         self.imp()
