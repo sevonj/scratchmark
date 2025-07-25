@@ -537,8 +537,10 @@ mod imp {
                 self.load_sheet(open_sheet_path);
             }
 
-            let show_sidebar = settings.boolean("library-sidebar-open");
-            self.top_split.set_show_sidebar(!show_sidebar);
+            self.top_split
+                .set_show_sidebar(!settings.boolean("library-sidebar-open"));
+            self.format_bar
+                .set_visible(settings.boolean("editor-formatbar-open"));
 
             let library_expanded_folders = settings.strv("library-expanded-folders");
             for path in library_expanded_folders {
@@ -559,8 +561,8 @@ mod imp {
                 .unwrap_or_default();
             settings.set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
 
-            let show_sidebar = self.top_split.shows_sidebar();
-            settings.set_boolean("library-sidebar-open", !show_sidebar)?;
+            settings.set_boolean("library-sidebar-open", !self.top_split.shows_sidebar())?;
+            settings.set_boolean("editor-formatbar-open", self.format_bar.is_visible())?;
 
             let expanded_folders = self.library_browser.expanded_folder_paths();
             settings.set_strv("library-expanded-folders", expanded_folders)?;
