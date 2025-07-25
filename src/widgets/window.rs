@@ -170,7 +170,10 @@ mod imp {
                     obj,
                     move |_: LibraryBrowser, folder: LibraryFolder| {
                         let heading = "Delete folder?";
-                        let body = format!("Are you sure you want to delete {}?", folder.name());
+                        let body = format!(
+                            "Are you sure you want to permanently delete {}?",
+                            folder.name()
+                        );
                         let dialog = AlertDialog::new(Some(heading), Some(&body));
                         dialog.add_response("cancel", "Cancel");
                         dialog.add_response("commit-delete", "Delete");
@@ -281,7 +284,10 @@ mod imp {
                     obj,
                     move |_: LibraryBrowser, sheet: LibrarySheet| {
                         let heading = "Delete sheet?";
-                        let body = format!("Are you sure you want to delete {}?", sheet.stem());
+                        let body = format!(
+                            "Are you sure you want to permanently delete {}?",
+                            sheet.stem()
+                        );
                         let dialog = AlertDialog::new(Some(heading), Some(&body));
                         dialog.add_response("cancel", "Cancel");
                         dialog.add_response("commit-delete", "Delete");
