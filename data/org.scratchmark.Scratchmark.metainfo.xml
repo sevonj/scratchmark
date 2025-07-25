@@ -39,6 +39,27 @@
   <url type="homepage">https://github.com/sevonj/scratchmark</url>
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.2.0" date="2025-07-25">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.2.0</url>
+      <description>
+        <p>New features:</p>
+        <ul>
+          <li>Choose custom font and size</li>
+          <li>Folder icons</li>
+          <li>Persistent window size</li>
+        </ul>
+        <p>Fixes:</p>
+        <ul>
+          <li>Renaming sometimes triggers "File changed on disk" alert.</li>
+          <li>Editor margins: Clamp width, add vertical margin</li>
+          <li>Sane default window size</li>
+          <li>Consistent formatting for UI text</li>
+          <li>Sidebar toggle is now a toggle button</li>
+          <li>Broken sidebar show/hide transition</li>
+        </ul>
+        <p>Also major code refactors not directly visible to the user.</p>
+      </description>
+    </release>
     <release version="v1.1.0" date="2025-07-7">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.1.0</url>
       <description>
