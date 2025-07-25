@@ -538,7 +538,7 @@ mod imp {
             }
 
             self.top_split
-                .set_show_sidebar(!settings.boolean("library-sidebar-open"));
+                .set_show_sidebar(settings.boolean("library-sidebar-open"));
             self.format_bar
                 .set_visible(settings.boolean("editor-formatbar-open"));
 
@@ -561,7 +561,7 @@ mod imp {
                 .unwrap_or_default();
             settings.set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
 
-            settings.set_boolean("library-sidebar-open", !self.top_split.shows_sidebar())?;
+            settings.set_boolean("library-sidebar-open", self.top_split.shows_sidebar())?;
             settings.set_boolean("editor-formatbar-open", self.format_bar.is_visible())?;
 
             let expanded_folders = self.library_browser.expanded_folder_paths();
