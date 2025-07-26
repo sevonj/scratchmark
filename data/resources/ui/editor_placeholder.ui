@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <template class="SheetEditorPlaceholder" parent="AdwBin">
+    <template class="EditorPlaceholder" parent="AdwBin">
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="halign">GTK_ALIGN_CENTER</property>

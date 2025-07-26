@@ -8,13 +8,13 @@ mod imp {
     use gtk::CompositeTemplate;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/sheet_editor_placeholder.ui")]
-    pub struct SheetEditorPlaceholder {}
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor_placeholder.ui")]
+    pub struct EditorPlaceholder {}
 
     #[glib::object_subclass]
-    impl ObjectSubclass for SheetEditorPlaceholder {
-        const NAME: &'static str = "SheetEditorPlaceholder";
-        type Type = super::SheetEditorPlaceholder;
+    impl ObjectSubclass for EditorPlaceholder {
+        const NAME: &'static str = "EditorPlaceholder";
+        type Type = super::EditorPlaceholder;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -26,26 +26,26 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for SheetEditorPlaceholder {
+    impl ObjectImpl for EditorPlaceholder {
         fn constructed(&self) {
             self.parent_constructed();
         }
     }
 
-    impl WidgetImpl for SheetEditorPlaceholder {}
-    impl BinImpl for SheetEditorPlaceholder {}
+    impl WidgetImpl for EditorPlaceholder {}
+    impl BinImpl for EditorPlaceholder {}
 }
 
 use glib::Object;
 use gtk::glib;
 
 glib::wrapper! {
-    pub struct SheetEditorPlaceholder(ObjectSubclass<imp::SheetEditorPlaceholder>)
+    pub struct EditorPlaceholder(ObjectSubclass<imp::EditorPlaceholder>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl Default for SheetEditorPlaceholder {
+impl Default for EditorPlaceholder {
     fn default() -> Self {
         Object::builder().build()
     }

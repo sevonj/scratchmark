@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/org/scratchmark/Scratchmark">
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_format_bar.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/editor_placeholder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_search_bar.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/item_create_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/item_rename_popover.ui</file>
@@ -11,7 +12,6 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library_project.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor_placeholder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/shortcuts.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>

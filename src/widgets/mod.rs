@@ -1,4 +1,5 @@
 mod editor_format_bar;
+mod editor_placeholder;
 mod editor_search_bar;
 mod item_create_popover;
 mod item_rename_popover;
@@ -7,10 +8,10 @@ mod library_folder;
 mod library_project;
 mod library_sheet;
 mod sheet_editor;
-mod sheet_editor_placeholder;
 mod window;
 
 pub use editor_format_bar::EditorFormatBar;
+pub use editor_placeholder::EditorPlaceholder;
 pub use editor_search_bar::EditorSearchBar;
 pub use item_create_popover::ItemCreatePopover;
 pub use item_rename_popover::ItemRenamePopover;
@@ -19,5 +20,4 @@ pub use library_folder::LibraryFolder;
 pub use library_project::LibraryProject;
 pub use library_sheet::LibrarySheet;
 pub use sheet_editor::SheetEditor;
-pub use sheet_editor_placeholder::SheetEditorPlaceholder;
 pub use window::Window;

@@ -27,12 +27,12 @@ mod imp {
     use crate::util;
 
     use crate::widgets::EditorFormatBar;
+    use crate::widgets::EditorPlaceholder;
     use crate::widgets::ItemCreatePopover;
     use crate::widgets::LibraryBrowser;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
     use crate::widgets::SheetEditor;
-    use crate::widgets::SheetEditorPlaceholder;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/window.ui")]
@@ -347,7 +347,7 @@ mod imp {
                 .sync_create()
                 .build();
             self.main_toolbar_view
-                .set_content(Some(&SheetEditorPlaceholder::default()));
+                .set_content(Some(&EditorPlaceholder::default()));
             self.sidebar_toolbar_view
                 .set_content(Some(&self.library_browser));
             self.update_window_title();
@@ -761,7 +761,7 @@ mod imp {
             self.sheet_editor.replace(None);
 
             self.main_toolbar_view
-                .set_content(Some(&SheetEditorPlaceholder::default()));
+                .set_content(Some(&EditorPlaceholder::default()));
             self.update_window_title();
             self.library_browser.set_selected_sheet(None);
             self.format_bar.bind_editor(None);
