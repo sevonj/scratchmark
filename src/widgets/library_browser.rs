@@ -29,7 +29,7 @@ mod imp {
 
         pub(super) selected_sheet: RefCell<Option<PathBuf>>,
 
-        pub(super) projects: RefCell<Vec<LibraryProject>>,
+        pub(super) project: RefCell<Option<LibraryProject>>,
     }
 
     #[glib::object_subclass]
@@ -87,21 +87,12 @@ mod imp {
 
     impl LibraryBrowser {
         pub(super) fn refresh_content(&self) {
-            let binding = self.projects.borrow();
-            let projects: &Vec<LibraryProject> = binding.as_ref();
-            for project in projects {
+            if let Some(project) = self.project.borrow().as_ref() {
                 project.refresh_content();
             }
         }
 
-        pub(super) fn add_project(&self, project: LibraryProject) {
-            let path = project.path();
-            for project in self.projects.borrow_mut().iter() {
-                if project.root_folder().path() == path {
-                    return;
-                }
-            }
-
+        pub(super) fn load_project(&self, project: LibraryProject) {
             project.connect_closure(
                 "folder-added",
                 false,
@@ -126,7 +117,7 @@ mod imp {
             );
 
             self.projects_container.append(&project);
-            self.projects.borrow_mut().push(project.clone());
+            self.project.borrow_mut().replace(project.clone());
             project.refresh_content();
             self.no_projects_status.set_visible(false);
         }
@@ -299,61 +290,40 @@ glib::wrapper! {
 impl Default for LibraryBrowser {
     fn default() -> Self {
         let this: Self = Object::builder().build();
-        this.imp().add_project(LibraryProject::new_appdata());
+        this.imp().load_project(LibraryProject::new_appdata());
         this.refresh_content();
         this
     }
 }
 
 impl LibraryBrowser {
-    pub fn project_paths(&self) -> Vec<String> {
-        let mut paths = vec![];
-
-        let binding = self.imp().projects.borrow();
-        let projects: &Vec<LibraryProject> = binding.as_ref();
-        for project in &projects[1..] {
-            paths.push(project.root_folder().path().to_str().unwrap().to_owned());
-        }
-        paths
-    }
-
     pub fn expanded_folder_paths(&self) -> Vec<String> {
-        let mut paths = vec![];
-
-        let binding = self.imp().projects.borrow();
-        let projects: &Vec<LibraryProject> = binding.as_ref();
-        for project in projects {
-            paths.append(&mut project.expanded_folder_paths());
-        }
-        paths
+        self.imp()
+            .project
+            .borrow()
+            .as_ref()
+            .map(LibraryProject::expanded_folder_paths)
+            .unwrap_or_default()
     }
 
     pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
-        let binding = self.imp().projects.borrow();
-        let projects: &Vec<LibraryProject> = binding.as_ref();
-        for project in projects {
-            let opt = project.get_folder(path);
-            if opt.is_some() {
-                return opt;
-            }
-        }
-        None
+        self.imp()
+            .project
+            .borrow()
+            .as_ref()
+            .and_then(|p| p.get_folder(path))
     }
 
     pub fn get_sheet(&self, path: &Path) -> Option<LibrarySheet> {
-        let binding = self.imp().projects.borrow();
-        let projects: &Vec<LibraryProject> = binding.as_ref();
-        for project in projects {
-            let opt = project.get_sheet(path);
-            if opt.is_some() {
-                return opt;
-            }
-        }
-        None
+        self.imp()
+            .project
+            .borrow()
+            .as_ref()
+            .and_then(|p| p.get_sheet(path))
     }
 
     pub fn add_project(&self, path: PathBuf) {
-        self.imp().add_project(LibraryProject::new(path));
+        self.imp().load_project(LibraryProject::new(path));
     }
 
     pub fn refresh_content(&self) {
