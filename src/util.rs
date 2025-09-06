@@ -66,6 +66,15 @@ pub fn create_builtin_library() {
     std::fs::create_dir_all(&path).expect("Couldn't create dir for builtin_library");
 }
 
+pub fn path_project_list_dir() -> PathBuf {
+    path_userdata().join("projects")
+}
+
+pub fn ensure_project_list_dir() {
+    let path = path_project_list_dir();
+    std::fs::create_dir_all(&path).expect("Couldn't create dir for projects");
+}
+
 /// Returns an unused filepath with a placeholder name
 pub fn untitled_folder_path(dir: PathBuf) -> PathBuf {
     assert!(dir.is_dir());

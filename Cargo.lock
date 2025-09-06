@@ -491,6 +491,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "itoa"
+version = "1.0.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4a5f13b858c8d314ee3e8f639011f7ccefe71f97f96e50151fb991f267928e2c"
+
+[[package]]
 name = "libadwaita"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -621,12 +627,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "ryu"
+version = "1.0.20"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "28d3b2b1366ec20994f1fd18c3c594f05c5dd4bc44d8bb0c1c632c8d6829481f"
+
+[[package]]
 name = "scratchmark"
 version = "1.3.0"
 dependencies = [
  "glib-build-tools",
  "gtk4",
  "libadwaita",
+ "serde",
+ "serde_json",
  "sourceview5",
 ]
 
@@ -654,6 +668,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "serde_json"
+version = "1.0.141"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "30b9eff21ebe718216c6ec64e1d9ac57087aad11efc64e32002bce4a0d4c03d3"
+dependencies = [
+ "itoa",
+ "memchr",
+ "ryu",
+ "serde",
 ]
 
 [[package]]

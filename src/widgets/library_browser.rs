@@ -12,9 +12,12 @@ mod imp {
     use gtk::glib::closure_local;
     use gtk::prelude::*;
 
+    use crate::data::ProjectState;
+    use crate::util::path_project_list_dir;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
     use crate::widgets::library_project::LibraryProject;
+    use crate::widgets::project_selector::ProjectSelector;
     use gtk::CompositeTemplate;
 
     #[derive(CompositeTemplate, Default)]
@@ -29,6 +32,9 @@ mod imp {
 
         pub(super) selected_sheet: RefCell<Option<PathBuf>>,
 
+        #[template_child]
+        pub(super) project_selector: TemplateChild<ProjectSelector>,
+        pub(super) projects: RefCell<Vec<PathBuf>>,
         pub(super) project: RefCell<Option<LibraryProject>>,
     }
 
@@ -40,6 +46,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             klass.bind_template();
+            ProjectSelector::ensure_type();
         }
 
         fn instance_init(obj: &InitializingObject<Self>) {
@@ -50,6 +57,38 @@ mod imp {
     impl ObjectImpl for LibraryBrowser {
         fn constructed(&self) {
             self.parent_constructed();
+
+            let obj = self.obj();
+
+            self.project_selector.connect_closure(
+                "select-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: ProjectSelector, path: PathBuf| {
+                        obj.emit_by_name::<()>("project-change-requested", &[&path]);
+                    }
+                ),
+            );
+
+            self.project_selector.connect_closure(
+                "remove-requested",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |selector: ProjectSelector, path: PathBuf| {
+                        let active_project_path = this.project.borrow().as_ref().map(|p| p.path());
+                        if active_project_path.is_some_and(|current| path == current) {
+                            this.obj()
+                                .emit_by_name::<()>("project-change-requested", &[&path]);
+                        } else {
+                            selector.remove(&path);
+                        }
+                    }
+                ),
+            );
         }
 
         fn signals() -> &'static [Signal] {
@@ -57,6 +96,9 @@ mod imp {
             SIGNALS.get_or_init(|| {
                 vec![
                     Signal::builder("sheet-selected")
+                        .param_types([PathBuf::static_type()])
+                        .build(),
+                    Signal::builder("project-change-requested")
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-rename-requested")
@@ -89,6 +131,7 @@ mod imp {
         pub(super) fn refresh_content(&self) {
             if let Some(project) = self.project.borrow().as_ref() {
                 project.refresh_content();
+                self.projects.replace(ProjectState::list_projects());
             }
         }
 
@@ -276,6 +319,7 @@ use gtk::glib;
 
 use glib::Object;
 
+use crate::error::ScratchmarkError;
 use crate::widgets::LibraryProject;
 use crate::widgets::LibrarySheet;
 
@@ -290,8 +334,8 @@ glib::wrapper! {
 impl Default for LibraryBrowser {
     fn default() -> Self {
         let this: Self = Object::builder().build();
-        this.imp().load_project(LibraryProject::new_appdata());
-        this.refresh_content();
+        // this.imp().load_project(LibraryProject::new_appdata());
+        // this.refresh_content();
         this
     }
 }
@@ -322,7 +366,13 @@ impl LibraryBrowser {
             .and_then(|p| p.get_sheet(path))
     }
 
-    pub fn add_project(&self, path: PathBuf) {
+    // Todo
+    // pub fn add_project(&self, path: PathBuf) {
+    //     //
+    // }
+
+    pub fn load_project(&self, path: PathBuf) {
+        self.imp().project_selector.select(&path);
         self.imp().load_project(LibraryProject::new(path));
     }
 

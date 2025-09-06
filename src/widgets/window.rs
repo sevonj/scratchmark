@@ -145,6 +145,23 @@ mod imp {
             );
 
             self.library_browser.connect_closure(
+                "project-change-requested",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_: LibraryBrowser, path: PathBuf| {
+                        if let Err(e) = this.close_editor() {
+                            this.toast_overlay.add_toast(Toast::new(&e.to_string()));
+                            return;
+                        }
+
+                        this.library_browser.load_project(path);
+                    }
+                ),
+            );
+
+            self.library_browser.connect_closure(
                 "folder-trash-requested",
                 false,
                 closure_local!(

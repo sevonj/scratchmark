@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="ProjectSelector" parent="AdwBin">
+        <child>
+            <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <property name="margin-bottom">6</property>
+                <property name="spacing">2</property>
+                <child>
+                    <object class="GtkToggleButton" id="reveal_toggle">
+                        <property name="icon-name">library</property>
+                        <property name="label">Library</property>
+                        <property name="hexpand">true</property>
+                        <style>
+                            <class name="flat" />
+                        </style>
+                        <child>
+                            <object class="GtkBox" id="title_row">
+                                <property name="orientation">0</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                    <object class="GtkImage">
+                                        <property name="icon-name">project-symbolic</property>
+                                        <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
+                                        <style>
+                                            <class name="dim-label" />
+                                        </style>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="title">
+                                        <property name="label">project-name-here</property>
+                                        <property name="xalign">0</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
+                                        <attributes>
+                                            <attribute name="weight" value="PANGO_WEIGHT_NORMAL" />
+                                        </attributes>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkImage" id="expand_icon">
+                                        <property name="icon-name">down-symbolic</property>
+                                        <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
+                                        <style>
+                                            <class name="dim-label" />
+                                        </style>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkRevealer" id="revealer">
+                        <child>
+                            <object class="GtkBox">
+                                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                                <property name="spacing">2</property>
+                                <child>
+                                    <object class="GtkBox" id="projects_container">
+                                        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                                        <property name="spacing">2</property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkButton">
+                                        <property name="label">Add Folder</property>
+                                        <style>
+                                            <class name="flat" />
+                                        </style>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>

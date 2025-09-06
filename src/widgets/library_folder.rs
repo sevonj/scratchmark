@@ -461,12 +461,13 @@ impl LibraryFolder {
     pub fn new_project_root(data: &FolderObject) -> Self {
         let this = Self::new(data);
         this.imp().is_project_root.replace(true);
-        this.imp()
-            .folder_icon
-            .set_icon_name(Some("library-symbolic"));
-        this.imp().expand_icon.set_visible(false);
-        this.imp().expand_button.set_sensitive(false);
-        this.imp().title.set_label("Library");
+        //this.imp()
+        //    .folder_icon
+        //    .set_icon_name(Some("project-symbolic"));
+        //this.imp().expand_icon.set_visible(false);
+        //this.imp().expand_button.set_sensitive(false);
+        //this.imp().title.set_label("Project");
+        this.imp().expand_button.set_visible(false);
         this.imp().content_vbox.set_margin_start(0);
         this.imp().content_vbox.set_margin_bottom(8); // Provide some empty space to aid dragging
         this.imp().set_expanded(true);
@@ -533,7 +534,7 @@ impl LibraryFolder {
 
         self.imp()
             .title_row
-            .set_margin_start(std::cmp::max(12 * data.depth() as i32, 0));
+            .set_margin_start(std::cmp::max(12 * data.depth() as i32 - 12, 0));
         let title_label = self.imp().title.get();
         let mut bindings = self.imp().bindings.borrow_mut();
 
