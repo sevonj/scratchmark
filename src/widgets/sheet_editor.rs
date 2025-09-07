@@ -30,6 +30,7 @@ mod imp {
     use gtk::TextMark;
     use sourceview5::View;
 
+    use super::SheetStats;
     use crate::util;
     use crate::widgets::EditorSearchBar;
 
@@ -42,6 +43,7 @@ mod imp {
         #[template_child]
         pub(super) source_view: TemplateChild<View>,
         pub(super) source_view_css_provider: CssProvider,
+        pub(super) sheet_stats: Cell<SheetStats>,
 
         #[template_child]
         pub(super) search_bar: TemplateChild<EditorSearchBar>,
@@ -394,6 +396,7 @@ mod imp {
                 vec![
                     Signal::builder("close-requested").build(),
                     Signal::builder("saved-as").build(),
+                    Signal::builder("stats-changed").build(),
                     Signal::builder("toast")
                         .param_types([String::static_type()])
                         .build(),
@@ -431,6 +434,7 @@ mod imp {
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
+use glib::clone;
 use gtk::glib;
 use gtk::prelude::*;
 use sourceview5::prelude::*;
@@ -477,6 +481,14 @@ impl SheetEditor {
         this.imp().source_view.set_buffer(Some(&buffer));
         this.imp().search_bar.set_search_context(search_context);
         this.imp().setup_filemon();
+        buffer.connect_changed(clone!(
+            #[weak]
+            this,
+            move |buffer| {
+                this.refresh_stats(buffer);
+            }
+        ));
+        this.refresh_stats(&buffer);
         Ok(this)
     }
 
@@ -533,6 +545,17 @@ impl SheetEditor {
             .load_from_string(&formatted);
     }
 
+    pub fn sheet_stats(&self) -> SheetStats {
+        self.imp().sheet_stats.get()
+    }
+
+    fn refresh_stats(&self, buffer: &Buffer) {
+        self.imp()
+            .sheet_stats
+            .replace(SheetStats::from_buffer(buffer));
+        self.emit_by_name::<()>("stats-changed", &[]);
+    }
+
     fn load_buffer_style_scheme(&self, buffer: &Buffer) {
         let scheme_id = "scratchmark";
 
@@ -563,5 +586,50 @@ impl SheetEditor {
         }
 
         println!("Failed to load scheme with id '{scheme_id}'.")
+    }
+}
+
+#[derive(Debug, Default, Clone, Copy)]
+pub struct SheetStats {
+    pub num_lines: i32,
+    pub num_chars: i32,
+    pub num_spaces: i32,
+    pub num_words: i32,
+}
+
+impl SheetStats {
+    pub fn from_buffer(buffer: &Buffer) -> Self {
+        let num_lines = buffer.line_count();
+        let num_chars = buffer.char_count();
+        let mut num_spaces = 0;
+        let mut num_words = 0;
+
+        let mut prev_whitespace = true;
+
+        for i in 0..num_lines {
+            let start = buffer.iter_at_line(i).unwrap();
+            let end = buffer
+                .iter_at_line(i + 1)
+                .unwrap_or_else(|| buffer.end_iter());
+
+            let text = buffer.text(&start, &end, true);
+
+            for char in text.chars() {
+                let is_whitespace = char.is_whitespace();
+                if is_whitespace {
+                    num_spaces += 1;
+                } else if prev_whitespace {
+                    num_words += 1;
+                }
+                prev_whitespace = is_whitespace;
+            }
+        }
+
+        Self {
+            num_lines,
+            num_chars,
+            num_spaces,
+            num_words,
+        }
     }
 }
