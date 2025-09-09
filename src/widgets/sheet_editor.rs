@@ -4,6 +4,7 @@ mod imp {
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
+    use adw::OverlaySplitView;
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use glib::clone;
@@ -49,6 +50,8 @@ mod imp {
         pub(super) search_bar: TemplateChild<EditorSearchBar>,
         #[template_child]
         pub(super) file_changed_banner: TemplateChild<Banner>,
+        #[template_child]
+        pub(super) editor_split: TemplateChild<OverlaySplitView>,
 
         pub(super) file: RefCell<Option<File>>,
         pub(super) filemon: RefCell<Option<FileMonitor>>,
@@ -56,6 +59,8 @@ mod imp {
 
         #[property(get, set)]
         pub(super) file_changed: Cell<bool>,
+        #[property(get, set)]
+        pub(super) show_sidebar: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -98,6 +103,12 @@ mod imp {
                     }
                 ),
             );
+
+            self.editor_split
+                .bind_property("show_sidebar", obj.as_ref(), "show_sidebar")
+                .sync_create()
+                .bidirectional()
+                .build();
 
             self.file_changed_banner.connect_button_clicked(clone!(
                 #[weak]

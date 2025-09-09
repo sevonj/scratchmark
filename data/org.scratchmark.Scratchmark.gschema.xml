@@ -12,6 +12,9 @@
       <default>true</default>
       <summary>Remember whether the sidebar was left open.</summary>
     </key>
+    <key name="editor-sidebar-open" type="b">
+      <default>false</default>
+    </key>
     <key name="editor-formatbar-open" type="b">
       <default>false</default>
     </key>

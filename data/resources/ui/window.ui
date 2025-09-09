@@ -75,6 +75,12 @@
                               </object>
                             </child>
                             <child type="end">
+                              <object class="GtkToggleButton" id="editor_sidebar_toggle">
+                                <property name="icon-name">info-outline-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Document Info</property>
+                              </object>
+                            </child>
+                            <child type="end">
                               <object class="GtkToggleButton" id="format_bar_toggle">
                                 <property name="icon-name">draw-text-symbolic</property>
                                 <property name="tooltip-text" translatable="yes">Formatting Toolbar</property>
