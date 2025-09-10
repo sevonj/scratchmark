@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+      - name: dependencies
+        run: apt-get install python3-tomlkit
       - name: flatpak-cargo-generator
         working-directory: build-aux
         run: |
