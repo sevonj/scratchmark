@@ -7,7 +7,7 @@
             <object class="AdwOverlaySplitView" id="editor_split">
                 <property name="sidebar-position">end</property>
                 <property name="sidebar">
-                    <object class="AdwBin"></object>
+                    <object class="SheetStats" id="sheet_stats"/>
                 </property>
                 <property name="content">
                     <object class="AdwToolbarView">

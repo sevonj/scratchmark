@@ -8,6 +8,7 @@ mod library_folder;
 mod library_project;
 mod library_sheet;
 mod sheet_editor;
+mod sheet_stats;
 mod window;
 
 pub use editor_format_bar::EditorFormatBar;
@@ -20,4 +21,5 @@ pub use library_folder::LibraryFolder;
 pub use library_project::LibraryProject;
 pub use library_sheet::LibrarySheet;
 pub use sheet_editor::SheetEditor;
+pub use sheet_stats::SheetStats;
 pub use window::Window;

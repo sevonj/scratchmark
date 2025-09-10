@@ -31,9 +31,10 @@ mod imp {
     use gtk::TextMark;
     use sourceview5::View;
 
-    use super::SheetStats;
+    use super::SheetStatsData;
     use crate::util;
     use crate::widgets::EditorSearchBar;
+    use crate::widgets::SheetStats;
 
     use super::NOT_CANCELLABLE;
 
@@ -44,7 +45,9 @@ mod imp {
         #[template_child]
         pub(super) source_view: TemplateChild<View>,
         pub(super) source_view_css_provider: CssProvider,
-        pub(super) sheet_stats: Cell<SheetStats>,
+        #[template_child]
+        pub(super) sheet_stats: TemplateChild<SheetStats>,
+        pub(super) sheet_stats_data: Cell<SheetStatsData>,
 
         #[template_child]
         pub(super) search_bar: TemplateChild<EditorSearchBar>,
@@ -70,6 +73,8 @@ mod imp {
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
+            SheetStats::ensure_type();
+
             klass.bind_template();
         }
 
@@ -556,14 +561,15 @@ impl SheetEditor {
             .load_from_string(&formatted);
     }
 
-    pub fn sheet_stats(&self) -> SheetStats {
-        self.imp().sheet_stats.get()
+    pub fn sheet_stats(&self) -> SheetStatsData {
+        self.imp().sheet_stats_data.get()
     }
 
     fn refresh_stats(&self, buffer: &Buffer) {
-        self.imp()
-            .sheet_stats
-            .replace(SheetStats::from_buffer(buffer));
+        let imp = self.imp();
+        let stats = SheetStatsData::from_buffer(buffer);
+        imp.sheet_stats.set_stats(&stats);
+        imp.sheet_stats_data.replace(stats);
         self.emit_by_name::<()>("stats-changed", &[]);
     }
 
@@ -601,14 +607,14 @@ impl SheetEditor {
 }
 
 #[derive(Debug, Default, Clone, Copy)]
-pub struct SheetStats {
+pub struct SheetStatsData {
     pub num_lines: i32,
     pub num_chars: i32,
     pub num_spaces: i32,
     pub num_words: i32,
 }
 
-impl SheetStats {
+impl SheetStatsData {
     pub fn from_buffer(buffer: &Buffer) -> Self {
         let num_lines = buffer.line_count();
         let num_chars = buffer.char_count();

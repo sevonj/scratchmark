@@ -13,6 +13,7 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/sheet_stats.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/shortcuts.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>
   </gresource>
