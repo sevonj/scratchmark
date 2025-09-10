@@ -355,24 +355,37 @@ mod imp {
                         return;
                     }
 
-                    let mark = search_context.buffer().get_insert();
-                    let iter = search_context.buffer().iter_at_mark(&mark);
-                    search_context.forward_async(
-                        &iter,
-                        None::<&Cancellable>,
-                        clone!(
-                            #[weak]
-                            this,
-                            move |result| {
-                                match result {
-                                    Ok((start, end, _wrapped)) => {
-                                        this.update_search_position(Some((start, end)))
+                    let Some(currently_focused) = this.obj().root().and_then(|r| r.focus()) else {
+                        this.update_search_position(None);
+                        this.update_search_occurrence_text();
+                        return;
+                    };
+                    let search_entry: &Entry = this.search_entry.as_ref();
+                    let replace_entry: &Entry = this.search_replace_entry.as_ref();
+                    if currently_focused.is_ancestor(search_entry)
+                        || currently_focused.is_ancestor(replace_entry)
+                    {
+                        let mark = search_context.buffer().get_insert();
+                        let iter = search_context.buffer().iter_at_mark(&mark);
+                        search_context.forward_async(
+                            &iter,
+                            None::<&Cancellable>,
+                            clone!(
+                                #[weak]
+                                this,
+                                move |result| {
+                                    match result {
+                                        Ok((start, end, _wrapped)) => {
+                                            this.update_search_position(Some((start, end)))
+                                        }
+                                        Err(_) => this.update_search_position(None),
                                     }
-                                    Err(_) => this.update_search_position(None),
                                 }
-                            }
-                        ),
-                    );
+                            ),
+                        );
+                    } else {
+                        this.update_search_position(None);
+                    }
                     this.update_search_occurrence_text();
                 }
             ));
