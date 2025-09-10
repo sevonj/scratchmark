@@ -71,6 +71,8 @@ mod imp {
         format_bar: TemplateChild<EditorFormatBar>,
         #[template_child]
         format_bar_toggle: TemplateChild<ToggleButton>,
+        #[template_child]
+        editor_sidebar_toggle: TemplateChild<ToggleButton>,
 
         library_browser: LibraryBrowser,
         sheet_editor: RefCell<Option<SheetEditor>>,
@@ -119,6 +121,8 @@ mod imp {
                 "`settings` should not be set before calling `setup_settings`.
                 ",
             );
+
+            self.editor_sidebar_toggle.set_sensitive(false);
 
             let builder = Builder::from_resource("/org/scratchmark/Scratchmark/ui/shortcuts.ui");
             let shortcuts = builder.object("help_overlay").unwrap();
@@ -524,6 +528,17 @@ mod imp {
             self.main_page.set_title("Scratchmark");
         }
 
+        fn update_toolbar_style(&self) {
+            let format_bar_open = self.format_bar_toggle.is_active();
+            let editor_sidebar_open = self.editor_sidebar_toggle.is_active();
+            let style = if format_bar_open || editor_sidebar_open {
+                ToolbarStyle::Raised
+            } else {
+                ToolbarStyle::Flat
+            };
+            self.main_toolbar_view.set_top_bar_style(style);
+        }
+
         fn load_state(&self) {
             let settings = self.settings();
 
@@ -541,6 +556,8 @@ mod imp {
                 .set_show_sidebar(settings.boolean("library-sidebar-open"));
             self.format_bar
                 .set_visible(settings.boolean("editor-formatbar-open"));
+            self.editor_sidebar_toggle
+                .set_active(settings.boolean("editor-sidebar-open"));
 
             let library_expanded_folders = settings.strv("library-expanded-folders");
             for path in library_expanded_folders {
@@ -563,6 +580,10 @@ mod imp {
 
             settings.set_boolean("library-sidebar-open", self.top_split.shows_sidebar())?;
             settings.set_boolean("editor-formatbar-open", self.format_bar.is_visible())?;
+            settings.set_boolean(
+                "editor-sidebar-open",
+                self.editor_sidebar_toggle.is_active(),
+            )?;
 
             let expanded_folders = self.library_browser.expanded_folder_paths();
             settings.set_strv("library-expanded-folders", expanded_folders)?;
@@ -617,15 +638,25 @@ mod imp {
             format_bar_toggle.connect_active_notify(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |toggle| {
-                    let style = if toggle.is_active() {
-                        ToolbarStyle::Raised
-                    } else {
-                        ToolbarStyle::Flat
-                    };
-                    this.main_toolbar_view.set_top_bar_style(style);
+                move |_| {
+                    this.update_toolbar_style();
                 }
             ));
+
+            self.editor_sidebar_toggle.connect_active_notify(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_| {
+                    this.update_toolbar_style();
+                }
+            ));
+
+            self.editor_sidebar_toggle
+                .bind_property("active", &editor, "show_sidebar")
+                .sync_create()
+                .build();
+
+            self.editor_sidebar_toggle.set_sensitive(true);
 
             editor.connect_closure(
                 "close-requested",
@@ -765,6 +796,7 @@ mod imp {
             self.update_window_title();
             self.library_browser.set_selected_sheet(None);
             self.format_bar.bind_editor(None);
+            self.editor_sidebar_toggle.set_sensitive(false);
             Ok(())
         }
 

@@ -4,6 +4,7 @@ mod imp {
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
+    use adw::OverlaySplitView;
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use glib::clone;
@@ -30,8 +31,10 @@ mod imp {
     use gtk::TextMark;
     use sourceview5::View;
 
+    use super::SheetStatsData;
     use crate::util;
     use crate::widgets::EditorSearchBar;
+    use crate::widgets::SheetStats;
 
     use super::NOT_CANCELLABLE;
 
@@ -42,11 +45,16 @@ mod imp {
         #[template_child]
         pub(super) source_view: TemplateChild<View>,
         pub(super) source_view_css_provider: CssProvider,
+        #[template_child]
+        pub(super) sheet_stats: TemplateChild<SheetStats>,
+        pub(super) sheet_stats_data: Cell<SheetStatsData>,
 
         #[template_child]
         pub(super) search_bar: TemplateChild<EditorSearchBar>,
         #[template_child]
         pub(super) file_changed_banner: TemplateChild<Banner>,
+        #[template_child]
+        pub(super) editor_split: TemplateChild<OverlaySplitView>,
 
         pub(super) file: RefCell<Option<File>>,
         pub(super) filemon: RefCell<Option<FileMonitor>>,
@@ -54,6 +62,8 @@ mod imp {
 
         #[property(get, set)]
         pub(super) file_changed: Cell<bool>,
+        #[property(get, set)]
+        pub(super) show_sidebar: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -63,6 +73,8 @@ mod imp {
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
+            SheetStats::ensure_type();
+
             klass.bind_template();
         }
 
@@ -96,6 +108,12 @@ mod imp {
                     }
                 ),
             );
+
+            self.editor_split
+                .bind_property("show_sidebar", obj.as_ref(), "show_sidebar")
+                .sync_create()
+                .bidirectional()
+                .build();
 
             self.file_changed_banner.connect_button_clicked(clone!(
                 #[weak]
@@ -394,6 +412,7 @@ mod imp {
                 vec![
                     Signal::builder("close-requested").build(),
                     Signal::builder("saved-as").build(),
+                    Signal::builder("stats-changed").build(),
                     Signal::builder("toast")
                         .param_types([String::static_type()])
                         .build(),
@@ -431,6 +450,7 @@ mod imp {
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
+use glib::clone;
 use gtk::glib;
 use gtk::prelude::*;
 use sourceview5::prelude::*;
@@ -477,6 +497,14 @@ impl SheetEditor {
         this.imp().source_view.set_buffer(Some(&buffer));
         this.imp().search_bar.set_search_context(search_context);
         this.imp().setup_filemon();
+        buffer.connect_changed(clone!(
+            #[weak]
+            this,
+            move |buffer| {
+                this.refresh_stats(buffer);
+            }
+        ));
+        this.refresh_stats(&buffer);
         Ok(this)
     }
 
@@ -533,6 +561,18 @@ impl SheetEditor {
             .load_from_string(&formatted);
     }
 
+    pub fn sheet_stats(&self) -> SheetStatsData {
+        self.imp().sheet_stats_data.get()
+    }
+
+    fn refresh_stats(&self, buffer: &Buffer) {
+        let imp = self.imp();
+        let stats = SheetStatsData::from_buffer(buffer);
+        imp.sheet_stats.set_stats(&stats);
+        imp.sheet_stats_data.replace(stats);
+        self.emit_by_name::<()>("stats-changed", &[]);
+    }
+
     fn load_buffer_style_scheme(&self, buffer: &Buffer) {
         let scheme_id = "scratchmark";
 
@@ -563,5 +603,50 @@ impl SheetEditor {
         }
 
         println!("Failed to load scheme with id '{scheme_id}'.")
+    }
+}
+
+#[derive(Debug, Default, Clone, Copy)]
+pub struct SheetStatsData {
+    pub num_lines: i32,
+    pub num_chars: i32,
+    pub num_spaces: i32,
+    pub num_words: i32,
+}
+
+impl SheetStatsData {
+    pub fn from_buffer(buffer: &Buffer) -> Self {
+        let num_lines = buffer.line_count();
+        let num_chars = buffer.char_count();
+        let mut num_spaces = 0;
+        let mut num_words = 0;
+
+        let mut prev_whitespace = true;
+
+        for i in 0..num_lines {
+            let start = buffer.iter_at_line(i).unwrap();
+            let end = buffer
+                .iter_at_line(i + 1)
+                .unwrap_or_else(|| buffer.end_iter());
+
+            let text = buffer.text(&start, &end, true);
+
+            for char in text.chars() {
+                let is_whitespace = char.is_whitespace();
+                if is_whitespace {
+                    num_spaces += 1;
+                } else if prev_whitespace {
+                    num_words += 1;
+                }
+                prev_whitespace = is_whitespace;
+            }
+        }
+
+        Self {
+            num_lines,
+            num_chars,
+            num_spaces,
+            num_words,
+        }
     }
 }
