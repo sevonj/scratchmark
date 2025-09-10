@@ -425,6 +425,16 @@ mod imp {
             ));
             obj.add_action(&action);
 
+            let action = gio::SimpleAction::new("file-save", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.save_sheet();
+                }
+            ));
+            obj.add_action(&action);
+
             let action = gio::SimpleAction::new("file-close", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
@@ -716,6 +726,7 @@ mod imp {
             self.format_bar.bind_editor(Some(editor.clone()));
             self.sheet_editor.replace(Some(editor));
             self.library_browser.set_selected_sheet(Some(path));
+            self.obj().action_set_enabled("win.file-save", true);
             self.update_window_title();
         }
 
@@ -801,6 +812,19 @@ mod imp {
             self.library_browser.refresh_content();
         }
 
+        fn save_sheet(&self) {
+            let mut editor_bind = self.sheet_editor.borrow_mut();
+            let Some(editor) = editor_bind.as_mut() else {
+                return;
+            };
+            if let Err(e) = editor.save() {
+                let toast = Toast::new(&e.to_string());
+                self.toast_overlay.add_toast(toast);
+                return;
+            }
+            self.toast_overlay.add_toast(Toast::new("Saved"));
+        }
+
         fn close_editor(&self) -> Result<(), ScratchmarkError> {
             if let Some(editor) = self.sheet_editor.borrow_mut().as_ref() {
                 editor.save()?;
@@ -813,6 +837,7 @@ mod imp {
             self.library_browser.set_selected_sheet(None);
             self.format_bar.bind_editor(None);
             self.editor_sidebar_toggle.set_sensitive(false);
+            self.obj().action_set_enabled("win.file-save", false);
             Ok(())
         }
 

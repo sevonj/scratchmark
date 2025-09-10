@@ -30,9 +30,10 @@ fn main() -> glib::ExitCode {
 }
 
 fn setup_accels(app: &adw::Application) {
-    app.set_accels_for_action("win.file-close", &["<Ctrl>W"]);
     app.set_accels_for_action("win.file-new", &["<Ctrl>N"]);
+    app.set_accels_for_action("win.file-save", &["<Ctrl>S"]);
     app.set_accels_for_action("win.file-rename-open", &["F2"]);
+    app.set_accels_for_action("win.file-close", &["<Ctrl>W"]);
     app.set_accels_for_action("editor.format-bold", &["<Ctrl>B"]);
     app.set_accels_for_action("editor.format-italic", &["<Ctrl>I"]);
     app.set_accels_for_action("editor.show-search", &["<Ctrl>F"]);
