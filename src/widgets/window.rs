@@ -519,11 +519,11 @@ mod imp {
         }
 
         fn update_window_title(&self) {
-            if let Some(editor) = self.sheet_editor.borrow().as_ref() {
-                if let Some(stem) = editor.path().file_stem() {
-                    self.main_page.set_title(&stem.to_string_lossy());
-                    return;
-                };
+            if let Some(editor) = self.sheet_editor.borrow().as_ref()
+                && let Some(stem) = editor.path().file_stem()
+            {
+                self.main_page.set_title(&stem.to_string_lossy());
+                return;
             };
             self.main_page.set_title("Scratchmark");
         }
@@ -708,12 +708,10 @@ mod imp {
                     .expect("folder delet trash to canonicalize sheet")
                     .starts_with(&path)
             });
-            if parent_of_currently_open {
-                if let Err(e) = self.close_editor() {
-                    let toast = Toast::new(&e.to_string());
-                    self.toast_overlay.add_toast(toast);
-                    return;
-                }
+            if parent_of_currently_open && let Err(e) = self.close_editor() {
+                let toast = Toast::new(&e.to_string());
+                self.toast_overlay.add_toast(toast);
+                return;
             }
             gio::File::for_path(path)
                 .trash(None::<&Cancellable>)
@@ -729,12 +727,10 @@ mod imp {
                 .borrow()
                 .as_ref()
                 .is_some_and(|e| e.path() == path);
-            if currently_open {
-                if let Err(e) = self.close_editor() {
-                    let toast = Toast::new(&e.to_string());
-                    self.toast_overlay.add_toast(toast);
-                    return;
-                }
+            if currently_open && let Err(e) = self.close_editor() {
+                let toast = Toast::new(&e.to_string());
+                self.toast_overlay.add_toast(toast);
+                return;
             }
             gio::File::for_path(path)
                 .trash(None::<&Cancellable>)
@@ -756,12 +752,10 @@ mod imp {
                     .expect("folder delet failed to canonicalize sheet")
                     .starts_with(&path)
             });
-            if parent_of_currently_open {
-                if let Err(e) = self.close_editor() {
-                    let toast = Toast::new(&e.to_string());
-                    self.toast_overlay.add_toast(toast);
-                    return;
-                }
+            if parent_of_currently_open && let Err(e) = self.close_editor() {
+                let toast = Toast::new(&e.to_string());
+                self.toast_overlay.add_toast(toast);
+                return;
             }
             std::fs::remove_dir_all(path).expect("folder delet failed");
             self.library_browser.refresh_content();
@@ -774,12 +768,10 @@ mod imp {
                 .borrow()
                 .as_ref()
                 .is_some_and(|e| e.path() == path);
-            if currently_open {
-                if let Err(e) = self.close_editor() {
-                    let toast = Toast::new(&e.to_string());
-                    self.toast_overlay.add_toast(toast);
-                    return;
-                }
+            if currently_open && let Err(e) = self.close_editor() {
+                let toast = Toast::new(&e.to_string());
+                self.toast_overlay.add_toast(toast);
+                return;
             }
             std::fs::remove_file(path).expect("file delet failed");
             self.library_browser.refresh_content();

@@ -335,16 +335,16 @@ impl LibraryBrowser {
     }
 
     pub fn set_selected_sheet(&self, path: Option<PathBuf>) {
-        if let Some(old_path) = self.imp().selected_sheet.borrow().as_ref() {
-            if let Some(old_button) = self.get_sheet(old_path) {
-                old_button.set_active(false);
-            }
+        if let Some(old_path) = self.imp().selected_sheet.borrow().as_ref()
+            && let Some(old_button) = self.get_sheet(old_path)
+        {
+            old_button.set_active(false);
         }
 
-        if let Some(path) = &path {
-            if let Some(button) = self.get_sheet(path) {
-                button.set_active(true);
-            }
+        if let Some(path) = &path
+            && let Some(button) = self.get_sheet(path)
+        {
+            button.set_active(true);
         };
 
         self.imp().selected_sheet.replace(path);
