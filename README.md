@@ -2,24 +2,35 @@
 
 # Scratchmark
 
-![app icon](resources/org.scratchmark.Scratchmark.svg)
+![app icon](data/icons/org.scratchmark.Scratchmark.svg)
 
-Scratchmark is a distraction-free markdown editor, designed both for keeping notes and writing. It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
+Scratchmark is a markdown editor designed both for keeping notes and writing. It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
 
 ![screenshot](data/screenshots/screenshot_a.png)
 
-> [!IMPORTANT]  
-> This is an early prototype. It lacks some fundamental features and may eat your homework.
-> 
-![cat](https://github.com/user-attachments/assets/aaa7b417-5e2f-4a87-ad9b-aa29591d6bcd)
-
 ![screenshot](data/screenshots/screenshot_b.png)
 
-## Development
+![cat](https://github.com/user-attachments/assets/aaa7b417-5e2f-4a87-ad9b-aa29591d6bcd)
+
+## Developers
 
 Scratchmark is written in Rust and uses GTK4 + Libadwaita for UI.
 
-[➜ Project management](https://github.com/users/sevonj/projects/20)
+[➜ Project backlog](https://github.com/users/sevonj/projects/20)
+
+### License
+
+Scratchmark is licensed GPL-3.0-or-later. Some parts may *additionally* be available under other licenses, such as MIT.
+
+### Building
+
+When running from the repository, there's an additional step to the usual `cargo run` command. You need to set this env var:
+
+```sh
+export GSETTINGS_SCHEMA_DIR=$PWD/data
+```
+
+The app needs its settings schema, and the lookup path seemingly can't be set in the program itself.
 
 ### Continuous Integration
 
@@ -37,3 +48,31 @@ Ubuntu
 ```
 libgtk-4-dev build-essential libglib2.0-dev libadwaita-1-dev libgtksourceview-5-dev
 ```
+
+### Flatpak
+
+Generating a Flatpak
+
+#### Dependencies
+
+You need Python3 with the following packages: 
+
+```
+aiohttp toml
+```
+
+You need Flatpak w/ Flathub and the following packages:
+
+```
+org.gnome.Sdk//48
+```
+
+#### Building
+
+Build & install:
+
+```sh
+cd build-aux
+sh generate_flatpak.sh && sudo flatpak install -y Scratchmark.flatpak
+```
+Note: `generate_flatpak.sh` will download and run a python script from Flatpak's builder tools repository.

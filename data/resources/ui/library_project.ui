@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="LibraryProject" parent="AdwBin">
+        <child>
+            <object class="GtkBox" id="project_root_vbox">
+                <property name="orientation">1</property>
+                <property name="margin-start">4</property>
+                <property name="margin-end">4</property>
+            </object>
+        </child>
+    </template>
+</interface>

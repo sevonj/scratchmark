@@ -1,6 +1,6 @@
 [package]
 name = "scratchmark"
-version = "0.1.1"
+version = "1.2.0"
 license = "GPL-3.0-or-later"
 edition = "2024"
 
@@ -11,7 +11,7 @@ sourceview5 = "0.9.1"
 
 [features]
 # Search for data files in install locations instead of source tree.
-packaged = []
+installed = []
 
 [build-dependencies]
-glib-build-tools = "0.20.0"
+glib-build-tools = "0.21.0"

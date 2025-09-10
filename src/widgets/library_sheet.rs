@@ -23,7 +23,7 @@ mod imp {
     use gtk::{Builder, CompositeTemplate, FileLauncher, Label, PopoverMenu, TemplateChild};
 
     use crate::data::SheetObject;
-    use crate::widgets::SheetRenamePopover;
+    use crate::widgets::ItemRenamePopover;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library_sheet.ui")]
@@ -32,12 +32,14 @@ mod imp {
         pub(super) button: TemplateChild<ToggleButton>,
         #[template_child]
         pub(super) sheet_name_label: TemplateChild<Label>,
+        #[template_child]
+        pub(super) title_row: TemplateChild<gtk::Box>,
 
         pub(super) sheet_object: RefCell<Option<SheetObject>>,
         pub(super) bindings: RefCell<Vec<Binding>>,
 
         context_menu_popover: RefCell<Option<PopoverMenu>>,
-        pub(super) rename_popover: RefCell<Option<SheetRenamePopover>>,
+        pub(super) rename_popover: RefCell<Option<ItemRenamePopover>>,
         pub(super) drag_source: RefCell<Option<DragSource>>,
     }
 
@@ -95,8 +97,26 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
+                move |_action, _parameter| this.prompt_rename()
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("duplicate", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
                 move |_action, _parameter| {
-                    this.rename_popover.borrow().as_ref().unwrap().popup();
+                    obj.duplicate();
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("trash", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    obj.emit_by_name::<()>("trash-requested", &[]);
                 }
             ));
             actions.add_action(&action);
@@ -117,9 +137,11 @@ mod imp {
             SIGNALS.get_or_init(|| {
                 vec![
                     Signal::builder("selected").build(),
+                    Signal::builder("duplicated").build(),
                     Signal::builder("rename-requested")
                         .param_types([PathBuf::static_type()])
                         .build(),
+                    Signal::builder("trash-requested").build(),
                     Signal::builder("delete-requested").build(),
                 ]
             })
@@ -130,6 +152,10 @@ mod imp {
     impl BinImpl for LibrarySheet {}
 
     impl LibrarySheet {
+        pub(super) fn prompt_rename(&self) {
+            self.rename_popover.borrow().as_ref().unwrap().popup();
+        }
+
         fn setup_context_menu(&self) {
             let obj = self.obj();
 
@@ -169,7 +195,7 @@ mod imp {
         fn setup_rename_menu(&self) {
             let obj = self.obj();
 
-            let menu = SheetRenamePopover::default();
+            let menu = ItemRenamePopover::for_sheet();
             menu.set_parent(&*obj);
 
             menu.connect_closure(
@@ -178,7 +204,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_popover: SheetRenamePopover, path: PathBuf| {
+                    move |_popover: ItemRenamePopover, path: PathBuf| {
                         obj.emit_by_name::<()>("rename-requested", &[&path]);
                     }
                 ),
@@ -209,12 +235,15 @@ mod imp {
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
+use gtk::gio;
 use gtk::glib;
 use gtk::prelude::*;
 
+use gio::{Cancellable, FileCopyFlags};
 use glib::Object;
 
 use crate::data::SheetObject;
+use crate::util;
 
 glib::wrapper! {
 pub struct LibrarySheet(ObjectSubclass<imp::LibrarySheet>)
@@ -247,9 +276,25 @@ impl LibrarySheet {
             .stem()
     }
 
+    pub fn prompt_rename(&self) {
+        self.imp().prompt_rename();
+    }
+
     pub fn rename(&self, path: PathBuf) {
         assert!(path.parent().is_some_and(|p| p.is_dir()));
         self.emit_by_name::<()>("rename-requested", &[&path]);
+    }
+
+    /// Create a copy of this file
+    pub fn duplicate(&self) {
+        let self_path = self.path();
+        let self_file = gio::File::for_path(&self_path);
+        let dupe_path = util::incremented_path(self_path);
+        let dupe_file = gio::File::for_path(&dupe_path);
+        self_file
+            .copy(&dupe_file, FileCopyFlags::NONE, None::<&Cancellable>, None)
+            .expect("File dupe failed");
+        self.emit_by_name::<()>("duplicated", &[]);
     }
 
     pub fn set_active(&self, is_active: bool) {
@@ -266,6 +311,9 @@ impl LibrarySheet {
             .unwrap()
             .set_path(path);
 
+        self.imp()
+            .title_row
+            .set_margin_start(20 + 12 * data.depth() as i32);
         let title_label = self.imp().sheet_name_label.get();
         let mut bindings = self.imp().bindings.borrow_mut();
 

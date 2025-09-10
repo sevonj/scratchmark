@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schemalist>
+  <schema id="org.scratchmark.Scratchmark" path="/org/scratchmark/Scratchmark/">
+    <key name="open-sheet-path" type="s">
+      <default>""</default>
+    </key>
+    <key name="library-expanded-folders" type="as">
+      <default>[]</default>
+      <summary>Remember expanded folders. Entries are folder paths.</summary>
+    </key>
+    <key name="library-sidebar-open" type="b">
+      <default>true</default>
+      <summary>Remember whether the sidebar was left open.</summary>
+    </key>
+    <key name="editor-sidebar-open" type="b">
+      <default>false</default>
+    </key>
+    <key name="editor-formatbar-open" type="b">
+      <default>false</default>
+    </key>
+    <key name="win-width" type="i">
+      <default>1200</default>
+    </key>
+    <key name="win-height" type="i">
+      <default>800</default>
+    </key>
+    <key name="is-maximized" type="b">
+      <default>false</default>
+    </key>
+    <key name="editor-font-family" type="s">
+      <default>"Monospace"</default>
+    </key>
+    <key name="editor-font-size" type="u">
+      <default>12</default>
+    </key>
+  </schema>
+</schemalist>

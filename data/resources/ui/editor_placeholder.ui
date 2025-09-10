@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="EditorPlaceholder" parent="AdwBin">
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="halign">GTK_ALIGN_CENTER</property>
+        <property name="width-request">800</property>
+        <property name="height-request">600</property>
+        <child>
+            <object class="AdwStatusPage">
+                <property name="title">Nothing Open</property>
+                <property name="description">Create a new sheet or open an existing one from the sidebar</property>
+                <property name="icon-name">text-x-generic-symbolic</property>
+                <style>
+                    <class name="compact" />
+                </style>
+            </object>
+        </child>
+    </template>
+</interface>

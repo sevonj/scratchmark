@@ -3,32 +3,33 @@
 
 mod imp {
     use std::cell::RefCell;
-    use std::collections::HashMap;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
-    use glib::closure_local;
     use glib::subclass::*;
     use gtk::glib;
+    use gtk::glib::closure_local;
     use gtk::prelude::*;
 
-    use gtk::CompositeTemplate;
-
-    use crate::data::FolderObject;
-    use crate::util::path_builtin_library;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
+    use crate::widgets::library_project::LibraryProject;
+    use gtk::CompositeTemplate;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library_browser.ui")]
     pub struct LibraryBrowser {
         #[template_child]
-        pub(super) library_root_vbox: TemplateChild<gtk::Box>,
+        pub(super) library_container: TemplateChild<gtk::Box>,
+        #[template_child]
+        pub(super) projects_container: TemplateChild<gtk::Box>,
+        #[template_child]
+        no_projects_status: TemplateChild<adw::Bin>,
 
-        pub(super) folders: RefCell<HashMap<PathBuf, LibraryFolder>>,
-        pub(super) sheets: RefCell<HashMap<PathBuf, LibrarySheet>>,
         pub(super) selected_sheet: RefCell<Option<PathBuf>>,
+
+        pub(super) project: RefCell<Option<LibraryProject>>,
     }
 
     #[glib::object_subclass]
@@ -49,12 +50,6 @@ mod imp {
     impl ObjectImpl for LibraryBrowser {
         fn constructed(&self) {
             self.parent_constructed();
-
-            let vbox = &self.library_root_vbox;
-            let root_folder =
-                LibraryFolder::new_root(&FolderObject::new(path_builtin_library(), true));
-            vbox.append(&root_folder);
-            self.add_folder(root_folder);
         }
 
         fn signals() -> &'static [Signal] {
@@ -76,6 +71,12 @@ mod imp {
                     Signal::builder("sheet-delete-requested")
                         .param_types([LibrarySheet::static_type()])
                         .build(),
+                    Signal::builder("folder-trash-requested")
+                        .param_types([LibraryFolder::static_type()])
+                        .build(),
+                    Signal::builder("sheet-trash-requested")
+                        .param_types([LibrarySheet::static_type()])
+                        .build(),
                 ]
             })
         }
@@ -85,7 +86,43 @@ mod imp {
     impl BinImpl for LibraryBrowser {}
 
     impl LibraryBrowser {
-        fn add_folder(&self, folder: LibraryFolder) {
+        pub(super) fn refresh_content(&self) {
+            if let Some(project) = self.project.borrow().as_ref() {
+                project.refresh_content();
+            }
+        }
+
+        pub(super) fn load_project(&self, project: LibraryProject) {
+            project.connect_closure(
+                "folder-added",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_: LibraryProject, folder: LibraryFolder| {
+                        this.connect_folder(folder);
+                    }
+                ),
+            );
+            project.connect_closure(
+                "sheet-added",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_: LibraryProject, sheet: LibrarySheet| {
+                        this.connect_sheet(sheet);
+                    }
+                ),
+            );
+
+            self.projects_container.append(&project);
+            self.project.borrow_mut().replace(project.clone());
+            project.refresh_content();
+            self.no_projects_status.set_visible(false);
+        }
+
+        fn connect_folder(&self, folder: LibraryFolder) {
             let obj = self.obj();
 
             folder.connect_closure(
@@ -113,49 +150,37 @@ mod imp {
             );
 
             folder.connect_closure(
-                "folder-added",
+                "folder-created",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryFolder, button: LibraryFolder| {
-                        this.add_folder(button);
+                    move |_: LibraryFolder, _path: PathBuf| {
+                        this.refresh_content();
                     }
                 ),
             );
 
             folder.connect_closure(
-                "sheet-added",
+                "sheet-created",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryFolder, button: LibrarySheet| {
-                        this.add_sheet(button);
+                    move |_: LibraryFolder, _path: PathBuf| {
+                        this.refresh_content();
                     }
                 ),
             );
 
             folder.connect_closure(
-                "folder-removed",
+                "trash-requested",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |_: LibraryFolder, path: PathBuf| {
-                        this.unlist_folder(path);
-                    }
-                ),
-            );
-
-            folder.connect_closure(
-                "sheet-removed",
-                false,
-                closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |_: LibraryFolder, path: PathBuf| {
-                        this.unlist_sheet(path);
+                    #[weak]
+                    obj,
+                    move |_: LibraryFolder, folder: LibraryFolder| {
+                        obj.emit_by_name::<()>("folder-trash-requested", &[&folder]);
                     }
                 ),
             );
@@ -171,14 +196,13 @@ mod imp {
                     }
                 ),
             );
-
-            folder.refresh_content();
-            let k = folder.path();
-            self.folders.borrow_mut().insert(k, folder);
         }
 
-        fn add_sheet(&self, sheet: LibrarySheet) {
+        fn connect_sheet(&self, sheet: LibrarySheet) {
             let obj = self.obj();
+
+            let is_selected = Some(sheet.path()) == *obj.imp().selected_sheet.borrow();
+            sheet.set_active(is_selected);
 
             sheet.connect_closure(
                 "selected",
@@ -190,6 +214,18 @@ mod imp {
                         sheet.set_active(false);
                         let path = sheet.path();
                         obj.emit_by_name::<()>("sheet-selected", &[&path]);
+                    }
+                ),
+            );
+
+            sheet.connect_closure(
+                "duplicated",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: LibrarySheet| {
+                        obj.refresh_content();
                     }
                 ),
             );
@@ -207,6 +243,18 @@ mod imp {
             );
 
             sheet.connect_closure(
+                "trash-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |button: LibrarySheet| {
+                        obj.emit_by_name::<()>("sheet-trash-requested", &[&button]);
+                    }
+                ),
+            );
+
+            sheet.connect_closure(
                 "delete-requested",
                 false,
                 closure_local!(
@@ -217,35 +265,19 @@ mod imp {
                     }
                 ),
             );
-
-            if let Some(selected) = self.selected_sheet.borrow().as_ref() {
-                if sheet.path() == *selected {
-                    sheet.set_active(true);
-                }
-            }
-
-            let k = sheet.path();
-            self.sheets.borrow_mut().insert(k, sheet);
-        }
-
-        fn unlist_folder(&self, path: PathBuf) {
-            self.folders.borrow_mut().remove(&path);
-        }
-
-        fn unlist_sheet(&self, path: PathBuf) {
-            self.sheets.borrow_mut().remove(&path);
         }
     }
 }
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use adw::subclass::prelude::*;
 use gtk::glib;
 
 use glib::Object;
 
-use crate::util::path_builtin_library;
+use crate::widgets::LibraryProject;
+use crate::widgets::LibrarySheet;
 
 use super::LibraryFolder;
 
@@ -258,23 +290,44 @@ glib::wrapper! {
 impl Default for LibraryBrowser {
     fn default() -> Self {
         let this: Self = Object::builder().build();
+        this.imp().load_project(LibraryProject::new_appdata());
         this.refresh_content();
         this
     }
 }
 
 impl LibraryBrowser {
-    pub fn root_folder(&self) -> LibraryFolder {
+    pub fn expanded_folder_paths(&self) -> Vec<String> {
         self.imp()
-            .folders
+            .project
             .borrow()
-            .get(&path_builtin_library())
-            .unwrap()
-            .clone()
+            .as_ref()
+            .map(LibraryProject::expanded_folder_paths)
+            .unwrap_or_default()
+    }
+
+    pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
+        self.imp()
+            .project
+            .borrow()
+            .as_ref()
+            .and_then(|p| p.get_folder(path))
+    }
+
+    pub fn get_sheet(&self, path: &Path) -> Option<LibrarySheet> {
+        self.imp()
+            .project
+            .borrow()
+            .as_ref()
+            .and_then(|p| p.get_sheet(path))
+    }
+
+    pub fn add_project(&self, path: PathBuf) {
+        self.imp().load_project(LibraryProject::new(path));
     }
 
     pub fn refresh_content(&self) {
-        self.root_folder().refresh_content();
+        self.imp().refresh_content();
     }
 
     pub fn selected_sheet(&self) -> Option<PathBuf> {
@@ -283,17 +336,27 @@ impl LibraryBrowser {
 
     pub fn set_selected_sheet(&self, path: Option<PathBuf>) {
         if let Some(old_path) = self.imp().selected_sheet.borrow().as_ref() {
-            if let Some(old_button) = self.imp().sheets.borrow().get(old_path) {
+            if let Some(old_button) = self.get_sheet(old_path) {
                 old_button.set_active(false);
             }
         }
 
         if let Some(path) = &path {
-            if let Some(button) = self.imp().sheets.borrow().get(path) {
+            if let Some(button) = self.get_sheet(path) {
                 button.set_active(true);
             }
         };
 
         self.imp().selected_sheet.replace(path);
+    }
+
+    pub fn rename_selected_sheet(&self) {
+        let Some(selected_path) = self.selected_sheet() else {
+            return;
+        };
+
+        if let Some(sheet) = self.get_sheet(&selected_path) {
+            sheet.prompt_rename();
+        }
     }
 }

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.scratchmark.Scratchmark</id>
+
+  <name>Scratchmark</name>
+  <summary>Organized markdown editor</summary>
+
+  <metadata_license>CC-BY-4.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <developer id="fi.sevonj">
+    <name>Sevonj</name>
+  </developer>
+
+  <description>
+    <p>Scratchmark lets you focus on the text without distractions. It&apos;s designed both for keeping notes and writing longer texts, and makes organizing files easy.</p>
+  </description>
+
+  <launchable type="desktop-id">org.scratchmark.Scratchmark.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>
+        https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_a.png?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>
+        https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_b.png?raw=true</image>
+    </screenshot>
+  </screenshots>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#ff00ff</color>
+    <color type="primary" scheme_preference="dark">#993d3d</color>
+  </branding>
+
+  <content_rating type="oars-1.1" />
+
+  <url type="bugtracker">https://github.com/sevonj/scratchmark/issues</url>
+  <url type="homepage">https://github.com/sevonj/scratchmark</url>
+  <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
+  <releases>
+    <release version="v1.2.0" date="2025-07-25">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.2.0</url>
+      <description>
+        <p>New features:</p>
+        <ul>
+          <li>Choose custom font and size</li>
+          <li>Folder icons</li>
+          <li>Persistent window size</li>
+        </ul>
+        <p>Fixes:</p>
+        <ul>
+          <li>Renaming sometimes triggers "File changed on disk" alert.</li>
+          <li>Editor margins: Clamp width, add vertical margin</li>
+          <li>Sane default window size</li>
+          <li>Consistent formatting for UI text</li>
+          <li>Sidebar toggle is now a toggle button</li>
+          <li>Broken sidebar show/hide transition</li>
+        </ul>
+        <p>Also major code refactors not directly visible to the user.</p>
+      </description>
+    </release>
+    <release version="v1.1.0" date="2025-07-7">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.1.0</url>
+      <description>
+        <p>Editor improvement round</p>
+        <ul>
+          <li>Remember opened sheet</li>
+          <li>Remember expanded folders</li>
+          <li>Manual library refresh</li>
+          <li>Search and replace</li>
+          <li>Fullscreen</li>
+          <li>Add formatting options</li>
+        </ul>
+      </description>
+    </release>
+    <release version="v1.0.1" date="2025-05-30">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.0.1</url>
+      <description>
+        <p>Polish patch</p>
+        <ul>
+          <li>Keyboard shortcuts for many operations</li>
+          <li>Keyboard shortcut helper dialog</li>
+          <li>Duplicate file context menu option</li>
+          <li>Distinction between deletion and moving to trash</li>
+          <li>Fixed bug where folder rename dialog tries to filter file extension</li>
+          <li>UI code cleanup</li>
+        </ul>
+      </description>
+    </release>
+    <release version="v1.0.0" date="2025-05-29">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.0.0</url>
+      <description>
+        <p>Initial relase</p>
+      </description>
+    </release>
+  </releases>
+</component>

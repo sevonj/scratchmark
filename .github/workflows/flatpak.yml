@@ -3,6 +3,19 @@ on:
 
 name: Flatpak
 jobs:
+  metainfo:
+    name: "Validate metainfo"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install flatpak
+        run: |
+          sudo apt-get update && sudo apt-get install flatpak
+          sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install -y org.flatpak.Builder
+      - name: checkout
+        uses: actions/checkout@v5
+      - name: flatpak-builder-lint
+        run: flatpak run --command=flatpak-builder-lint org.flatpak.Builder appstream  data/org.scratchmark.Scratchmark.metainfo.xml
   flatpak:
     name: "Flatpak"
     runs-on: ubuntu-latest
@@ -11,7 +24,7 @@ jobs:
       options: --privileged
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: dependencies
         run: apt-get install python3-tomlkit
       - name: flatpak-cargo-generator
@@ -27,7 +40,9 @@ jobs:
           cache-key: flatpak-builder-${{ github.sha }}
   release:
     name: "Generate Release"
-    needs: flatpak
+    needs: 
+      - "flatpak"
+      - "metainfo"
     if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
     permissions:
@@ -42,7 +57,7 @@ jobs:
             echo "PRERELEASE=false" >> $GITHUB_ENV
           fi
       - name: Download Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: Scratchmark-x86_64.flatpak
       - name: Release

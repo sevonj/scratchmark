@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="LibrarySheet" parent="AdwBin">
+        <child>
+            <object class="GtkToggleButton" id="button">
+                <style>
+                    <class name="flat" />
+                </style>
+                <child>
+                    <object class="GtkBox" id="title_row">
+                        <property name="orientation">0</property>
+                        <property name="spacing">4</property>
+                        <child>
+                            <object class="GtkImage" id="sheet_icon">
+                                <style>
+                                    <class name="dim-label" />
+                                </style>
+                                <property name="icon-name">text-x-generic-symbolic</property>
+                                <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkLabel" id="sheet_name_label">
+                                <property name="label">sheet-name-here</property>
+                                <property name="xalign">0</property>
+                                <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
+                                <attributes>
+                                    <attribute name="weight" value="PANGO_WEIGHT_NORMAL" />
+                                </attributes>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>

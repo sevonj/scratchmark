@@ -21,11 +21,13 @@ modules:
         PREFIX: "/app"
     build-commands:
       - "cargo --offline fetch --manifest-path Cargo.toml --verbose"
-      - "cargo --offline build --release --verbose --features packaged"
+      - "cargo --offline build --release --verbose --features installed"
       - "install -Dm755 ./target/release/scratchmark -t /app/bin/"
-      - "install -Dm644 ./resources/editor_schemes/scratchmark.xml -t /app/share/${FLATPAK_ID}/editor_schemes/"
-      - "install -Dm644 ./resources/${FLATPAK_ID}.desktop -t /app/share/applications/"
-      - "install -Dm644 ./resources/${FLATPAK_ID}.svg -t /app/share/icons/hicolor/scalable/apps/"
+      - "install -Dm644 ./data/editor_schemes/scratchmark.xml -t /app/share/${FLATPAK_ID}/editor_schemes/"
+      - "install -Dm644 ./data/${FLATPAK_ID}.desktop -t /app/share/applications/"
+      - "install -Dm644 ./data/icons/${FLATPAK_ID}.svg -t /app/share/icons/hicolor/scalable/apps/"
+      - "install -Dm644 ./data/org.scratchmark.Scratchmark.gschema.xml -t /app/share/glib-2.0/schemas"
+      - "glib-compile-schemas /app/share/glib-2.0/schemas"
     sources:
       - type: "dir"
         path: "../"
