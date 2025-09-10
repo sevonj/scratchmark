@@ -337,6 +337,16 @@ mod imp {
             self.actions.add_action(&action);
         }
 
+        pub(super) fn is_search_focused(&self) -> bool {
+            let Some(currently_focused) = self.obj().root().and_then(|r| r.focus()) else {
+                return false;
+            };
+            let search_entry: &Entry = self.search_entry.as_ref();
+            let replace_entry: &Entry = self.search_replace_entry.as_ref();
+            currently_focused.is_ancestor(search_entry)
+                || currently_focused.is_ancestor(replace_entry)
+        }
+
         pub(super) fn set_search_context(&self, search_context: SearchContext) {
             search_context.connect_occurrences_count_notify(clone!(
                 #[weak(rename_to = this)]
@@ -355,16 +365,7 @@ mod imp {
                         return;
                     }
 
-                    let Some(currently_focused) = this.obj().root().and_then(|r| r.focus()) else {
-                        this.update_search_position(None);
-                        this.update_search_occurrence_text();
-                        return;
-                    };
-                    let search_entry: &Entry = this.search_entry.as_ref();
-                    let replace_entry: &Entry = this.search_replace_entry.as_ref();
-                    if currently_focused.is_ancestor(search_entry)
-                        || currently_focused.is_ancestor(replace_entry)
-                    {
+                    if this.is_search_focused() {
                         let mark = search_context.buffer().get_insert();
                         let iter = search_context.buffer().iter_at_mark(&mark);
                         search_context.forward_async(
