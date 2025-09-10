@@ -4,8 +4,7 @@
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="halign">GTK_ALIGN_CENTER</property>
-        <property name="width-request">800</property>
-        <property name="height-request">600</property>
+        <property name="width-request">500</property>
         <child>
             <object class="AdwStatusPage">
                 <property name="title">Nothing Open</property>
