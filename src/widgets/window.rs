@@ -352,6 +352,29 @@ mod imp {
                 .sync_create()
                 .build();
 
+            let format_bar_toggle: &ToggleButton = self.format_bar_toggle.as_ref();
+            self.format_bar
+                .bind_property("visible", format_bar_toggle, "active")
+                .bidirectional()
+                .sync_create()
+                .build();
+
+            format_bar_toggle.connect_active_notify(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_| {
+                    this.update_toolbar_style();
+                }
+            ));
+
+            self.editor_sidebar_toggle.connect_active_notify(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_| {
+                    this.update_toolbar_style();
+                }
+            ));
+
             self.top_split.connect_collapsed_notify(clone!(
                 #[weak (rename_to = this)]
                 self,
@@ -661,29 +684,6 @@ mod imp {
             let font_family = self.settings().string("editor-font-family");
             let font_size = self.settings().uint("editor-font-size");
             editor.set_font(font_family.as_str(), font_size);
-
-            let format_bar_toggle: &ToggleButton = self.format_bar_toggle.as_ref();
-            self.format_bar
-                .bind_property("visible", format_bar_toggle, "active")
-                .bidirectional()
-                .sync_create()
-                .build();
-
-            format_bar_toggle.connect_active_notify(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |_| {
-                    this.update_toolbar_style();
-                }
-            ));
-
-            self.editor_sidebar_toggle.connect_active_notify(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |_| {
-                    this.update_toolbar_style();
-                }
-            ));
 
             self.editor_sidebar_toggle
                 .bind_property("active", &editor, "show_sidebar")
