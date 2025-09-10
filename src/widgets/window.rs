@@ -1,5 +1,5 @@
 mod imp {
-    use std::cell::{OnceCell, RefCell};
+    use std::cell::{Cell, OnceCell, RefCell};
     use std::fs;
     use std::path::PathBuf;
 
@@ -48,6 +48,7 @@ mod imp {
         sidebar_toolbar_view: TemplateChild<ToolbarView>,
         #[template_child]
         sidebar_toggle: TemplateChild<ToggleButton>,
+        sidebar_uncollapsed_open: Cell<bool>,
 
         #[template_child]
         main_page: TemplateChild<NavigationPage>,
@@ -350,6 +351,28 @@ mod imp {
                 .bidirectional()
                 .sync_create()
                 .build();
+
+            self.top_split.connect_collapsed_notify(clone!(
+                #[weak (rename_to = this)]
+                self,
+                move |top_split| {
+                    if !top_split.is_collapsed() {
+                        top_split.set_show_sidebar(this.sidebar_uncollapsed_open.get());
+                    }
+                }
+            ));
+
+            self.sidebar_toggle.connect_active_notify(clone!(
+                #[weak (rename_to = this)]
+                self,
+                move |sidebar_toggle| {
+                    if !this.top_split.is_collapsed() {
+                        this.sidebar_uncollapsed_open
+                            .replace(sidebar_toggle.is_active());
+                    }
+                }
+            ));
+
             self.main_toolbar_view
                 .set_content(Some(&EditorPlaceholder::default()));
             self.sidebar_toolbar_view
@@ -552,8 +575,9 @@ mod imp {
                 self.load_sheet(open_sheet_path);
             }
 
-            self.top_split
-                .set_show_sidebar(settings.boolean("library-sidebar-open"));
+            let show_sidebar = settings.boolean("library-sidebar-open");
+            self.sidebar_uncollapsed_open.replace(show_sidebar);
+            self.top_split.set_show_sidebar(show_sidebar);
             self.format_bar
                 .set_visible(settings.boolean("editor-formatbar-open"));
             self.editor_sidebar_toggle
@@ -578,7 +602,7 @@ mod imp {
                 .unwrap_or_default();
             settings.set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
 
-            settings.set_boolean("library-sidebar-open", self.top_split.shows_sidebar())?;
+            settings.set_boolean("library-sidebar-open", self.sidebar_uncollapsed_open.get())?;
             settings.set_boolean("editor-formatbar-open", self.format_bar.is_visible())?;
             settings.set_boolean(
                 "editor-sidebar-open",
