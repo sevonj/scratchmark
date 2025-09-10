@@ -246,6 +246,13 @@ mod imp {
                 move |_, _| {
                     let buffer = this.source_view.buffer();
                     let Some((start, end)) = buffer.selection_bounds() else {
+                        let mut iter = buffer.iter_at_mark(&buffer.get_insert());
+                        let start_off = iter.offset();
+                        buffer.insert(&mut iter, "****");
+                        let end_off = iter.offset();
+                        let start = buffer.iter_at_offset(start_off);
+                        let end = buffer.iter_at_offset(end_off);
+                        buffer.select_range(&start, &end);
                         return;
                     };
                     let offset = start.offset();
@@ -285,6 +292,13 @@ mod imp {
                 move |_, _| {
                     let buffer = this.source_view.buffer();
                     let Some((start, end)) = buffer.selection_bounds() else {
+                        let mut iter = buffer.iter_at_mark(&buffer.get_insert());
+                        let start_off = iter.offset();
+                        buffer.insert(&mut iter, "**");
+                        let end_off = iter.offset();
+                        let start = buffer.iter_at_offset(start_off);
+                        let end = buffer.iter_at_offset(end_off);
+                        buffer.select_range(&start, &end);
                         return;
                     };
                     let offset = start.offset();
