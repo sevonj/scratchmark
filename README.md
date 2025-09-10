@@ -24,9 +24,10 @@ Scratchmark is licensed GPL-3.0-or-later. Some parts may *additionally* be avail
 
 ### Building
 
-When running from the repository, there's an additional step to the usual `cargo run` command. You need to set this env var:
+When running from the repository, there's an additional step to the usual `cargo run` command. You need to compile settings schema and set an env var to tell the app where to find it:
 
 ```sh
+glib-compile-schemas data # Recompile if you add or edit settings
 export GSETTINGS_SCHEMA_DIR=$PWD/data
 ```
 
