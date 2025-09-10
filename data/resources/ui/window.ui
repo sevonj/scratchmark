@@ -4,9 +4,11 @@
   <requires lib="libadwaita" version="1.5" />
   <requires lib="gtksourceview" version="5.0" />
   <template class="Window" parent="AdwApplicationWindow">
+    <property name="width-request">650</property>
+    <property name="height-request">400</property>
     <child>
       <object class="AdwBreakpoint">
-        <condition>max-width: 800sp</condition>
+        <condition>max-width: 900sp</condition>
         <setter object="top_split" property="collapsed">True</setter>
       </object>
     </child>
