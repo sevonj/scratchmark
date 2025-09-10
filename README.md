@@ -59,7 +59,7 @@ Generating a Flatpak
 You need Python3 with the following packages: 
 
 ```
-aiohttp toml
+aiohttp tomlkit
 ```
 
 You need Flatpak w/ Flathub and the following packages:
