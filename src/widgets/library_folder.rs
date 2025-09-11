@@ -147,13 +147,14 @@ mod imp {
             self.expanded.replace(expanded);
 
             if expanded {
-                self.expand_icon.set_icon_name("pan-down-symbolic".into());
+                self.expand_icon.set_icon_name("down-small-symbolic".into());
                 self.content_vbox.set_visible(true);
                 if !self.is_project_root.get() {
                     self.folder_icon.set_icon_name(Some("folder-open-symbolic"));
                 }
             } else {
-                self.expand_icon.set_icon_name("pan-end-symbolic".into());
+                self.expand_icon
+                    .set_icon_name("right-small-symbolic".into());
                 self.content_vbox.set_visible(false);
                 if !self.is_project_root.get() {
                     self.folder_icon.set_icon_name(Some("folder-symbolic"));
