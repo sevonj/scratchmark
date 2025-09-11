@@ -8,14 +8,17 @@
       <default>[]</default>
       <summary>Remember expanded folders. Entries are folder paths.</summary>
     </key>
-    <key name="library-sidebar-open" type="b">
+    <key name="library-show-sidebar" type="b">
       <default>true</default>
       <summary>Remember whether the sidebar was left open.</summary>
     </key>
-    <key name="editor-sidebar-open" type="b">
+    <key name="editor-show-sidebar" type="b">
       <default>false</default>
     </key>
-    <key name="editor-formatbar-open" type="b">
+    <key name="editor-show-formatbar" type="b">
+      <default>false</default>
+    </key>
+    <key name="editor-show-minimap" type="b">
       <default>false</default>
     </key>
     <key name="win-width" type="i">

@@ -11,10 +11,11 @@ mod imp {
     use gtk::pango;
 
     use adw::{
-        AboutDialog, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView,
-        Toast, ToastOverlay, ToolbarStyle, ToolbarView,
+        AboutDialog, ActionRow, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage,
+        OverlaySplitView, PreferencesDialog, PreferencesGroup, PreferencesPage, PreferencesRow,
+        SwitchRow, Toast, ToastOverlay, ToolbarStyle, ToolbarView,
     };
-    use gio::{Cancellable, Settings, SimpleAction, SimpleActionGroup};
+    use gio::{Cancellable, Settings, SettingsBindFlags, SimpleAction, SimpleActionGroup};
     use glib::VariantTy;
     use gtk::{
         Builder, Button, CompositeTemplate, EventControllerMotion, FontDialog, MenuButton,
@@ -512,6 +513,16 @@ mod imp {
             ));
             obj.add_action(&action);
 
+            let action = gio::SimpleAction::new("preferences", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.show_preferences();
+                }
+            ));
+            obj.add_action(&action);
+
             let action = gio::SimpleAction::new("show-font-dialog", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
@@ -609,13 +620,13 @@ mod imp {
                 self.load_sheet(open_sheet_path);
             }
 
-            let show_sidebar = settings.boolean("library-sidebar-open");
+            let show_sidebar = settings.boolean("library-show-sidebar");
             self.sidebar_uncollapsed_open.replace(show_sidebar);
             self.top_split.set_show_sidebar(show_sidebar);
             self.format_bar
-                .set_visible(settings.boolean("editor-formatbar-open"));
+                .set_visible(settings.boolean("editor-show-formatbar"));
             self.editor_sidebar_toggle
-                .set_active(settings.boolean("editor-sidebar-open"));
+                .set_active(settings.boolean("editor-show-sidebar"));
 
             let library_expanded_folders = settings.strv("library-expanded-folders");
             for path in library_expanded_folders {
@@ -636,10 +647,10 @@ mod imp {
                 .unwrap_or_default();
             settings.set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
 
-            settings.set_boolean("library-sidebar-open", self.sidebar_uncollapsed_open.get())?;
-            settings.set_boolean("editor-formatbar-open", self.format_bar.is_visible())?;
+            settings.set_boolean("library-show-sidebar", self.sidebar_uncollapsed_open.get())?;
+            settings.set_boolean("editor-show-formatbar", self.format_bar.is_visible())?;
             settings.set_boolean(
-                "editor-sidebar-open",
+                "editor-show-sidebar",
                 self.editor_sidebar_toggle.is_active(),
             )?;
 
@@ -722,6 +733,10 @@ mod imp {
                     }
                 ),
             );
+            self.settings()
+                .bind("editor-show-minimap", &editor, "show-minimap")
+                .flags(SettingsBindFlags::DEFAULT)
+                .build();
 
             self.main_toolbar_view.set_content(Some(&editor));
             self.format_bar.bind_editor(Some(editor.clone()));
@@ -869,6 +884,48 @@ mod imp {
             dialog.set_version(env!("CARGO_PKG_VERSION"));
             dialog.set_website("https://github.com/sevonj/scratchmark/");
             dialog.set_support_url("https://github.com/sevonj/scratchmark/discussions/");
+            dialog.present(Some(&*obj));
+        }
+
+        fn show_preferences(&self) {
+            let obj = self.obj();
+            let settings = self.settings();
+            let dialog = PreferencesDialog::new();
+            dialog.set_title("Preferences");
+            let page = PreferencesPage::new();
+            dialog.add(&page);
+            let group_appearance = PreferencesGroup::new();
+            group_appearance.set_title("Appearance");
+            let row_appearance_font = ActionRow::builder()
+                .title("Change Font")
+                .activatable(true)
+                .subtitle("Customize font size and typeface.")
+                .build();
+            row_appearance_font.connect_activated(clone!(
+                #[weak]
+                obj,
+                move |_| {
+                    WidgetExt::activate_action(&obj, "win.show-font-dialog", None).unwrap();
+                }
+            ));
+            group_appearance.add(&row_appearance_font);
+            page.add(&group_appearance);
+            let group_editor = PreferencesGroup::new();
+            group_editor.set_title("Editor");
+            let row_editor_minimap = SwitchRow::builder()
+                .title("Show Minimap")
+                .subtitle("Show document overview on the right side of the editor.")
+                .build();
+            settings
+                .bind("editor-show-minimap", &row_editor_minimap, "active")
+                .flags(SettingsBindFlags::DEFAULT)
+                .build();
+            let row_editor_minimap = PreferencesRow::builder()
+                .title("Show Minimap")
+                .child(&row_editor_minimap)
+                .build();
+            group_editor.add(&row_editor_minimap);
+            page.add(&group_editor);
             dialog.present(Some(&*obj));
         }
 

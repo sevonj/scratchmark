@@ -1,4 +1,5 @@
 mod editor_format_bar;
+mod editor_minimap;
 mod editor_placeholder;
 mod editor_search_bar;
 mod item_create_popover;
@@ -12,6 +13,7 @@ mod sheet_stats;
 mod window;
 
 pub use editor_format_bar::EditorFormatBar;
+pub use editor_minimap::EditorMinimap;
 pub use editor_placeholder::EditorPlaceholder;
 pub use editor_search_bar::EditorSearchBar;
 pub use item_create_popover::ItemCreatePopover;
