@@ -39,6 +39,28 @@
   <url type="homepage">https://github.com/sevonj/scratchmark</url>
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.3.0" date="2025-09-11">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.3.0</url>
+      <description>
+        <p>New features:</p>
+        <ul>
+          <li>Formatting bar state persists after closing the app.</li>
+          <li>Document info sidebar with statistics.</li>
+          <li>Formatting actions support empty selection.</li>
+          <li>Manual document save</li>
+          <li>Editor overview minimap</li>
+        </ul>
+        <p>Fixes:</p>
+        <ul>
+          <li>Missing expand icons on some machines.</li>
+          <li>Window having no minimum size.</li>
+          <li>Search hijacking text selection.</li>
+          <li>Broken formatting bar toggle when no document is open.</li>
+          <li>Editor actions enabled without open document.</li>
+        </ul>
+        <p>Also minor code refactors not directly visible to the user.</p>
+      </description>
+    </release>
     <release version="v1.2.0" date="2025-07-25">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.2.0</url>
       <description>
