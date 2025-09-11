@@ -546,19 +546,19 @@ mod imp {
                 editor_actions.add_action(&action);
             }
 
+            let pi32 = Some(VariantTy::INT32);
             forward_action_to_editor(self, "format-bold", None, &editor_actions);
             forward_action_to_editor(self, "format-italic", None, &editor_actions);
-            forward_action_to_editor(
-                self,
-                "format-heading",
-                Some(VariantTy::INT32),
-                &editor_actions,
-            );
+            forward_action_to_editor(self, "format-heading", pi32, &editor_actions);
             forward_action_to_editor(self, "format-code", None, &editor_actions);
             forward_action_to_editor(self, "show-search", None, &editor_actions);
             forward_action_to_editor(self, "show-search-replace", None, &editor_actions);
             forward_action_to_editor(self, "hide-search", None, &editor_actions);
             forward_action_to_editor(self, "shiftreturn", None, &editor_actions);
+
+            obj.connect_map(|this| {
+                this.imp().editor_actions_set_enabled(false);
+            });
 
             self.load_state();
         }
@@ -726,7 +726,7 @@ mod imp {
             self.format_bar.bind_editor(Some(editor.clone()));
             self.sheet_editor.replace(Some(editor));
             self.library_browser.set_selected_sheet(Some(path));
-            self.obj().action_set_enabled("win.file-save", true);
+            self.editor_actions_set_enabled(true);
             self.update_window_title();
         }
 
@@ -837,8 +837,23 @@ mod imp {
             self.library_browser.set_selected_sheet(None);
             self.format_bar.bind_editor(None);
             self.editor_sidebar_toggle.set_sensitive(false);
-            self.obj().action_set_enabled("win.file-save", false);
+            self.editor_actions_set_enabled(false);
             Ok(())
+        }
+
+        fn editor_actions_set_enabled(&self, enabled: bool) {
+            let obj = self.obj();
+            obj.action_set_enabled("win.file-save", enabled);
+            obj.action_set_enabled("win.file-rename-open", enabled);
+            obj.action_set_enabled("win.file-close", enabled);
+            obj.action_set_enabled("editor.format-bold", enabled);
+            obj.action_set_enabled("editor.format-italic", enabled);
+            obj.action_set_enabled("editor.format-heading", enabled);
+            obj.action_set_enabled("editor.format-code", enabled);
+            obj.action_set_enabled("editor.show-search", enabled);
+            obj.action_set_enabled("editor.show-search-replace", enabled);
+            obj.action_set_enabled("editor.hide-search", enabled);
+            obj.action_set_enabled("editor.shiftreturn", enabled);
         }
 
         fn show_about(&self) {
