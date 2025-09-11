@@ -586,7 +586,8 @@ mod imp {
 
         fn update_toolbar_style(&self) {
             let format_bar_open = self.format_bar_toggle.is_active();
-            let editor_sidebar_open = self.editor_sidebar_toggle.is_active();
+            let editor_sidebar_open =
+                self.sheet_editor.borrow().is_some() && self.editor_sidebar_toggle.is_active();
             let style = if format_bar_open || editor_sidebar_open {
                 ToolbarStyle::Raised
             } else {
@@ -728,6 +729,7 @@ mod imp {
             self.library_browser.set_selected_sheet(Some(path));
             self.editor_actions_set_enabled(true);
             self.update_window_title();
+            self.update_toolbar_style();
         }
 
         fn trash_folder(&self, folder: LibraryFolder) {
@@ -838,6 +840,7 @@ mod imp {
             self.format_bar.bind_editor(None);
             self.editor_sidebar_toggle.set_sensitive(false);
             self.editor_actions_set_enabled(false);
+            self.update_toolbar_style();
             Ok(())
         }
 
