@@ -109,6 +109,12 @@
   <menu id="primary_menu">
     <section>
       <item>
+        <attribute name="label" translatable="yes">New</attribute>
+        <attribute name="action">win.file-new</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
         <attribute name="label" translatable="yes">Save</attribute>
         <attribute name="action">win.file-save</attribute>
       </item>
