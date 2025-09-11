@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="EditorMinimap" parent="AdwBin">
+    <property name="width-request">72</property>
+    <child>
+      <object class="GtkSourceMap" id="map">
+        <property name="overflow">visible</property>
+      </object>
+    </child>
+  </template>
+</interface>

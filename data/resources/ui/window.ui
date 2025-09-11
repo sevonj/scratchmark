@@ -146,13 +146,9 @@
       </item>
     </section>
     <section>
-      <!--item>
-        <attribute name="label" translatable="yes">_Preferences</attribute>
-        <attribute name="action">app.preferences</attribute>
-      </item-->
       <item>
-        <attribute name="label" translatable="yes">Change Font</attribute>
-        <attribute name="action">win.show-font-dialog</attribute>
+        <attribute name="label" translatable="yes">Preferences</attribute>
+        <attribute name="action">win.preferences</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Keyboard Shortcuts</attribute>

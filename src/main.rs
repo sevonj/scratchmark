@@ -46,4 +46,5 @@ fn setup_accels(app: &adw::Application) {
     app.set_accels_for_action("win.fullscreen", &["F11"]);
     app.set_accels_for_action("win.unfullscreen", &["F11"]);
     app.set_accels_for_action("win.show-help-overlay", &["<Control>question"]);
+    app.set_accels_for_action("win.preferences", &["<ctrl>comma"]);
 }

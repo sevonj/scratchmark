@@ -33,6 +33,7 @@ mod imp {
 
     use super::SheetStatsData;
     use crate::util;
+    use crate::widgets::EditorMinimap;
     use crate::widgets::EditorSearchBar;
     use crate::widgets::SheetStats;
 
@@ -55,6 +56,10 @@ mod imp {
         pub(super) file_changed_banner: TemplateChild<Banner>,
         #[template_child]
         pub(super) editor_split: TemplateChild<OverlaySplitView>,
+        #[template_child]
+        pub(super) minimap: TemplateChild<EditorMinimap>,
+        #[property(get, set)]
+        pub(super) show_minimap: Cell<bool>,
 
         pub(super) file: RefCell<Option<File>>,
         pub(super) filemon: RefCell<Option<FileMonitor>>,
@@ -74,6 +79,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             SheetStats::ensure_type();
+            EditorMinimap::ensure_type();
 
             klass.bind_template();
         }
@@ -176,6 +182,13 @@ mod imp {
                     dialog.present(Some(&obj));
                 }
             ));
+
+            self.minimap.bind(&self.source_view);
+            self.minimap
+                .bind_property("visible", obj.as_ref(), "show_minimap")
+                .sync_create()
+                .bidirectional()
+                .build();
 
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("editor", Some(&actions));

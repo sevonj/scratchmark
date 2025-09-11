@@ -22,28 +22,37 @@
                             </object>
                         </child>
                         <child>
-                            <object class="GtkScrolledWindow">
+                            <object class="GtkBox">
+                                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                                 <child>
-                                    <object class="AdwClampScrollable">
-                                        <property name="maximum-size">768</property>
-                                        <property name="tightening-threshold">640</property>
+                                    <object class="GtkScrolledWindow">
+                                        <property name="hexpand">true</property>
                                         <child>
-                                            <object class="GtkSourceView" id="source_view">
-                                                <property name="margin-start">32</property>
-                                                <property name="margin-end">32</property>
-                                                <property name="top-margin">96</property>
-                                                <property name="bottom-margin">192</property>
-                                                <property name="tab-width">4</property>
-                                                <property name="auto-indent">True</property>
-                                                <property name="wrap-mode">3</property>
-                                                <child internal-child="completion">
-                                                    <object class="GtkSourceCompletion">
-                                                        <property name="select-on-show">False</property>
+                                            <object class="AdwClampScrollable">
+                                                <property name="maximum-size">768</property>
+                                                <property name="tightening-threshold">640</property>
+                                                <child>
+                                                    <object class="GtkSourceView" id="source_view">
+                                                        <property name="margin-start">32</property>
+                                                        <property name="margin-end">32</property>
+                                                        <property name="top-margin">96</property>
+                                                        <property name="bottom-margin">192</property>
+                                                        <property name="tab-width">4</property>
+                                                        <property name="auto-indent">True</property>
+                                                        <property name="wrap-mode">3</property>
+                                                        <child internal-child="completion">
+                                                            <object class="GtkSourceCompletion">
+                                                                <property name="select-on-show">False</property>
+                                                            </object>
+                                                        </child>
                                                     </object>
                                                 </child>
                                             </object>
                                         </child>
                                     </object>
+                                </child>
+                                <child>
+                                    <object class="EditorMinimap" id="minimap" />
                                 </child>
                             </object>
                         </child>
