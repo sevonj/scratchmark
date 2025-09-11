@@ -568,7 +568,8 @@ mod imp {
             forward_action_to_editor(self, "shiftreturn", None, &editor_actions);
 
             obj.connect_map(|this| {
-                this.imp().editor_actions_set_enabled(false);
+                this.imp()
+                    .editor_actions_set_enabled(this.imp().sheet_editor.borrow().is_some());
             });
 
             self.load_state();
