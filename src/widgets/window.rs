@@ -321,6 +321,30 @@ mod imp {
                 ),
             );
 
+            self.library_browser.connect_closure(
+                "close-project-requested",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |browser: LibraryBrowser, project_path: PathBuf| {
+                        let contains_edited_file = this
+                            .sheet_editor
+                            .borrow()
+                            .as_ref()
+                            .is_some_and(|editor| editor.path().starts_with(&project_path));
+
+                        if contains_edited_file && let Err(e) = this.close_editor() {
+                            let toast = Toast::new(&e.to_string());
+                            this.toast_overlay.add_toast(toast);
+                            return;
+                        }
+
+                        browser.remove_project(&project_path);
+                    }
+                ),
+            );
+
             let new_folder_popover = ItemCreatePopover::for_folder();
             self.new_folder_button
                 .set_popover(Some(&new_folder_popover));

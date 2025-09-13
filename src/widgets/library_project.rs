@@ -80,6 +80,7 @@ mod imp {
                     Signal::builder("sheet-trash-requested")
                         .param_types([LibrarySheet::static_type()])
                         .build(),
+                    Signal::builder("close-project-requested").build(),
                 ]
             })
         }
@@ -89,7 +90,8 @@ mod imp {
     impl BinImpl for LibraryProject {}
 
     impl LibraryProject {
-        pub(super) fn setup_root(&self, path: PathBuf) {
+        pub(super) fn setup_root(&self, root_folder: LibraryFolder) {
+            let path = root_folder.path();
             self.project_object
                 .replace(Some(LibraryObject::new(path.clone())));
             self.project_object
@@ -99,7 +101,7 @@ mod imp {
                 .refresh_content();
 
             let vbox = &self.project_root_vbox;
-            let root_folder = LibraryFolder::new_project_root(&FolderObject::new(path.clone(), 0));
+
             vbox.append(&root_folder);
             self.connect_folder(root_folder.clone());
 
@@ -226,12 +228,16 @@ use std::path::{Path, PathBuf};
 
 use adw::subclass::prelude::*;
 use gtk::glib;
+use gtk::glib::closure_local;
+use sourceview5::prelude::*;
 
 use glib::Object;
 
-use crate::{util::path_builtin_library, widgets::LibrarySheet};
+use crate::data::FolderObject;
+use crate::util::path_builtin_library;
 
-use super::LibraryFolder;
+use crate::widgets::LibraryFolder;
+use crate::widgets::LibrarySheet;
 
 glib::wrapper! {
     pub struct LibraryProject(ObjectSubclass<imp::LibraryProject>)
@@ -240,16 +246,30 @@ glib::wrapper! {
 }
 
 impl LibraryProject {
+    /// New standard project
     pub fn new(path: PathBuf) -> Self {
         let this: Self = Object::builder().build();
-        this.imp().setup_root(path);
+        let root = LibraryFolder::new_project_root(&FolderObject::new(path.clone(), 0));
+        root.connect_closure(
+            "close-project-requested",
+            false,
+            closure_local!(
+                #[weak]
+                this,
+                move |_: LibraryFolder| {
+                    this.emit_by_name::<()>("close-project-requested", &[]);
+                }
+            ),
+        );
+        this.imp().setup_root(root);
         this
     }
 
-    /// Default project in appdata
-    pub fn new_appdata() -> Self {
+    /// Builtin drafts project
+    pub fn new_draft_table() -> Self {
         let this: Self = Object::builder().build();
-        this.imp().setup_root(path_builtin_library());
+        let root = LibraryFolder::new_drafts_root(&FolderObject::new(path_builtin_library(), 0));
+        this.imp().setup_root(root);
         this
     }
 

@@ -4,7 +4,7 @@
   <menu id="context-menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">this is folder</attribute>
+        <attribute name="label" translatable="yes">this is root</attribute>
         <attribute name="action">unused</attribute>
       </item>
       <item>
