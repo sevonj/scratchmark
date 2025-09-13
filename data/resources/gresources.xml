@@ -8,9 +8,11 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/item_create_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/item_rename_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_browser.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library_drafts_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_project.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library_project_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor.ui</file>
@@ -20,6 +22,7 @@
   </gresource>
   <gresource prefix="/org/scratchmark/Scratchmark">
     <file preprocess="xml-stripblanks">icons/scalable/actions/down-small-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/draft-table-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/draw-text-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/info-outline-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/library-symbolic.svg</file>
@@ -31,6 +34,8 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/md-format-h1-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/md-format-h2-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/md-horizontal-rule-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/plus-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/project-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/quotation-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/regex-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/right-small-symbolic.svg</file>
