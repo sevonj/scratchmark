@@ -341,13 +341,22 @@ impl Default for LibraryBrowser {
     fn default() -> Self {
         let this: Self = Object::builder().build();
         this.imp().load_project(LibraryProject::new_draft_table());
-        this.add_project(PathBuf::from("/home/julius/Documents/Notes/test_project"));
         this.refresh_content();
         this
     }
 }
 
 impl LibraryBrowser {
+    pub fn open_project_paths(&self) -> Vec<String> {
+        let mut paths = vec![];
+        for project in self.imp().projects.borrow().deref().values() {
+            if !project.is_builtin() {
+                paths.push(project.path().to_str().unwrap().to_owned());
+            }
+        }
+        paths
+    }
+
     pub fn expanded_folder_paths(&self) -> Vec<String> {
         let mut paths = vec![];
         for project in self.imp().projects.borrow().deref().values() {

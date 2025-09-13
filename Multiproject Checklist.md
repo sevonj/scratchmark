@@ -2,7 +2,6 @@
 
 **Todo**
 
-- Projects list save/load
 - Folders can be selected
 - Project removal selects Drafts project
 - Adding project selects it
@@ -15,6 +14,7 @@
 
 **Done**
 
+- Projects list save/load
 - Can't open multiple project add dialogs
 - Nested projects can't be added
 - Projects can be added

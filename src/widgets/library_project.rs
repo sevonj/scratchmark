@@ -1,4 +1,5 @@
 mod imp {
+    use std::cell::Cell;
     use std::cell::RefCell;
     use std::collections::HashMap;
     use std::path::PathBuf;
@@ -27,6 +28,9 @@ mod imp {
         pub(super) folders: RefCell<HashMap<PathBuf, LibraryFolder>>,
         pub(super) sheets: RefCell<HashMap<PathBuf, LibrarySheet>>,
         pub(super) project_object: RefCell<Option<LibraryObject>>,
+
+        /// Is this a builtin project (drafts)
+        pub(super) is_builtin: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -249,6 +253,7 @@ impl LibraryProject {
     /// New standard project
     pub fn new(path: PathBuf) -> Self {
         let this: Self = Object::builder().build();
+        this.imp().is_builtin.replace(false);
         let root = LibraryFolder::new_project_root(&FolderObject::new(path.clone(), 0));
         root.connect_closure(
             "close-project-requested",
@@ -268,6 +273,7 @@ impl LibraryProject {
     /// Builtin drafts project
     pub fn new_draft_table() -> Self {
         let this: Self = Object::builder().build();
+        this.imp().is_builtin.replace(true);
         let root = LibraryFolder::new_drafts_root(&FolderObject::new(path_builtin_library(), 0));
         this.imp().setup_root(root);
         this
@@ -280,6 +286,10 @@ impl LibraryProject {
     pub fn root_folder(&self) -> LibraryFolder {
         let path = self.imp().project_object.borrow().as_ref().unwrap().path();
         self.imp().folders.borrow().get(&path).unwrap().clone()
+    }
+
+    pub fn is_builtin(&self) -> bool {
+        self.imp().is_builtin.get()
     }
 
     pub fn expanded_folder_paths(&self) -> Vec<String> {

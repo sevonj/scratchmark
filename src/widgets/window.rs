@@ -653,6 +653,10 @@ mod imp {
             self.editor_sidebar_toggle
                 .set_active(settings.boolean("editor-show-sidebar"));
 
+            let open_projects = settings.strv("library-project-paths");
+            for path in open_projects {
+                self.library_browser.add_project(PathBuf::from(path));
+            }
             let library_expanded_folders = settings.strv("library-expanded-folders");
             for path in library_expanded_folders {
                 if let Some(folder) = self.library_browser.get_folder(&PathBuf::from(path)) {
@@ -681,6 +685,8 @@ mod imp {
 
             let expanded_folders = self.library_browser.expanded_folder_paths();
             settings.set_strv("library-expanded-folders", expanded_folders)?;
+            let open_projects = self.library_browser.open_project_paths();
+            settings.set_strv("library-project-paths", open_projects)?;
 
             Ok(())
         }
