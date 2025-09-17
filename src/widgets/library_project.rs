@@ -264,8 +264,16 @@ mod imp {
                     dead_folders.push(path.clone());
 
                     let parent_path = path.parent().unwrap();
-                    let parent = subfolders.get(parent_path).unwrap().clone();
-                    parent.remove_subfolder(folder)
+
+                    if let Some(parent) = subfolders.get(parent_path) {
+                        parent.remove_subfolder(folder);
+                    } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
+                        self.root_folder
+                            .borrow()
+                            .as_ref()
+                            .unwrap()
+                            .remove_subfolder(folder);
+                    }
                 }
             }
             for (path, sheet) in sheets.iter() {
@@ -273,8 +281,16 @@ mod imp {
                     dead_sheets.push(path.clone());
 
                     let parent_path = path.parent().unwrap();
-                    let parent = subfolders.get(parent_path).unwrap().clone();
-                    parent.remove_sheet(sheet)
+
+                    if let Some(parent) = subfolders.get(parent_path) {
+                        parent.remove_sheet(sheet);
+                    } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
+                        self.root_folder
+                            .borrow()
+                            .as_ref()
+                            .unwrap()
+                            .remove_sheet(sheet);
+                    }
                 }
             }
             for path in dead_folders {
