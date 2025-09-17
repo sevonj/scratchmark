@@ -80,9 +80,6 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
 
-            self.setup_context_menu();
-            self.setup_rename_menu();
-            self.setup_drag();
             self.setup_drop();
 
             let this = self;
@@ -110,6 +107,7 @@ mod imp {
                     Signal::builder("delete-requested")
                         .param_types([super::LibraryFolder::static_type()])
                         .build(),
+                    Signal::builder("close-project-requested").build(),
                     Signal::builder("folder-created")
                         .param_types([PathBuf::static_type()])
                         .build(),
@@ -210,12 +208,10 @@ mod imp {
             self.sheets.borrow_mut().push(sheet);
         }
 
-        fn setup_context_menu(&self) {
+        pub(super) fn setup_context_menu(&self, resource_path: &str) {
             let obj = self.obj();
 
-            let builder = Builder::from_resource(
-                "/org/scratchmark/Scratchmark/ui/library_folder_context_menu.ui",
-            );
+            let builder = Builder::from_resource(resource_path);
             let popover = builder
                 .object::<MenuModel>("context-menu")
                 .expect("LibraryFolder context-menu model failed");
@@ -249,7 +245,7 @@ mod imp {
             });
         }
 
-        fn setup_rename_menu(&self) {
+        pub(super) fn setup_rename_menu(&self) {
             let obj = self.obj();
 
             let menu = ItemRenamePopover::for_folder();
@@ -276,7 +272,7 @@ mod imp {
             });
         }
 
-        fn setup_drag(&self) {
+        pub(super) fn setup_drag(&self) {
             let obj = self.obj();
 
             let drag_source = DragSource::new();
@@ -346,9 +342,8 @@ mod imp {
             obj.add_controller(drop_target);
         }
 
-        pub(super) fn setup_actions(&self) {
+        pub(super) fn setup_actions_common(&self) {
             let obj = self.obj();
-
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("folder", Some(&actions));
 
@@ -394,6 +389,13 @@ mod imp {
                 }
             ));
             actions.add_action(&action);
+        }
+
+        pub(super) fn setup_actions_subfolder(&self) {
+            let obj = self.obj();
+            let actions = SimpleActionGroup::new();
+            obj.insert_action_group("subfolder", Some(&actions));
+            let obj = self.obj();
 
             let action = gio::SimpleAction::new("rename-begin", None);
             action.connect_activate(clone!(
@@ -428,6 +430,23 @@ mod imp {
             ));
             actions.add_action(&action);
         }
+
+        pub(super) fn setup_actions_project_root(&self) {
+            let obj = self.obj();
+            let actions = SimpleActionGroup::new();
+            obj.insert_action_group("project-root", Some(&actions));
+
+            let action = gio::SimpleAction::new("close-project", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    assert!(obj.is_root());
+                    obj.emit_by_name::<()>("close-project-requested", &[]);
+                }
+            ));
+            actions.add_action(&action);
+        }
     }
 }
 
@@ -452,27 +471,39 @@ impl LibraryFolder {
     /// Normal folder
     pub fn new(data: &FolderObject) -> Self {
         let this: Self = Object::builder().build();
-        this.imp().setup_actions();
+        let imp = this.imp();
+        imp.setup_rename_menu();
+        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library_folder_context_menu.ui");
+        imp.setup_drag();
+        imp.setup_actions_common();
+        imp.setup_actions_subfolder();
         this.bind(data);
         this
     }
 
     /// Project root folder
     pub fn new_project_root(data: &FolderObject) -> Self {
-        let this = Self::new(data);
-        this.imp().is_project_root.replace(true);
-        this.imp()
-            .folder_icon
-            .set_icon_name(Some("library-symbolic"));
-        this.imp().expand_icon.set_visible(false);
-        this.imp().expand_button.set_sensitive(false);
-        this.imp().title.set_label("Library");
-        this.imp().content_vbox.set_margin_start(0);
-        this.imp().content_vbox.set_margin_bottom(8); // Provide some empty space to aid dragging
-        this.imp().set_expanded(true);
-        if let Some(popover) = this.imp().rename_popover.take() {
-            popover.unparent();
-        }
+        let this: Self = Object::builder().build();
+        let imp = this.imp();
+        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library_project_context_menu.ui");
+        imp.is_project_root.replace(true);
+        imp.folder_icon.set_icon_name(Some("project-symbolic"));
+        imp.setup_actions_common();
+        imp.setup_actions_project_root();
+        this.bind(data);
+        this
+    }
+
+    /// Special root folder for builtin drafts project
+    pub fn new_drafts_root(data: &FolderObject) -> Self {
+        let this: Self = Object::builder().build();
+        let imp = this.imp();
+        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library_drafts_context_menu.ui");
+        imp.is_project_root.replace(true);
+        imp.folder_icon.set_icon_name(Some("draft-table-symbolic"));
+        imp.setup_actions_common();
+        this.bind(data);
+        imp.title.set_label("Drafts");
         this
     }
 
@@ -522,20 +553,16 @@ impl LibraryFolder {
     }
 
     fn bind(&self, data: &FolderObject) {
-        self.imp().folder_object.replace(Some(data.clone()));
+        let imp = self.imp();
+        imp.folder_object.replace(Some(data.clone()));
         let path = data.path();
-        self.imp()
-            .rename_popover
-            .borrow()
-            .as_ref()
-            .unwrap()
-            .set_path(path);
-
-        self.imp()
-            .title_row
+        if let Some(rename_popover) = imp.rename_popover.borrow().as_ref() {
+            rename_popover.set_path(path);
+        }
+        imp.title_row
             .set_margin_start(std::cmp::max(12 * data.depth() as i32, 0));
-        let title_label = self.imp().title.get();
-        let mut bindings = self.imp().bindings.borrow_mut();
+        let title_label = imp.title.get();
+        let mut bindings = imp.bindings.borrow_mut();
 
         let title_binding = data
             .bind_property("name", &title_label, "label")

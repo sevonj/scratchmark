@@ -15,18 +15,6 @@
         <attribute name="label" translatable="yes">Show in File Manager</attribute>
         <attribute name="action">folder.filemanager</attribute>
       </item>
-      <item>
-        <attribute name="label" translatable="yes">Rename Folder</attribute>
-        <attribute name="action">subfolder.rename-begin</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Move to Trash</attribute>
-        <attribute name="action">subfolder.trash</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Delete Folder</attribute>
-        <attribute name="action">subfolder.delete</attribute>
-      </item>
     </section>
   </menu>
 </interface>

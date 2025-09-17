@@ -3,14 +3,22 @@
 
 mod imp {
     use std::cell::RefCell;
+    use std::collections::HashMap;
+    use std::ops::Deref;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
     use glib::subclass::*;
+    use gtk::gio::Cancellable;
     use gtk::glib;
+    use gtk::glib::clone;
     use gtk::glib::closure_local;
     use gtk::prelude::*;
+
+    use gtk::FileDialog;
+    use gtk::gio::SimpleAction;
+    use gtk::gio::SimpleActionGroup;
 
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
@@ -21,15 +29,10 @@ mod imp {
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library_browser.ui")]
     pub struct LibraryBrowser {
         #[template_child]
-        pub(super) library_container: TemplateChild<gtk::Box>,
-        #[template_child]
         pub(super) projects_container: TemplateChild<gtk::Box>,
-        #[template_child]
-        no_projects_status: TemplateChild<adw::Bin>,
 
         pub(super) selected_sheet: RefCell<Option<PathBuf>>,
-
-        pub(super) project: RefCell<Option<LibraryProject>>,
+        pub(super) projects: RefCell<HashMap<PathBuf, LibraryProject>>,
     }
 
     #[glib::object_subclass]
@@ -49,7 +52,36 @@ mod imp {
 
     impl ObjectImpl for LibraryBrowser {
         fn constructed(&self) {
+            let obj = self.obj();
             self.parent_constructed();
+
+            let actions = SimpleActionGroup::new();
+            obj.insert_action_group("library", Some(&actions));
+
+            let action = SimpleAction::new("add-project-picker", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_action, _parameter| {
+                    let dialog = FileDialog::builder().build();
+                    dialog.select_folder(
+                        obj.root().and_downcast_ref::<gtk::Window>(),
+                        None::<&Cancellable>,
+                        clone!(
+                            #[weak]
+                            obj,
+                            move |result| {
+                                if let Ok(file) = result
+                                    && let Some(path) = file.path()
+                                {
+                                    obj.add_project(path);
+                                }
+                            }
+                        ),
+                    );
+                }
+            ));
+            actions.add_action(&action);
         }
 
         fn signals() -> &'static [Signal] {
@@ -77,6 +109,9 @@ mod imp {
                     Signal::builder("sheet-trash-requested")
                         .param_types([LibrarySheet::static_type()])
                         .build(),
+                    Signal::builder("close-project-requested")
+                        .param_types([PathBuf::static_type()])
+                        .build(),
                 ]
             })
         }
@@ -87,12 +122,13 @@ mod imp {
 
     impl LibraryBrowser {
         pub(super) fn refresh_content(&self) {
-            if let Some(project) = self.project.borrow().as_ref() {
+            for project in self.projects.borrow().deref().values() {
                 project.refresh_content();
             }
         }
 
         pub(super) fn load_project(&self, project: LibraryProject) {
+            let obj = self.obj();
             project.connect_closure(
                 "folder-added",
                 false,
@@ -115,11 +151,23 @@ mod imp {
                     }
                 ),
             );
+            project.connect_closure(
+                "close-project-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |project: LibraryProject| {
+                        obj.emit_by_name::<()>("close-project-requested", &[&project.path()]);
+                    }
+                ),
+            );
 
             self.projects_container.append(&project);
-            self.project.borrow_mut().replace(project.clone());
+            self.projects
+                .borrow_mut()
+                .insert(project.path(), project.clone());
             project.refresh_content();
-            self.no_projects_status.set_visible(false);
         }
 
         fn connect_folder(&self, folder: LibraryFolder) {
@@ -269,12 +317,14 @@ mod imp {
     }
 }
 
+use std::ops::Deref;
 use std::path::{Path, PathBuf};
 
 use adw::subclass::prelude::*;
 use gtk::glib;
 
 use glib::Object;
+use gtk::prelude::BoxExt;
 
 use crate::widgets::LibraryProject;
 use crate::widgets::LibrarySheet;
@@ -290,40 +340,72 @@ glib::wrapper! {
 impl Default for LibraryBrowser {
     fn default() -> Self {
         let this: Self = Object::builder().build();
-        this.imp().load_project(LibraryProject::new_appdata());
+        this.imp().load_project(LibraryProject::new_draft_table());
         this.refresh_content();
         this
     }
 }
 
 impl LibraryBrowser {
+    pub fn open_project_paths(&self) -> Vec<String> {
+        let mut paths = vec![];
+        for project in self.imp().projects.borrow().deref().values() {
+            if !project.is_builtin() {
+                paths.push(project.path().to_str().unwrap().to_owned());
+            }
+        }
+        paths
+    }
+
     pub fn expanded_folder_paths(&self) -> Vec<String> {
-        self.imp()
-            .project
-            .borrow()
-            .as_ref()
-            .map(LibraryProject::expanded_folder_paths)
-            .unwrap_or_default()
+        let mut paths = vec![];
+        for project in self.imp().projects.borrow().deref().values() {
+            paths.append(&mut project.expanded_folder_paths());
+        }
+        paths
+    }
+
+    pub fn expand_folder(&self, path: PathBuf) {
+        for project in self.imp().projects.borrow().deref().values() {
+            if path.starts_with(project.path()) {
+                project.expand_folder(path);
+                return;
+            }
+        }
     }
 
     pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
-        self.imp()
-            .project
-            .borrow()
-            .as_ref()
-            .and_then(|p| p.get_folder(path))
+        for project in self.imp().projects.borrow().deref().values() {
+            if path.starts_with(project.path()) {
+                return project.get_folder(path);
+            }
+        }
+        None
     }
 
     pub fn get_sheet(&self, path: &Path) -> Option<LibrarySheet> {
-        self.imp()
-            .project
-            .borrow()
-            .as_ref()
-            .and_then(|p| p.get_sheet(path))
+        for project in self.imp().projects.borrow().deref().values() {
+            if path.starts_with(project.path()) {
+                return project.get_sheet(path);
+            }
+        }
+        None
     }
 
     pub fn add_project(&self, path: PathBuf) {
+        for project in self.imp().projects.borrow().deref().values() {
+            let compare = project.path();
+            if path.starts_with(&compare) || compare.starts_with(&path) {
+                return;
+            }
+        }
         self.imp().load_project(LibraryProject::new(path));
+    }
+
+    pub fn remove_project(&self, path: &Path) {
+        let imp = self.imp();
+        let project = imp.projects.borrow_mut().remove(path).unwrap();
+        imp.projects_container.remove(&project);
     }
 
     pub fn refresh_content(&self) {

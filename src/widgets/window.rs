@@ -321,6 +321,30 @@ mod imp {
                 ),
             );
 
+            self.library_browser.connect_closure(
+                "close-project-requested",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |browser: LibraryBrowser, project_path: PathBuf| {
+                        let contains_edited_file = this
+                            .sheet_editor
+                            .borrow()
+                            .as_ref()
+                            .is_some_and(|editor| editor.path().starts_with(&project_path));
+
+                        if contains_edited_file && let Err(e) = this.close_editor() {
+                            let toast = Toast::new(&e.to_string());
+                            this.toast_overlay.add_toast(toast);
+                            return;
+                        }
+
+                        browser.remove_project(&project_path);
+                    }
+                ),
+            );
+
             let new_folder_popover = ItemCreatePopover::for_folder();
             self.new_folder_button
                 .set_popover(Some(&new_folder_popover));
@@ -629,11 +653,13 @@ mod imp {
             self.editor_sidebar_toggle
                 .set_active(settings.boolean("editor-show-sidebar"));
 
+            let open_projects = settings.strv("library-project-paths");
+            for path in open_projects {
+                self.library_browser.add_project(PathBuf::from(path));
+            }
             let library_expanded_folders = settings.strv("library-expanded-folders");
             for path in library_expanded_folders {
-                if let Some(folder) = self.library_browser.get_folder(&PathBuf::from(path)) {
-                    folder.set_expanded(true);
-                }
+                self.library_browser.expand_folder(PathBuf::from(path));
             }
         }
 
@@ -657,6 +683,8 @@ mod imp {
 
             let expanded_folders = self.library_browser.expanded_folder_paths();
             settings.set_strv("library-expanded-folders", expanded_folders)?;
+            let open_projects = self.library_browser.open_project_paths();
+            settings.set_strv("library-project-paths", open_projects)?;
 
             Ok(())
         }
@@ -664,6 +692,10 @@ mod imp {
         fn create_folder(&self, path: PathBuf) {
             util::create_folder(&path);
             self.library_browser.refresh_content();
+            self.library_browser
+                .get_folder(&util::path_builtin_library())
+                .unwrap()
+                .set_expanded(true);
         }
 
         fn create_sheet(&self, path: PathBuf) {
@@ -675,6 +707,10 @@ mod imp {
             util::create_sheet_file(&path);
             self.library_browser.refresh_content();
             self.load_sheet(path);
+            self.library_browser
+                .get_folder(&util::path_builtin_library())
+                .unwrap()
+                .set_expanded(true);
         }
 
         fn load_sheet(&self, path: PathBuf) {
