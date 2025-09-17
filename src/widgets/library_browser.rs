@@ -365,6 +365,15 @@ impl LibraryBrowser {
         paths
     }
 
+    pub fn expand_folder(&self, path: PathBuf) {
+        for project in self.imp().projects.borrow().deref().values() {
+            if path.starts_with(project.path()) {
+                project.expand_folder(path);
+                return;
+            }
+        }
+    }
+
     pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
         for project in self.imp().projects.borrow().deref().values() {
             if path.starts_with(project.path()) {

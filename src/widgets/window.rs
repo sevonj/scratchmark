@@ -659,9 +659,7 @@ mod imp {
             }
             let library_expanded_folders = settings.strv("library-expanded-folders");
             for path in library_expanded_folders {
-                if let Some(folder) = self.library_browser.get_folder(&PathBuf::from(path)) {
-                    folder.set_expanded(true);
-                }
+                self.library_browser.expand_folder(PathBuf::from(path));
             }
         }
 

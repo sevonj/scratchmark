@@ -2,22 +2,35 @@ mod imp {
     use std::cell::Cell;
     use std::cell::RefCell;
     use std::collections::HashMap;
+    use std::collections::HashSet;
+    use std::collections::VecDeque;
     use std::path::PathBuf;
     use std::sync::OnceLock;
+    use std::time::Duration;
 
     use adw::subclass::prelude::*;
+    use async_channel::Receiver;
+    use async_channel::Sender;
     use glib::closure_local;
     use glib::subclass::*;
     use gtk::glib;
+    use gtk::glib::clone;
+    use gtk::glib::timeout_add_local;
     use gtk::prelude::*;
 
     use gtk::CompositeTemplate;
+    use gtk::glib::MainContext;
 
     use crate::data::FolderObject;
-    use crate::data::ProjectObject;
     use crate::data::SheetObject;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
+
+    #[derive(Debug)]
+    enum ProjectEntry {
+        Dir { path: PathBuf, depth: u32 },
+        File { path: PathBuf, depth: u32 },
+    }
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library_project.ui")]
@@ -25,12 +38,14 @@ mod imp {
         #[template_child]
         pub(super) project_root_vbox: TemplateChild<gtk::Box>,
 
-        pub(super) folders: RefCell<HashMap<PathBuf, LibraryFolder>>,
+        pub(super) root_folder: RefCell<Option<LibraryFolder>>,
+        pub(super) subfolders: RefCell<HashMap<PathBuf, LibraryFolder>>,
         pub(super) sheets: RefCell<HashMap<PathBuf, LibrarySheet>>,
-        pub(super) project_object: RefCell<Option<ProjectObject>>,
-
         /// Is this a builtin project (drafts)
         pub(super) is_builtin: Cell<bool>,
+        crawler_rx: RefCell<Option<Receiver<ProjectEntry>>>,
+        crawler_tx: RefCell<Option<Sender<ProjectEntry>>>,
+        pub(super) expanded_folders: RefCell<HashSet<PathBuf>>,
     }
 
     #[glib::object_subclass]
@@ -50,7 +65,36 @@ mod imp {
 
     impl ObjectImpl for LibraryProject {
         fn constructed(&self) {
+            let obj = self.obj();
             self.parent_constructed();
+
+            let (sender, receiver) = async_channel::unbounded();
+            self.crawler_tx.replace(Some(sender));
+            self.crawler_rx.replace(Some(receiver));
+
+            timeout_add_local(
+                Duration::from_millis(100),
+                clone!(
+                    #[strong]
+                    obj,
+                    move || {
+                        let imp = obj.imp();
+                        let mut bind = imp.crawler_rx.borrow_mut();
+                        let receiver = bind.as_mut().unwrap();
+                        while let Ok(entry) = receiver.try_recv() {
+                            match entry {
+                                ProjectEntry::Dir { path, depth } => {
+                                    imp.add_subfolder(path, depth);
+                                }
+                                ProjectEntry::File { path, depth } => {
+                                    imp.add_sheet(path, depth);
+                                }
+                            }
+                        }
+                        glib::ControlFlow::Continue
+                    }
+                ),
+            );
         }
 
         fn signals() -> &'static [Signal] {
@@ -95,101 +139,146 @@ mod imp {
 
     impl LibraryProject {
         pub(super) fn setup_root(&self, root_folder: LibraryFolder) {
-            let path = root_folder.path();
-            self.project_object
-                .replace(Some(ProjectObject::new(path.clone())));
-            self.project_object
-                .borrow()
-                .as_ref()
-                .unwrap()
-                .refresh_content();
-
+            assert!(self.root_folder.borrow().is_none());
             let vbox = &self.project_root_vbox;
-
             vbox.append(&root_folder);
             self.connect_folder(root_folder.clone());
-
-            self.folders.borrow_mut().insert(path, root_folder);
+            self.root_folder.replace(Some(root_folder));
+            self.refresh_content();
         }
 
         pub(super) fn refresh_content(&self) {
-            self.project_object
-                .borrow()
-                .as_ref()
-                .unwrap()
-                .refresh_content();
+            let sender = self.crawler_tx.borrow().as_ref().unwrap().clone();
+            let root_path = self.obj().root_path();
+
+            MainContext::default().spawn_local(async move {
+                let mut search_stack: VecDeque<(PathBuf, u32)> = VecDeque::from([(root_path, 1)]);
+                let mut found_folders: Vec<(PathBuf, u32)> = vec![];
+                let mut found_files: Vec<(PathBuf, u32)> = vec![];
+
+                loop {
+                    let Some((folder, depth)) = search_stack.pop_front() else {
+                        break;
+                    };
+                    let Ok(entries) = folder.read_dir() else {
+                        continue;
+                    };
+                    for entry in entries {
+                        let Ok(entry) = entry else {
+                            continue;
+                        };
+                        let Ok(metadata) = entry.metadata() else {
+                            continue;
+                        };
+                        let path = entry.path();
+                        if metadata.is_dir() {
+                            search_stack.push_back((path.clone(), depth + 1));
+                            found_folders.push((path.clone(), depth + 1));
+                            sender
+                                .send(ProjectEntry::Dir { path, depth })
+                                .await
+                                .expect("Crawler failed to send dir path!");
+                        } else {
+                            if !path
+                                .extension()
+                                .is_some_and(|ext| ext.eq_ignore_ascii_case("md"))
+                            {
+                                continue;
+                            }
+
+                            found_files.push((path.clone(), depth + 1));
+                            sender
+                                .send(ProjectEntry::File { path, depth })
+                                .await
+                                .expect("Crawler failed to send file path!");
+                        }
+                    }
+                }
+            });
 
             self.prune();
+        }
 
-            let binding = self.project_object.borrow();
-            let lib = binding.as_ref().unwrap();
-
-            // Add new
-            let mut added_folders = vec![];
-            for (path, folder_state) in lib.data().folders.iter() {
-                if !self.folders.borrow().contains_key(path) {
-                    let folder =
-                        LibraryFolder::new(&FolderObject::new(path.clone(), folder_state.depth));
-                    self.connect_folder(folder.clone());
-                    added_folders.push(folder.clone());
-                    self.folders.borrow_mut().insert(path.clone(), folder);
-                }
+        fn add_subfolder(&self, path: PathBuf, depth: u32) {
+            let mut subfolders = self.subfolders.borrow_mut();
+            if subfolders.contains_key(&path) {
+                return;
             }
-            for folder in &added_folders {
-                let path = folder.path();
-                let parent_path = path.parent().unwrap();
-                let parent = self.folders.borrow().get(parent_path).unwrap().clone();
+
+            let folder = LibraryFolder::new(&FolderObject::new(path.clone(), depth));
+            self.connect_folder(folder.clone());
+            subfolders.insert(path.clone(), folder.clone());
+
+            let parent_path = path.parent().unwrap();
+            if let Some(parent) = subfolders.get(parent_path) {
                 parent.add_subfolder(folder.clone());
+            } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
+                self.root_folder
+                    .borrow()
+                    .as_ref()
+                    .unwrap()
+                    .add_subfolder(folder.clone());
+            } else {
+                panic!("Tried to add a folder, but couldn't find its parent.");
             }
 
-            for (path, sheet_state) in lib.data().sheets.iter() {
-                if !self.sheets.borrow().contains_key(path) {
-                    let sheet =
-                        LibrarySheet::new(&SheetObject::new(path.clone(), sheet_state.depth));
-                    self.obj().emit_by_name::<()>("sheet-added", &[&sheet]);
-
-                    self.sheets.borrow_mut().insert(path.clone(), sheet.clone());
-
-                    let parent_path = path.parent().unwrap();
-                    let parent = self.folders.borrow().get(parent_path).unwrap().clone();
-                    parent.add_sheet(sheet);
-                }
+            if self.expanded_folders.borrow().contains(&path) {
+                folder.set_expanded(true);
             }
+        }
+
+        fn add_sheet(&self, path: PathBuf, depth: u32) {
+            let mut sheets = self.sheets.borrow_mut();
+            let subfolders = self.subfolders.borrow();
+            if sheets.contains_key(&path) {
+                return;
+            }
+
+            let sheet = LibrarySheet::new(&SheetObject::new(path.clone(), depth));
+            sheets.insert(path.clone(), sheet.clone());
+
+            let parent_path = path.parent().unwrap();
+            if let Some(parent) = subfolders.get(parent_path) {
+                parent.add_sheet(sheet.clone());
+            } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
+                self.root_folder
+                    .borrow()
+                    .as_ref()
+                    .unwrap()
+                    .add_sheet(sheet.clone());
+            } else {
+                panic!("Tried to add a sheet, but couldn't find its parent.");
+            }
+
+            self.obj().emit_by_name::<()>("sheet-added", &[&sheet]);
         }
 
         /// Remove widgets for entries that don't exist in the library anymore
         fn prune(&self) {
-            let binding = self.project_object.borrow();
-            let project = binding.as_ref().unwrap();
-
-            let mut folders = self.folders.borrow_mut();
+            let mut subfolders = self.subfolders.borrow_mut();
             let mut sheets = self.sheets.borrow_mut();
             let mut dead_folders = vec![];
             let mut dead_sheets = vec![];
-            for (path, folder) in folders.iter() {
-                // Do not delete library root
-                if *path == project.path() {
-                    continue;
-                }
-                if !project.data().folders.contains_key(path) {
+            for (path, folder) in subfolders.iter() {
+                if !path.exists() {
                     dead_folders.push(path.clone());
 
                     let parent_path = path.parent().unwrap();
-                    let parent = folders.get(parent_path).unwrap().clone();
+                    let parent = subfolders.get(parent_path).unwrap().clone();
                     parent.remove_subfolder(folder)
                 }
             }
             for (path, sheet) in sheets.iter() {
-                if !project.data().sheets.contains_key(path) {
+                if !path.exists() {
                     dead_sheets.push(path.clone());
 
                     let parent_path = path.parent().unwrap();
-                    let parent = folders.get(parent_path).unwrap().clone();
+                    let parent = subfolders.get(parent_path).unwrap().clone();
                     parent.remove_sheet(sheet)
                 }
             }
             for path in dead_folders {
-                folders
+                subfolders
                     .remove(&path)
                     .expect("dead folder entry disappeared?");
             }
@@ -283,9 +372,12 @@ impl LibraryProject {
         self.root_folder().path()
     }
 
+    pub fn root_path(&self) -> PathBuf {
+        self.imp().root_folder.borrow().as_ref().unwrap().path()
+    }
+
     pub fn root_folder(&self) -> LibraryFolder {
-        let path = self.imp().project_object.borrow().as_ref().unwrap().path();
-        self.imp().folders.borrow().get(&path).unwrap().clone()
+        self.imp().root_folder.borrow().clone().unwrap()
     }
 
     pub fn is_builtin(&self) -> bool {
@@ -294,7 +386,10 @@ impl LibraryProject {
 
     pub fn expanded_folder_paths(&self) -> Vec<String> {
         let mut paths = vec![];
-        for (path, folder) in self.imp().folders.borrow().iter() {
+        if self.root_folder().is_expanded() {
+            paths.push(self.root_path().to_str().unwrap().to_owned());
+        }
+        for (path, folder) in self.imp().subfolders.borrow().iter() {
             if folder.is_expanded() {
                 paths.push(path.to_str().unwrap().to_owned());
             }
@@ -302,8 +397,18 @@ impl LibraryProject {
         paths
     }
 
+    pub fn expand_folder(&self, path: PathBuf) {
+        let imp = self.imp();
+        if let Some(folder) = imp.subfolders.borrow().get(&path) {
+            folder.set_expanded(true);
+        } else if path == self.root_path() {
+            self.root_folder().set_expanded(true);
+        }
+        imp.expanded_folders.borrow_mut().insert(path);
+    }
+
     pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
-        self.imp().folders.borrow().get(path).cloned()
+        self.imp().subfolders.borrow().get(path).cloned()
     }
 
     pub fn get_sheet(&self, path: &Path) -> Option<LibrarySheet> {
