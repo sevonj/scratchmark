@@ -692,6 +692,10 @@ mod imp {
         fn create_folder(&self, path: PathBuf) {
             util::create_folder(&path);
             self.library_browser.refresh_content();
+            self.library_browser
+                .get_folder(&util::path_builtin_library())
+                .unwrap()
+                .set_expanded(true);
         }
 
         fn create_sheet(&self, path: PathBuf) {
@@ -703,6 +707,10 @@ mod imp {
             util::create_sheet_file(&path);
             self.library_browser.refresh_content();
             self.load_sheet(path);
+            self.library_browser
+                .get_folder(&util::path_builtin_library())
+                .unwrap()
+                .set_expanded(true);
         }
 
         fn load_sheet(&self, path: PathBuf) {

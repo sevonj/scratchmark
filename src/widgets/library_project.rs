@@ -424,7 +424,14 @@ impl LibraryProject {
     }
 
     pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
-        self.imp().subfolders.borrow().get(path).cloned()
+        let sub = self.imp().subfolders.borrow().get(path).cloned();
+        if sub.is_some() {
+            sub
+        } else if *path == self.root_path() {
+            Some(self.root_folder())
+        } else {
+            None
+        }
     }
 
     pub fn get_sheet(&self, path: &Path) -> Option<LibrarySheet> {
