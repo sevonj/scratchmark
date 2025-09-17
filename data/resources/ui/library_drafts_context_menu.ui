@@ -4,10 +4,6 @@
   <menu id="context-menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">this is drafts</attribute>
-        <attribute name="action">unused</attribute>
-      </item>
-      <item>
         <attribute name="label" translatable="yes">New Sheet</attribute>
         <attribute name="action">folder.create-sheet</attribute>
       </item>
@@ -18,22 +14,6 @@
       <item>
         <attribute name="label" translatable="yes">Show in File Manager</attribute>
         <attribute name="action">folder.filemanager</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Rename Folder</attribute>
-        <attribute name="action">subfolder.rename-begin</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Move to Trash</attribute>
-        <attribute name="action">subfolder.trash</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Delete Folder</attribute>
-        <attribute name="action">subfolder.delete</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Close Project</attribute>
-        <attribute name="action">project-root.close-project</attribute>
       </item>
     </section>
   </menu>
