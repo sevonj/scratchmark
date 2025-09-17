@@ -7,24 +7,24 @@ mod imp {
     use gtk::prelude::*;
     use gtk::subclass::prelude::*;
 
-    use super::LibraryData;
+    use super::ProjectData;
 
     #[derive(Properties, Default)]
-    #[properties(wrapper_type = super::LibraryObject)]
-    pub struct LibraryObject {
+    #[properties(wrapper_type = super::ProjectObject)]
+    pub struct ProjectObject {
         #[property(name = "path", get, set, type = PathBuf, member = path)]
         #[property(name = "displayName", get, set, type = String, member = display_name)]
-        pub data: RefCell<LibraryData>,
+        pub data: RefCell<ProjectData>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LibraryObject {
-        const NAME: &'static str = "LibraryObject";
-        type Type = super::LibraryObject;
+    impl ObjectSubclass for ProjectObject {
+        const NAME: &'static str = "ProjectObject";
+        type Type = super::ProjectObject;
     }
 
     #[glib::derived_properties]
-    impl ObjectImpl for LibraryObject {}
+    impl ObjectImpl for ProjectObject {}
 }
 
 use std::collections::HashMap;
@@ -35,10 +35,10 @@ use glib::Object;
 use gtk::glib;
 
 glib::wrapper! {
-    pub struct LibraryObject(ObjectSubclass<imp::LibraryObject>);
+    pub struct ProjectObject(ObjectSubclass<imp::ProjectObject>);
 }
 
-impl LibraryObject {
+impl ProjectObject {
     pub fn new(path: PathBuf) -> Self {
         let display_name = path.file_name().unwrap().to_string_lossy().into_owned();
         Object::builder()
@@ -47,7 +47,7 @@ impl LibraryObject {
             .build()
     }
 
-    pub fn data(&self) -> std::cell::Ref<'_, LibraryData> {
+    pub fn data(&self) -> std::cell::Ref<'_, ProjectData> {
         self.imp().data.borrow()
     }
 
@@ -151,7 +151,7 @@ impl SheetState {
 }
 
 #[derive(Default, Debug)]
-pub struct LibraryData {
+pub struct ProjectData {
     pub path: PathBuf,
     pub display_name: String,
     /// Every folder in the project, except root

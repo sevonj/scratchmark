@@ -14,7 +14,7 @@ mod imp {
     use gtk::CompositeTemplate;
 
     use crate::data::FolderObject;
-    use crate::data::LibraryObject;
+    use crate::data::ProjectObject;
     use crate::data::SheetObject;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
@@ -27,7 +27,7 @@ mod imp {
 
         pub(super) folders: RefCell<HashMap<PathBuf, LibraryFolder>>,
         pub(super) sheets: RefCell<HashMap<PathBuf, LibrarySheet>>,
-        pub(super) project_object: RefCell<Option<LibraryObject>>,
+        pub(super) project_object: RefCell<Option<ProjectObject>>,
 
         /// Is this a builtin project (drafts)
         pub(super) is_builtin: Cell<bool>,
@@ -97,7 +97,7 @@ mod imp {
         pub(super) fn setup_root(&self, root_folder: LibraryFolder) {
             let path = root_folder.path();
             self.project_object
-                .replace(Some(LibraryObject::new(path.clone())));
+                .replace(Some(ProjectObject::new(path.clone())));
             self.project_object
                 .borrow()
                 .as_ref()
