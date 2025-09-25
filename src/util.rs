@@ -1,12 +1,15 @@
 use std::fs::OpenOptions;
 use std::io::Write;
-use std::path::{Path, PathBuf};
+use std::path::Path;
+use std::path::PathBuf;
 
-use gtk::gio;
-use gtk::glib;
+use gtk::gio::prelude::*;
 
-use gio::Cancellable;
-use glib::GString;
+use gtk::gio::Cancellable;
+use gtk::gio::File;
+use gtk::glib::GString;
+
+use gtk::glib::user_data_dir;
 
 use crate::APP_ID;
 use crate::error::ScratchmarkError;
@@ -50,7 +53,7 @@ impl FilenameStatus {
 
 /// User data directory
 pub fn path_userdata() -> PathBuf {
-    let path = glib::user_data_dir().join(APP_ID);
+    let path = user_data_dir().join(APP_ID);
     std::fs::create_dir_all(&path).expect("Couldn't create dir for userdata");
     path
 }
@@ -126,8 +129,8 @@ pub fn create_sheet_file(path: &Path) {
         .expect("failed to write template to new file");
 }
 
-pub fn read_file_to_string(file: &gio::File) -> Result<GString, ScratchmarkError> {
-    let slice = match gio::prelude::FileExtManual::load_contents(file, None::<&Cancellable>) {
+pub fn read_file_to_string(file: &File) -> Result<GString, ScratchmarkError> {
+    let slice = match FileExtManual::load_contents(file, None::<&Cancellable>) {
         Ok((slice, _)) => slice,
         Err(_) => return Err(ScratchmarkError::FileOpenFail),
     };
@@ -136,6 +139,29 @@ pub fn read_file_to_string(file: &gio::File) -> Result<GString, ScratchmarkError
         Err(_) => return Err(ScratchmarkError::InvalidChars),
     };
     Ok(text)
+}
+
+pub fn move_folder(original_path: &Path, new_path: &Path) -> Result<(), std::io::Error> {
+    if std::fs::exists(new_path).unwrap() {
+        panic!("Move folder: already exists")
+    }
+    copy_folder_recurse(original_path, new_path)?;
+    std::fs::remove_dir_all(original_path)?;
+    Ok(())
+}
+
+fn copy_folder_recurse(original_path: &Path, new_path: &Path) -> Result<(), std::io::Error> {
+    std::fs::create_dir_all(new_path)?;
+    for entry in std::fs::read_dir(original_path)? {
+        let entry = entry?;
+        let entry_dest = PathBuf::from(new_path).join(entry.file_name());
+        if entry.file_type()?.is_dir() {
+            move_folder(&entry.path(), &entry_dest)?;
+        } else {
+            std::fs::copy(entry.path(), &entry_dest)?;
+        }
+    }
+    Ok(())
 }
 
 #[cfg(test)]
