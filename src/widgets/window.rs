@@ -1,12 +1,10 @@
 mod imp {
     use std::cell::{Cell, OnceCell, RefCell};
-    use std::fs;
     use std::path::PathBuf;
 
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use glib::{clone, closure_local};
-    use gtk::gio;
     use gtk::glib;
     use gtk::pango;
 
@@ -15,8 +13,14 @@ mod imp {
         OverlaySplitView, PreferencesDialog, PreferencesGroup, PreferencesPage, PreferencesRow,
         SwitchRow, Toast, ToastOverlay, ToolbarStyle, ToolbarView,
     };
-    use gio::{Cancellable, Settings, SettingsBindFlags, SimpleAction, SimpleActionGroup};
     use glib::VariantTy;
+    use gtk::gio::Cancellable;
+    use gtk::gio::File;
+    use gtk::gio::FileCopyFlags;
+    use gtk::gio::Settings;
+    use gtk::gio::SettingsBindFlags;
+    use gtk::gio::SimpleAction;
+    use gtk::gio::SimpleActionGroup;
     use gtk::{
         Builder, Button, CompositeTemplate, EventControllerMotion, FontDialog, MenuButton,
         Revealer, ToggleButton,
@@ -226,7 +230,17 @@ mod imp {
                         if open_sheet_affected {
                             sheet_editor_opt.as_ref().unwrap().cancel_filemon();
                         }
-                        fs::rename(&original_path, &new_path).expect("Folder rename failed");
+
+                        let new_folder = File::for_path(&new_path);
+                        let old_folder = File::for_path(&original_path);
+                        if old_folder
+                            .move_(&new_folder, FileCopyFlags::NONE, None::<&Cancellable>, None)
+                            .is_err()
+                        {
+                            util::move_folder(&original_path, &new_path)
+                                .expect("Folder move failed");
+                        }
+
                         if open_sheet_affected {
                             let selected_sheet = sheet_editor_opt.as_ref().unwrap().path();
                             let relative = selected_sheet.strip_prefix(folder.path()).unwrap();
@@ -264,7 +278,10 @@ mod imp {
                         if open_sheet_affected {
                             sheet_editor_opt.as_ref().unwrap().cancel_filemon();
                         }
-                        fs::rename(&original_path, &new_path).expect("File rename failed");
+                        let new_file = File::for_path(&new_path);
+                        File::for_path(&original_path)
+                            .move_(&new_file, FileCopyFlags::NONE, None::<&Cancellable>, None)
+                            .expect("File move failed");
                         if open_sheet_affected {
                             this.library_browser
                                 .set_selected_sheet(Some(new_path.clone()));
@@ -435,7 +452,7 @@ mod imp {
                 move |_| this.on_close_request()
             ));
 
-            let action_fullscreen = gio::SimpleAction::new("fullscreen", None);
+            let action_fullscreen = SimpleAction::new("fullscreen", None);
             action_fullscreen.connect_activate(clone!(
                 #[weak]
                 obj,
@@ -443,7 +460,7 @@ mod imp {
             ));
             obj.add_action(&action_fullscreen);
 
-            let action_unfullscreen = gio::SimpleAction::new("unfullscreen", None);
+            let action_unfullscreen = SimpleAction::new("unfullscreen", None);
             action_unfullscreen.connect_activate(clone!(
                 #[weak]
                 obj,
@@ -463,7 +480,7 @@ mod imp {
             self.on_fullscreen_changed(action_fullscreen, action_unfullscreen);
             self.setup_fullscreen_headerbar();
 
-            let action = gio::SimpleAction::new("file-new", None);
+            let action = SimpleAction::new("file-new", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
@@ -473,7 +490,7 @@ mod imp {
             ));
             obj.add_action(&action);
 
-            let action = gio::SimpleAction::new("file-save", None);
+            let action = SimpleAction::new("file-save", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
@@ -483,7 +500,7 @@ mod imp {
             ));
             obj.add_action(&action);
 
-            let action = gio::SimpleAction::new("file-close", None);
+            let action = SimpleAction::new("file-close", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
@@ -496,7 +513,7 @@ mod imp {
             ));
             obj.add_action(&action);
 
-            let action = gio::SimpleAction::new("file-rename-open", None);
+            let action = SimpleAction::new("file-rename-open", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
@@ -506,7 +523,7 @@ mod imp {
             ));
             obj.add_action(&action);
 
-            let action = gio::SimpleAction::new("library-refresh", None);
+            let action = SimpleAction::new("library-refresh", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
@@ -516,7 +533,7 @@ mod imp {
             ));
             obj.add_action(&action);
 
-            let action = gio::SimpleAction::new("toggle-sidebar", None);
+            let action = SimpleAction::new("toggle-sidebar", None);
             action.connect_activate(clone!(
                 #[weak]
                 top_split,
@@ -527,7 +544,7 @@ mod imp {
             ));
             obj.add_action(&action);
 
-            let action = gio::SimpleAction::new("show-about", None);
+            let action = SimpleAction::new("show-about", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
@@ -537,7 +554,7 @@ mod imp {
             ));
             obj.add_action(&action);
 
-            let action = gio::SimpleAction::new("preferences", None);
+            let action = SimpleAction::new("preferences", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
@@ -547,7 +564,7 @@ mod imp {
             ));
             obj.add_action(&action);
 
-            let action = gio::SimpleAction::new("show-font-dialog", None);
+            let action = SimpleAction::new("show-font-dialog", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
@@ -566,7 +583,7 @@ mod imp {
                 parameter_type: Option<&glib::VariantTy>,
                 editor_actions: &SimpleActionGroup,
             ) {
-                let action = gio::SimpleAction::new(name, parameter_type);
+                let action = SimpleAction::new(name, parameter_type);
                 let name = format!("editor.{name}");
                 action.connect_activate(clone!(
                     #[weak]
@@ -802,7 +819,7 @@ mod imp {
                 self.toast_overlay.add_toast(toast);
                 return;
             }
-            gio::File::for_path(path)
+            File::for_path(path)
                 .trash(None::<&Cancellable>)
                 .expect("folder trash failed");
             self.toast_overlay.add_toast(Toast::new("Moved to trash"));
@@ -821,7 +838,7 @@ mod imp {
                 self.toast_overlay.add_toast(toast);
                 return;
             }
-            gio::File::for_path(path)
+            File::for_path(path)
                 .trash(None::<&Cancellable>)
                 .expect("folder trash failed");
             self.toast_overlay.add_toast(Toast::new("Moved to trash"));
