@@ -21,11 +21,15 @@
   <screenshots>
     <screenshot type="default">
       <image>
-        https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_a.png?raw=true</image>
+        https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_a_light.png?raw=true</image>
     </screenshot>
     <screenshot>
       <image>
-        https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_b.png?raw=true</image>
+        https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_b_light.png?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>
+        https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_c_dark.png?raw=true</image>
     </screenshot>
   </screenshots>
 
