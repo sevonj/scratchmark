@@ -44,6 +44,12 @@
   <url type="homepage">https://github.com/sevonj/scratchmark</url>
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.4.1" date="2025-09-26">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.1</url>
+      <description>
+        <p>Permissions are now Flathub-compliant.</p>
+      </description>
+    </release>
     <release version="v1.4.0" date="2025-09-26">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.0</url>
       <description>
