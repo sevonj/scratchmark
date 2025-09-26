@@ -13,7 +13,8 @@
   </developer>
 
   <description>
-    <p>Scratchmark lets you focus on the text without distractions. It&apos;s designed both for keeping notes and writing longer texts, and makes organizing files easy.</p>
+    <p>Scratchmark lets you focus on the text without distractions. It&apos;s designed both for
+      keeping notes and writing longer texts, and makes organizing files easy.</p>
   </description>
 
   <launchable type="desktop-id">org.scratchmark.Scratchmark.desktop</launchable>
@@ -39,6 +40,15 @@
   <url type="homepage">https://github.com/sevonj/scratchmark</url>
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.4.0" date="2025-09-26">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.0</url>
+      <description>
+        <p>New features:</p>
+        <ul>
+          <li>Arbitrary project folders, multiple projects</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.3.0" date="2025-09-11">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.3.0</url>
       <description>
