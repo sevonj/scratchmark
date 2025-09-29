@@ -44,6 +44,13 @@
   <url type="homepage">https://github.com/sevonj/scratchmark</url>
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.4.2" date="2025-09-29">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.2</url>
+      <description>
+        <p>Fix: Moving files was broken when combined with Flatpak portals.</p>
+        <p>Fix: No bottom margin in library browser.</p>
+      </description>
+    </release>
     <release version="v1.4.1" date="2025-09-26">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.1</url>
       <description>
