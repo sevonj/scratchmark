@@ -298,13 +298,9 @@ mod imp {
                 false,
                 move |_: &DropTarget, value: &glib::Value, _: f64, _: f64| {
                     if let Ok(sheet) = value.get::<LibrarySheet>() {
-                        let Ok(old_path) = sheet.path().canonicalize() else {
-                            return true;
-                        };
+                        let old_path = sheet.path();
                         let filename = old_path.file_name().unwrap();
-                        let Ok(target_path) = obj.path().canonicalize() else {
-                            return true;
-                        };
+                        let target_path = obj.path();
                         let new_path = target_path.join(filename);
                         if new_path == old_path {
                             return true;
@@ -317,13 +313,9 @@ mod imp {
                         if folder.is_root() {
                             return true;
                         }
-                        let Ok(old_path) = folder.path().canonicalize() else {
-                            return true;
-                        };
+                        let old_path = folder.path();
                         let filename = old_path.file_name().unwrap();
-                        let Ok(target_path) = obj.path().canonicalize() else {
-                            return true;
-                        };
+                        let target_path = obj.path();
                         if target_path.starts_with(&old_path) {
                             return true;
                         }
