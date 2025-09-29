@@ -804,16 +804,12 @@ mod imp {
         fn trash_folder(&self, folder: LibraryFolder) {
             assert!(!folder.is_root());
 
-            let path = folder
-                .path()
-                .canonicalize()
-                .expect("folder trash failed to canonicalize folder");
-            let parent_of_currently_open = self.sheet_editor.borrow().as_ref().is_some_and(|e| {
-                e.path()
-                    .canonicalize()
-                    .expect("folder delet trash to canonicalize sheet")
-                    .starts_with(&path)
-            });
+            let path = folder.path();
+            let parent_of_currently_open = self
+                .sheet_editor
+                .borrow()
+                .as_ref()
+                .is_some_and(|e| e.path().starts_with(&path));
             if parent_of_currently_open && let Err(e) = self.close_editor() {
                 let toast = Toast::new(&e.to_string());
                 self.toast_overlay.add_toast(toast);
@@ -848,16 +844,12 @@ mod imp {
         fn delete_folder(&self, folder: LibraryFolder) {
             assert!(!folder.is_root());
 
-            let path = folder
-                .path()
-                .canonicalize()
-                .expect("folder delet failed to canonicalize folder");
-            let parent_of_currently_open = self.sheet_editor.borrow().as_ref().is_some_and(|e| {
-                e.path()
-                    .canonicalize()
-                    .expect("folder delet failed to canonicalize sheet")
-                    .starts_with(&path)
-            });
+            let path = folder.path();
+            let parent_of_currently_open = self
+                .sheet_editor
+                .borrow()
+                .as_ref()
+                .is_some_and(|e| e.path().starts_with(&path));
             if parent_of_currently_open && let Err(e) = self.close_editor() {
                 let toast = Toast::new(&e.to_string());
                 self.toast_overlay.add_toast(toast);
