@@ -38,6 +38,8 @@ jobs:
           bundle: Scratchmark.flatpak
           manifest-path: build-aux/org.scratchmark.Scratchmark.yml
           cache-key: flatpak-builder-${{ github.sha }}
+        env:
+          - "SCRATCHMARK_DISTRIB": "ci-flatpak"
   release:
     name: "Generate Release"
     needs: 
