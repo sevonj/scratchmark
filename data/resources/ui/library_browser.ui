@@ -7,6 +7,7 @@
                 <child>
                     <object class="GtkBox">
                         <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                        <property name="margin-bottom">6</property>
                         <!--child>
                             <object class="GtkSeparator">
                                 <property name="margin-top">8</property>

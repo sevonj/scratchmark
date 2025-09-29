@@ -4,8 +4,8 @@
         <child>
             <object class="GtkBox" id="project_root_vbox">
                 <property name="orientation">1</property>
-                <property name="margin-start">4</property>
-                <property name="margin-end">4</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
             </object>
         </child>
     </template>
