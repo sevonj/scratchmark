@@ -44,6 +44,12 @@
   <url type="homepage">https://github.com/sevonj/scratchmark</url>
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.4.3" date="2025-10-7">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.3</url>
+      <description>
+        <p>Switch to Meson build system</p>
+      </description>
+    </release>
     <release version="v1.4.2" date="2025-09-29">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.2</url>
       <description>
