@@ -9,6 +9,7 @@ adw = { version = "0.7.2", package = "libadwaita", features = ["v1_5"] }
 async-channel = "2.5.0"
 gtk = { version = "0.9.7", package = "gtk4", features = ["v4_14"] }
 sourceview5 = "0.9.1"
+gettext-rs = { version = "0.7", features = ["gettext-system"] }
 
 [features]
 # Search for data files in install locations instead of source tree.

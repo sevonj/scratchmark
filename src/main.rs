@@ -1,9 +1,9 @@
+mod config;
 mod data;
 mod error;
 mod util;
 mod widgets;
 
-use gtk::gio;
 use gtk::glib;
 use gtk::prelude::*;
 
@@ -14,8 +14,26 @@ const APP_ID: &str = "org.scratchmark.Scratchmark";
 fn main() -> glib::ExitCode {
     util::create_builtin_library();
 
-    gio::resources_register_include!("gresources.gresource")
-        .expect("Failed to register resources.");
+    gettextrs::bindtextdomain(config::GETTEXT_PACKAGE, config::LOCALEDIR)
+        .expect("Unable to bind the text domain");
+    gettextrs::bind_textdomain_codeset(config::GETTEXT_PACKAGE, "UTF-8")
+        .expect("Unable to set the text domain encoding");
+    gettextrs::textdomain(config::GETTEXT_PACKAGE).expect("Unable to switch to the text domain");
+
+    #[cfg(feature = "installed")]
+    {
+        let resources =
+            gtk::gio::Resource::load(config::PKGDATADIR.to_owned() + "/scratchmark.gresource")
+                .expect("Could not load resources");
+        gtk::gio::resources_register(&resources);
+    }
+
+    #[cfg(not(feature = "installed"))]
+    {
+        // Running from repository
+        gtk::gio::resources_register_include!("gresources.gresource")
+            .expect("Failed to register resources.");
+    }
 
     let app = adw::Application::builder().application_id(APP_ID).build();
     setup_accels(&app);
@@ -47,4 +65,15 @@ fn setup_accels(app: &adw::Application) {
     app.set_accels_for_action("win.unfullscreen", &["F11"]);
     app.set_accels_for_action("win.show-help-overlay", &["<Control>question"]);
     app.set_accels_for_action("win.preferences", &["<ctrl>comma"]);
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::config;
+
+    #[test]
+    fn test_meson_cargo_equal_version() {
+        // Top level meson.build and Cargo.toml
+        assert_eq!(config::VERSION, env!("CARGO_PKG_VERSION"));
+    }
 }

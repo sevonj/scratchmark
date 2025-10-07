@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Scratchmark
+Comment=Markdown editor
+Exec=scratchmark
+Icon=org.scratchmark.Scratchmark
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true
+GenericName=Scratchmark Markdown editor
+Categories=Office;WordProcessor;

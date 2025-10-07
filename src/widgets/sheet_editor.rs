@@ -491,8 +491,7 @@ use sourceview5::SearchContext;
 use sourceview5::SearchSettings;
 use sourceview5::StyleSchemeManager;
 
-#[cfg(feature = "installed")]
-use crate::APP_ID;
+use crate::config::PKGDATADIR;
 use crate::error::ScratchmarkError;
 use crate::util;
 
@@ -609,13 +608,8 @@ impl SheetEditor {
             return;
         }
 
-        #[cfg(feature = "installed")]
-        {
-            for dir in glib::system_data_dirs() {
-                let path = dir.join(APP_ID).join("editor_schemes");
-                StyleSchemeManager::default().append_search_path(path.to_str().unwrap());
-            }
-        }
+        // Fetch failed, add paths and try again
+        StyleSchemeManager::default().append_search_path(&format!("{}/editor_schemes", PKGDATADIR));
         #[cfg(not(feature = "installed"))]
         {
             const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
@@ -623,7 +617,6 @@ impl SheetEditor {
                 .append_search_path(format!("{MANIFEST_DIR}/data/editor_schemes").as_str());
         }
 
-        // Try fetching the scheme again
         if let Some(style_scheme) = StyleSchemeManager::default().scheme(scheme_id) {
             buffer.set_style_scheme(Some(&style_scheme));
             return;

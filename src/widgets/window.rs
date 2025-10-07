@@ -28,6 +28,7 @@ mod imp {
     use pango::FontDescription;
 
     use crate::APP_ID;
+    use crate::config;
     use crate::error::ScratchmarkError;
     use crate::util;
 
@@ -927,7 +928,7 @@ mod imp {
             dialog.set_application_name("Scratchmark");
             dialog.set_developer_name("Sevonj");
             dialog.set_issue_url("https://github.com/sevonj/scratchmark/issues/");
-            dialog.set_version(env!("CARGO_PKG_VERSION"));
+            dialog.set_version(config::VERSION);
             dialog.set_website("https://github.com/sevonj/scratchmark/");
             dialog.set_support_url("https://github.com/sevonj/scratchmark/discussions/");
             dialog.present(Some(&*obj));
