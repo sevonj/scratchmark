@@ -24,6 +24,9 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/down-small-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/draft-table-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/draw-text-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/folder-drag-accept-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/folder-open-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/folder-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/info-outline-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/library-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/list-compact-symbolic.svg</file>
