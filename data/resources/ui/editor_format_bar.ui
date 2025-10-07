@@ -12,14 +12,14 @@
                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                 <child>
                   <object class="GtkButton">
-                    <property name="icon-name">format-text-bold-symbolic</property>
+                    <property name="icon-name">md-bold-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Bold (Ctrl+B)</property>
                     <property name="action-name">formatbar.bold</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="icon-name">format-text-italic-symbolic</property>
+                    <property name="icon-name">md-italic-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Italic (Ctrl+I)</property>
                     <property name="action-name">formatbar.italic</property>
                   </object>
