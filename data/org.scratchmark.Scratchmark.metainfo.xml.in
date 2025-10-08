@@ -47,32 +47,32 @@
   <releases>
     <release version="v1.4.4" date="2025-10-7">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.3</url>
-      <description>
+      <description translate="no">
         <p>Fix invalid desktop entry</p>
       </description>
     </release>
     <release version="v1.4.3" date="2025-10-7">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.3</url>
-      <description>
+      <description translate="no">
         <p>Switch to Meson build system</p>
       </description>
     </release>
     <release version="v1.4.2" date="2025-09-29">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.2</url>
-      <description>
+      <description translate="no">
         <p>Fix: Moving files was broken when combined with Flatpak portals.</p>
         <p>Fix: No bottom margin in library browser.</p>
       </description>
     </release>
     <release version="v1.4.1" date="2025-09-26">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.1</url>
-      <description>
+      <description translate="no">
         <p>Permissions are now Flathub-compliant.</p>
       </description>
     </release>
     <release version="v1.4.0" date="2025-09-26">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.0</url>
-      <description>
+      <description translate="no">
         <p>New features:</p>
         <ul>
           <li>Arbitrary project folders, multiple projects</li>
@@ -81,7 +81,7 @@
     </release>
     <release version="v1.3.0" date="2025-09-11">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.3.0</url>
-      <description>
+      <description translate="no">
         <p>New features:</p>
         <ul>
           <li>Formatting bar state persists after closing the app.</li>
@@ -103,7 +103,7 @@
     </release>
     <release version="v1.2.0" date="2025-07-25">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.2.0</url>
-      <description>
+      <description translate="no">
         <p>New features:</p>
         <ul>
           <li>Choose custom font and size</li>
@@ -124,7 +124,7 @@
     </release>
     <release version="v1.1.0" date="2025-07-7">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.1.0</url>
-      <description>
+      <description translate="no">
         <p>Editor improvement round</p>
         <ul>
           <li>Remember opened sheet</li>
@@ -138,7 +138,7 @@
     </release>
     <release version="v1.0.1" date="2025-05-30">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.0.1</url>
-      <description>
+      <description translate="no">
         <p>Polish patch</p>
         <ul>
           <li>Keyboard shortcuts for many operations</li>
@@ -152,7 +152,7 @@
     </release>
     <release version="v1.0.0" date="2025-05-29">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.0.0</url>
-      <description>
+      <description translate="no">
         <p>Initial relase</p>
       </description>
     </release>
