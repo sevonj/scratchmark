@@ -50,6 +50,7 @@
                                 <child>
                                     <object class="GtkButton">
                                         <property name="icon-name">plus-symbolic</property>
+                                        <property name="tooltip-text" translatable="yes">Select Folder</property>
                                         <property name="action-name">library.add-project-picker</property>
                                         <style>
                                             <class name="flat" />
