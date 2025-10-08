@@ -12,6 +12,8 @@ finish-args:
   - "--device=dri"
 build-options:
   append-path: "/usr/lib/sdk/rust-stable/bin"
+  build-args:
+    - "--share=network"
   env:
     CARGO_HOME: "/run/build/scratchmark/cargo"
 modules:
@@ -19,7 +21,7 @@ modules:
     builddir: true
     buildsystem: "meson"
     config-opts:
-      - "-Doffline=true"
+      - "-Doffline=false"
       - "-Dbuildtype=release"
     sources:
       - type: "dir"
@@ -27,4 +29,3 @@ modules:
         skip:
           - "target"
           - "test"
-      - "generated-sources.json"
