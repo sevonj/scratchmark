@@ -57,16 +57,10 @@ Generating a Flatpak
 
 #### Dependencies
 
-You need Python3 with the following packages: 
-
-```
-aiohttp tomlkit
-```
-
 You need Flatpak w/ Flathub and the following packages:
 
 ```
-org.gnome.Sdk//48
+org.gnome.Sdk//49
 ```
 
 #### Building
@@ -75,6 +69,5 @@ Build & install:
 
 ```sh
 cd build-aux
-sh generate_flatpak.sh && sudo flatpak install -y Scratchmark.flatpak
+sh generate_flatpak.sh && sudo flatpak install Scratchmark.flatpak
 ```
-Note: `generate_flatpak.sh` will download and run a python script from Flatpak's builder tools repository.
