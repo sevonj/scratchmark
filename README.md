@@ -26,6 +26,10 @@ Scratchmark is licensed GPL-3.0-or-later. Some parts may *additionally* be avail
 
 ### Building
 
+The project is transitioning to Meson build system, but it remains possible to build and run it with Cargo.
+
+### Cargo
+
 When running from the repository, there's an additional step to the usual `cargo run` command. You need to set an env var to tell the app where to find it:
 
 ```sh
