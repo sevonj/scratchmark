@@ -2,7 +2,7 @@
 
 # Scratchmark
 
-![app icon](data/icons/org.scratchmark.Scratchmark.svg)
+![app icon](data/icons/hicolor/scalable/apps/org.scratchmark.Scratchmark.svg)
 
 Scratchmark is an organized Markdown editor designed for note keeping and writing. It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
 
