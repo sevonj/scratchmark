@@ -13,8 +13,9 @@
   </developer>
 
   <description>
-    <p>Scratchmark lets you focus on the text without distractions. It&apos;s designed both for
-      keeping notes and writing longer texts, and makes organizing files easy.</p>
+    <p>Write without distractions and keep your documents organized.</p>
+    <p>Editing features are designed to stay out of sight when not needed.</p>
+    <p>Documents are organized into folders, which may contain a writing project, personal notes, or maybe a recipe book.</p>
   </description>
 
   <launchable type="desktop-id">org.scratchmark.Scratchmark.desktop</launchable>
