@@ -15,7 +15,7 @@
                 <property name="margin-bottom">12</property>
                 <child>
                     <object class="GtkLabel">
-                        <property name="label">Statistics</property>
+                        <property name="label" translatable="yes">Statistics</property>
                         <property name="xalign">0</property>
                         <property name="hexpand">true</property>
                         <property name="margin-bottom">8</property>
@@ -29,7 +29,7 @@
                         <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label">Characters</property>
+                                <property name="label" translatable="yes">Characters</property>
                                 <property name="xalign">0</property>
                                 <property name="hexpand">true</property>
                                 <attributes>
@@ -42,7 +42,7 @@
                         </child>
                         <child>
                             <object class="GtkLabel" id="lab_num_chars">
-                                <property name="label">N/A</property>
+                                <property name="label" translatable="yes">N/A</property>
                                 <property name="xalign">1</property>
                                 <property name="hexpand">true</property>
                                 <attributes>
@@ -57,7 +57,7 @@
                         <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label">Excluding Spaces</property>
+                                <property name="label" translatable="yes">Excluding Spaces</property>
                                 <property name="xalign">0</property>
                                 <property name="hexpand">true</property>
                                 <attributes>
@@ -70,7 +70,7 @@
                         </child>
                         <child>
                             <object class="GtkLabel" id="lab_num_nospace">
-                                <property name="label">N/A</property>
+                                <property name="label" translatable="yes">N/A</property>
                                 <property name="xalign">1</property>
                                 <property name="hexpand">true</property>
                                 <attributes>
@@ -85,7 +85,7 @@
                         <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label">Words</property>
+                                <property name="label" translatable="yes">Words</property>
                                 <property name="xalign">0</property>
                                 <property name="hexpand">true</property>
                                 <attributes>
@@ -98,7 +98,7 @@
                         </child>
                         <child>
                             <object class="GtkLabel" id="lab_num_words">
-                                <property name="label">N/A</property>
+                                <property name="label" translatable="yes">N/A</property>
                                 <property name="xalign">1</property>
                                 <property name="hexpand">true</property>
                                 <attributes>
@@ -113,7 +113,7 @@
                         <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label">Lines</property>
+                                <property name="label" translatable="yes">Lines</property>
                                 <property name="xalign">0</property>
                                 <property name="hexpand">true</property>
                                 <attributes>
@@ -126,7 +126,7 @@
                         </child>
                         <child>
                             <object class="GtkLabel" id="lab_num_lines">
-                                <property name="label">N/A</property>
+                                <property name="label" translatable="yes">N/A</property>
                                 <property name="xalign">1</property>
                                 <property name="hexpand">true</property>
                                 <attributes>
