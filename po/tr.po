@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 16:05+0300\n"
+"POT-Creation-Date: 2025-10-09 16:31+0300\n"
 "PO-Revision-Date: 2025-10-08 16:08+0300\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
@@ -19,16 +19,16 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.7\n"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:2
+#: data/org.scratchmark.Scratchmark.desktop.in:3
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:3
+#: data/org.scratchmark.Scratchmark.desktop.in:4
 msgid "Markdown editor"
 msgstr "Markdown düzenleyici"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:9
+#: data/org.scratchmark.Scratchmark.desktop.in:10
 msgid "Scratchmark Markdown editor"
 msgstr "Scratchmark Markdown düzenleyici"
 

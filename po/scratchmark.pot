@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the scratchmark package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 16:05+0300\n"
+"POT-Creation-Date: 2025-10-09 16:31+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:2
+#: data/org.scratchmark.Scratchmark.desktop.in:3
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr ""
 
-#: data/org.scratchmark.Scratchmark.desktop.in:3
+#: data/org.scratchmark.Scratchmark.desktop.in:4
 msgid "Markdown editor"
 msgstr ""
 
-#: data/org.scratchmark.Scratchmark.desktop.in:9
+#: data/org.scratchmark.Scratchmark.desktop.in:10
 msgid "Scratchmark Markdown editor"
 msgstr ""
 
