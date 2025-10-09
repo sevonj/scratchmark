@@ -16,7 +16,7 @@
       <object class="AdwOverlaySplitView" id="top_split">
         <property name="sidebar">
           <object class="AdwNavigationPage" id="sidebar_page">
-            <property name="title" translatable="no">Library</property>
+            <property name="title" translatable="yes">Library</property>
             <property name="child">
               <object class="AdwToolbarView" id="sidebar_toolbar_view">
                 <child type="top">

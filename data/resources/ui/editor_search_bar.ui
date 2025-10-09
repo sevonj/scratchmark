@@ -82,7 +82,7 @@
                         <style>
                           <class name="dimmed" />
                         </style>
-                        <property name="label">?</property>
+                        <property name="label" translatable="yes">?</property>
                         <property name="width-request">72</property>
                       </object>
                     </child>

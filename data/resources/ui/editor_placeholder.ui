@@ -7,8 +7,8 @@
         <property name="width-request">500</property>
         <child>
             <object class="AdwStatusPage">
-                <property name="title">Nothing Open</property>
-                <property name="description">Create a new sheet or open an existing one from the sidebar</property>
+                <property name="title" translatable="yes">Nothing Open</property>
+                <property name="description" translatable="yes">Create a new sheet or open an existing one from the sidebar</property>
                 <property name="icon-name">text-x-generic-symbolic</property>
                 <style>
                     <class name="compact" />

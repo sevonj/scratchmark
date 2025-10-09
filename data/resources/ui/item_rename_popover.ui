@@ -7,12 +7,12 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkEntry" id="name_field">
-            <property name="placeholder-text">Name...</property>
+            <property name="placeholder-text" translatable="yes">Name...</property>
           </object>
         </child>
         <child>
           <object class="GtkButton" id="commit_button">
-            <property name="label">Rename</property>
+            <property name="label" translatable="yes">Rename</property>
           </object>
         </child>
         <child>
