@@ -46,8 +46,19 @@
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <url type="translate">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.4.5" date="2025-10-10">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.5</url>
+      <description translate="no">
+        <ul>
+          <li>Fix: Header panel background color bug when exiting fullscreen</li>
+          <li>Slightly improved app icon</li>
+          <li>Add Turkish translation</li>
+          <li>Add Finnish translation</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.4.4" date="2025-10-7">
-      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.3</url>
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.4</url>
       <description translate="no">
         <p>Fix invalid desktop entry</p>
       </description>

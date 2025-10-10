@@ -813,7 +813,7 @@ dependencies = [
 
 [[package]]
 name = "scratchmark"
-version = "1.4.4"
+version = "1.4.5"
 dependencies = [
  "async-channel",
  "gettext-rs",
