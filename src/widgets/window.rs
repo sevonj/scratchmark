@@ -642,7 +642,8 @@ mod imp {
             let format_bar_open = self.format_bar_toggle.is_active();
             let editor_sidebar_open =
                 self.sheet_editor.borrow().is_some() && self.editor_sidebar_toggle.is_active();
-            let style = if format_bar_open || editor_sidebar_open {
+            let fullscreen = self.obj().is_fullscreen();
+            let style = if format_bar_open || editor_sidebar_open || fullscreen {
                 ToolbarStyle::Raised
             } else {
                 ToolbarStyle::Flat
@@ -1039,20 +1040,17 @@ mod imp {
             if self.obj().is_fullscreen() {
                 self.unfullscreen_button.set_visible(true);
                 self.main_header_revealer.set_reveal_child(false);
-                self.main_toolbar_view
-                    .set_top_bar_style(adw::ToolbarStyle::Raised);
                 self.main_header_bar.set_show_end_title_buttons(false);
                 action_fullscreen.set_enabled(false);
                 action_unfullscreen.set_enabled(true);
             } else {
                 self.unfullscreen_button.set_visible(false);
                 self.main_header_revealer.set_reveal_child(true);
-                self.main_toolbar_view
-                    .set_top_bar_style(adw::ToolbarStyle::Flat);
                 self.main_header_bar.set_show_end_title_buttons(true);
                 action_fullscreen.set_enabled(true);
                 action_unfullscreen.set_enabled(false);
             }
+            self.update_toolbar_style();
         }
 
         fn setup_fullscreen_headerbar(&self) {
