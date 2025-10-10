@@ -926,7 +926,7 @@ mod imp {
             let dialog = AboutDialog::new();
             dialog.set_application_icon(APP_ID);
             dialog.set_application_name("Scratchmark");
-            dialog.set_developer_name("Sevonj");
+            dialog.set_developer_name("Sevonj & co.");
             dialog.set_issue_url("https://github.com/sevonj/scratchmark/issues/");
             dialog.set_version(config::VERSION);
             dialog.set_website("https://github.com/sevonj/scratchmark/");
