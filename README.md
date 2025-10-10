@@ -14,6 +14,10 @@ Scratchmark is an organized Markdown editor designed for note keeping and writin
 
 ![cat](https://github.com/user-attachments/assets/aaa7b417-5e2f-4a87-ad9b-aa29591d6bcd)
 
+<a href='https://flathub.org/apps/org.scratchmark.Scratchmark'>
+    <img height='80' alt='Get it on Flathub' src='https://flathub.org/api/badge?svg&locale=en'/>
+</a>
+
 ## Developers
 
 Scratchmark is written in Rust and uses GTK4 + Libadwaita for UI.
