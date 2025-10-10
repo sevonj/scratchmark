@@ -1,0 +1,380 @@
+# Finnish translations for scratchmark package.
+# Copyright (C) 2025 THE scratchmark'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the scratchmark package.
+# Automatically generated, 2025.
+# Sevonj <>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: scratchmark\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-09 16:31+0300\n"
+"PO-Revision-Date: 2025-10-10 13:34+0300\n"
+"Last-Translator: Sevonj <>\n"
+"Language-Team: Finnish\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 49.0\n"
+
+#: data/org.scratchmark.Scratchmark.desktop.in:3
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
+msgid "Scratchmark"
+msgstr "Scratchmark"
+
+#: data/org.scratchmark.Scratchmark.desktop.in:4
+msgid "Markdown editor"
+msgstr "Markdown-editori"
+
+#: data/org.scratchmark.Scratchmark.desktop.in:10
+msgid "Scratchmark Markdown editor"
+msgstr "Scratchmark Markdown-editori"
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
+msgid "Organized markdown editor"
+msgstr ""
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:12
+msgid "Sevonj"
+msgstr "Sevonj"
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
+msgid "Write without distractions and keep your documents organized."
+msgstr ""
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:17
+msgid "Editing features are designed to stay out of sight when not needed."
+msgstr ""
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:18
+msgid ""
+"Documents are organized into folders, which may contain a writing project, "
+"personal notes, or maybe a recipe book."
+msgstr ""
+
+#: data/org.scratchmark.Scratchmark.gschema.xml:9
+msgid "Remember expanded folders. Entries are folder paths."
+msgstr ""
+
+#: data/org.scratchmark.Scratchmark.gschema.xml:16
+msgid "Remember whether the sidebar was left open."
+msgstr ""
+
+#: data/resources/ui/editor_format_bar.ui:16
+msgid "Bold (Ctrl+B)"
+msgstr "Lihavointi (Ctrl+B)"
+
+#: data/resources/ui/editor_format_bar.ui:23
+msgid "Italic (Ctrl+I)"
+msgstr "Kursivointi (Ctrl+I)"
+
+#: data/resources/ui/editor_format_bar.ui:49
+msgid "Heading 1"
+msgstr "Otsikko 1"
+
+#: data/resources/ui/editor_format_bar.ui:57
+msgid "Heading 2"
+msgstr "Otsikko 2"
+
+#: data/resources/ui/editor_format_bar.ui:116
+msgid "Code"
+msgstr "Koodi"
+
+#: data/resources/ui/editor_placeholder.ui:10
+msgid "Nothing Open"
+msgstr "Ei avattua tiedostoa"
+
+#: data/resources/ui/editor_placeholder.ui:11
+msgid "Create a new sheet or open an existing one from the sidebar"
+msgstr "Luo uusi tiedosto tai avaa olemassaoleva sivupalkista"
+
+#: data/resources/ui/editor_search_bar.ui:26
+msgid "Search"
+msgstr "Etsi"
+
+#: data/resources/ui/editor_search_bar.ui:39
+#: data/resources/ui/editor_search_bar.ui:136
+msgid "Replace"
+msgstr "Korvaa"
+
+#: data/resources/ui/editor_search_bar.ui:63
+msgid "Match Case"
+msgstr "Huomioi kirjainkoko"
+
+#: data/resources/ui/editor_search_bar.ui:69
+msgid "Whole Words"
+msgstr "Kokonaiset sanat"
+
+#: data/resources/ui/editor_search_bar.ui:75
+msgid "Use Regex"
+msgstr "Säännölliset lausekkeet (Regex)"
+
+#: data/resources/ui/editor_search_bar.ui:85
+msgid "?"
+msgstr "?"
+
+#: data/resources/ui/editor_search_bar.ui:98
+msgid "Previous Match (Shift + Return)"
+msgstr "Edellinen osuma (Shift + Enter)"
+
+#: data/resources/ui/editor_search_bar.ui:105
+msgid "Next Match (Return)"
+msgstr "Seuraava osuma (Enter)"
+
+#: data/resources/ui/editor_search_bar.ui:113
+msgid "Search and Replace (Ctrl+F)"
+msgstr "Etsi ja korvaa (Ctrl+F)"
+
+#: data/resources/ui/editor_search_bar.ui:119
+msgid "Close Search"
+msgstr "Sulje"
+
+#: data/resources/ui/editor_search_bar.ui:137
+msgid "Replace (Return)"
+msgstr "Korvaa (Enter)"
+
+#: data/resources/ui/editor_search_bar.ui:143
+msgid "Replace All"
+msgstr "Korvaa kaikki"
+
+#: data/resources/ui/editor_search_bar.ui:144
+msgid "Replace All (Shift + Return)"
+msgstr "Replace All (Shift + Return)"
+
+#: data/resources/ui/item_create_popover.ui:10
+#: data/resources/ui/item_rename_popover.ui:10
+msgid "Name..."
+msgstr "Nimi..."
+
+#: data/resources/ui/item_create_popover.ui:15
+msgid "Create"
+msgstr "Luo"
+
+#: data/resources/ui/item_rename_popover.ui:15
+msgid "Rename"
+msgstr "Nimeä uudelleen"
+
+#: data/resources/ui/library_browser.ui:38 data/resources/ui/window.ui:19
+msgid "Library"
+msgstr "Kirjasto"
+
+#: data/resources/ui/library_browser.ui:53
+msgid "Select Folder"
+msgstr "Lisää kansio"
+
+#: data/resources/ui/library_drafts_context_menu.ui:7
+#: data/resources/ui/library_folder_context_menu.ui:7
+#: data/resources/ui/library_project_context_menu.ui:7
+msgid "New Sheet"
+msgstr "Uusi tiedosto"
+
+#: data/resources/ui/library_drafts_context_menu.ui:11
+#: data/resources/ui/library_folder_context_menu.ui:11
+#: data/resources/ui/library_project_context_menu.ui:11
+msgid "New Folder"
+msgstr "Uusi kansio"
+
+#: data/resources/ui/library_drafts_context_menu.ui:15
+#: data/resources/ui/library_folder_context_menu.ui:15
+#: data/resources/ui/library_project_context_menu.ui:15
+#: data/resources/ui/library_sheet_context_menu.ui:7
+msgid "Show in File Manager"
+msgstr "Näytä tiedostoselaimessa"
+
+#: data/resources/ui/library_folder_context_menu.ui:19
+msgid "Rename Folder"
+msgstr "Nimeä uudelleen"
+
+#: data/resources/ui/library_folder_context_menu.ui:23
+#: data/resources/ui/library_sheet_context_menu.ui:19
+msgid "Move to Trash"
+msgstr "Siirrä roskakoriin"
+
+#: data/resources/ui/library_folder_context_menu.ui:27
+msgid "Delete Folder"
+msgstr "Poista pysyvästi"
+
+#: data/resources/ui/library_project_context_menu.ui:19
+msgid "Close Project"
+msgstr "Sulje projekti"
+
+#: data/resources/ui/library_sheet_context_menu.ui:11
+msgid "Rename Sheet"
+msgstr "Nimeä uudelleen"
+
+#: data/resources/ui/library_sheet_context_menu.ui:15
+msgid "Duplicate"
+msgstr "Luo kopio"
+
+#: data/resources/ui/library_sheet_context_menu.ui:23
+msgid "Delete Sheet"
+msgstr "Poista pysyvästi"
+
+#: data/resources/ui/sheet_editor.ui:16
+msgid "File changed on disk"
+msgstr "Tiedosto on muuttunut levyllä"
+
+#: data/resources/ui/sheet_editor.ui:17
+msgid "Resolve"
+msgstr "Ratkaise"
+
+#: data/resources/ui/sheet_stats.ui:18
+msgid "Statistics"
+msgstr "Tilastot"
+
+#: data/resources/ui/sheet_stats.ui:32
+msgid "Characters"
+msgstr "Merkkejä"
+
+#: data/resources/ui/sheet_stats.ui:45 data/resources/ui/sheet_stats.ui:73
+#: data/resources/ui/sheet_stats.ui:101 data/resources/ui/sheet_stats.ui:129
+msgid "N/A"
+msgstr "N/A"
+
+#: data/resources/ui/sheet_stats.ui:60
+msgid "Excluding Spaces"
+msgstr "Poislukien välilyönnit"
+
+#: data/resources/ui/sheet_stats.ui:88
+msgid "Words"
+msgstr "Sanoja"
+
+#: data/resources/ui/sheet_stats.ui:116
+msgid "Lines"
+msgstr "Rivejä"
+
+#: data/resources/ui/shortcuts.ui:11
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Yleiset"
+
+#: data/resources/ui/shortcuts.ui:14
+msgctxt "shortcut window"
+msgid "Toggle Fullscreen"
+msgstr "Koko näytön tila"
+
+#: data/resources/ui/shortcuts.ui:20
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Asetukset"
+
+#: data/resources/ui/shortcuts.ui:26
+msgctxt "shortcut window"
+msgid "Show Shortcuts"
+msgstr "Näytä pikanäppäimet"
+
+#: data/resources/ui/shortcuts.ui:34
+msgctxt "shortcut window"
+msgid "Document"
+msgstr "Tiedosto"
+
+#: data/resources/ui/shortcuts.ui:37
+msgctxt "shortcut window"
+msgid "New Sheet"
+msgstr "Uusi"
+
+#: data/resources/ui/shortcuts.ui:43
+msgctxt "shortcut window"
+msgid "Save Sheet"
+msgstr "Tallenna"
+
+#: data/resources/ui/shortcuts.ui:49
+msgctxt "shortcut window"
+msgid "Rename Sheet"
+msgstr "Uudelleennimeä"
+
+#: data/resources/ui/shortcuts.ui:55
+msgctxt "shortcut window"
+msgid "Close Sheet"
+msgstr "Sulje"
+
+#: data/resources/ui/shortcuts.ui:63
+msgctxt "shortcut window"
+msgid "Editor"
+msgstr "Editori"
+
+#: data/resources/ui/shortcuts.ui:66
+msgctxt "shortcut window"
+msgid "Search Text"
+msgstr "Etsi tekstiä"
+
+#: data/resources/ui/shortcuts.ui:72
+msgctxt "shortcut window"
+msgid "Search and Replace Text"
+msgstr "Etsi ja korvaa tesktiä"
+
+#: data/resources/ui/shortcuts.ui:80
+msgctxt "shortcut window"
+msgid "Library"
+msgstr "Kirjasto"
+
+#: data/resources/ui/shortcuts.ui:83
+msgctxt "shortcut window"
+msgid "Manual Refresh"
+msgstr "Päivitä kirjasto"
+
+#: data/resources/ui/window.ui:28
+msgid "Create Folder"
+msgstr "Luo kansio"
+
+#: data/resources/ui/window.ui:54
+msgid "Toggle Sidebar (F9)"
+msgstr "Avaa/sulje sivupalkki (F9)"
+
+#: data/resources/ui/window.ui:60
+msgid "New Sheet (Ctrl+N)"
+msgstr "Uusi tiedosto (Ctrl+N)"
+
+#: data/resources/ui/window.ui:66 data/resources/ui/window.ui:143
+msgid "Exit Fullscreen"
+msgstr "Poistu koko näytön tilasta"
+
+#: data/resources/ui/window.ui:75
+msgid "Menu"
+msgstr "Valikko"
+
+#: data/resources/ui/window.ui:82
+msgid "Document Info"
+msgstr "Tiedoston tiedot"
+
+#: data/resources/ui/window.ui:88
+msgid "Formatting Toolbar"
+msgstr "Muotoilupalkki"
+
+#: data/resources/ui/window.ui:112
+msgid "New"
+msgstr "Uusi"
+
+#: data/resources/ui/window.ui:118
+msgid "Save"
+msgstr "Tallenna"
+
+#: data/resources/ui/window.ui:122
+msgid "Close"
+msgstr "Sulje"
+
+#: data/resources/ui/window.ui:128
+msgid "Search Text"
+msgstr "Etsi tekstiä"
+
+#: data/resources/ui/window.ui:132
+msgid "Search and Replace"
+msgstr "Etsi ja korvaa"
+
+#: data/resources/ui/window.ui:138
+msgid "Enter Fullscreen"
+msgstr "Koko näyttö"
+
+#: data/resources/ui/window.ui:150
+msgid "Preferences"
+msgstr "Asetukset"
+
+#: data/resources/ui/window.ui:154
+msgid "Keyboard Shortcuts"
+msgstr "Pikanäppäimet"
+
+#: data/resources/ui/window.ui:158
+msgid "About Scratchmark"
+msgstr "Tietoja - Scratchmark"
