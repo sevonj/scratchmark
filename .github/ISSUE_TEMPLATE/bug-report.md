@@ -2,7 +2,7 @@
 name: Bug report
 about: 'When something is broken or doesn''t work as expected '
 title: 'Bug: Short Descriptive Title'
-labels: ''
+labels: bug
 assignees: ''
 
 ---
