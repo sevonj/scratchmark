@@ -46,6 +46,14 @@
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <url type="translate">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.4.6" date="2025-10-13">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.6</url>
+      <description translate="no">
+        <ul>
+          <li>Add Polish translation</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.4.5" date="2025-10-10">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.5</url>
       <description translate="no">
