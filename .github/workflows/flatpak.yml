@@ -67,6 +67,6 @@ jobs:
           artifacts: Scratchmark.flatpak
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: ${{ env.PRERELEASE }}
-          body: "Release contains an x86_64 Flatpak."
+          body: "It is recommended to install the app from Flathub instead of downloading it from here. See: https://flathub.org/en/apps/org.scratchmark.Scratchmark"
           generateReleaseNotes: true
           artifactErrorsFailBuild: true
