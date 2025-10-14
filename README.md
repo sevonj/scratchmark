@@ -14,9 +14,17 @@ Scratchmark is an organized Markdown editor designed for note keeping and writin
 
 ![cat](https://github.com/user-attachments/assets/aaa7b417-5e2f-4a87-ad9b-aa29591d6bcd)
 
+## Get Scratchmark
+
+### Linux
+
 <a href='https://flathub.org/apps/org.scratchmark.Scratchmark'>
-    <img height='80' alt='Get it on Flathub' src='https://flathub.org/api/badge?svg&locale=en'/>
+<img height='48' alt='Get it on Flathub' src='https://flathub.org/api/badge?svg&locale=en'/>
 </a>
+
+### Windows
+
+(planned)
 
 ## Developers
 
