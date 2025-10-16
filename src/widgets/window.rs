@@ -124,10 +124,9 @@ mod imp {
             settings
                 .bind("is-maximized", obj.as_ref(), "maximized")
                 .build();
-            self.settings.set(settings).expect(
-                "`settings` should not be set before calling `setup_settings`.
-                ",
-            );
+            self.settings
+                .set(settings)
+                .expect("`settings` should not be set before calling `setup_settings`.");
 
             self.editor_sidebar_toggle.set_sensitive(false);
 
@@ -237,9 +236,9 @@ mod imp {
                         if old_folder
                             .move_(&new_folder, FileCopyFlags::NONE, None::<&Cancellable>, None)
                             .is_err()
+                            && let Err(e) = util::move_folder(&original_path, &new_path)
                         {
-                            util::move_folder(&original_path, &new_path)
-                                .expect("Folder move failed");
+                            this.toast(&e.to_string());
                         }
 
                         if open_sheet_affected {
@@ -280,9 +279,15 @@ mod imp {
                             sheet_editor_opt.as_ref().unwrap().cancel_filemon();
                         }
                         let new_file = File::for_path(&new_path);
-                        File::for_path(&original_path)
-                            .move_(&new_file, FileCopyFlags::NONE, None::<&Cancellable>, None)
-                            .expect("File move failed");
+                        if let Err(e) = File::for_path(&original_path).move_(
+                            &new_file,
+                            FileCopyFlags::NONE,
+                            None::<&Cancellable>,
+                            None,
+                        ) {
+                            println!("{e}");
+                            this.toast("Couldn't move file.");
+                        }
                         if open_sheet_affected {
                             this.library_browser
                                 .set_selected_sheet(Some(new_path.clone()));
@@ -353,12 +358,23 @@ mod imp {
                             .is_some_and(|editor| editor.path().starts_with(&project_path));
 
                         if contains_edited_file && let Err(e) = this.close_editor() {
-                            let toast = Toast::new(&e.to_string());
-                            this.toast_overlay.add_toast(toast);
+                            this.toast(&e.to_string());
                             return;
                         }
 
                         browser.remove_project(&project_path);
+                    }
+                ),
+            );
+
+            self.library_browser.connect_closure(
+                "notify-err",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_browser: LibraryBrowser, msg: String| {
+                        this.toast(&msg);
                     }
                 ),
             );
@@ -507,8 +523,7 @@ mod imp {
                 self,
                 move |_, _| {
                     if let Err(e) = this.close_editor() {
-                        let toast = Toast::new(&e.to_string());
-                        this.toast_overlay.add_toast(toast);
+                        this.toast(&e.to_string());
                     }
                 }
             ));
@@ -651,6 +666,10 @@ mod imp {
             self.main_toolbar_view.set_top_bar_style(style);
         }
 
+        fn toast(&self, title: &str) {
+            self.toast_overlay.add_toast(Toast::new(title));
+        }
+
         fn load_state(&self) {
             let settings = self.settings();
 
@@ -658,8 +677,7 @@ mod imp {
             if !open_sheet_path.is_empty() {
                 let open_sheet_path = PathBuf::from(open_sheet_path);
                 if !open_sheet_path.exists() {
-                    let toast = Toast::new("Last open sheet has been moved or deleted.");
-                    self.toast_overlay.add_toast(toast);
+                    self.toast("Opened sheet has been moved or deleted.");
                 }
                 self.load_sheet(open_sheet_path);
             }
@@ -709,7 +727,11 @@ mod imp {
         }
 
         fn create_folder(&self, path: PathBuf) {
-            util::create_folder(&path);
+            if let Err(e) = util::create_folder(&path) {
+                self.toast(&e.to_string());
+                self.library_browser.refresh_content();
+                return;
+            }
             self.library_browser.refresh_content();
             self.library_browser
                 .get_folder(&util::path_builtin_library())
@@ -719,11 +741,14 @@ mod imp {
 
         fn create_sheet(&self, path: PathBuf) {
             if let Err(e) = self.close_editor() {
-                let toast = Toast::new(&e.to_string());
-                self.toast_overlay.add_toast(toast);
+                self.toast(&e.to_string());
                 return;
             }
-            util::create_sheet_file(&path);
+            if let Err(e) = util::create_sheet_file(&path) {
+                self.toast(&e.to_string());
+                self.library_browser.refresh_content();
+                return;
+            }
             self.library_browser.refresh_content();
             self.load_sheet(path);
             self.library_browser
@@ -734,16 +759,14 @@ mod imp {
 
         fn load_sheet(&self, path: PathBuf) {
             if let Err(e) = self.close_editor() {
-                let toast = Toast::new(&e.to_string());
-                self.toast_overlay.add_toast(toast);
+                self.toast(&e.to_string());
                 return;
             }
 
             let editor = match SheetEditor::new(path.clone()) {
                 Ok(editor) => editor,
                 Err(e) => {
-                    let toast = Toast::new(&e.to_string());
-                    self.toast_overlay.add_toast(toast);
+                    self.toast(&e.to_string());
                     self.update_window_title();
                     return;
                 }
@@ -768,8 +791,7 @@ mod imp {
                     self,
                     move |_: SheetEditor| {
                         if let Err(e) = this.close_editor() {
-                            let toast = Toast::new(&e.to_string());
-                            this.toast_overlay.add_toast(toast);
+                            this.toast(&e.to_string());
                             return;
                         }
                     }
@@ -813,14 +835,15 @@ mod imp {
                 .as_ref()
                 .is_some_and(|e| e.path().starts_with(&path));
             if parent_of_currently_open && let Err(e) = self.close_editor() {
-                let toast = Toast::new(&e.to_string());
-                self.toast_overlay.add_toast(toast);
+                self.toast(&e.to_string());
                 return;
             }
-            File::for_path(path)
-                .trash(None::<&Cancellable>)
-                .expect("folder trash failed");
-            self.toast_overlay.add_toast(Toast::new("Moved to trash"));
+            if let Err(e) = File::for_path(path).trash(None::<&Cancellable>) {
+                println!("{e}");
+                self.toast("Couldn't move to trash.");
+                return;
+            }
+            self.toast("Moved to trash");
             self.library_browser.refresh_content();
         }
 
@@ -832,14 +855,15 @@ mod imp {
                 .as_ref()
                 .is_some_and(|e| e.path() == path);
             if currently_open && let Err(e) = self.close_editor() {
-                let toast = Toast::new(&e.to_string());
-                self.toast_overlay.add_toast(toast);
+                self.toast(&e.to_string());
                 return;
             }
-            File::for_path(path)
-                .trash(None::<&Cancellable>)
-                .expect("folder trash failed");
-            self.toast_overlay.add_toast(Toast::new("Moved to trash"));
+            if let Err(e) = File::for_path(path).trash(None::<&Cancellable>) {
+                println!("{e}");
+                self.toast("Couldn't move to trash.");
+                return;
+            }
+            self.toast("Moved to trash");
             self.library_browser.refresh_content();
         }
 
@@ -853,11 +877,13 @@ mod imp {
                 .as_ref()
                 .is_some_and(|e| e.path().starts_with(&path));
             if parent_of_currently_open && let Err(e) = self.close_editor() {
-                let toast = Toast::new(&e.to_string());
-                self.toast_overlay.add_toast(toast);
+                self.toast(&e.to_string());
                 return;
             }
-            std::fs::remove_dir_all(path).expect("folder delet failed");
+            if let Err(e) = std::fs::remove_dir_all(path) {
+                println!("{e}");
+                self.toast("Couldn't delete folder.");
+            }
             self.library_browser.refresh_content();
         }
 
@@ -869,11 +895,13 @@ mod imp {
                 .as_ref()
                 .is_some_and(|e| e.path() == path);
             if currently_open && let Err(e) = self.close_editor() {
-                let toast = Toast::new(&e.to_string());
-                self.toast_overlay.add_toast(toast);
+                self.toast(&e.to_string());
                 return;
             }
-            std::fs::remove_file(path).expect("file delet failed");
+            if let Err(e) = std::fs::remove_file(path) {
+                println!("{e}");
+                self.toast("Couldn't delete file.");
+            }
             self.library_browser.refresh_content();
         }
 
@@ -883,11 +911,10 @@ mod imp {
                 return;
             };
             if let Err(e) = editor.save() {
-                let toast = Toast::new(&e.to_string());
-                self.toast_overlay.add_toast(toast);
+                self.toast(&e.to_string());
                 return;
             }
-            self.toast_overlay.add_toast(Toast::new("Saved"));
+            self.toast("Saved");
         }
 
         fn close_editor(&self) -> Result<(), ScratchmarkError> {
@@ -999,8 +1026,7 @@ mod imp {
                         };
 
                         if let Err(e) = this.set_editor_font(font) {
-                            let toast = Toast::new(&e.to_string());
-                            this.toast_overlay.add_toast(toast);
+                            this.toast(&e.to_string());
                         }
                     }
                 ),
@@ -1025,8 +1051,7 @@ mod imp {
         fn on_close_request(&self) -> glib::Propagation {
             self.save_state().expect("Failed to save app state");
             if let Err(e) = self.close_editor() {
-                let toast = Toast::new(&e.to_string());
-                self.toast_overlay.add_toast(toast);
+                self.toast(&e.to_string());
                 return glib::Propagation::Stop;
             }
             glib::Propagation::Proceed
