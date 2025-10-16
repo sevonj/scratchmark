@@ -24,6 +24,7 @@ mod imp {
     use crate::data::FolderObject;
     use crate::data::SheetObject;
     use crate::widgets::LibraryFolder;
+    use crate::widgets::LibraryProjectErrPlaceholder;
     use crate::widgets::LibrarySheet;
 
     #[derive(Debug)]
@@ -43,6 +44,8 @@ mod imp {
         pub(super) sheets: RefCell<HashMap<PathBuf, LibrarySheet>>,
         /// Is this a builtin project (drafts)
         pub(super) is_builtin: Cell<bool>,
+        /// Project folder is inaccessible or deleted
+        is_invalid: Cell<bool>,
         crawler_rx: RefCell<Option<Receiver<ProjectEntry>>>,
         crawler_tx: RefCell<Option<Sender<ProjectEntry>>>,
         pub(super) expanded_folders: RefCell<HashSet<PathBuf>>,
@@ -148,8 +151,16 @@ mod imp {
         }
 
         pub(super) fn refresh_content(&self) {
-            let sender = self.crawler_tx.borrow().as_ref().unwrap().clone();
+            if self.is_invalid.get() {
+                return;
+            }
             let root_path = self.obj().root_path();
+            if !root_path.exists() {
+                self.mark_invalid();
+                return;
+            }
+
+            let sender = self.crawler_tx.borrow().as_ref().unwrap().clone();
 
             MainContext::default().spawn_local(async move {
                 let mut search_stack: VecDeque<(PathBuf, u32)> = VecDeque::from([(root_path, 1)]);
@@ -197,6 +208,29 @@ mod imp {
             });
 
             self.prune();
+        }
+
+        fn mark_invalid(&self) {
+            self.is_invalid.replace(true);
+            self.root_folder
+                .borrow()
+                .as_ref()
+                .unwrap()
+                .set_visible(false);
+            let err_placeholder = LibraryProjectErrPlaceholder::new(&self.obj().root_path());
+            let obj = self.obj();
+            err_placeholder.connect_closure(
+                "close-project-requested",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: LibraryProjectErrPlaceholder| {
+                        obj.emit_by_name::<()>("close-project-requested", &[]);
+                    }
+                ),
+            );
+            self.project_root_vbox.append(&err_placeholder);
         }
 
         fn add_subfolder(&self, path: PathBuf, depth: u32) {

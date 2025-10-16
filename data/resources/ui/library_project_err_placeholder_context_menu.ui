@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="context-menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Close Project</attribute>
+        <attribute name="action">project-root.close-project</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
