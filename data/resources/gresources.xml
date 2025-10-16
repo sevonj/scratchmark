@@ -11,6 +11,8 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library_drafts_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library_project_err_placeholder_context_menu.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library_project_err_placeholder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_project.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_project_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_context_menu.ui</file>
@@ -41,6 +43,7 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/md-format-h2-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/md-horizontal-rule-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/md-italic-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/minus-circle-filled-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/plus-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/project-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/quotation-symbolic.svg</file>
