@@ -112,21 +112,29 @@ pub fn incremented_path(path: PathBuf) -> PathBuf {
     }
 }
 
-pub fn create_folder(path: &Path) {
-    std::fs::create_dir(path).expect("folder create fail");
+pub fn create_folder(path: &Path) -> Result<(), ScratchmarkError> {
+    if let Err(e) = std::fs::create_dir(path) {
+        println!("{e}");
+        return Err(ScratchmarkError::FolderCreateFail);
+    }
+    Ok(())
 }
 
-pub fn create_sheet_file(path: &Path) {
-    let mut file = OpenOptions::new()
-        .write(true)
-        .create_new(true)
-        .open(path)
-        .expect("file create fail");
-
+pub fn create_sheet_file(path: &Path) -> Result<(), ScratchmarkError> {
+    let mut file = match OpenOptions::new().write(true).create_new(true).open(path) {
+        Ok(f) => f,
+        Err(e) => {
+            println!("{e}");
+            return Err(ScratchmarkError::FileCreateFail);
+        }
+    };
     let stem = path.file_stem().unwrap().to_string_lossy();
     let contents = format!("# {stem}\n\n");
-    file.write_all(contents.as_bytes())
-        .expect("failed to write template to new file");
+    if let Err(e) = file.write_all(contents.as_bytes()) {
+        println!("{e}");
+        return Err(ScratchmarkError::FileCreateFail);
+    }
+    Ok(())
 }
 
 pub fn read_file_to_string(file: &File) -> Result<GString, ScratchmarkError> {
@@ -141,12 +149,18 @@ pub fn read_file_to_string(file: &File) -> Result<GString, ScratchmarkError> {
     Ok(text)
 }
 
-pub fn move_folder(original_path: &Path, new_path: &Path) -> Result<(), std::io::Error> {
+pub fn move_folder(original_path: &Path, new_path: &Path) -> Result<(), ScratchmarkError> {
     if std::fs::exists(new_path).unwrap() {
-        panic!("Move folder: already exists")
+        println!("Move folder: already exists")
     }
-    copy_folder_recurse(original_path, new_path)?;
-    std::fs::remove_dir_all(original_path)?;
+    if let Err(e) = copy_folder_recurse(original_path, new_path) {
+        println!("{e}");
+        return Err(ScratchmarkError::FolderMoveFail);
+    };
+    if let Err(e) = std::fs::remove_dir_all(original_path) {
+        println!("{e}");
+        return Err(ScratchmarkError::FolderMoveFail);
+    };
     Ok(())
 }
 
@@ -156,7 +170,7 @@ fn copy_folder_recurse(original_path: &Path, new_path: &Path) -> Result<(), std:
         let entry = entry?;
         let entry_dest = PathBuf::from(new_path).join(entry.file_name());
         if entry.file_type()?.is_dir() {
-            move_folder(&entry.path(), &entry_dest)?;
+            copy_folder_recurse(&entry.path(), &entry_dest)?;
         } else {
             std::fs::copy(entry.path(), &entry_dest)?;
         }

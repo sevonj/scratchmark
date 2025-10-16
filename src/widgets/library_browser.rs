@@ -112,6 +112,10 @@ mod imp {
                     Signal::builder("close-project-requested")
                         .param_types([PathBuf::static_type()])
                         .build(),
+                    // Error that should be toasted to the user
+                    Signal::builder("notify-err")
+                        .param_types([String::static_type()])
+                        .build(),
                 ]
             })
         }
@@ -241,6 +245,18 @@ mod imp {
                     obj,
                     move |_: LibraryFolder, folder: LibraryFolder| {
                         obj.emit_by_name::<()>("folder-delete-requested", &[&folder]);
+                    }
+                ),
+            );
+
+            folder.connect_closure(
+                "notify-err",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: LibraryFolder, msg: String| {
+                        obj.emit_by_name::<()>("notify-err", &[&msg]);
                     }
                 ),
             );

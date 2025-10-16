@@ -114,6 +114,10 @@ mod imp {
                     Signal::builder("sheet-created")
                         .param_types([PathBuf::static_type()])
                         .build(),
+                    // Error that should be toasted to the user
+                    Signal::builder("notify-err")
+                        .param_types([String::static_type()])
+                        .build(),
                 ]
             })
         }
@@ -345,7 +349,10 @@ mod imp {
                 obj,
                 move |_action, _parameter| {
                     let path = util::untitled_sheet_path(obj.path());
-                    util::create_sheet_file(&path);
+                    if let Err(e) = util::create_sheet_file(&path) {
+                        obj.emit_by_name::<()>("notify-err", &[&e.to_string()]);
+                        return;
+                    }
                     obj.emit_by_name::<()>("sheet-created", &[&path]);
                     obj.imp().sort_children();
                     obj.imp().set_expanded(true);
@@ -359,7 +366,10 @@ mod imp {
                 obj,
                 move |_action, _parameter| {
                     let path = util::untitled_folder_path(obj.path());
-                    util::create_folder(&path);
+                    if let Err(e) = util::create_folder(&path) {
+                        obj.emit_by_name::<()>("notify-err", &[&e.to_string()]);
+                        return;
+                    }
                     obj.emit_by_name::<()>("folder-created", &[&path]);
                     obj.imp().sort_children();
                     obj.imp().set_expanded(true);
