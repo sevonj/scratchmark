@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: If you have multiple suggestions, please file a separate issue for each.
-title: 'Feature: Short Descriptive Title'
+title: 'Feature: Short Descriptive Title (one feature per issue)'
 labels: enhancement
 assignees: ''
 
