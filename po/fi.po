@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-17 14:22+0300\n"
-"PO-Revision-Date: 2025-10-10 13:34+0300\n"
+"PO-Revision-Date: 2025-10-17 16:46+0300\n"
 "Last-Translator: Sevonj <>\n"
 "Language-Team: Finnish\n"
 "Language: fi\n"
@@ -72,7 +72,7 @@ msgstr "Kursivointi (Ctrl+I)"
 
 #: data/resources/ui/editor_format_bar.ui:37
 msgid "Strikethrough"
-msgstr ""
+msgstr "Yliviivaus"
 
 #: data/resources/ui/editor_format_bar.ui:49
 msgid "Heading 1"
@@ -280,10 +280,9 @@ msgid "New Sheet"
 msgstr "Uusi"
 
 #: data/resources/ui/shortcuts.ui:43
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Add Project"
-msgstr "Sulje projekti"
+msgstr "Lisää projekti"
 
 #: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
@@ -358,9 +357,8 @@ msgid "New"
 msgstr "Uusi"
 
 #: data/resources/ui/window.ui:116
-#, fuzzy
 msgid "Add Project"
-msgstr "Sulje projekti"
+msgstr "Lisää projekti"
 
 #: data/resources/ui/window.ui:122
 msgid "Save"

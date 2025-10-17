@@ -284,10 +284,9 @@ msgid "New Sheet"
 msgstr "Yeni Sayfa"
 
 #: data/resources/ui/shortcuts.ui:43
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Add Project"
-msgstr "Projeyi Kapat"
+msgstr ""
 
 #: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
@@ -362,9 +361,8 @@ msgid "New"
 msgstr "Yeni"
 
 #: data/resources/ui/window.ui:116
-#, fuzzy
 msgid "Add Project"
-msgstr "Projeyi Kapat"
+msgstr ""
 
 #: data/resources/ui/window.ui:122
 msgid "Save"
