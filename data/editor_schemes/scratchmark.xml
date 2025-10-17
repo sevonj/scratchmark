@@ -17,6 +17,8 @@
   <style name="def:emphasis" italic="true" />
   <!-- formatting: bold -->
   <style name="def:strong-emphasis" bold="true" />
+  <!-- formatting: striketrough -->
+  <style name="def:deletion" strikethrough="true" foreground="#CadetBlue" />
   <!-- formatting: code block -->
   <style name="def:inline-code" foreground="#gray" />
   <!-- formatting: code span -->

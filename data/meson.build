@@ -36,3 +36,4 @@ test('Validate schema file',
 subdir('icons')
 subdir('resources')
 subdir('editor_schemes')
+subdir('language_specs')

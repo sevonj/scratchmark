@@ -342,6 +342,46 @@ mod imp {
             ));
             actions.add_action(&action);
 
+            let action = gio::SimpleAction::new("format-strikethrough", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    let buffer = this.source_view.buffer();
+                    let Some((start, end)) = buffer.selection_bounds() else {
+                        let mut iter = buffer.iter_at_mark(&buffer.get_insert());
+                        let start_off = iter.offset();
+                        buffer.insert(&mut iter, "~~~~");
+                        let end_off = iter.offset();
+                        let start = buffer.iter_at_offset(start_off);
+                        let end = buffer.iter_at_offset(end_off);
+                        buffer.select_range(&start, &end);
+                        return;
+                    };
+                    let offset = start.offset();
+                    let selection = buffer.text(&start, &end, false);
+
+                    let is_strikethrough = selection.len() >= 4
+                        && selection.starts_with("~~")
+                        && selection.ends_with("~~");
+
+                    let replacement = if is_strikethrough {
+                        selection[2..(selection.len() - 2)].to_owned()
+                    } else {
+                        format!("~~{selection}~~")
+                    };
+
+                    buffer.delete_selection(true, true);
+                    let mut iter = buffer.iter_at_mark(&buffer.get_insert());
+                    buffer.insert(&mut iter, &replacement);
+
+                    let ins = buffer.iter_at_offset(offset);
+                    let bound = buffer.iter_at_offset(offset + replacement.len() as i32);
+                    buffer.select_range(&ins, &bound);
+                }
+            ));
+            actions.add_action(&action);
+
             let action = gio::SimpleAction::new("format-heading", Some(VariantTy::INT32));
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
@@ -484,6 +524,7 @@ use sourceview5::prelude::*;
 
 use gtk::gio::Cancellable;
 use gtk::gio::FileCreateFlags;
+use gtk::glib::GString;
 use gtk::glib::Object;
 use sourceview5::Buffer;
 use sourceview5::LanguageManager;
@@ -507,7 +548,8 @@ impl SheetEditor {
     pub fn new(path: PathBuf) -> Result<Self, ScratchmarkError> {
         let file = gtk::gio::File::for_path(&path);
         let text = util::read_file_to_string(&file)?;
-        let lang = LanguageManager::default().language("markdown").unwrap();
+        let lm = Self::language_manager();
+        let lang = lm.language("markdown").unwrap();
         let buffer = Buffer::with_language(&lang);
         buffer.set_text(&text);
 
@@ -516,7 +558,7 @@ impl SheetEditor {
         let search_context = SearchContext::new(&buffer, Some(&search_settings));
 
         let this: Self = Object::builder().build();
-        this.load_buffer_style_scheme(&buffer);
+        Self::load_buffer_style_scheme(&buffer);
         this.imp().file.replace(Some(file));
         this.imp().path.replace(Some(path));
         this.imp().source_view.set_monospace(true);
@@ -599,7 +641,7 @@ impl SheetEditor {
         self.emit_by_name::<()>("stats-changed", &[]);
     }
 
-    fn load_buffer_style_scheme(&self, buffer: &Buffer) {
+    fn load_buffer_style_scheme(buffer: &Buffer) {
         let scheme_id = "scratchmark";
 
         // Try fetching the scheme
@@ -609,7 +651,7 @@ impl SheetEditor {
         }
 
         // Fetch failed, add paths and try again
-        StyleSchemeManager::default().append_search_path(&format!("{}/editor_schemes", PKGDATADIR));
+        StyleSchemeManager::default().append_search_path(&format!("{PKGDATADIR}/editor_schemes"));
         #[cfg(not(feature = "installed"))]
         {
             const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
@@ -623,6 +665,27 @@ impl SheetEditor {
         }
 
         println!("Failed to load scheme with id '{scheme_id}'.")
+    }
+
+    fn language_manager() -> LanguageManager {
+        let lm = LanguageManager::default();
+        let mut search_path = lm.search_path();
+
+        #[cfg(feature = "installed")]
+        {
+            let lang_spec_dir = &format!("{PKGDATADIR}/language_specs");
+            search_path.insert(0, lang_spec_dir.into());
+        }
+        #[cfg(not(feature = "installed"))]
+        {
+            const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
+            let lang_spec_dir = format!("{MANIFEST_DIR}/data/language_specs");
+            search_path.insert(0, lang_spec_dir.into());
+        }
+
+        let dirs: Vec<&str> = search_path.iter().map(GString::as_str).collect();
+        lm.set_search_path(&dirs);
+        lm
     }
 }
 

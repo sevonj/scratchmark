@@ -31,13 +31,13 @@
                     <property name="action-name">formatbar.underline</property>
                   </object>
                 </child-->
-                <!--child>
+                <child>
                   <object class="GtkButton">
-                    <property name="icon-name">format-text-strikethrough-symbolic</property>
+                    <property name="icon-name">md-format-strikethrough-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Strikethrough</property>
                     <property name="action-name">formatbar.strikethrough</property>
                   </object>
-                </child-->
+                </child>
               </object>
             </child>
             <child>

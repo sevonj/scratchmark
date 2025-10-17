@@ -78,6 +78,20 @@ mod imp {
             ));
             self.actions.add_action(&action);
 
+            let action = SimpleAction::new("strikethrough", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_action, _parameter| {
+                    if let Some(editor) = this.editor.borrow().as_ref() {
+                        editor
+                            .activate_action("editor.format-strikethrough", None)
+                            .unwrap();
+                    }
+                }
+            ));
+            self.actions.add_action(&action);
+
             let action = SimpleAction::new("heading", Some(glib::VariantTy::INT32));
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
