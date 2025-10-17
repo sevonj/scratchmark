@@ -1,0 +1,11 @@
+# https://www.gnu.org/licenses/license-list.html
+# GPL3 compatible
+[licenses]
+unused-allowed-license = "deny"
+allow = [
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "GPL-3.0-or-later",
+    "MIT",
+    "Unicode-3.0",
+]
