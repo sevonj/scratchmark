@@ -507,6 +507,18 @@ mod imp {
             ));
             obj.add_action(&action);
 
+            let action = SimpleAction::new("project-add", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.library_browser
+                        .activate_action("library.project-add", None)
+                        .unwrap();
+                }
+            ));
+            obj.add_action(&action);
+
             let action = SimpleAction::new("file-save", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-09 16:31+0300\n"
+"POT-Creation-Date: 2025-10-17 14:22+0300\n"
 "PO-Revision-Date: 2025-10-10 16:32+0200\n"
 "Last-Translator: Łukasz Horodecki <dakilla@gmail.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -46,13 +46,16 @@ msgstr "Pisz bez rozpraszania uwagi i utrzymuj porządek w swoich dokumentach."
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:17
 msgid "Editing features are designed to stay out of sight when not needed."
-msgstr "Funkcje edycji są zaprojektowane tak, by pozostawały niewidoczne, gdy są niepotrzebne."
+msgstr ""
+"Funkcje edycji są zaprojektowane tak, by pozostawały niewidoczne, gdy są "
+"niepotrzebne."
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:18
 msgid ""
 "Documents are organized into folders, which may contain a writing project, "
 "personal notes, or maybe a recipe book."
-msgstr "Dokumenty są zorganizowane w katalogach, które mogą zawierać projekt "
+msgstr ""
+"Dokumenty są zorganizowane w katalogach, które mogą zawierać projekt "
 "pisarski, osobiste notatki lub książkę kucharską."
 
 #: data/org.scratchmark.Scratchmark.gschema.xml:9
@@ -70,6 +73,10 @@ msgstr "Pogrubienie (Ctrl+B)"
 #: data/resources/ui/editor_format_bar.ui:23
 msgid "Italic (Ctrl+I)"
 msgstr "Kursywa (Ctrl+I)"
+
+#: data/resources/ui/editor_format_bar.ui:37
+msgid "Strikethrough"
+msgstr ""
 
 #: data/resources/ui/editor_format_bar.ui:49
 msgid "Heading 1"
@@ -277,41 +284,47 @@ msgid "New Sheet"
 msgstr "Nowy arkusz"
 
 #: data/resources/ui/shortcuts.ui:43
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Add Project"
+msgstr "Zamknij projekt"
+
+#: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "Save Sheet"
 msgstr "Zapisz arkusz"
 
-#: data/resources/ui/shortcuts.ui:49
+#: data/resources/ui/shortcuts.ui:55
 msgctxt "shortcut window"
 msgid "Rename Sheet"
 msgstr "Zmień nazwę arkusza"
 
-#: data/resources/ui/shortcuts.ui:55
+#: data/resources/ui/shortcuts.ui:61
 msgctxt "shortcut window"
 msgid "Close Sheet"
 msgstr "Zamknij arkusz"
 
-#: data/resources/ui/shortcuts.ui:63
+#: data/resources/ui/shortcuts.ui:69
 msgctxt "shortcut window"
 msgid "Editor"
 msgstr "Edytor"
 
-#: data/resources/ui/shortcuts.ui:66
+#: data/resources/ui/shortcuts.ui:72
 msgctxt "shortcut window"
 msgid "Search Text"
 msgstr "Szukaj tekstu"
 
-#: data/resources/ui/shortcuts.ui:72
+#: data/resources/ui/shortcuts.ui:78
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr "Szukaj i zastąp tekst"
 
-#: data/resources/ui/shortcuts.ui:80
+#: data/resources/ui/shortcuts.ui:86
 msgctxt "shortcut window"
 msgid "Library"
 msgstr "Biblioteka"
 
-#: data/resources/ui/shortcuts.ui:83
+#: data/resources/ui/shortcuts.ui:89
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Ręczne odświeżenie"
@@ -328,7 +341,7 @@ msgstr "Przełącz panel boczny (F9)"
 msgid "New Sheet (Ctrl+N)"
 msgstr "Nowy arkusz (Ctr+N)"
 
-#: data/resources/ui/window.ui:66 data/resources/ui/window.ui:143
+#: data/resources/ui/window.ui:66 data/resources/ui/window.ui:147
 msgid "Exit Fullscreen"
 msgstr "Opuść pełny ekran"
 
@@ -348,34 +361,39 @@ msgstr "Pasek formatowania"
 msgid "New"
 msgstr "Nowy"
 
-#: data/resources/ui/window.ui:118
+#: data/resources/ui/window.ui:116
+#, fuzzy
+msgid "Add Project"
+msgstr "Zamknij projekt"
+
+#: data/resources/ui/window.ui:122
 msgid "Save"
 msgstr "Zapisz"
 
-#: data/resources/ui/window.ui:122
+#: data/resources/ui/window.ui:126
 msgid "Close"
 msgstr "Zamknij"
 
-#: data/resources/ui/window.ui:128
+#: data/resources/ui/window.ui:132
 msgid "Search Text"
 msgstr "Szukaj tekstu"
 
-#: data/resources/ui/window.ui:132
+#: data/resources/ui/window.ui:136
 msgid "Search and Replace"
 msgstr "Szukaj i zamień"
 
-#: data/resources/ui/window.ui:138
+#: data/resources/ui/window.ui:142
 msgid "Enter Fullscreen"
 msgstr "Włącz pełny ekran"
 
-#: data/resources/ui/window.ui:150
+#: data/resources/ui/window.ui:154
 msgid "Preferences"
 msgstr "Preferencje"
 
-#: data/resources/ui/window.ui:154
+#: data/resources/ui/window.ui:158
 msgid "Keyboard Shortcuts"
 msgstr "Skróty klawiszowe"
 
-#: data/resources/ui/window.ui:158
+#: data/resources/ui/window.ui:162
 msgid "About Scratchmark"
 msgstr "O programie"

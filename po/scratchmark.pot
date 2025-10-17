@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-09 16:31+0300\n"
+"POT-Creation-Date: 2025-10-17 14:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,6 +66,10 @@ msgstr ""
 
 #: data/resources/ui/editor_format_bar.ui:23
 msgid "Italic (Ctrl+I)"
+msgstr ""
+
+#: data/resources/ui/editor_format_bar.ui:37
+msgid "Strikethrough"
 msgstr ""
 
 #: data/resources/ui/editor_format_bar.ui:49
@@ -275,40 +279,45 @@ msgstr ""
 
 #: data/resources/ui/shortcuts.ui:43
 msgctxt "shortcut window"
-msgid "Save Sheet"
+msgid "Add Project"
 msgstr ""
 
 #: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
-msgid "Rename Sheet"
+msgid "Save Sheet"
 msgstr ""
 
 #: data/resources/ui/shortcuts.ui:55
 msgctxt "shortcut window"
+msgid "Rename Sheet"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:61
+msgctxt "shortcut window"
 msgid "Close Sheet"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:63
+#: data/resources/ui/shortcuts.ui:69
 msgctxt "shortcut window"
 msgid "Editor"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:66
+#: data/resources/ui/shortcuts.ui:72
 msgctxt "shortcut window"
 msgid "Search Text"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:72
+#: data/resources/ui/shortcuts.ui:78
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:80
+#: data/resources/ui/shortcuts.ui:86
 msgctxt "shortcut window"
 msgid "Library"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:83
+#: data/resources/ui/shortcuts.ui:89
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr ""
@@ -325,7 +334,7 @@ msgstr ""
 msgid "New Sheet (Ctrl+N)"
 msgstr ""
 
-#: data/resources/ui/window.ui:66 data/resources/ui/window.ui:143
+#: data/resources/ui/window.ui:66 data/resources/ui/window.ui:147
 msgid "Exit Fullscreen"
 msgstr ""
 
@@ -345,34 +354,38 @@ msgstr ""
 msgid "New"
 msgstr ""
 
-#: data/resources/ui/window.ui:118
-msgid "Save"
+#: data/resources/ui/window.ui:116
+msgid "Add Project"
 msgstr ""
 
 #: data/resources/ui/window.ui:122
+msgid "Save"
+msgstr ""
+
+#: data/resources/ui/window.ui:126
 msgid "Close"
 msgstr ""
 
-#: data/resources/ui/window.ui:128
+#: data/resources/ui/window.ui:132
 msgid "Search Text"
 msgstr ""
 
-#: data/resources/ui/window.ui:132
+#: data/resources/ui/window.ui:136
 msgid "Search and Replace"
 msgstr ""
 
-#: data/resources/ui/window.ui:138
+#: data/resources/ui/window.ui:142
 msgid "Enter Fullscreen"
 msgstr ""
 
-#: data/resources/ui/window.ui:150
+#: data/resources/ui/window.ui:154
 msgid "Preferences"
 msgstr ""
 
-#: data/resources/ui/window.ui:154
+#: data/resources/ui/window.ui:158
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: data/resources/ui/window.ui:158
+#: data/resources/ui/window.ui:162
 msgid "About Scratchmark"
 msgstr ""

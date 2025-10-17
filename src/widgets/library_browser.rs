@@ -58,7 +58,7 @@ mod imp {
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("library", Some(&actions));
 
-            let action = SimpleAction::new("add-project-picker", None);
+            let action = SimpleAction::new("project-add", None);
             action.connect_activate(clone!(
                 #[weak]
                 obj,

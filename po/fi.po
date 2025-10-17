@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-09 16:31+0300\n"
+"POT-Creation-Date: 2025-10-17 14:22+0300\n"
 "PO-Revision-Date: 2025-10-10 13:34+0300\n"
 "Last-Translator: Sevonj <>\n"
 "Language-Team: Finnish\n"
@@ -69,6 +69,10 @@ msgstr "Lihavointi (Ctrl+B)"
 #: data/resources/ui/editor_format_bar.ui:23
 msgid "Italic (Ctrl+I)"
 msgstr "Kursivointi (Ctrl+I)"
+
+#: data/resources/ui/editor_format_bar.ui:37
+msgid "Strikethrough"
+msgstr ""
 
 #: data/resources/ui/editor_format_bar.ui:49
 msgid "Heading 1"
@@ -276,41 +280,47 @@ msgid "New Sheet"
 msgstr "Uusi"
 
 #: data/resources/ui/shortcuts.ui:43
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Add Project"
+msgstr "Sulje projekti"
+
+#: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "Save Sheet"
 msgstr "Tallenna"
 
-#: data/resources/ui/shortcuts.ui:49
+#: data/resources/ui/shortcuts.ui:55
 msgctxt "shortcut window"
 msgid "Rename Sheet"
 msgstr "Uudelleennimeä"
 
-#: data/resources/ui/shortcuts.ui:55
+#: data/resources/ui/shortcuts.ui:61
 msgctxt "shortcut window"
 msgid "Close Sheet"
 msgstr "Sulje"
 
-#: data/resources/ui/shortcuts.ui:63
+#: data/resources/ui/shortcuts.ui:69
 msgctxt "shortcut window"
 msgid "Editor"
 msgstr "Editori"
 
-#: data/resources/ui/shortcuts.ui:66
+#: data/resources/ui/shortcuts.ui:72
 msgctxt "shortcut window"
 msgid "Search Text"
 msgstr "Etsi tekstiä"
 
-#: data/resources/ui/shortcuts.ui:72
+#: data/resources/ui/shortcuts.ui:78
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr "Etsi ja korvaa tesktiä"
 
-#: data/resources/ui/shortcuts.ui:80
+#: data/resources/ui/shortcuts.ui:86
 msgctxt "shortcut window"
 msgid "Library"
 msgstr "Kirjasto"
 
-#: data/resources/ui/shortcuts.ui:83
+#: data/resources/ui/shortcuts.ui:89
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Päivitä kirjasto"
@@ -327,7 +337,7 @@ msgstr "Avaa/sulje sivupalkki (F9)"
 msgid "New Sheet (Ctrl+N)"
 msgstr "Uusi tiedosto (Ctrl+N)"
 
-#: data/resources/ui/window.ui:66 data/resources/ui/window.ui:143
+#: data/resources/ui/window.ui:66 data/resources/ui/window.ui:147
 msgid "Exit Fullscreen"
 msgstr "Poistu koko näytön tilasta"
 
@@ -347,34 +357,39 @@ msgstr "Muotoilupalkki"
 msgid "New"
 msgstr "Uusi"
 
-#: data/resources/ui/window.ui:118
+#: data/resources/ui/window.ui:116
+#, fuzzy
+msgid "Add Project"
+msgstr "Sulje projekti"
+
+#: data/resources/ui/window.ui:122
 msgid "Save"
 msgstr "Tallenna"
 
-#: data/resources/ui/window.ui:122
+#: data/resources/ui/window.ui:126
 msgid "Close"
 msgstr "Sulje"
 
-#: data/resources/ui/window.ui:128
+#: data/resources/ui/window.ui:132
 msgid "Search Text"
 msgstr "Etsi tekstiä"
 
-#: data/resources/ui/window.ui:132
+#: data/resources/ui/window.ui:136
 msgid "Search and Replace"
 msgstr "Etsi ja korvaa"
 
-#: data/resources/ui/window.ui:138
+#: data/resources/ui/window.ui:142
 msgid "Enter Fullscreen"
 msgstr "Koko näyttö"
 
-#: data/resources/ui/window.ui:150
+#: data/resources/ui/window.ui:154
 msgid "Preferences"
 msgstr "Asetukset"
 
-#: data/resources/ui/window.ui:154
+#: data/resources/ui/window.ui:158
 msgid "Keyboard Shortcuts"
 msgstr "Pikanäppäimet"
 
-#: data/resources/ui/window.ui:158
+#: data/resources/ui/window.ui:162
 msgid "About Scratchmark"
 msgstr "Tietoja - Scratchmark"

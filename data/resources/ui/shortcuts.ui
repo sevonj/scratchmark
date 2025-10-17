@@ -40,6 +40,12 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Add Project</property>
+                <property name="action-name">win.project-add</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes" context="shortcut window">Save Sheet</property>
                 <property name="action-name">win.file-save</property>
               </object>

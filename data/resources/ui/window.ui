@@ -112,6 +112,10 @@
         <attribute name="label" translatable="yes">New</attribute>
         <attribute name="action">win.file-new</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">Add Project</attribute>
+        <attribute name="action">win.project-add</attribute>
+      </item>
     </section>
     <section>
       <item>
