@@ -46,6 +46,16 @@
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <url type="translate">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.4.7" date="2025-10-21">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.7</url>
+      <description translate="no">
+        <ul>
+          <li>Feature: Add support for strikethrough Markdown extension</li>
+          <li>Fix: Some errors crash the app.</li>
+          <li>Fix: Detect missing projects.</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.4.6" date="2025-10-13">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.6</url>
       <description translate="no">
