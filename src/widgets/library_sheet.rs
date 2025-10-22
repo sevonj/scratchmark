@@ -31,7 +31,7 @@ mod imp {
         #[template_child]
         pub(super) button: TemplateChild<ToggleButton>,
         #[template_child]
-        pub(super) sheet_name_label: TemplateChild<Label>,
+        pub(super) document_name_label: TemplateChild<Label>,
         #[template_child]
         pub(super) title_row: TemplateChild<gtk::Box>,
 
@@ -76,7 +76,7 @@ mod imp {
             ));
 
             let actions = SimpleActionGroup::new();
-            obj.insert_action_group("sheet", Some(&actions));
+            obj.insert_action_group("document", Some(&actions));
 
             let action = gio::SimpleAction::new("filemanager", None);
             action.connect_activate(clone!(
@@ -314,7 +314,7 @@ impl LibrarySheet {
         self.imp()
             .title_row
             .set_margin_start(20 + 12 * data.depth() as i32);
-        let title_label = self.imp().sheet_name_label.get();
+        let title_label = self.imp().document_name_label.get();
         let mut bindings = self.imp().bindings.borrow_mut();
 
         let title_binding = data

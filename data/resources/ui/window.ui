@@ -25,7 +25,7 @@
                     <child type="start">
                       <object class="GtkMenuButton" id="new_folder_button">
                         <property name="icon-name">folder-new-symbolic</property>
-                        <property name="tooltip-text" translatable="yes">Create Folder</property>
+                        <property name="tooltip-text" translatable="yes">Create Subfolder</property>
                       </object>
                     </child>
                   </object>
@@ -55,9 +55,9 @@
                               </object>
                             </child>
                             <child type="start">
-                              <object class="GtkMenuButton" id="new_sheet_button">
+                              <object class="GtkMenuButton" id="new_document_button">
                                 <property name="icon-name">document-new-symbolic</property>
-                                <property name="tooltip-text" translatable="yes">New Sheet (Ctrl+N)</property>
+                                <property name="tooltip-text" translatable="yes">New Document (Ctrl+N)</property>
                               </object>
                             </child>
                             <child type="end">

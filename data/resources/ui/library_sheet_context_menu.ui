@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Context menu for Library Sheet Button -->
 <interface>
   <menu id="context-menu">
     <section>
       <item>
         <attribute name="label" translatable="yes">Show in File Manager</attribute>
-        <attribute name="action">sheet.filemanager</attribute>
+        <attribute name="action">document.filemanager</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Rename Sheet</attribute>
-        <attribute name="action">sheet.rename-begin</attribute>
+        <attribute name="label" translatable="yes">Rename</attribute>
+        <attribute name="action">document.rename-begin</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Duplicate</attribute>
-        <attribute name="action">sheet.duplicate</attribute>
+        <attribute name="action">document.duplicate</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Move to Trash</attribute>
-        <attribute name="action">sheet.trash</attribute>
+        <attribute name="action">document.trash</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Delete Sheet</attribute>
-        <attribute name="action">sheet.delete</attribute>
+        <attribute name="label" translatable="yes">Delete Permanently</attribute>
+        <attribute name="action">document.delete</attribute>
       </item>
     </section>
   </menu>

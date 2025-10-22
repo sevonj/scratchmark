@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 14:34+0300\n"
+"POT-Creation-Date: 2025-10-22 15:36+0300\n"
 "PO-Revision-Date: 2025-10-22 01:07-0300\n"
 "Last-Translator: Filipe Motta <luizfilipemotta@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -87,7 +87,8 @@ msgid "Nothing Open"
 msgstr "Nada aberto"
 
 #: data/resources/ui/editor_placeholder.ui:11
-msgid "Create a new sheet or open an existing one from the sidebar"
+#, fuzzy
+msgid "Create a new document or open an existing one from the sidebar"
 msgstr "Crie uma nova folha ou abra uma existente a partir da barra lateral"
 
 #: data/resources/ui/editor_search_bar.ui:26
@@ -153,6 +154,8 @@ msgid "Create"
 msgstr "Criar"
 
 #: data/resources/ui/item_rename_popover.ui:15
+#: data/resources/ui/library_folder_context_menu.ui:18
+#: data/resources/ui/library_sheet_context_menu.ui:10
 msgid "Rename"
 msgstr "Renomear"
 
@@ -164,53 +167,46 @@ msgstr "Biblioteca"
 msgid "Add Project"
 msgstr "Adicionar projeto"
 
-#: data/resources/ui/library_drafts_context_menu.ui:7
-#: data/resources/ui/library_folder_context_menu.ui:7
-#: data/resources/ui/library_project_context_menu.ui:7
-msgid "New Sheet"
+#: data/resources/ui/library_drafts_context_menu.ui:6
+#: data/resources/ui/library_folder_context_menu.ui:6
+#: data/resources/ui/library_project_context_menu.ui:6
+#, fuzzy
+msgid "New Document"
 msgstr "Nova folha"
 
-#: data/resources/ui/library_drafts_context_menu.ui:11
-#: data/resources/ui/library_folder_context_menu.ui:11
-#: data/resources/ui/library_project_context_menu.ui:11
-msgid "New Folder"
-msgstr "Nova pasta"
+#: data/resources/ui/library_drafts_context_menu.ui:10
+#: data/resources/ui/library_folder_context_menu.ui:10
+#: data/resources/ui/library_project_context_menu.ui:10
+#: data/resources/ui/window.ui:28
+#, fuzzy
+msgid "Create Subfolder"
+msgstr "Criar pasta"
 
-#: data/resources/ui/library_drafts_context_menu.ui:15
-#: data/resources/ui/library_folder_context_menu.ui:15
-#: data/resources/ui/library_project_context_menu.ui:15
-#: data/resources/ui/library_sheet_context_menu.ui:7
+#: data/resources/ui/library_drafts_context_menu.ui:14
+#: data/resources/ui/library_folder_context_menu.ui:14
+#: data/resources/ui/library_project_context_menu.ui:14
+#: data/resources/ui/library_sheet_context_menu.ui:6
 msgid "Show in File Manager"
 msgstr "Mostrar no gerenciador de arquivos"
 
-#: data/resources/ui/library_folder_context_menu.ui:19
-msgid "Rename Folder"
-msgstr "Renomear pasta"
-
-#: data/resources/ui/library_folder_context_menu.ui:23
-#: data/resources/ui/library_sheet_context_menu.ui:19
+#: data/resources/ui/library_folder_context_menu.ui:22
+#: data/resources/ui/library_sheet_context_menu.ui:18
 msgid "Move to Trash"
 msgstr "Mover para a Lixeira"
 
-#: data/resources/ui/library_folder_context_menu.ui:27
-msgid "Delete Folder"
-msgstr "Excluir pasta"
+#: data/resources/ui/library_folder_context_menu.ui:26
+#: data/resources/ui/library_sheet_context_menu.ui:22
+#, fuzzy
+msgid "Delete Permanently"
+msgstr "Excluir folha"
 
-#: data/resources/ui/library_project_context_menu.ui:19
+#: data/resources/ui/library_project_context_menu.ui:18
 msgid "Close Project"
 msgstr "Fechar projeto"
 
-#: data/resources/ui/library_sheet_context_menu.ui:11
-msgid "Rename Sheet"
-msgstr "Renomear folha"
-
-#: data/resources/ui/library_sheet_context_menu.ui:15
+#: data/resources/ui/library_sheet_context_menu.ui:14
 msgid "Duplicate"
 msgstr "Duplicar"
-
-#: data/resources/ui/library_sheet_context_menu.ui:23
-msgid "Delete Sheet"
-msgstr "Excluir folha"
 
 #: data/resources/ui/sheet_editor.ui:16
 msgid "File changed on disk"
@@ -271,8 +267,9 @@ msgid "Document"
 msgstr "Documento"
 
 #: data/resources/ui/shortcuts.ui:37
+#, fuzzy
 msgctxt "shortcut window"
-msgid "New Sheet"
+msgid "New Document"
 msgstr "Nova folha"
 
 #: data/resources/ui/shortcuts.ui:43
@@ -281,18 +278,21 @@ msgid "Add Project"
 msgstr "Adicionar projeto"
 
 #: data/resources/ui/shortcuts.ui:49
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Save Sheet"
+msgid "Save Document"
 msgstr "Salvar folha"
 
 #: data/resources/ui/shortcuts.ui:55
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Rename Sheet"
+msgid "Rename Document"
 msgstr "Renomear folha"
 
 #: data/resources/ui/shortcuts.ui:61
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Close Sheet"
+msgid "Close Document"
 msgstr "Fechar folha"
 
 #: data/resources/ui/shortcuts.ui:69
@@ -320,16 +320,13 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Atualização manual"
 
-#: data/resources/ui/window.ui:28
-msgid "Create Folder"
-msgstr "Criar pasta"
-
 #: data/resources/ui/window.ui:54
 msgid "Toggle Sidebar (F9)"
 msgstr "Ativar/Desativar barra lateral"
 
 #: data/resources/ui/window.ui:60
-msgid "New Sheet (Ctrl+N)"
+#, fuzzy
+msgid "New Document (Ctrl+N)"
 msgstr "Nova Folha (Ctrl + N)"
 
 #: data/resources/ui/window.ui:66 data/resources/ui/window.ui:147
@@ -383,3 +380,16 @@ msgstr "Atalhos de teclado"
 #: data/resources/ui/window.ui:162
 msgid "About Scratchmark"
 msgstr "Sobre o Scratchmark"
+
+#~ msgid "New Folder"
+#~ msgstr "Nova pasta"
+
+#~ msgid "Rename Folder"
+#~ msgstr "Renomear pasta"
+
+#~ msgid "Delete Folder"
+#~ msgstr "Excluir pasta"
+
+#, fuzzy
+#~ msgid "Rename Document"
+#~ msgstr "Renomear folha"

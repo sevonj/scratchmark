@@ -45,7 +45,7 @@ mod imp {
         #[template_child]
         pub(super) subdirs_vbox: TemplateChild<gtk::Box>,
         #[template_child]
-        pub(super) sheets_vbox: TemplateChild<gtk::Box>,
+        pub(super) documents_vbox: TemplateChild<gtk::Box>,
         #[template_child]
         pub(super) title_row: TemplateChild<gtk::Box>,
 
@@ -108,10 +108,10 @@ mod imp {
                         .param_types([super::LibraryFolder::static_type()])
                         .build(),
                     Signal::builder("close-project-requested").build(),
-                    Signal::builder("folder-created")
+                    Signal::builder("subfolder-created")
                         .param_types([PathBuf::static_type()])
                         .build(),
-                    Signal::builder("sheet-created")
+                    Signal::builder("document-created")
                         .param_types([PathBuf::static_type()])
                         .build(),
                     // Error that should be toasted to the user
@@ -175,7 +175,7 @@ mod imp {
                 for i in (0..sheets.len() - 1).rev() {
                     let child = &sheets[i + 1];
                     let sibling = Some(&sheets[i]);
-                    self.sheets_vbox.reorder_child_after(child, sibling);
+                    self.documents_vbox.reorder_child_after(child, sibling);
                 }
             }
 
@@ -208,7 +208,7 @@ mod imp {
         }
 
         pub(super) fn add_sheet(&self, sheet: LibrarySheet) {
-            self.sheets_vbox.append(&sheet);
+            self.documents_vbox.append(&sheet);
             self.sheets.borrow_mut().push(sheet);
         }
 
@@ -343,7 +343,7 @@ mod imp {
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("folder", Some(&actions));
 
-            let action = gio::SimpleAction::new("create-sheet", None);
+            let action = gio::SimpleAction::new("create-document", None);
             action.connect_activate(clone!(
                 #[weak]
                 obj,
@@ -353,14 +353,14 @@ mod imp {
                         obj.emit_by_name::<()>("notify-err", &[&e.to_string()]);
                         return;
                     }
-                    obj.emit_by_name::<()>("sheet-created", &[&path]);
+                    obj.emit_by_name::<()>("document-created", &[&path]);
                     obj.imp().sort_children();
                     obj.imp().set_expanded(true);
                 }
             ));
             actions.add_action(&action);
 
-            let action = gio::SimpleAction::new("create-folder", None);
+            let action = gio::SimpleAction::new("create-subfolder", None);
             action.connect_activate(clone!(
                 #[weak]
                 obj,
@@ -370,7 +370,7 @@ mod imp {
                         obj.emit_by_name::<()>("notify-err", &[&e.to_string()]);
                         return;
                     }
-                    obj.emit_by_name::<()>("folder-created", &[&path]);
+                    obj.emit_by_name::<()>("subfolder-created", &[&path]);
                     obj.imp().sort_children();
                     obj.imp().set_expanded(true);
                 }
@@ -545,7 +545,7 @@ impl LibraryFolder {
     }
 
     pub fn remove_sheet(&self, sheet: &LibrarySheet) {
-        self.imp().sheets_vbox.remove(sheet);
+        self.imp().documents_vbox.remove(sheet);
     }
 
     pub fn rename(&self, path: PathBuf) {

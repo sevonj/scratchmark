@@ -34,7 +34,7 @@
             <property name="title" translatable="yes" context="shortcut window">Document</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">New Sheet</property>
+                <property name="title" translatable="yes" context="shortcut window">New Document</property>
                 <property name="action-name">win.file-new</property>
               </object>
             </child>
@@ -46,19 +46,19 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Save Sheet</property>
+                <property name="title" translatable="yes" context="shortcut window">Save Document</property>
                 <property name="action-name">win.file-save</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Rename Sheet</property>
+                <property name="title" translatable="yes" context="shortcut window">Rename Document</property>
                 <property name="action-name">win.file-rename-open</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Close Sheet</property>
+                <property name="title" translatable="yes" context="shortcut window">Close Document</property>
                 <property name="action-name">win.file-close</property>
               </object>
             </child>

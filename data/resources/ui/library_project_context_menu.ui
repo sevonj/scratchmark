@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Context menu for Library Folder Button -->
 <interface>
   <menu id="context-menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">New Sheet</attribute>
-        <attribute name="action">folder.create-sheet</attribute>
+        <attribute name="label" translatable="yes">New Document</attribute>
+        <attribute name="action">folder.create-document</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">New Folder</attribute>
-        <attribute name="action">folder.create-folder</attribute>
+        <attribute name="label" translatable="yes">Create Subfolder</attribute>
+        <attribute name="action">folder.create-subfolder</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Show in File Manager</attribute>

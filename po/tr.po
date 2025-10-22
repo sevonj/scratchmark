@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 14:34+0300\n"
+"POT-Creation-Date: 2025-10-22 15:36+0300\n"
 "PO-Revision-Date: 2025-10-08 16:08+0300\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
@@ -87,7 +87,8 @@ msgid "Nothing Open"
 msgstr "Hiçbir Şey Açık Değil"
 
 #: data/resources/ui/editor_placeholder.ui:11
-msgid "Create a new sheet or open an existing one from the sidebar"
+#, fuzzy
+msgid "Create a new document or open an existing one from the sidebar"
 msgstr "Kenar çubuğundan yeni sayfa oluşturun ya da var olan sayfayı açın"
 
 #: data/resources/ui/editor_search_bar.ui:26
@@ -153,6 +154,8 @@ msgid "Create"
 msgstr "Oluştur"
 
 #: data/resources/ui/item_rename_popover.ui:15
+#: data/resources/ui/library_folder_context_menu.ui:18
+#: data/resources/ui/library_sheet_context_menu.ui:10
 msgid "Rename"
 msgstr "Yeniden Adlandır"
 
@@ -164,53 +167,46 @@ msgstr "Kitaplık"
 msgid "Add Project"
 msgstr ""
 
-#: data/resources/ui/library_drafts_context_menu.ui:7
-#: data/resources/ui/library_folder_context_menu.ui:7
-#: data/resources/ui/library_project_context_menu.ui:7
-msgid "New Sheet"
+#: data/resources/ui/library_drafts_context_menu.ui:6
+#: data/resources/ui/library_folder_context_menu.ui:6
+#: data/resources/ui/library_project_context_menu.ui:6
+#, fuzzy
+msgid "New Document"
 msgstr "Yeni Sayfa"
 
-#: data/resources/ui/library_drafts_context_menu.ui:11
-#: data/resources/ui/library_folder_context_menu.ui:11
-#: data/resources/ui/library_project_context_menu.ui:11
-msgid "New Folder"
-msgstr "Yeni Klasör"
+#: data/resources/ui/library_drafts_context_menu.ui:10
+#: data/resources/ui/library_folder_context_menu.ui:10
+#: data/resources/ui/library_project_context_menu.ui:10
+#: data/resources/ui/window.ui:28
+#, fuzzy
+msgid "Create Subfolder"
+msgstr "Klasör Oluştur"
 
-#: data/resources/ui/library_drafts_context_menu.ui:15
-#: data/resources/ui/library_folder_context_menu.ui:15
-#: data/resources/ui/library_project_context_menu.ui:15
-#: data/resources/ui/library_sheet_context_menu.ui:7
+#: data/resources/ui/library_drafts_context_menu.ui:14
+#: data/resources/ui/library_folder_context_menu.ui:14
+#: data/resources/ui/library_project_context_menu.ui:14
+#: data/resources/ui/library_sheet_context_menu.ui:6
 msgid "Show in File Manager"
 msgstr "Dosya Yöneticisinde Göster"
 
-#: data/resources/ui/library_folder_context_menu.ui:19
-msgid "Rename Folder"
-msgstr "Klasörü Yeniden Adlandır"
-
-#: data/resources/ui/library_folder_context_menu.ui:23
-#: data/resources/ui/library_sheet_context_menu.ui:19
+#: data/resources/ui/library_folder_context_menu.ui:22
+#: data/resources/ui/library_sheet_context_menu.ui:18
 msgid "Move to Trash"
 msgstr "Çöpe Taşı"
 
-#: data/resources/ui/library_folder_context_menu.ui:27
-msgid "Delete Folder"
-msgstr "Klasörü Sil"
+#: data/resources/ui/library_folder_context_menu.ui:26
+#: data/resources/ui/library_sheet_context_menu.ui:22
+#, fuzzy
+msgid "Delete Permanently"
+msgstr "Sayfayı Sil"
 
-#: data/resources/ui/library_project_context_menu.ui:19
+#: data/resources/ui/library_project_context_menu.ui:18
 msgid "Close Project"
 msgstr "Projeyi Kapat"
 
-#: data/resources/ui/library_sheet_context_menu.ui:11
-msgid "Rename Sheet"
-msgstr "Sayfayı Yeniden Adlandır"
-
-#: data/resources/ui/library_sheet_context_menu.ui:15
+#: data/resources/ui/library_sheet_context_menu.ui:14
 msgid "Duplicate"
 msgstr "Çoğalt"
-
-#: data/resources/ui/library_sheet_context_menu.ui:23
-msgid "Delete Sheet"
-msgstr "Sayfayı Sil"
 
 #: data/resources/ui/sheet_editor.ui:16
 msgid "File changed on disk"
@@ -271,8 +267,9 @@ msgid "Document"
 msgstr "Belge"
 
 #: data/resources/ui/shortcuts.ui:37
+#, fuzzy
 msgctxt "shortcut window"
-msgid "New Sheet"
+msgid "New Document"
 msgstr "Yeni Sayfa"
 
 #: data/resources/ui/shortcuts.ui:43
@@ -281,18 +278,21 @@ msgid "Add Project"
 msgstr ""
 
 #: data/resources/ui/shortcuts.ui:49
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Save Sheet"
+msgid "Save Document"
 msgstr "Sayfayı Kaydet"
 
 #: data/resources/ui/shortcuts.ui:55
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Rename Sheet"
+msgid "Rename Document"
 msgstr "Sayfayı Yeniden Adlandır"
 
 #: data/resources/ui/shortcuts.ui:61
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Close Sheet"
+msgid "Close Document"
 msgstr "Sayfayı Kapat"
 
 #: data/resources/ui/shortcuts.ui:69
@@ -320,16 +320,13 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Elle Yenile"
 
-#: data/resources/ui/window.ui:28
-msgid "Create Folder"
-msgstr "Klasör Oluştur"
-
 #: data/resources/ui/window.ui:54
 msgid "Toggle Sidebar (F9)"
 msgstr "Kenar Çubuğunu Aç/Kapat (F9)"
 
 #: data/resources/ui/window.ui:60
-msgid "New Sheet (Ctrl+N)"
+#, fuzzy
+msgid "New Document (Ctrl+N)"
 msgstr "Yeni Sayfa (Ctrl+N)"
 
 #: data/resources/ui/window.ui:66 data/resources/ui/window.ui:147
@@ -383,3 +380,16 @@ msgstr "Klavye Kısayolları"
 #: data/resources/ui/window.ui:162
 msgid "About Scratchmark"
 msgstr "Scratchmark Hakkında"
+
+#~ msgid "New Folder"
+#~ msgstr "Yeni Klasör"
+
+#~ msgid "Rename Folder"
+#~ msgstr "Klasörü Yeniden Adlandır"
+
+#~ msgid "Delete Folder"
+#~ msgstr "Klasörü Sil"
+
+#, fuzzy
+#~ msgid "Rename Document"
+#~ msgstr "Sayfayı Yeniden Adlandır"
