@@ -88,25 +88,25 @@ mod imp {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
-                    Signal::builder("sheet-selected")
+                    Signal::builder("document-selected")
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-rename-requested")
                         .param_types([LibraryFolder::static_type(), PathBuf::static_type()])
                         .build(),
-                    Signal::builder("sheet-rename-requested")
+                    Signal::builder("document-rename-requested")
                         .param_types([LibrarySheet::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
                         .param_types([LibraryFolder::static_type()])
                         .build(),
-                    Signal::builder("sheet-delete-requested")
+                    Signal::builder("document-delete-requested")
                         .param_types([LibrarySheet::static_type()])
                         .build(),
                     Signal::builder("folder-trash-requested")
                         .param_types([LibraryFolder::static_type()])
                         .build(),
-                    Signal::builder("sheet-trash-requested")
+                    Signal::builder("document-trash-requested")
                         .param_types([LibrarySheet::static_type()])
                         .build(),
                     Signal::builder("close-project-requested")
@@ -145,7 +145,7 @@ mod imp {
                 ),
             );
             project.connect_closure(
-                "sheet-added",
+                "document-added",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
@@ -190,13 +190,13 @@ mod imp {
             );
 
             folder.connect_closure(
-                "sheet-created",
+                "document-created",
                 false,
                 closure_local!(
                     #[weak]
                     obj,
                     move |_: LibraryFolder, path: PathBuf| {
-                        obj.emit_by_name::<()>("sheet-selected", &[&path]);
+                        obj.emit_by_name::<()>("document-selected", &[&path]);
                     }
                 ),
             );
@@ -214,7 +214,7 @@ mod imp {
             );
 
             folder.connect_closure(
-                "sheet-created",
+                "document-created",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
@@ -277,7 +277,7 @@ mod imp {
                     move |sheet: LibrarySheet| {
                         sheet.set_active(false);
                         let path = sheet.path();
-                        obj.emit_by_name::<()>("sheet-selected", &[&path]);
+                        obj.emit_by_name::<()>("document-selected", &[&path]);
                     }
                 ),
             );
@@ -301,7 +301,7 @@ mod imp {
                     #[weak]
                     obj,
                     move |sheet: LibrarySheet, new_path: PathBuf| {
-                        obj.emit_by_name::<()>("sheet-rename-requested", &[&sheet, &new_path]);
+                        obj.emit_by_name::<()>("document-rename-requested", &[&sheet, &new_path]);
                     }
                 ),
             );
@@ -313,7 +313,7 @@ mod imp {
                     #[weak]
                     obj,
                     move |button: LibrarySheet| {
-                        obj.emit_by_name::<()>("sheet-trash-requested", &[&button]);
+                        obj.emit_by_name::<()>("document-trash-requested", &[&button]);
                     }
                 ),
             );
@@ -325,7 +325,7 @@ mod imp {
                     #[weak]
                     obj,
                     move |button: LibrarySheet| {
-                        obj.emit_by_name::<()>("sheet-delete-requested", &[&button]);
+                        obj.emit_by_name::<()>("document-delete-requested", &[&button]);
                     }
                 ),
             );

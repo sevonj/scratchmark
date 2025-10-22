@@ -111,7 +111,7 @@ mod imp {
                     Signal::builder("folder-created")
                         .param_types([PathBuf::static_type()])
                         .build(),
-                    Signal::builder("sheet-created")
+                    Signal::builder("document-created")
                         .param_types([PathBuf::static_type()])
                         .build(),
                     // Error that should be toasted to the user
@@ -353,7 +353,7 @@ mod imp {
                         obj.emit_by_name::<()>("notify-err", &[&e.to_string()]);
                         return;
                     }
-                    obj.emit_by_name::<()>("sheet-created", &[&path]);
+                    obj.emit_by_name::<()>("document-created", &[&path]);
                     obj.imp().sort_children();
                     obj.imp().set_expanded(true);
                 }

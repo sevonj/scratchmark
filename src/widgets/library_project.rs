@@ -107,28 +107,28 @@ mod imp {
                     Signal::builder("folder-added")
                         .param_types([LibraryFolder::static_type()])
                         .build(),
-                    Signal::builder("sheet-added")
+                    Signal::builder("document-added")
                         .param_types([LibrarySheet::static_type()])
                         .build(),
-                    Signal::builder("sheet-selected")
+                    Signal::builder("document-selected")
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-rename-requested")
                         .param_types([LibraryFolder::static_type(), PathBuf::static_type()])
                         .build(),
-                    Signal::builder("sheet-rename-requested")
+                    Signal::builder("document-rename-requested")
                         .param_types([LibrarySheet::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
                         .param_types([LibraryFolder::static_type()])
                         .build(),
-                    Signal::builder("sheet-delete-requested")
+                    Signal::builder("document-delete-requested")
                         .param_types([LibrarySheet::static_type()])
                         .build(),
                     Signal::builder("folder-trash-requested")
                         .param_types([LibraryFolder::static_type()])
                         .build(),
-                    Signal::builder("sheet-trash-requested")
+                    Signal::builder("document-trash-requested")
                         .param_types([LibrarySheet::static_type()])
                         .build(),
                     Signal::builder("close-project-requested").build(),
@@ -284,7 +284,7 @@ mod imp {
                 panic!("Tried to add a sheet, but couldn't find its parent.");
             }
 
-            self.obj().emit_by_name::<()>("sheet-added", &[&sheet]);
+            self.obj().emit_by_name::<()>("document-added", &[&sheet]);
         }
 
         /// Remove widgets for entries that don't exist in the library anymore
@@ -353,7 +353,7 @@ mod imp {
             );
 
             folder.connect_closure(
-                "sheet-created",
+                "document-created",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]

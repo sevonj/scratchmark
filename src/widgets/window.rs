@@ -137,7 +137,7 @@ mod imp {
             let top_split = self.top_split.get();
 
             self.library_browser.connect_closure(
-                "sheet-selected",
+                "document-selected",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
@@ -161,7 +161,7 @@ mod imp {
             );
 
             self.library_browser.connect_closure(
-                "sheet-trash-requested",
+                "document-trash-requested",
                 false,
                 closure_local!(
                     #[weak]
@@ -262,7 +262,7 @@ mod imp {
             );
 
             self.library_browser.connect_closure(
-                "sheet-rename-requested",
+                "document-rename-requested",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
@@ -306,7 +306,7 @@ mod imp {
             );
 
             self.library_browser.connect_closure(
-                "sheet-delete-requested",
+                "document-delete-requested",
                 false,
                 closure_local!(
                     #[weak]
