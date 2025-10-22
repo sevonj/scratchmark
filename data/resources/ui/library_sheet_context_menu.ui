@@ -7,7 +7,7 @@
         <attribute name="action">document.filemanager</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Rename Document</attribute>
+        <attribute name="label" translatable="yes">Rename</attribute>
         <attribute name="action">document.rename-begin</attribute>
       </item>
       <item>
@@ -19,7 +19,7 @@
         <attribute name="action">document.trash</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Delete Document</attribute>
+        <attribute name="label" translatable="yes">Delete Permanently</attribute>
         <attribute name="action">document.delete</attribute>
       </item>
     </section>

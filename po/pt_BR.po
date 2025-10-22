@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 15:11+0300\n"
+"POT-Creation-Date: 2025-10-22 15:29+0300\n"
 "PO-Revision-Date: 2025-10-22 01:07-0300\n"
 "Last-Translator: Filipe Motta <luizfilipemotta@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -154,6 +154,8 @@ msgid "Create"
 msgstr "Criar"
 
 #: data/resources/ui/item_rename_popover.ui:15
+#: data/resources/ui/library_folder_context_menu.ui:18
+#: data/resources/ui/library_sheet_context_menu.ui:10
 msgid "Rename"
 msgstr "Renomear"
 
@@ -185,36 +187,24 @@ msgstr "Nova pasta"
 msgid "Show in File Manager"
 msgstr "Mostrar no gerenciador de arquivos"
 
-#: data/resources/ui/library_folder_context_menu.ui:18
-msgid "Rename Folder"
-msgstr "Renomear pasta"
-
 #: data/resources/ui/library_folder_context_menu.ui:22
 #: data/resources/ui/library_sheet_context_menu.ui:18
 msgid "Move to Trash"
 msgstr "Mover para a Lixeira"
 
 #: data/resources/ui/library_folder_context_menu.ui:26
-msgid "Delete Folder"
-msgstr "Excluir pasta"
+#: data/resources/ui/library_sheet_context_menu.ui:22
+#, fuzzy
+msgid "Delete Permanently"
+msgstr "Excluir folha"
 
 #: data/resources/ui/library_project_context_menu.ui:18
 msgid "Close Project"
 msgstr "Fechar projeto"
 
-#: data/resources/ui/library_sheet_context_menu.ui:10
-#, fuzzy
-msgid "Rename Document"
-msgstr "Renomear folha"
-
 #: data/resources/ui/library_sheet_context_menu.ui:14
 msgid "Duplicate"
 msgstr "Duplicar"
-
-#: data/resources/ui/library_sheet_context_menu.ui:22
-#, fuzzy
-msgid "Delete Document"
-msgstr "Excluir folha"
 
 #: data/resources/ui/sheet_editor.ui:16
 msgid "File changed on disk"
@@ -392,3 +382,13 @@ msgstr "Atalhos de teclado"
 #: data/resources/ui/window.ui:162
 msgid "About Scratchmark"
 msgstr "Sobre o Scratchmark"
+
+#~ msgid "Rename Folder"
+#~ msgstr "Renomear pasta"
+
+#~ msgid "Delete Folder"
+#~ msgstr "Excluir pasta"
+
+#, fuzzy
+#~ msgid "Rename Document"
+#~ msgstr "Renomear folha"

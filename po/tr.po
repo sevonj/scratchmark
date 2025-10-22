@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 15:11+0300\n"
+"POT-Creation-Date: 2025-10-22 15:29+0300\n"
 "PO-Revision-Date: 2025-10-08 16:08+0300\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
@@ -154,6 +154,8 @@ msgid "Create"
 msgstr "Oluştur"
 
 #: data/resources/ui/item_rename_popover.ui:15
+#: data/resources/ui/library_folder_context_menu.ui:18
+#: data/resources/ui/library_sheet_context_menu.ui:10
 msgid "Rename"
 msgstr "Yeniden Adlandır"
 
@@ -185,36 +187,24 @@ msgstr "Yeni Klasör"
 msgid "Show in File Manager"
 msgstr "Dosya Yöneticisinde Göster"
 
-#: data/resources/ui/library_folder_context_menu.ui:18
-msgid "Rename Folder"
-msgstr "Klasörü Yeniden Adlandır"
-
 #: data/resources/ui/library_folder_context_menu.ui:22
 #: data/resources/ui/library_sheet_context_menu.ui:18
 msgid "Move to Trash"
 msgstr "Çöpe Taşı"
 
 #: data/resources/ui/library_folder_context_menu.ui:26
-msgid "Delete Folder"
-msgstr "Klasörü Sil"
+#: data/resources/ui/library_sheet_context_menu.ui:22
+#, fuzzy
+msgid "Delete Permanently"
+msgstr "Sayfayı Sil"
 
 #: data/resources/ui/library_project_context_menu.ui:18
 msgid "Close Project"
 msgstr "Projeyi Kapat"
 
-#: data/resources/ui/library_sheet_context_menu.ui:10
-#, fuzzy
-msgid "Rename Document"
-msgstr "Sayfayı Yeniden Adlandır"
-
 #: data/resources/ui/library_sheet_context_menu.ui:14
 msgid "Duplicate"
 msgstr "Çoğalt"
-
-#: data/resources/ui/library_sheet_context_menu.ui:22
-#, fuzzy
-msgid "Delete Document"
-msgstr "Sayfayı Sil"
 
 #: data/resources/ui/sheet_editor.ui:16
 msgid "File changed on disk"
@@ -392,3 +382,13 @@ msgstr "Klavye Kısayolları"
 #: data/resources/ui/window.ui:162
 msgid "About Scratchmark"
 msgstr "Scratchmark Hakkında"
+
+#~ msgid "Rename Folder"
+#~ msgstr "Klasörü Yeniden Adlandır"
+
+#~ msgid "Delete Folder"
+#~ msgstr "Klasörü Sil"
+
+#, fuzzy
+#~ msgid "Rename Document"
+#~ msgstr "Sayfayı Yeniden Adlandır"

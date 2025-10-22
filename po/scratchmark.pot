@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 15:11+0300\n"
+"POT-Creation-Date: 2025-10-22 15:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -147,6 +147,8 @@ msgid "Create"
 msgstr ""
 
 #: data/resources/ui/item_rename_popover.ui:15
+#: data/resources/ui/library_folder_context_menu.ui:18
+#: data/resources/ui/library_sheet_context_menu.ui:10
 msgid "Rename"
 msgstr ""
 
@@ -177,33 +179,22 @@ msgstr ""
 msgid "Show in File Manager"
 msgstr ""
 
-#: data/resources/ui/library_folder_context_menu.ui:18
-msgid "Rename Folder"
-msgstr ""
-
 #: data/resources/ui/library_folder_context_menu.ui:22
 #: data/resources/ui/library_sheet_context_menu.ui:18
 msgid "Move to Trash"
 msgstr ""
 
 #: data/resources/ui/library_folder_context_menu.ui:26
-msgid "Delete Folder"
+#: data/resources/ui/library_sheet_context_menu.ui:22
+msgid "Delete Permanently"
 msgstr ""
 
 #: data/resources/ui/library_project_context_menu.ui:18
 msgid "Close Project"
 msgstr ""
 
-#: data/resources/ui/library_sheet_context_menu.ui:10
-msgid "Rename Document"
-msgstr ""
-
 #: data/resources/ui/library_sheet_context_menu.ui:14
 msgid "Duplicate"
-msgstr ""
-
-#: data/resources/ui/library_sheet_context_menu.ui:22
-msgid "Delete Document"
 msgstr ""
 
 #: data/resources/ui/sheet_editor.ui:16
