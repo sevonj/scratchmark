@@ -1,0 +1,397 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the scratchmark package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Filipe Motta <luizfilipemotta@gmail.com>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: scratchmark\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-17 14:22+0300\n"
+"PO-Revision-Date: 2025-10-22 01:07-0300\n"
+"Last-Translator: Filipe Motta <luizfilipemotta@gmail.com>\n"
+"Language-Team: Brazilian Portuguese\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Gtranslator 49.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: data/org.scratchmark.Scratchmark.desktop.in:3
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
+msgid "Scratchmark"
+msgstr "Scratchmark"
+
+#: data/org.scratchmark.Scratchmark.desktop.in:4
+msgid "Markdown editor"
+msgstr "Editor Markdown"
+
+#: data/org.scratchmark.Scratchmark.desktop.in:10
+msgid "Scratchmark Markdown editor"
+msgstr "Editor Markdown Scratchmark"
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
+msgid "Organized markdown editor"
+msgstr "Editor Markdown organizado"
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:12
+msgid "Sevonj"
+msgstr "Sevonj"
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
+msgid "Write without distractions and keep your documents organized."
+msgstr "Escreva sem distrações e mantenha seus documentos organizados."
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:17
+msgid "Editing features are designed to stay out of sight when not needed."
+msgstr ""
+"Os recursos de edição são planejados para se manterem fora de vista quando "
+"não necessários."
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:18
+msgid ""
+"Documents are organized into folders, which may contain a writing project, "
+"personal notes, or maybe a recipe book."
+msgstr ""
+"Os documentos são organizados em pastas, as quais podem conter um projeto de "
+"escrita, notas pessoais, ou talvez um livro de receitas."
+
+#: data/org.scratchmark.Scratchmark.gschema.xml:9
+msgid "Remember expanded folders. Entries are folder paths."
+msgstr "Lembrar pastas expandidas. As entradas são caminhos para pastas."
+
+#: data/org.scratchmark.Scratchmark.gschema.xml:16
+msgid "Remember whether the sidebar was left open."
+msgstr "Lembrar se a barra lateral foi deixada aberta."
+
+#: data/resources/ui/editor_format_bar.ui:16
+msgid "Bold (Ctrl+B)"
+msgstr "Negrito (Ctrl+B)"
+
+#: data/resources/ui/editor_format_bar.ui:23
+msgid "Italic (Ctrl+I)"
+msgstr "Itálico (Ctrl+I)"
+
+#: data/resources/ui/editor_format_bar.ui:37
+msgid "Strikethrough"
+msgstr "Tachado"
+
+#: data/resources/ui/editor_format_bar.ui:49
+msgid "Heading 1"
+msgstr "Cabeçalho 1"
+
+#: data/resources/ui/editor_format_bar.ui:57
+msgid "Heading 2"
+msgstr "Cabeçalho 2"
+
+#: data/resources/ui/editor_format_bar.ui:116
+msgid "Code"
+msgstr "Código"
+
+#: data/resources/ui/editor_placeholder.ui:10
+msgid "Nothing Open"
+msgstr "Nada aberto"
+
+#: data/resources/ui/editor_placeholder.ui:11
+msgid "Create a new sheet or open an existing one from the sidebar"
+msgstr "Crie uma nova folha ou abra uma existente a partir da barra lateral"
+
+#: data/resources/ui/editor_search_bar.ui:26
+msgid "Search"
+msgstr "Pesquisar"
+
+#: data/resources/ui/editor_search_bar.ui:39
+#: data/resources/ui/editor_search_bar.ui:136
+msgid "Replace"
+msgstr "Substituir"
+
+#: data/resources/ui/editor_search_bar.ui:63
+msgid "Match Case"
+msgstr "Diferenciar maiúsculas e minúsculas"
+
+#: data/resources/ui/editor_search_bar.ui:69
+msgid "Whole Words"
+msgstr "Palavras inteiras"
+
+#: data/resources/ui/editor_search_bar.ui:75
+msgid "Use Regex"
+msgstr "Usar expressão regular"
+
+#: data/resources/ui/editor_search_bar.ui:85
+msgid "?"
+msgstr "?"
+
+#: data/resources/ui/editor_search_bar.ui:98
+msgid "Previous Match (Shift + Return)"
+msgstr "Correspondência anterior (Shift + Enter)"
+
+#: data/resources/ui/editor_search_bar.ui:105
+msgid "Next Match (Return)"
+msgstr "Próxima correspondência (Enter)"
+
+#: data/resources/ui/editor_search_bar.ui:113
+msgid "Search and Replace (Ctrl+F)"
+msgstr "Pesquisar e substituir (Ctrl + F)"
+
+#: data/resources/ui/editor_search_bar.ui:119
+msgid "Close Search"
+msgstr "Fechar pesquisa"
+
+#: data/resources/ui/editor_search_bar.ui:137
+msgid "Replace (Return)"
+msgstr "Substituir (Enter)"
+
+#: data/resources/ui/editor_search_bar.ui:143
+msgid "Replace All"
+msgstr "Substituir tudo"
+
+#: data/resources/ui/editor_search_bar.ui:144
+msgid "Replace All (Shift + Return)"
+msgstr "Substituir tudo (Shift + Enter)"
+
+#: data/resources/ui/item_create_popover.ui:10
+#: data/resources/ui/item_rename_popover.ui:10
+msgid "Name..."
+msgstr "Nome..."
+
+#: data/resources/ui/item_create_popover.ui:15
+msgid "Create"
+msgstr "Criar"
+
+#: data/resources/ui/item_rename_popover.ui:15
+msgid "Rename"
+msgstr "Renomear"
+
+#: data/resources/ui/library_browser.ui:38 data/resources/ui/window.ui:19
+msgid "Library"
+msgstr "Biblioteca"
+
+#: data/resources/ui/library_browser.ui:53
+msgid "Select Folder"
+msgstr "Escolher pasta"
+
+#: data/resources/ui/library_drafts_context_menu.ui:7
+#: data/resources/ui/library_folder_context_menu.ui:7
+#: data/resources/ui/library_project_context_menu.ui:7
+msgid "New Sheet"
+msgstr "Nova folha"
+
+#: data/resources/ui/library_drafts_context_menu.ui:11
+#: data/resources/ui/library_folder_context_menu.ui:11
+#: data/resources/ui/library_project_context_menu.ui:11
+msgid "New Folder"
+msgstr "Nova pasta"
+
+#: data/resources/ui/library_drafts_context_menu.ui:15
+#: data/resources/ui/library_folder_context_menu.ui:15
+#: data/resources/ui/library_project_context_menu.ui:15
+#: data/resources/ui/library_sheet_context_menu.ui:7
+msgid "Show in File Manager"
+msgstr "Mostrar no gerenciador de arquivos"
+
+#: data/resources/ui/library_folder_context_menu.ui:19
+msgid "Rename Folder"
+msgstr "Renomear pasta"
+
+#: data/resources/ui/library_folder_context_menu.ui:23
+#: data/resources/ui/library_sheet_context_menu.ui:19
+msgid "Move to Trash"
+msgstr "Mover para a Lixeira"
+
+#: data/resources/ui/library_folder_context_menu.ui:27
+msgid "Delete Folder"
+msgstr "Excluir pasta"
+
+#: data/resources/ui/library_project_context_menu.ui:19
+msgid "Close Project"
+msgstr "Fechar projeto"
+
+#: data/resources/ui/library_sheet_context_menu.ui:11
+msgid "Rename Sheet"
+msgstr "Renomear folha"
+
+#: data/resources/ui/library_sheet_context_menu.ui:15
+msgid "Duplicate"
+msgstr "Duplicar"
+
+#: data/resources/ui/library_sheet_context_menu.ui:23
+msgid "Delete Sheet"
+msgstr "Excluir folha"
+
+#: data/resources/ui/sheet_editor.ui:16
+msgid "File changed on disk"
+msgstr "Arquivo alterado no disco"
+
+#: data/resources/ui/sheet_editor.ui:17
+msgid "Resolve"
+msgstr "Resolver"
+
+#: data/resources/ui/sheet_stats.ui:18
+msgid "Statistics"
+msgstr "Estatísticas"
+
+#: data/resources/ui/sheet_stats.ui:32
+msgid "Characters"
+msgstr "Caracteres"
+
+#: data/resources/ui/sheet_stats.ui:45 data/resources/ui/sheet_stats.ui:73
+#: data/resources/ui/sheet_stats.ui:101 data/resources/ui/sheet_stats.ui:129
+msgid "N/A"
+msgstr "Nenhum"
+
+#: data/resources/ui/sheet_stats.ui:60
+msgid "Excluding Spaces"
+msgstr "Desconsiderando espaços"
+
+#: data/resources/ui/sheet_stats.ui:88
+msgid "Words"
+msgstr "Palavras"
+
+#: data/resources/ui/sheet_stats.ui:116
+msgid "Lines"
+msgstr "Linhas"
+
+#: data/resources/ui/shortcuts.ui:11
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Geral"
+
+#: data/resources/ui/shortcuts.ui:14
+msgctxt "shortcut window"
+msgid "Toggle Fullscreen"
+msgstr "Ativar/Desativar tela cheia"
+
+#: data/resources/ui/shortcuts.ui:20
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Preferências"
+
+#: data/resources/ui/shortcuts.ui:26
+msgctxt "shortcut window"
+msgid "Show Shortcuts"
+msgstr "Mostrar atalhos"
+
+#: data/resources/ui/shortcuts.ui:34
+msgctxt "shortcut window"
+msgid "Document"
+msgstr "Documento"
+
+#: data/resources/ui/shortcuts.ui:37
+msgctxt "shortcut window"
+msgid "New Sheet"
+msgstr "Nova folha"
+
+#: data/resources/ui/shortcuts.ui:43
+msgctxt "shortcut window"
+msgid "Add Project"
+msgstr "Adicionar projeto"
+
+#: data/resources/ui/shortcuts.ui:49
+msgctxt "shortcut window"
+msgid "Save Sheet"
+msgstr "Salvar folha"
+
+#: data/resources/ui/shortcuts.ui:55
+msgctxt "shortcut window"
+msgid "Rename Sheet"
+msgstr "Renomear folha"
+
+#: data/resources/ui/shortcuts.ui:61
+msgctxt "shortcut window"
+msgid "Close Sheet"
+msgstr "Fechar folha"
+
+#: data/resources/ui/shortcuts.ui:69
+msgctxt "shortcut window"
+msgid "Editor"
+msgstr "Editor"
+
+#: data/resources/ui/shortcuts.ui:72
+msgctxt "shortcut window"
+msgid "Search Text"
+msgstr "Pesquisar no texto"
+
+#: data/resources/ui/shortcuts.ui:78
+msgctxt "shortcut window"
+msgid "Search and Replace Text"
+msgstr "Pesquisar e substituir texto"
+
+#: data/resources/ui/shortcuts.ui:86
+msgctxt "shortcut window"
+msgid "Library"
+msgstr "Biblioteca"
+
+#: data/resources/ui/shortcuts.ui:89
+msgctxt "shortcut window"
+msgid "Manual Refresh"
+msgstr "Atualização manual"
+
+#: data/resources/ui/window.ui:28
+msgid "Create Folder"
+msgstr "Criar pasta"
+
+#: data/resources/ui/window.ui:54
+msgid "Toggle Sidebar (F9)"
+msgstr "Ativar/Desativar barra lateral"
+
+#: data/resources/ui/window.ui:60
+msgid "New Sheet (Ctrl+N)"
+msgstr "Nova Folha (Ctrl + N)"
+
+#: data/resources/ui/window.ui:66 data/resources/ui/window.ui:147
+msgid "Exit Fullscreen"
+msgstr "Sair da tela cheia"
+
+#: data/resources/ui/window.ui:75
+msgid "Menu"
+msgstr "Menu"
+
+#: data/resources/ui/window.ui:82
+msgid "Document Info"
+msgstr "Informações do documento"
+
+#: data/resources/ui/window.ui:88
+msgid "Formatting Toolbar"
+msgstr "Barra de formatação"
+
+#: data/resources/ui/window.ui:112
+msgid "New"
+msgstr "Novo"
+
+#: data/resources/ui/window.ui:116
+msgid "Add Project"
+msgstr "Adicionar projeto"
+
+#: data/resources/ui/window.ui:122
+msgid "Save"
+msgstr "Salvar"
+
+#: data/resources/ui/window.ui:126
+msgid "Close"
+msgstr "Fechar"
+
+#: data/resources/ui/window.ui:132
+msgid "Search Text"
+msgstr "Pesquisar no texto"
+
+#: data/resources/ui/window.ui:136
+msgid "Search and Replace"
+msgstr "Pesquisar e substituir"
+
+#: data/resources/ui/window.ui:142
+msgid "Enter Fullscreen"
+msgstr "Entrar em tela cheia"
+
+#: data/resources/ui/window.ui:154
+msgid "Preferences"
+msgstr "Preferências"
+
+#: data/resources/ui/window.ui:158
+msgid "Keyboard Shortcuts"
+msgstr "Atalhos de teclado"
+
+#: data/resources/ui/window.ui:162
+msgid "About Scratchmark"
+msgstr "Sobre o Scratchmark"
