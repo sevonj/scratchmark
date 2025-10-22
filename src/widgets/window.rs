@@ -685,9 +685,9 @@ mod imp {
         fn load_state(&self) {
             let settings = self.settings();
 
-            let open_sheet_path = settings.string("open-sheet-path");
-            if !open_sheet_path.is_empty() {
-                let open_sheet_path = PathBuf::from(open_sheet_path);
+            let open_document_path = settings.string("open-document-path");
+            if !open_document_path.is_empty() {
+                let open_sheet_path = PathBuf::from(open_document_path);
                 if !open_sheet_path.exists() {
                     self.toast("Opened sheet has been moved or deleted.");
                 }
@@ -715,13 +715,13 @@ mod imp {
         fn save_state(&self) -> Result<(), glib::BoolError> {
             let settings = self.settings();
 
-            let open_sheet_path = self
+            let open_document_path = self
                 .sheet_editor
                 .borrow()
                 .as_ref()
                 .map(|e| e.path())
                 .unwrap_or_default();
-            settings.set_string("open-sheet-path", open_sheet_path.to_str().unwrap())?;
+            settings.set_string("open-document-path", open_document_path.to_str().unwrap())?;
 
             settings.set_boolean("library-show-sidebar", self.sidebar_uncollapsed_open.get())?;
             settings.set_boolean("editor-show-formatbar", self.format_bar.is_visible())?;
