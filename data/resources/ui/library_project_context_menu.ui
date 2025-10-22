@@ -4,7 +4,7 @@
     <section>
       <item>
         <attribute name="label" translatable="yes">New Document</attribute>
-        <attribute name="action">folder.create-sheet</attribute>
+        <attribute name="action">folder.create-document</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">New Folder</attribute>

@@ -4,23 +4,23 @@
     <section>
       <item>
         <attribute name="label" translatable="yes">Show in File Manager</attribute>
-        <attribute name="action">sheet.filemanager</attribute>
+        <attribute name="action">document.filemanager</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Rename Document</attribute>
-        <attribute name="action">sheet.rename-begin</attribute>
+        <attribute name="action">document.rename-begin</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Duplicate</attribute>
-        <attribute name="action">sheet.duplicate</attribute>
+        <attribute name="action">document.duplicate</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Move to Trash</attribute>
-        <attribute name="action">sheet.trash</attribute>
+        <attribute name="action">document.trash</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Delete Document</attribute>
-        <attribute name="action">sheet.delete</attribute>
+        <attribute name="action">document.delete</attribute>
       </item>
     </section>
   </menu>

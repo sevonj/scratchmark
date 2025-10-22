@@ -343,7 +343,7 @@ mod imp {
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("folder", Some(&actions));
 
-            let action = gio::SimpleAction::new("create-sheet", None);
+            let action = gio::SimpleAction::new("create-document", None);
             action.connect_activate(clone!(
                 #[weak]
                 obj,

@@ -76,7 +76,7 @@ mod imp {
             ));
 
             let actions = SimpleActionGroup::new();
-            obj.insert_action_group("sheet", Some(&actions));
+            obj.insert_action_group("document", Some(&actions));
 
             let action = gio::SimpleAction::new("filemanager", None);
             action.connect_activate(clone!(
