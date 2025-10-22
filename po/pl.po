@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 15:29+0300\n"
+"POT-Creation-Date: 2025-10-22 15:36+0300\n"
 "PO-Revision-Date: 2025-10-10 16:32+0200\n"
 "Last-Translator: Łukasz Horodecki <dakilla@gmail.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -177,8 +177,10 @@ msgstr "Nowy arkusz"
 #: data/resources/ui/library_drafts_context_menu.ui:10
 #: data/resources/ui/library_folder_context_menu.ui:10
 #: data/resources/ui/library_project_context_menu.ui:10
-msgid "New Folder"
-msgstr "Nowy katalog"
+#: data/resources/ui/window.ui:28
+#, fuzzy
+msgid "Create Subfolder"
+msgstr "Utwórz katalog"
 
 #: data/resources/ui/library_drafts_context_menu.ui:14
 #: data/resources/ui/library_folder_context_menu.ui:14
@@ -318,10 +320,6 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Ręczne odświeżenie"
 
-#: data/resources/ui/window.ui:28
-msgid "Create Folder"
-msgstr "Utwórz katalog"
-
 #: data/resources/ui/window.ui:54
 msgid "Toggle Sidebar (F9)"
 msgstr "Przełącz panel boczny (F9)"
@@ -382,6 +380,9 @@ msgstr "Skróty klawiszowe"
 #: data/resources/ui/window.ui:162
 msgid "About Scratchmark"
 msgstr "O programie"
+
+#~ msgid "New Folder"
+#~ msgstr "Nowy katalog"
 
 #~ msgid "Rename Folder"
 #~ msgstr "Zmień nazwę katalogu"

@@ -7,7 +7,7 @@
         <attribute name="action">folder.create-document</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">New Folder</attribute>
+        <attribute name="label" translatable="yes">Create Subfolder</attribute>
         <attribute name="action">folder.create-folder</attribute>
       </item>
       <item>

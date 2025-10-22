@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 15:29+0300\n"
+"POT-Creation-Date: 2025-10-22 15:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,7 +169,8 @@ msgstr ""
 #: data/resources/ui/library_drafts_context_menu.ui:10
 #: data/resources/ui/library_folder_context_menu.ui:10
 #: data/resources/ui/library_project_context_menu.ui:10
-msgid "New Folder"
+#: data/resources/ui/window.ui:28
+msgid "Create Subfolder"
 msgstr ""
 
 #: data/resources/ui/library_drafts_context_menu.ui:14
@@ -303,10 +304,6 @@ msgstr ""
 #: data/resources/ui/shortcuts.ui:89
 msgctxt "shortcut window"
 msgid "Manual Refresh"
-msgstr ""
-
-#: data/resources/ui/window.ui:28
-msgid "Create Folder"
 msgstr ""
 
 #: data/resources/ui/window.ui:54

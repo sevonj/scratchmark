@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 15:29+0300\n"
+"POT-Creation-Date: 2025-10-22 15:36+0300\n"
 "PO-Revision-Date: 2025-10-17 16:46+0300\n"
 "Last-Translator: Sevonj <>\n"
 "Language-Team: Finnish\n"
@@ -171,8 +171,9 @@ msgstr "Uusi tiedosto"
 #: data/resources/ui/library_drafts_context_menu.ui:10
 #: data/resources/ui/library_folder_context_menu.ui:10
 #: data/resources/ui/library_project_context_menu.ui:10
-msgid "New Folder"
-msgstr "Uusi kansio"
+#: data/resources/ui/window.ui:28
+msgid "Create Subfolder"
+msgstr "Luo alikansio"
 
 #: data/resources/ui/library_drafts_context_menu.ui:14
 #: data/resources/ui/library_folder_context_menu.ui:14
@@ -306,10 +307,6 @@ msgstr "Kirjasto"
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Päivitä kirjasto"
-
-#: data/resources/ui/window.ui:28
-msgid "Create Folder"
-msgstr "Luo kansio"
 
 #: data/resources/ui/window.ui:54
 msgid "Toggle Sidebar (F9)"

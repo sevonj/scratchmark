@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 15:29+0300\n"
+"POT-Creation-Date: 2025-10-22 15:36+0300\n"
 "PO-Revision-Date: 2025-10-08 16:08+0300\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
@@ -177,8 +177,10 @@ msgstr "Yeni Sayfa"
 #: data/resources/ui/library_drafts_context_menu.ui:10
 #: data/resources/ui/library_folder_context_menu.ui:10
 #: data/resources/ui/library_project_context_menu.ui:10
-msgid "New Folder"
-msgstr "Yeni Klasör"
+#: data/resources/ui/window.ui:28
+#, fuzzy
+msgid "Create Subfolder"
+msgstr "Klasör Oluştur"
 
 #: data/resources/ui/library_drafts_context_menu.ui:14
 #: data/resources/ui/library_folder_context_menu.ui:14
@@ -318,10 +320,6 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Elle Yenile"
 
-#: data/resources/ui/window.ui:28
-msgid "Create Folder"
-msgstr "Klasör Oluştur"
-
 #: data/resources/ui/window.ui:54
 msgid "Toggle Sidebar (F9)"
 msgstr "Kenar Çubuğunu Aç/Kapat (F9)"
@@ -382,6 +380,9 @@ msgstr "Klavye Kısayolları"
 #: data/resources/ui/window.ui:162
 msgid "About Scratchmark"
 msgstr "Scratchmark Hakkında"
+
+#~ msgid "New Folder"
+#~ msgstr "Yeni Klasör"
 
 #~ msgid "Rename Folder"
 #~ msgstr "Klasörü Yeniden Adlandır"
