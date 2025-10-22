@@ -70,7 +70,7 @@ mod imp {
         #[template_child]
         new_folder_button: TemplateChild<MenuButton>,
         #[template_child]
-        new_sheet_button: TemplateChild<MenuButton>,
+        new_document_button: TemplateChild<MenuButton>,
         #[template_child]
         unfullscreen_button: TemplateChild<Button>,
 
@@ -393,7 +393,8 @@ mod imp {
             );
 
             let new_sheet_popover = ItemCreatePopover::for_sheet();
-            self.new_sheet_button.set_popover(Some(&new_sheet_popover));
+            self.new_document_button
+                .set_popover(Some(&new_sheet_popover));
             new_sheet_popover.connect_closure(
                 "committed",
                 false,
@@ -502,7 +503,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_, _| {
-                    this.new_sheet_button.popup();
+                    this.new_document_button.popup();
                 }
             ));
             obj.add_action(&action);

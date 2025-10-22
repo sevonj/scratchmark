@@ -45,7 +45,7 @@ mod imp {
         #[template_child]
         pub(super) subdirs_vbox: TemplateChild<gtk::Box>,
         #[template_child]
-        pub(super) sheets_vbox: TemplateChild<gtk::Box>,
+        pub(super) documents_vbox: TemplateChild<gtk::Box>,
         #[template_child]
         pub(super) title_row: TemplateChild<gtk::Box>,
 
@@ -175,7 +175,7 @@ mod imp {
                 for i in (0..sheets.len() - 1).rev() {
                     let child = &sheets[i + 1];
                     let sibling = Some(&sheets[i]);
-                    self.sheets_vbox.reorder_child_after(child, sibling);
+                    self.documents_vbox.reorder_child_after(child, sibling);
                 }
             }
 
@@ -208,7 +208,7 @@ mod imp {
         }
 
         pub(super) fn add_sheet(&self, sheet: LibrarySheet) {
-            self.sheets_vbox.append(&sheet);
+            self.documents_vbox.append(&sheet);
             self.sheets.borrow_mut().push(sheet);
         }
 
@@ -545,7 +545,7 @@ impl LibraryFolder {
     }
 
     pub fn remove_sheet(&self, sheet: &LibrarySheet) {
-        self.imp().sheets_vbox.remove(sheet);
+        self.imp().documents_vbox.remove(sheet);
     }
 
     pub fn rename(&self, path: PathBuf) {

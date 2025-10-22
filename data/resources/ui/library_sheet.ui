@@ -11,7 +11,7 @@
                         <property name="orientation">0</property>
                         <property name="spacing">4</property>
                         <child>
-                            <object class="GtkImage" id="sheet_icon">
+                            <object class="GtkImage">
                                 <style>
                                     <class name="dim-label" />
                                 </style>
@@ -20,7 +20,7 @@
                             </object>
                         </child>
                         <child>
-                            <object class="GtkLabel" id="sheet_name_label">
+                            <object class="GtkLabel" id="document_name_label">
                                 <property name="label" translatable="no">document-name-here</property>
                                 <property name="xalign">0</property>
                                 <property name="ellipsize">PANGO_ELLIPSIZE_END</property>

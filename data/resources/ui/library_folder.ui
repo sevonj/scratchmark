@@ -61,7 +61,7 @@
                             </object>
                         </child>
                         <child>
-                            <object class="GtkBox" id="sheets_vbox">
+                            <object class="GtkBox" id="documents_vbox">
                                 <property name="orientation">1</property>
                                 <property name="spacing">2</property>
                             </object>

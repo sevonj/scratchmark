@@ -47,8 +47,8 @@ mod imp {
         pub(super) source_view: TemplateChild<View>,
         pub(super) source_view_css_provider: CssProvider,
         #[template_child]
-        pub(super) sheet_stats: TemplateChild<SheetStats>,
-        pub(super) sheet_stats_data: Cell<SheetStatsData>,
+        pub(super) document_stats: TemplateChild<SheetStats>,
+        pub(super) document_stats_data: Cell<SheetStatsData>,
 
         #[template_child]
         pub(super) search_bar: TemplateChild<EditorSearchBar>,
@@ -630,14 +630,14 @@ impl SheetEditor {
     }
 
     pub fn sheet_stats(&self) -> SheetStatsData {
-        self.imp().sheet_stats_data.get()
+        self.imp().document_stats_data.get()
     }
 
     fn refresh_stats(&self, buffer: &Buffer) {
         let imp = self.imp();
         let stats = SheetStatsData::from_buffer(buffer);
-        imp.sheet_stats.set_stats(&stats);
-        imp.sheet_stats_data.replace(stats);
+        imp.document_stats.set_stats(&stats);
+        imp.document_stats_data.replace(stats);
         self.emit_by_name::<()>("stats-changed", &[]);
     }
 
