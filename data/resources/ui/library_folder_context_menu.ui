@@ -8,7 +8,7 @@
       </item>
       <item>
         <attribute name="label" translatable="yes">Create Subfolder</attribute>
-        <attribute name="action">folder.create-folder</attribute>
+        <attribute name="action">folder.create-subfolder</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Show in File Manager</attribute>

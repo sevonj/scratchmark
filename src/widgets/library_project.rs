@@ -341,7 +341,7 @@ mod imp {
             self.obj().emit_by_name::<()>("folder-added", &[&folder]);
 
             folder.connect_closure(
-                "folder-created",
+                "subfolder-created",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]

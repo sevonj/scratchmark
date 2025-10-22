@@ -108,7 +108,7 @@ mod imp {
                         .param_types([super::LibraryFolder::static_type()])
                         .build(),
                     Signal::builder("close-project-requested").build(),
-                    Signal::builder("folder-created")
+                    Signal::builder("subfolder-created")
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("document-created")
@@ -360,7 +360,7 @@ mod imp {
             ));
             actions.add_action(&action);
 
-            let action = gio::SimpleAction::new("create-folder", None);
+            let action = gio::SimpleAction::new("create-subfolder", None);
             action.connect_activate(clone!(
                 #[weak]
                 obj,
@@ -370,7 +370,7 @@ mod imp {
                         obj.emit_by_name::<()>("notify-err", &[&e.to_string()]);
                         return;
                     }
-                    obj.emit_by_name::<()>("folder-created", &[&path]);
+                    obj.emit_by_name::<()>("subfolder-created", &[&path]);
                     obj.imp().sort_children();
                     obj.imp().set_expanded(true);
                 }
