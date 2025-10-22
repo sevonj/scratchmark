@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-17 14:22+0300\n"
+"POT-Creation-Date: 2025-10-22 14:34+0300\n"
 "PO-Revision-Date: 2025-10-08 16:08+0300\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
@@ -57,14 +57,6 @@ msgid ""
 msgstr ""
 "Belgeler, yazı projesi, kişisel notlar ya da belki bir yemek tarifi kitabı "
 "içerebilen klasörler halinde düzenlenir."
-
-#: data/org.scratchmark.Scratchmark.gschema.xml:9
-msgid "Remember expanded folders. Entries are folder paths."
-msgstr "Genişletilmiş klasörleri hatırla. Girişler klasör yollarıdır."
-
-#: data/org.scratchmark.Scratchmark.gschema.xml:16
-msgid "Remember whether the sidebar was left open."
-msgstr "Kenar çubuğunun açık bırakılma durumunu hatırlar."
 
 #: data/resources/ui/editor_format_bar.ui:16
 msgid "Bold (Ctrl+B)"
@@ -168,9 +160,9 @@ msgstr "Yeniden Adlandır"
 msgid "Library"
 msgstr "Kitaplık"
 
-#: data/resources/ui/library_browser.ui:53
-msgid "Select Folder"
-msgstr "Klasör Seç"
+#: data/resources/ui/library_browser.ui:53 data/resources/ui/window.ui:116
+msgid "Add Project"
+msgstr ""
 
 #: data/resources/ui/library_drafts_context_menu.ui:7
 #: data/resources/ui/library_folder_context_menu.ui:7
@@ -359,10 +351,6 @@ msgstr "Biçimlendirme Araç Çubuğu"
 #: data/resources/ui/window.ui:112
 msgid "New"
 msgstr "Yeni"
-
-#: data/resources/ui/window.ui:116
-msgid "Add Project"
-msgstr ""
 
 #: data/resources/ui/window.ui:122
 msgid "Save"

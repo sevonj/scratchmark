@@ -6,14 +6,12 @@
     </key>
     <key name="library-expanded-folders" type="as">
       <default>[]</default>
-      <summary>Remember expanded folders. Entries are folder paths.</summary>
     </key>
     <key name="library-project-paths" type="as">
       <default>[]</default>
     </key>
     <key name="library-show-sidebar" type="b">
       <default>true</default>
-      <summary>Remember whether the sidebar was left open.</summary>
     </key>
     <key name="editor-show-sidebar" type="b">
       <default>false</default>
