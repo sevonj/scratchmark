@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 14:34+0300\n"
+"POT-Creation-Date: 2025-10-22 15:11+0300\n"
 "PO-Revision-Date: 2025-10-10 16:32+0200\n"
 "Last-Translator: Łukasz Horodecki <dakilla@gmail.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -87,7 +87,8 @@ msgid "Nothing Open"
 msgstr "Nic nie jest otwarte"
 
 #: data/resources/ui/editor_placeholder.ui:11
-msgid "Create a new sheet or open an existing one from the sidebar"
+#, fuzzy
+msgid "Create a new document or open an existing one from the sidebar"
 msgstr "Utwórz nowy arkusz lub otwórz istniejący w panelu bocznym"
 
 #: data/resources/ui/editor_search_bar.ui:26
@@ -164,52 +165,55 @@ msgstr "Biblioteka"
 msgid "Add Project"
 msgstr ""
 
-#: data/resources/ui/library_drafts_context_menu.ui:7
-#: data/resources/ui/library_folder_context_menu.ui:7
-#: data/resources/ui/library_project_context_menu.ui:7
-msgid "New Sheet"
+#: data/resources/ui/library_drafts_context_menu.ui:6
+#: data/resources/ui/library_folder_context_menu.ui:6
+#: data/resources/ui/library_project_context_menu.ui:6
+#, fuzzy
+msgid "New Document"
 msgstr "Nowy arkusz"
 
-#: data/resources/ui/library_drafts_context_menu.ui:11
-#: data/resources/ui/library_folder_context_menu.ui:11
-#: data/resources/ui/library_project_context_menu.ui:11
+#: data/resources/ui/library_drafts_context_menu.ui:10
+#: data/resources/ui/library_folder_context_menu.ui:10
+#: data/resources/ui/library_project_context_menu.ui:10
 msgid "New Folder"
 msgstr "Nowy katalog"
 
-#: data/resources/ui/library_drafts_context_menu.ui:15
-#: data/resources/ui/library_folder_context_menu.ui:15
-#: data/resources/ui/library_project_context_menu.ui:15
-#: data/resources/ui/library_sheet_context_menu.ui:7
+#: data/resources/ui/library_drafts_context_menu.ui:14
+#: data/resources/ui/library_folder_context_menu.ui:14
+#: data/resources/ui/library_project_context_menu.ui:14
+#: data/resources/ui/library_sheet_context_menu.ui:6
 msgid "Show in File Manager"
 msgstr "Pokaż w menedżerze plików"
 
-#: data/resources/ui/library_folder_context_menu.ui:19
+#: data/resources/ui/library_folder_context_menu.ui:18
 msgid "Rename Folder"
 msgstr "Zmień nazwę katalogu"
 
-#: data/resources/ui/library_folder_context_menu.ui:23
-#: data/resources/ui/library_sheet_context_menu.ui:19
+#: data/resources/ui/library_folder_context_menu.ui:22
+#: data/resources/ui/library_sheet_context_menu.ui:18
 msgid "Move to Trash"
 msgstr "Przenieś do śmieci"
 
-#: data/resources/ui/library_folder_context_menu.ui:27
+#: data/resources/ui/library_folder_context_menu.ui:26
 msgid "Delete Folder"
 msgstr "Usuń katalog"
 
-#: data/resources/ui/library_project_context_menu.ui:19
+#: data/resources/ui/library_project_context_menu.ui:18
 msgid "Close Project"
 msgstr "Zamknij projekt"
 
-#: data/resources/ui/library_sheet_context_menu.ui:11
-msgid "Rename Sheet"
+#: data/resources/ui/library_sheet_context_menu.ui:10
+#, fuzzy
+msgid "Rename Document"
 msgstr "Zmień nazwę akrusza"
 
-#: data/resources/ui/library_sheet_context_menu.ui:15
+#: data/resources/ui/library_sheet_context_menu.ui:14
 msgid "Duplicate"
 msgstr "Duplikuj"
 
-#: data/resources/ui/library_sheet_context_menu.ui:23
-msgid "Delete Sheet"
+#: data/resources/ui/library_sheet_context_menu.ui:22
+#, fuzzy
+msgid "Delete Document"
 msgstr "Usuń arkusz"
 
 #: data/resources/ui/sheet_editor.ui:16
@@ -271,8 +275,9 @@ msgid "Document"
 msgstr "Dokument"
 
 #: data/resources/ui/shortcuts.ui:37
+#, fuzzy
 msgctxt "shortcut window"
-msgid "New Sheet"
+msgid "New Document"
 msgstr "Nowy arkusz"
 
 #: data/resources/ui/shortcuts.ui:43
@@ -281,18 +286,21 @@ msgid "Add Project"
 msgstr ""
 
 #: data/resources/ui/shortcuts.ui:49
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Save Sheet"
+msgid "Save Document"
 msgstr "Zapisz arkusz"
 
 #: data/resources/ui/shortcuts.ui:55
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Rename Sheet"
+msgid "Rename Document"
 msgstr "Zmień nazwę arkusza"
 
 #: data/resources/ui/shortcuts.ui:61
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Close Sheet"
+msgid "Close Document"
 msgstr "Zamknij arkusz"
 
 #: data/resources/ui/shortcuts.ui:69
@@ -329,7 +337,8 @@ msgid "Toggle Sidebar (F9)"
 msgstr "Przełącz panel boczny (F9)"
 
 #: data/resources/ui/window.ui:60
-msgid "New Sheet (Ctrl+N)"
+#, fuzzy
+msgid "New Document (Ctrl+N)"
 msgstr "Nowy arkusz (Ctr+N)"
 
 #: data/resources/ui/window.ui:66 data/resources/ui/window.ui:147

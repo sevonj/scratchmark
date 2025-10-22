@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Context menu for Library Sheet Button -->
 <interface>
   <menu id="context-menu">
     <section>
@@ -8,7 +7,7 @@
         <attribute name="action">sheet.filemanager</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Rename Sheet</attribute>
+        <attribute name="label" translatable="yes">Rename Document</attribute>
         <attribute name="action">sheet.rename-begin</attribute>
       </item>
       <item>
@@ -20,7 +19,7 @@
         <attribute name="action">sheet.trash</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Delete Sheet</attribute>
+        <attribute name="label" translatable="yes">Delete Document</attribute>
         <attribute name="action">sheet.delete</attribute>
       </item>
     </section>
