@@ -1,7 +1,5 @@
-//! Library browser is located in the left sidebar.
-//!
-
 mod imp {
+    use std::cell::Cell;
     use std::cell::RefCell;
     use std::collections::HashMap;
     use std::ops::Deref;
@@ -9,23 +7,25 @@ mod imp {
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
-    use glib::subclass::*;
-    use gtk::gio::Cancellable;
     use gtk::glib;
     use gtk::glib::clone;
     use gtk::glib::closure_local;
+    use gtk::glib::subclass::*;
     use gtk::prelude::*;
 
+    use gtk::CompositeTemplate;
     use gtk::FileDialog;
+    use gtk::gio::Cancellable;
     use gtk::gio::SimpleAction;
     use gtk::gio::SimpleActionGroup;
+    use gtk::glib::Properties;
 
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
     use crate::widgets::library_project::LibraryProject;
-    use gtk::CompositeTemplate;
 
-    #[derive(CompositeTemplate, Default)]
+    #[derive(CompositeTemplate, Default, Properties)]
+    #[properties(wrapper_type = super::LibraryBrowser)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library_browser.ui")]
     pub struct LibraryBrowser {
         #[template_child]
@@ -33,6 +33,9 @@ mod imp {
 
         pub(super) selected_sheet: RefCell<Option<PathBuf>>,
         pub(super) projects: RefCell<HashMap<PathBuf, LibraryProject>>,
+
+        #[property(get, set)]
+        ignore_hidden_files: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -50,6 +53,7 @@ mod imp {
         }
     }
 
+    #[glib::derived_properties]
     impl ObjectImpl for LibraryBrowser {
         fn constructed(&self) {
             let obj = self.obj();
@@ -171,6 +175,11 @@ mod imp {
             self.projects
                 .borrow_mut()
                 .insert(project.path(), project.clone());
+
+            obj.bind_property("ignore_hidden_files", &project, "ignore_hidden_files")
+                .sync_create()
+                .build();
+
             project.refresh_content();
         }
 

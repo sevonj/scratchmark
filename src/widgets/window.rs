@@ -124,6 +124,25 @@ mod imp {
             settings
                 .bind("is-maximized", obj.as_ref(), "maximized")
                 .build();
+            let library_browser: &LibraryBrowser = self.library_browser.as_ref();
+            settings
+                .bind(
+                    "library-ignore-hidden-files",
+                    library_browser,
+                    "ignore-hidden-files",
+                )
+                .flags(SettingsBindFlags::GET)
+                .build();
+            settings.connect_changed(
+                Some("library-ignore-hidden-files"),
+                clone!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_, _| {
+                        this.library_browser.refresh_content();
+                    }
+                ),
+            );
             self.settings
                 .set(settings)
                 .expect("`settings` should not be set before calling `setup_settings`.");
@@ -982,6 +1001,7 @@ mod imp {
             dialog.set_title("Preferences");
             let page = PreferencesPage::new();
             dialog.add(&page);
+
             let group_appearance = PreferencesGroup::new();
             group_appearance.set_title("Appearance");
             let row_appearance_font = ActionRow::builder()
@@ -998,6 +1018,7 @@ mod imp {
             ));
             group_appearance.add(&row_appearance_font);
             page.add(&group_appearance);
+
             let group_editor = PreferencesGroup::new();
             group_editor.set_title("Editor");
             let row_editor_minimap = SwitchRow::builder()
@@ -1014,6 +1035,24 @@ mod imp {
                 .build();
             group_editor.add(&row_editor_minimap);
             page.add(&group_editor);
+
+            let group_library = PreferencesGroup::new();
+            group_library.set_title("Library");
+            let row_editor_minimap = SwitchRow::builder()
+                .title("Ignore hidden files")
+                .subtitle("Files and folders starting with \".\" won't show up in the library.")
+                .build();
+            settings
+                .bind("library-ignore-hidden-files", &row_editor_minimap, "active")
+                .flags(SettingsBindFlags::DEFAULT)
+                .build();
+            let row_editor_minimap = PreferencesRow::builder()
+                .title("Ignore hidden files")
+                .child(&row_editor_minimap)
+                .build();
+            group_library.add(&row_editor_minimap);
+            page.add(&group_library);
+
             dialog.present(Some(&*obj));
         }
 

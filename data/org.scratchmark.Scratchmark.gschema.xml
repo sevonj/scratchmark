@@ -4,6 +4,9 @@
     <key name="open-document-path" type="s">
       <default>""</default>
     </key>
+    <key name="library-ignore-hidden-files" type="b">
+      <default>true</default>
+    </key>
     <key name="library-expanded-folders" type="as">
       <default>[]</default>
     </key>
