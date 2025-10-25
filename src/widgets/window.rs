@@ -39,6 +39,7 @@ mod imp {
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
     use crate::widgets::SheetEditor;
+    use crate::widgets::WindowTitle;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/window.ui")]
@@ -64,6 +65,8 @@ mod imp {
         main_header_revealer: TemplateChild<Revealer>,
         #[template_child]
         main_header_bar: TemplateChild<HeaderBar>,
+        #[template_child]
+        window_title: TemplateChild<WindowTitle>,
 
         #[template_child]
         toast_overlay: TemplateChild<ToastOverlay>,
@@ -95,6 +98,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             EditorFormatBar::ensure_type();
+            WindowTitle::ensure_type();
 
             klass.bind_template();
         }
@@ -677,13 +681,16 @@ mod imp {
         }
 
         fn update_window_title(&self) {
-            if let Some(editor) = self.sheet_editor.borrow().as_ref()
-                && let Some(stem) = editor.path().file_stem()
-            {
-                self.main_page.set_title(&stem.to_string_lossy());
+            let binding = self.sheet_editor.borrow();
+            let Some(editor) = binding.as_ref() else {
+                self.window_title.set_filename(None::<String>);
                 return;
             };
-            self.main_page.set_title("Scratchmark");
+            let filename = editor
+                .path()
+                .file_stem()
+                .map(|d| d.to_string_lossy().to_string());
+            self.window_title.set_filename(filename);
         }
 
         fn update_toolbar_style(&self) {
@@ -844,6 +851,12 @@ mod imp {
                     }
                 ),
             );
+
+            let window_title: &WindowTitle = self.window_title.as_ref();
+            editor
+                .bind_property("unsaved-changes", window_title, "unsaved-changes")
+                .sync_create()
+                .build();
             self.settings()
                 .bind("editor-show-minimap", &editor, "show-minimap")
                 .flags(SettingsBindFlags::DEFAULT)

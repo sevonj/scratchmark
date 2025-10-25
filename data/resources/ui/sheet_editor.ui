@@ -12,7 +12,7 @@
                 <property name="content">
                     <object class="AdwToolbarView">
                         <child type="top">
-                            <object class="AdwBanner" id="file_changed_banner">
+                            <object class="AdwBanner" id="file_changed_on_disk_banner">
                                 <property name="title" translatable="yes">File changed on disk</property>
                                 <property name="button-label" translatable="yes">Resolve</property>
                             </object>

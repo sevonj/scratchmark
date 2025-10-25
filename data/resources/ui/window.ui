@@ -48,6 +48,9 @@
                           <object class="AdwHeaderBar" id="main_header_bar">
                             <property name="show-start-title-buttons">False</property>
                             <property name="show-end-title-buttons">True</property>
+                            <property name="title-widget">
+                              <object class="WindowTitle" id="window_title" />
+                            </property>
                             <child type="start">
                               <object class="GtkToggleButton" id="sidebar_toggle">
                                 <property name="icon-name">dock-left-symbolic</property>
