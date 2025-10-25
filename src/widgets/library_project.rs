@@ -14,6 +14,7 @@ mod imp {
     use glib::closure_local;
     use glib::subclass::*;
     use gtk::glib;
+    use gtk::glib::Properties;
     use gtk::glib::clone;
     use gtk::glib::timeout_add_local;
     use gtk::prelude::*;
@@ -33,7 +34,8 @@ mod imp {
         File { path: PathBuf, depth: u32 },
     }
 
-    #[derive(CompositeTemplate, Default)]
+    #[derive(CompositeTemplate, Default, Properties)]
+    #[properties(wrapper_type = super::LibraryProject)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library_project.ui")]
     pub struct LibraryProject {
         #[template_child]
@@ -49,6 +51,9 @@ mod imp {
         crawler_rx: RefCell<Option<Receiver<ProjectEntry>>>,
         crawler_tx: RefCell<Option<Sender<ProjectEntry>>>,
         pub(super) expanded_folders: RefCell<HashSet<PathBuf>>,
+
+        #[property(get, set)]
+        ignore_hidden_files: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -66,6 +71,7 @@ mod imp {
         }
     }
 
+    #[glib::derived_properties]
     impl ObjectImpl for LibraryProject {
         fn constructed(&self) {
             let obj = self.obj();
@@ -147,7 +153,6 @@ mod imp {
             vbox.append(&root_folder);
             self.connect_folder(root_folder.clone());
             self.root_folder.replace(Some(root_folder));
-            self.refresh_content();
         }
 
         pub(super) fn refresh_content(&self) {
@@ -160,6 +165,7 @@ mod imp {
                 return;
             }
 
+            let ignore_hidden = self.ignore_hidden_files.get();
             let sender = self.crawler_tx.borrow().as_ref().unwrap().clone();
 
             MainContext::default().spawn_local(async move {
@@ -181,6 +187,11 @@ mod imp {
                         let Ok(metadata) = entry.metadata() else {
                             continue;
                         };
+                        if ignore_hidden
+                            && entry.file_name().as_os_str().as_encoded_bytes()[0] == b'.'
+                        {
+                            continue;
+                        }
                         let path = entry.path();
                         if metadata.is_dir() {
                             search_stack.push_back((path.clone(), depth + 1));
@@ -294,7 +305,12 @@ mod imp {
             let mut dead_folders = vec![];
             let mut dead_sheets = vec![];
             for (path, folder) in subfolders.iter() {
-                if !path.exists() {
+                let is_hidden = path
+                    .file_name()
+                    .is_some_and(|s| s.as_encoded_bytes()[0] == b'.');
+                let prune_hidden = self.ignore_hidden_files.get() && is_hidden;
+
+                if !path.exists() || prune_hidden {
                     dead_folders.push(path.clone());
 
                     let parent_path = path.parent().unwrap();
@@ -311,7 +327,12 @@ mod imp {
                 }
             }
             for (path, sheet) in sheets.iter() {
-                if !path.exists() {
+                let is_hidden = path
+                    .file_name()
+                    .is_some_and(|s| s.as_encoded_bytes()[0] == b'.');
+                let prune_hidden = self.ignore_hidden_files.get() && is_hidden;
+
+                if !path.exists() || prune_hidden {
                     dead_sheets.push(path.clone());
 
                     let parent_path = path.parent().unwrap();
