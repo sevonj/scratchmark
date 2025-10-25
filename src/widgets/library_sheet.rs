@@ -1,6 +1,3 @@
-//! Sheet button widget for library browser
-//!
-
 mod imp {
     use std::cell::RefCell;
     use std::path::PathBuf;

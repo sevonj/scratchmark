@@ -1,6 +1,3 @@
-//! Expandable folder widget for library browser
-//!
-
 mod imp {
     use std::cell::{Cell, RefCell};
     use std::path::PathBuf;
