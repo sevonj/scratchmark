@@ -32,13 +32,13 @@ mod imp {
     use crate::error::ScratchmarkError;
     use crate::util;
 
+    use crate::widgets::Editor;
     use crate::widgets::EditorFormatBar;
     use crate::widgets::EditorPlaceholder;
     use crate::widgets::ItemCreatePopover;
     use crate::widgets::LibraryBrowser;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
-    use crate::widgets::SheetEditor;
     use crate::widgets::WindowTitle;
 
     #[derive(CompositeTemplate, Default)]
@@ -85,7 +85,7 @@ mod imp {
         editor_sidebar_toggle: TemplateChild<ToggleButton>,
 
         library_browser: LibraryBrowser,
-        sheet_editor: RefCell<Option<SheetEditor>>,
+        editor: RefCell<Option<Editor>>,
 
         settings: OnceCell<Settings>,
     }
@@ -246,12 +246,12 @@ mod imp {
                         let original_path = folder.path();
                         let new_path = util::incremented_path(new_path);
 
-                        let sheet_editor_opt = this.sheet_editor.borrow();
-                        let open_sheet_affected = sheet_editor_opt
+                        let editor_opt = this.editor.borrow();
+                        let open_sheet_affected = editor_opt
                             .as_ref()
                             .is_some_and(|e| e.path().starts_with(&original_path));
                         if open_sheet_affected {
-                            sheet_editor_opt.as_ref().unwrap().cancel_filemon();
+                            editor_opt.as_ref().unwrap().cancel_filemon();
                         }
 
                         let new_folder = File::for_path(&new_path);
@@ -265,17 +265,17 @@ mod imp {
                         }
 
                         if open_sheet_affected {
-                            let selected_sheet = sheet_editor_opt.as_ref().unwrap().path();
+                            let selected_sheet = editor_opt.as_ref().unwrap().path();
                             let relative = selected_sheet.strip_prefix(folder.path()).unwrap();
                             let sheet_path = new_path.join(relative);
                             this.library_browser
                                 .set_selected_sheet(Some(sheet_path.clone()));
-                            sheet_editor_opt.as_ref().unwrap().set_path(sheet_path);
+                            editor_opt.as_ref().unwrap().set_path(sheet_path);
                         }
 
                         assert_eq!(
                             this.library_browser.selected_sheet(),
-                            this.sheet_editor.borrow().as_ref().map(|e| e.path())
+                            this.editor.borrow().as_ref().map(|e| e.path())
                         );
 
                         this.library_browser.refresh_content();
@@ -294,12 +294,12 @@ mod imp {
                         let original_path = sheet.path();
                         let new_path = util::incremented_path(new_path);
 
-                        let sheet_editor_opt = this.sheet_editor.borrow();
-                        let open_sheet_affected = sheet_editor_opt
+                        let editor_opt = this.editor.borrow();
+                        let open_sheet_affected = editor_opt
                             .as_ref()
                             .is_some_and(|e| e.path() == sheet.path());
                         if open_sheet_affected {
-                            sheet_editor_opt.as_ref().unwrap().cancel_filemon();
+                            editor_opt.as_ref().unwrap().cancel_filemon();
                         }
                         let new_file = File::for_path(&new_path);
                         if let Err(e) = File::for_path(&original_path).move_(
@@ -314,12 +314,12 @@ mod imp {
                         if open_sheet_affected {
                             this.library_browser
                                 .set_selected_sheet(Some(new_path.clone()));
-                            sheet_editor_opt.as_ref().unwrap().set_path(new_path);
+                            editor_opt.as_ref().unwrap().set_path(new_path);
                         }
 
                         assert_eq!(
                             this.library_browser.selected_sheet(),
-                            this.sheet_editor.borrow().as_ref().map(|e| e.path())
+                            this.editor.borrow().as_ref().map(|e| e.path())
                         );
 
                         this.library_browser.refresh_content();
@@ -375,7 +375,7 @@ mod imp {
                     self,
                     move |browser: LibraryBrowser, project_path: PathBuf| {
                         let contains_edited_file = this
-                            .sheet_editor
+                            .editor
                             .borrow()
                             .as_ref()
                             .is_some_and(|editor| editor.path().starts_with(&project_path));
@@ -641,9 +641,9 @@ mod imp {
                     #[weak]
                     this,
                     move |_action, param| {
-                        let sheet_editor_opt = this.sheet_editor.borrow();
-                        if let Some(sheet_editor) = sheet_editor_opt.as_ref() {
-                            sheet_editor.activate_action(&name, param).expect(&name);
+                        let editor_opt = this.editor.borrow();
+                        if let Some(editor) = editor_opt.as_ref() {
+                            editor.activate_action(&name, param).expect(&name);
                         }
                     }
                 ));
@@ -662,7 +662,7 @@ mod imp {
 
             obj.connect_map(|this| {
                 this.imp()
-                    .editor_actions_set_enabled(this.imp().sheet_editor.borrow().is_some());
+                    .editor_actions_set_enabled(this.imp().editor.borrow().is_some());
             });
 
             self.library_browser.add_drafts_project();
@@ -681,7 +681,7 @@ mod imp {
         }
 
         fn update_window_title(&self) {
-            let binding = self.sheet_editor.borrow();
+            let binding = self.editor.borrow();
             let Some(editor) = binding.as_ref() else {
                 self.window_title.set_filename(None::<String>);
                 return;
@@ -696,7 +696,7 @@ mod imp {
         fn update_toolbar_style(&self) {
             let format_bar_open = self.format_bar_toggle.is_active();
             let editor_sidebar_open =
-                self.sheet_editor.borrow().is_some() && self.editor_sidebar_toggle.is_active();
+                self.editor.borrow().is_some() && self.editor_sidebar_toggle.is_active();
             let fullscreen = self.obj().is_fullscreen();
             let style = if format_bar_open || editor_sidebar_open || fullscreen {
                 ToolbarStyle::Raised
@@ -744,7 +744,7 @@ mod imp {
             let settings = self.settings();
 
             let open_document_path = self
-                .sheet_editor
+                .editor
                 .borrow()
                 .as_ref()
                 .map(|e| e.path())
@@ -803,7 +803,7 @@ mod imp {
                 return;
             }
 
-            let editor = match SheetEditor::new(path.clone()) {
+            let editor = match Editor::new(path.clone()) {
                 Ok(editor) => editor,
                 Err(e) => {
                     self.toast(&e.to_string());
@@ -829,7 +829,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: SheetEditor| {
+                    move |_: Editor| {
                         if let Err(e) = this.close_editor() {
                             this.toast(&e.to_string());
                             return;
@@ -844,7 +844,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |editor: SheetEditor| {
+                    move |editor: Editor| {
                         this.library_browser.refresh_content();
                         this.library_browser.set_selected_sheet(Some(editor.path()));
                         this.update_window_title();
@@ -864,7 +864,7 @@ mod imp {
 
             self.main_toolbar_view.set_content(Some(&editor));
             self.format_bar.bind_editor(Some(editor.clone()));
-            self.sheet_editor.replace(Some(editor));
+            self.editor.replace(Some(editor));
             self.library_browser.set_selected_sheet(Some(path));
             self.editor_actions_set_enabled(true);
             self.update_window_title();
@@ -876,7 +876,7 @@ mod imp {
 
             let path = folder.path();
             let parent_of_currently_open = self
-                .sheet_editor
+                .editor
                 .borrow()
                 .as_ref()
                 .is_some_and(|e| e.path().starts_with(&path));
@@ -896,7 +896,7 @@ mod imp {
         fn trash_sheet(&self, sheet: LibrarySheet) {
             let path = sheet.path();
             let currently_open = self
-                .sheet_editor
+                .editor
                 .borrow()
                 .as_ref()
                 .is_some_and(|e| e.path() == path);
@@ -918,7 +918,7 @@ mod imp {
 
             let path = folder.path();
             let parent_of_currently_open = self
-                .sheet_editor
+                .editor
                 .borrow()
                 .as_ref()
                 .is_some_and(|e| e.path().starts_with(&path));
@@ -936,7 +936,7 @@ mod imp {
         fn delete_sheet(&self, sheet: LibrarySheet) {
             let path = sheet.path();
             let currently_open = self
-                .sheet_editor
+                .editor
                 .borrow()
                 .as_ref()
                 .is_some_and(|e| e.path() == path);
@@ -952,7 +952,7 @@ mod imp {
         }
 
         fn save_sheet(&self) {
-            let mut editor_bind = self.sheet_editor.borrow_mut();
+            let mut editor_bind = self.editor.borrow_mut();
             let Some(editor) = editor_bind.as_mut() else {
                 return;
             };
@@ -964,10 +964,10 @@ mod imp {
         }
 
         fn close_editor(&self) -> Result<(), ScratchmarkError> {
-            if let Some(editor) = self.sheet_editor.borrow_mut().as_ref() {
+            if let Some(editor) = self.editor.borrow_mut().as_ref() {
                 editor.save()?;
             }
-            self.sheet_editor.replace(None);
+            self.editor.replace(None);
 
             self.main_toolbar_view
                 .set_content(Some(&EditorPlaceholder::default()));
@@ -1106,7 +1106,7 @@ mod imp {
             self.settings().set_uint("editor-font-size", size)?;
             self.settings().set_string("editor-font-family", &family)?;
 
-            if let Some(editor) = self.sheet_editor.borrow().as_ref() {
+            if let Some(editor) = self.editor.borrow().as_ref() {
                 editor.set_font(family.as_str(), size);
             };
 

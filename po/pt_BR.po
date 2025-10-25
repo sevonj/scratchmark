@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 15:36+0300\n"
+"POT-Creation-Date: 2025-10-26 01:14+0300\n"
 "PO-Revision-Date: 2025-10-22 01:07-0300\n"
 "Last-Translator: Filipe Motta <luizfilipemotta@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -19,16 +19,16 @@ msgstr ""
 "X-Generator: Gtranslator 49.0\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:3
+#: data/org.scratchmark.Scratchmark.desktop.in:2
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:4
+#: data/org.scratchmark.Scratchmark.desktop.in:3
 msgid "Markdown editor"
 msgstr "Editor Markdown"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:10
+#: data/org.scratchmark.Scratchmark.desktop.in:9
 msgid "Scratchmark Markdown editor"
 msgstr "Editor Markdown Scratchmark"
 
@@ -144,6 +144,14 @@ msgstr "Substituir tudo"
 msgid "Replace All (Shift + Return)"
 msgstr "Substituir tudo (Shift + Enter)"
 
+#: data/resources/ui/editor.ui:16
+msgid "File changed on disk"
+msgstr "Arquivo alterado no disco"
+
+#: data/resources/ui/editor.ui:17
+msgid "Resolve"
+msgstr "Resolver"
+
 #: data/resources/ui/item_create_popover.ui:10
 #: data/resources/ui/item_rename_popover.ui:10
 msgid "Name..."
@@ -163,7 +171,7 @@ msgstr "Renomear"
 msgid "Library"
 msgstr "Biblioteca"
 
-#: data/resources/ui/library_browser.ui:53 data/resources/ui/window.ui:116
+#: data/resources/ui/library_browser.ui:53 data/resources/ui/window.ui:119
 msgid "Add Project"
 msgstr "Adicionar projeto"
 
@@ -207,14 +215,6 @@ msgstr "Fechar projeto"
 #: data/resources/ui/library_sheet_context_menu.ui:14
 msgid "Duplicate"
 msgstr "Duplicar"
-
-#: data/resources/ui/sheet_editor.ui:16
-msgid "File changed on disk"
-msgstr "Arquivo alterado no disco"
-
-#: data/resources/ui/sheet_editor.ui:17
-msgid "Resolve"
-msgstr "Resolver"
 
 #: data/resources/ui/sheet_stats.ui:18
 msgid "Statistics"
@@ -320,64 +320,64 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Atualização manual"
 
-#: data/resources/ui/window.ui:54
+#: data/resources/ui/window.ui:57
 msgid "Toggle Sidebar (F9)"
 msgstr "Ativar/Desativar barra lateral"
 
-#: data/resources/ui/window.ui:60
+#: data/resources/ui/window.ui:63
 #, fuzzy
 msgid "New Document (Ctrl+N)"
 msgstr "Nova Folha (Ctrl + N)"
 
-#: data/resources/ui/window.ui:66 data/resources/ui/window.ui:147
+#: data/resources/ui/window.ui:69 data/resources/ui/window.ui:150
 msgid "Exit Fullscreen"
 msgstr "Sair da tela cheia"
 
-#: data/resources/ui/window.ui:75
+#: data/resources/ui/window.ui:78
 msgid "Menu"
 msgstr "Menu"
 
-#: data/resources/ui/window.ui:82
+#: data/resources/ui/window.ui:85
 msgid "Document Info"
 msgstr "Informações do documento"
 
-#: data/resources/ui/window.ui:88
+#: data/resources/ui/window.ui:91
 msgid "Formatting Toolbar"
 msgstr "Barra de formatação"
 
-#: data/resources/ui/window.ui:112
+#: data/resources/ui/window.ui:115
 msgid "New"
 msgstr "Novo"
 
-#: data/resources/ui/window.ui:122
+#: data/resources/ui/window.ui:125
 msgid "Save"
 msgstr "Salvar"
 
-#: data/resources/ui/window.ui:126
+#: data/resources/ui/window.ui:129
 msgid "Close"
 msgstr "Fechar"
 
-#: data/resources/ui/window.ui:132
+#: data/resources/ui/window.ui:135
 msgid "Search Text"
 msgstr "Pesquisar no texto"
 
-#: data/resources/ui/window.ui:136
+#: data/resources/ui/window.ui:139
 msgid "Search and Replace"
 msgstr "Pesquisar e substituir"
 
-#: data/resources/ui/window.ui:142
+#: data/resources/ui/window.ui:145
 msgid "Enter Fullscreen"
 msgstr "Entrar em tela cheia"
 
-#: data/resources/ui/window.ui:154
+#: data/resources/ui/window.ui:157
 msgid "Preferences"
 msgstr "Preferências"
 
-#: data/resources/ui/window.ui:158
+#: data/resources/ui/window.ui:161
 msgid "Keyboard Shortcuts"
 msgstr "Atalhos de teclado"
 
-#: data/resources/ui/window.ui:162
+#: data/resources/ui/window.ui:165
 msgid "About Scratchmark"
 msgstr "Sobre o Scratchmark"
 

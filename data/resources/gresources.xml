@@ -5,6 +5,7 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_minimap.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_placeholder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_search_bar.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/editor.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/item_create_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/item_rename_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_browser.ui</file>
@@ -17,7 +18,6 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library_project_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/sheet_editor.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_stats.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/shortcuts.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>

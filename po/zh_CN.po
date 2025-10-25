@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 15:36+0300\n"
+"POT-Creation-Date: 2025-10-26 01:14+0300\n"
 "PO-Revision-Date: 2025-10-24 01:20+0800\n"
 "Last-Translator: Rain Ding <Sulasalias@emailasso.net>\n"
 "Language-Team: \n"
@@ -18,16 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:3
+#: data/org.scratchmark.Scratchmark.desktop.in:2
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:4
+#: data/org.scratchmark.Scratchmark.desktop.in:3
 msgid "Markdown editor"
 msgstr "Markdown 编辑"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:10
+#: data/org.scratchmark.Scratchmark.desktop.in:9
 msgid "Scratchmark Markdown editor"
 msgstr "Scratchmark Markdown 编辑器"
 
@@ -139,6 +139,14 @@ msgstr "替换全部"
 msgid "Replace All (Shift + Return)"
 msgstr "替换全部 (Shift + Return)"
 
+#: data/resources/ui/editor.ui:16
+msgid "File changed on disk"
+msgstr "磁盘上的文件已更改"
+
+#: data/resources/ui/editor.ui:17
+msgid "Resolve"
+msgstr "解析"
+
 #: data/resources/ui/item_create_popover.ui:10
 #: data/resources/ui/item_rename_popover.ui:10
 msgid "Name..."
@@ -158,7 +166,7 @@ msgstr "重命名"
 msgid "Library"
 msgstr "库"
 
-#: data/resources/ui/library_browser.ui:53 data/resources/ui/window.ui:116
+#: data/resources/ui/library_browser.ui:53 data/resources/ui/window.ui:119
 msgid "Add Project"
 msgstr "添加计划"
 
@@ -199,14 +207,6 @@ msgstr "关闭计划"
 #: data/resources/ui/library_sheet_context_menu.ui:14
 msgid "Duplicate"
 msgstr "复制"
-
-#: data/resources/ui/sheet_editor.ui:16
-msgid "File changed on disk"
-msgstr "磁盘上的文件已更改"
-
-#: data/resources/ui/sheet_editor.ui:17
-msgid "Resolve"
-msgstr "解析"
 
 #: data/resources/ui/sheet_stats.ui:18
 msgid "Statistics"
@@ -308,62 +308,62 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "手动刷新"
 
-#: data/resources/ui/window.ui:54
+#: data/resources/ui/window.ui:57
 msgid "Toggle Sidebar (F9)"
 msgstr "切换侧边栏 (F9)"
 
-#: data/resources/ui/window.ui:60
+#: data/resources/ui/window.ui:63
 msgid "New Document (Ctrl+N)"
 msgstr "新文档 (Ctrl+N)"
 
-#: data/resources/ui/window.ui:66 data/resources/ui/window.ui:147
+#: data/resources/ui/window.ui:69 data/resources/ui/window.ui:150
 msgid "Exit Fullscreen"
 msgstr "退出全屏"
 
-#: data/resources/ui/window.ui:75
+#: data/resources/ui/window.ui:78
 msgid "Menu"
 msgstr "菜单"
 
-#: data/resources/ui/window.ui:82
+#: data/resources/ui/window.ui:85
 msgid "Document Info"
 msgstr "文档信息"
 
-#: data/resources/ui/window.ui:88
+#: data/resources/ui/window.ui:91
 msgid "Formatting Toolbar"
 msgstr "格式化工具栏"
 
-#: data/resources/ui/window.ui:112
+#: data/resources/ui/window.ui:115
 msgid "New"
 msgstr "新建"
 
-#: data/resources/ui/window.ui:122
+#: data/resources/ui/window.ui:125
 msgid "Save"
 msgstr "保存"
 
-#: data/resources/ui/window.ui:126
+#: data/resources/ui/window.ui:129
 msgid "Close"
 msgstr "关闭"
 
-#: data/resources/ui/window.ui:132
+#: data/resources/ui/window.ui:135
 msgid "Search Text"
 msgstr "查找文本"
 
-#: data/resources/ui/window.ui:136
+#: data/resources/ui/window.ui:139
 msgid "Search and Replace"
 msgstr "查找与替换"
 
-#: data/resources/ui/window.ui:142
+#: data/resources/ui/window.ui:145
 msgid "Enter Fullscreen"
 msgstr "进入全屏模式"
 
-#: data/resources/ui/window.ui:154
+#: data/resources/ui/window.ui:157
 msgid "Preferences"
 msgstr "设置"
 
-#: data/resources/ui/window.ui:158
+#: data/resources/ui/window.ui:161
 msgid "Keyboard Shortcuts"
 msgstr "键盘快捷键"
 
-#: data/resources/ui/window.ui:162
+#: data/resources/ui/window.ui:165
 msgid "About Scratchmark"
 msgstr "关于 Scratchmark"

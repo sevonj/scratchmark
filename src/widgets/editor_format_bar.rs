@@ -11,13 +11,13 @@ mod imp {
     use glib::clone;
     use gtk::CompositeTemplate;
 
-    use crate::widgets::SheetEditor;
+    use crate::widgets::Editor;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/editor_format_bar.ui")]
     pub struct EditorFormatBar {
         actions: SimpleActionGroup,
-        pub(super) editor: RefCell<Option<SheetEditor>>,
+        pub(super) editor: RefCell<Option<Editor>>,
     }
 
     #[glib::object_subclass]
@@ -141,7 +141,7 @@ use adw::subclass::prelude::ObjectSubclassIsExt;
 use glib::Object;
 use gtk::glib;
 
-use crate::widgets::SheetEditor;
+use crate::widgets::Editor;
 
 glib::wrapper! {
     pub struct EditorFormatBar(ObjectSubclass<imp::EditorFormatBar>)
@@ -156,7 +156,7 @@ impl Default for EditorFormatBar {
 }
 
 impl EditorFormatBar {
-    pub fn bind_editor(&self, editor: Option<SheetEditor>) {
+    pub fn bind_editor(&self, editor: Option<Editor>) {
         self.imp().editor.replace(editor);
         self.imp().update_enabled();
     }
