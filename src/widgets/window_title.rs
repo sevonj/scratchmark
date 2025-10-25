@@ -1,4 +1,5 @@
 mod imp {
+    use std::cell::Cell;
     use std::cell::RefCell;
 
     use adw::subclass::prelude::*;
@@ -17,6 +18,8 @@ mod imp {
 
         #[property(get, set, nullable)]
         filename: RefCell<Option<String>>,
+        #[property(get, set)]
+        unsaved_changes: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -40,7 +43,8 @@ mod imp {
             let obj = self.obj();
             self.parent_constructed();
 
-            obj.connect_notify(Some("filename"), move |this, _| {
+            obj.connect_notify(None, move |this, _| {
+                // On any property change
                 this.imp().update_window_title();
             });
         }
@@ -51,9 +55,19 @@ mod imp {
 
     impl WindowTitle {
         fn update_window_title(&self) {
-            let binding = self.filename.borrow();
-            let title_text = binding.as_ref().map_or("Scratchmark", |s| &s);
-            self.window_title.set_title(title_text);
+            let Some(filename) = self.filename.borrow().as_ref().cloned() else {
+                self.window_title.set_title("Scratchmark");
+                return;
+            };
+
+            let unsaved_indicator = if self.unsaved_changes.get() {
+                "⦁ "
+            } else {
+                ""
+            };
+
+            self.window_title
+                .set_title(&format!("{unsaved_indicator}{filename}"));
         }
     }
 }

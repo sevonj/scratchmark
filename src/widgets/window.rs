@@ -851,6 +851,12 @@ mod imp {
                     }
                 ),
             );
+
+            let window_title: &WindowTitle = self.window_title.as_ref();
+            editor
+                .bind_property("unsaved-changes", window_title, "unsaved-changes")
+                .sync_create()
+                .build();
             self.settings()
                 .bind("editor-show-minimap", &editor, "show-minimap")
                 .flags(SettingsBindFlags::DEFAULT)

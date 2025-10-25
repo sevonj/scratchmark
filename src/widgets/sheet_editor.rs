@@ -583,7 +583,7 @@ impl SheetEditor {
             this,
             move |buffer| {
                 this.refresh_stats(buffer);
-                this.imp().unsaved_changes.replace(true);
+                this.set_unsaved_changes(true);
             }
         ));
         this.refresh_stats(&buffer);
@@ -615,7 +615,7 @@ impl SheetEditor {
             output_stream.flush(NOT_CANCELLABLE).unwrap();
         }
         imp.setup_filemon();
-        imp.unsaved_changes.replace(false);
+        self.set_unsaved_changes(false);
         Ok(())
     }
 
