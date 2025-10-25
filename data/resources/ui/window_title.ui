@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="WindowTitle" parent="AdwBin">
+        <child>
+            <object class="AdwWindowTitle" id="window_title">
+                <property name="title" translatable="no">window-title-here</property>
+                <!--property name="subtitle" translatable="no">window-subtitle-here</property-->
+            </object>
+        </child>
+    </template>
+</interface>
