@@ -53,7 +53,7 @@ mod imp {
         #[template_child]
         pub(super) search_bar: TemplateChild<EditorSearchBar>,
         #[template_child]
-        pub(super) file_changed_banner: TemplateChild<Banner>,
+        pub(super) file_changed_on_disk_banner: TemplateChild<Banner>,
         #[template_child]
         pub(super) editor_split: TemplateChild<OverlaySplitView>,
         #[template_child]
@@ -66,7 +66,9 @@ mod imp {
         pub(super) path: RefCell<Option<PathBuf>>,
 
         #[property(get, set)]
-        pub(super) file_changed: Cell<bool>,
+        pub(super) file_changed_on_disk: Cell<bool>,
+        #[property(get, set)]
+        pub(super) unsaved_changes: Cell<bool>,
         #[property(get, set)]
         pub(super) show_sidebar: Cell<bool>,
     }
@@ -121,67 +123,78 @@ mod imp {
                 .bidirectional()
                 .build();
 
-            self.file_changed_banner.connect_button_clicked(clone!(
-                #[weak]
-                obj,
-                move |_| {
-                    let heading = "File changed";
-                    let body = "The file has changed on disk.";
-                    let dialog = AlertDialog::new(
-                        Some(heading),
-                        Some(body), // once told me the world is gonna roll me
-                    );
-                    dialog.add_response("discard", "Discard changes");
-                    dialog.add_response("overwrite", "Overwrite file");
-                    dialog.add_response("keep-both", "Keep both");
-                    dialog.set_response_appearance("keep-both", adw::ResponseAppearance::Suggested);
-                    dialog
-                        .set_response_appearance("overwrite", adw::ResponseAppearance::Destructive);
-                    dialog.set_response_appearance("discard", adw::ResponseAppearance::Destructive);
-                    dialog.connect_closure(
-                        "response",
-                        false,
-                        closure_local!(
-                            #[weak]
-                            obj,
-                            move |_: AlertDialog, response: String| {
-                                if response == "keep-both" {
-                                    let new_path = util::incremented_path(obj.path());
-                                    obj.set_path(new_path);
-                                    obj.imp().file_changed.set(false);
-                                    obj.imp().file_changed_banner.set_revealed(false);
-                                    if let Err(e) = obj.save() {
-                                        obj.emit_by_name::<()>("toast", &[&e.to_string()]);
-                                        return;
-                                    };
-                                    obj.emit_by_name::<()>("saved-as", &[]);
-                                } else if response == "overwrite" {
-                                    obj.imp().file_changed.set(false);
-                                    if let Err(e) = obj.save() {
-                                        obj.emit_by_name::<()>("toast", &[&e.to_string()]);
-                                        return;
-                                    };
-                                    obj.imp().file_changed.set(false);
-                                    obj.imp().file_changed_banner.set_revealed(false);
-                                } else if response == "discard" {
-                                    let file = gio::File::for_path(obj.path());
-                                    match util::read_file_to_string(&file) {
-                                        Ok(text) => {
-                                            obj.imp().source_view.buffer().set_text(&text);
-                                            obj.imp().file_changed.set(false);
-                                            obj.imp().file_changed_banner.set_revealed(false);
-                                        }
-                                        Err(e) => {
-                                            obj.emit_by_name::<()>("toast", &[&e.to_string()])
+            self.file_changed_on_disk_banner
+                .connect_button_clicked(clone!(
+                    #[weak]
+                    obj,
+                    move |_| {
+                        let heading = "File changed";
+                        let body = "The file has changed on disk.";
+                        let dialog = AlertDialog::new(
+                            Some(heading),
+                            Some(body), // once told me the world is gonna roll me
+                        );
+                        dialog.add_response("discard", "Discard changes");
+                        dialog.add_response("overwrite", "Overwrite file");
+                        dialog.add_response("keep-both", "Keep both");
+                        dialog.set_response_appearance(
+                            "keep-both",
+                            adw::ResponseAppearance::Suggested,
+                        );
+                        dialog.set_response_appearance(
+                            "overwrite",
+                            adw::ResponseAppearance::Destructive,
+                        );
+                        dialog.set_response_appearance(
+                            "discard",
+                            adw::ResponseAppearance::Destructive,
+                        );
+                        dialog.connect_closure(
+                            "response",
+                            false,
+                            closure_local!(
+                                #[weak]
+                                obj,
+                                move |_: AlertDialog, response: String| {
+                                    if response == "keep-both" {
+                                        let new_path = util::incremented_path(obj.path());
+                                        obj.set_path(new_path);
+                                        obj.imp().file_changed_on_disk.set(false);
+                                        obj.imp().file_changed_on_disk_banner.set_revealed(false);
+                                        if let Err(e) = obj.save() {
+                                            obj.emit_by_name::<()>("toast", &[&e.to_string()]);
+                                            return;
+                                        };
+                                        obj.emit_by_name::<()>("saved-as", &[]);
+                                    } else if response == "overwrite" {
+                                        obj.imp().file_changed_on_disk.set(false);
+                                        if let Err(e) = obj.save() {
+                                            obj.emit_by_name::<()>("toast", &[&e.to_string()]);
+                                            return;
+                                        };
+                                        obj.imp().file_changed_on_disk.set(false);
+                                        obj.imp().file_changed_on_disk_banner.set_revealed(false);
+                                    } else if response == "discard" {
+                                        let file = gio::File::for_path(obj.path());
+                                        match util::read_file_to_string(&file) {
+                                            Ok(text) => {
+                                                obj.imp().source_view.buffer().set_text(&text);
+                                                obj.imp().file_changed_on_disk.set(false);
+                                                obj.imp()
+                                                    .file_changed_on_disk_banner
+                                                    .set_revealed(false);
+                                            }
+                                            Err(e) => {
+                                                obj.emit_by_name::<()>("toast", &[&e.to_string()])
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        ),
-                    );
-                    dialog.present(Some(&obj));
-                }
-            ));
+                            ),
+                        );
+                        dialog.present(Some(&obj));
+                    }
+                ));
 
             self.minimap.bind(&self.source_view);
             self.minimap
@@ -503,12 +516,12 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_, _, _, _| {
-                    this.file_changed.set(true);
-                    this.file_changed_banner.set_revealed(true);
+                    this.file_changed_on_disk.set(true);
+                    this.file_changed_on_disk_banner.set_revealed(true);
                 }
             ));
 
-            self.file_changed.set(false);
+            self.file_changed_on_disk.set(false);
             self.filemon.replace(Some(filemon));
         }
     }
@@ -570,6 +583,7 @@ impl SheetEditor {
             this,
             move |buffer| {
                 this.refresh_stats(buffer);
+                this.imp().unsaved_changes.replace(true);
             }
         ));
         this.refresh_stats(&buffer);
@@ -577,18 +591,19 @@ impl SheetEditor {
     }
 
     pub fn save(&self) -> Result<(), ScratchmarkError> {
-        if self.imp().file_changed.get() {
+        let imp = self.imp();
+        if imp.file_changed_on_disk.get() {
             return Err(ScratchmarkError::FileChanged);
         }
-        self.imp().filemon.borrow().as_ref().unwrap().cancel();
+        imp.filemon.borrow().as_ref().unwrap().cancel();
 
-        let buffer = self.imp().source_view.buffer();
+        let buffer = imp.source_view.buffer();
         let start = buffer.start_iter();
         let end = buffer.end_iter();
         let text = buffer.text(&start, &end, true).to_string();
         let bytes = text.as_bytes();
         {
-            let Some(ref mut file) = *self.imp().file.borrow_mut() else {
+            let Some(ref mut file) = *imp.file.borrow_mut() else {
                 panic!("SheetEditor file uninitialized");
             };
 
@@ -599,7 +614,8 @@ impl SheetEditor {
             output_stream.write_all(bytes, NOT_CANCELLABLE).unwrap();
             output_stream.flush(NOT_CANCELLABLE).unwrap();
         }
-        self.imp().setup_filemon();
+        imp.setup_filemon();
+        imp.unsaved_changes.replace(false);
         Ok(())
     }
 
