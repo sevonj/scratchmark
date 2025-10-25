@@ -661,6 +661,7 @@ mod imp {
                     .editor_actions_set_enabled(this.imp().sheet_editor.borrow().is_some());
             });
 
+            self.library_browser.add_drafts_project();
             self.load_state();
         }
     }

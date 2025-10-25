@@ -364,10 +364,7 @@ glib::wrapper! {
 
 impl Default for LibraryBrowser {
     fn default() -> Self {
-        let this: Self = Object::builder().build();
-        this.imp().load_project(LibraryProject::new_draft_table());
-        this.refresh_content();
-        this
+        Object::builder().build()
     }
 }
 
@@ -415,6 +412,15 @@ impl LibraryBrowser {
             }
         }
         None
+    }
+
+    pub fn add_drafts_project(&self) {
+        let drafts = LibraryProject::new_draft_table();
+        assert!(
+            self.imp().projects.borrow().get(&drafts.path()).is_none(),
+            "Draft table created multiple times!"
+        );
+        self.imp().load_project(drafts);
     }
 
     pub fn add_project(&self, path: PathBuf) {

@@ -153,7 +153,6 @@ mod imp {
             vbox.append(&root_folder);
             self.connect_folder(root_folder.clone());
             self.root_folder.replace(Some(root_folder));
-            self.refresh_content();
         }
 
         pub(super) fn refresh_content(&self) {
