@@ -47,7 +47,7 @@ use adw::subclass::prelude::ObjectSubclassIsExt;
 use glib::Object;
 use gtk::glib;
 
-use crate::widgets::sheet_editor::SheetStatsData;
+use crate::widgets::editor::SheetStatsData;
 
 glib::wrapper! {
     pub struct SheetStats(ObjectSubclass<imp::SheetStats>)

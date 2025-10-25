@@ -4,17 +4,16 @@ mod imp {
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
-    use adw::OverlaySplitView;
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use glib::clone;
     use glib::closure_local;
     use gtk::gio;
-    use gtk::gio::SimpleAction;
     use gtk::glib;
 
     use adw::AlertDialog;
     use adw::Banner;
+    use adw::OverlaySplitView;
     use gio::File;
     use gio::FileMonitor;
     use gio::FileMonitorFlags;
@@ -29,6 +28,7 @@ mod imp {
     use gtk::CssProvider;
     use gtk::TemplateChild;
     use gtk::TextMark;
+    use gtk::gio::SimpleAction;
     use sourceview5::View;
 
     use super::SheetStatsData;
@@ -40,9 +40,9 @@ mod imp {
     use super::NOT_CANCELLABLE;
 
     #[derive(Debug, Properties, CompositeTemplate, Default)]
-    #[properties(wrapper_type = super::SheetEditor)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/sheet_editor.ui")]
-    pub struct SheetEditor {
+    #[properties(wrapper_type = super::Editor)]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor.ui")]
+    pub struct Editor {
         #[template_child]
         pub(super) source_view: TemplateChild<View>,
         pub(super) source_view_css_provider: CssProvider,
@@ -74,9 +74,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for SheetEditor {
-        const NAME: &'static str = "SheetEditor";
-        type Type = super::SheetEditor;
+    impl ObjectSubclass for Editor {
+        const NAME: &'static str = "Editor";
+        type Type = super::Editor;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -92,7 +92,7 @@ mod imp {
     }
 
     #[glib::derived_properties]
-    impl ObjectImpl for SheetEditor {
+    impl ObjectImpl for Editor {
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
@@ -501,13 +501,13 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for SheetEditor {}
-    impl BinImpl for SheetEditor {}
+    impl WidgetImpl for Editor {}
+    impl BinImpl for Editor {}
 
-    impl SheetEditor {
+    impl Editor {
         pub(super) fn setup_filemon(&self) {
             let Some(ref mut file) = *self.file.borrow_mut() else {
-                panic!("SheetEditor file uninitialized");
+                panic!("Editor file uninitialized");
             };
             let filemon = file
                 .monitor(FileMonitorFlags::NONE, NOT_CANCELLABLE)
@@ -552,12 +552,12 @@ use crate::util;
 const NOT_CANCELLABLE: Option<&Cancellable> = None;
 
 glib::wrapper! {
-    pub struct SheetEditor(ObjectSubclass<imp::SheetEditor>)
+    pub struct Editor(ObjectSubclass<imp::Editor>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl SheetEditor {
+impl Editor {
     pub fn new(path: PathBuf) -> Result<Self, ScratchmarkError> {
         let file = gtk::gio::File::for_path(&path);
         let text = util::read_file_to_string(&file)?;
@@ -604,7 +604,7 @@ impl SheetEditor {
         let bytes = text.as_bytes();
         {
             let Some(ref mut file) = *imp.file.borrow_mut() else {
-                panic!("SheetEditor file uninitialized");
+                panic!("Editor file uninitialized");
             };
 
             let output_stream = file
@@ -621,9 +621,7 @@ impl SheetEditor {
 
     pub fn path(&self) -> PathBuf {
         let opt = self.imp().path.borrow();
-        opt.as_ref()
-            .expect("SheetEditor: path uninitialized")
-            .clone()
+        opt.as_ref().expect("Editor: path uninitialized").clone()
     }
 
     pub fn set_path(&self, path: PathBuf) {

@@ -4,6 +4,7 @@ data/org.scratchmark.Scratchmark.gschema.xml
 data/resources/ui/editor_format_bar.ui
 data/resources/ui/editor_placeholder.ui
 data/resources/ui/editor_search_bar.ui
+data/resources/ui/editor.ui
 data/resources/ui/item_create_popover.ui
 data/resources/ui/item_rename_popover.ui
 data/resources/ui/library_browser.ui
@@ -11,7 +12,6 @@ data/resources/ui/library_drafts_context_menu.ui
 data/resources/ui/library_folder_context_menu.ui
 data/resources/ui/library_project_context_menu.ui
 data/resources/ui/library_sheet_context_menu.ui
-data/resources/ui/sheet_editor.ui
 data/resources/ui/sheet_stats.ui
 data/resources/ui/shortcuts.ui
 data/resources/ui/window.ui
