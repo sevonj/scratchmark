@@ -21,6 +21,7 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_stats.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/shortcuts.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/window_title.ui</file>
   </gresource>
   <gresource prefix="/org/scratchmark/Scratchmark">
     <file preprocess="xml-stripblanks">icons/scalable/actions/dock-left-symbolic.svg</file>

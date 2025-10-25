@@ -12,6 +12,7 @@ mod library_sheet;
 mod sheet_editor;
 mod sheet_stats;
 mod window;
+mod window_title;
 
 pub use editor_format_bar::EditorFormatBar;
 pub use editor_minimap::EditorMinimap;
@@ -27,3 +28,4 @@ pub use library_sheet::LibrarySheet;
 pub use sheet_editor::SheetEditor;
 pub use sheet_stats::SheetStats;
 pub use window::Window;
+pub use window_title::WindowTitle;
