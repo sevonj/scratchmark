@@ -9,9 +9,8 @@ mod imp {
     use gtk::pango;
 
     use adw::{
-        AboutDialog, ActionRow, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage,
-        OverlaySplitView, PreferencesDialog, PreferencesGroup, PreferencesPage, PreferencesRow,
-        SwitchRow, Toast, ToastOverlay, ToolbarStyle, ToolbarView,
+        AboutDialog, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView,
+        Toast, ToastOverlay, ToolbarStyle, ToolbarView,
     };
     use glib::VariantTy;
     use gtk::gio::Cancellable;
@@ -22,8 +21,8 @@ mod imp {
     use gtk::gio::SimpleAction;
     use gtk::gio::SimpleActionGroup;
     use gtk::{
-        Builder, Button, CompositeTemplate, EventControllerMotion, FontDialog, MenuButton,
-        Revealer, ToggleButton,
+        Builder, Button, CompositeTemplate, EventControllerMotion, MenuButton, Revealer,
+        ToggleButton,
     };
     use pango::FontDescription;
 
@@ -39,6 +38,7 @@ mod imp {
     use crate::widgets::LibraryBrowser;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibrarySheet;
+    use crate::widgets::PreferencesDialog;
     use crate::widgets::WindowTitle;
 
     #[derive(CompositeTemplate, Default)]
@@ -616,16 +616,6 @@ mod imp {
             ));
             obj.add_action(&action);
 
-            let action = SimpleAction::new("show-font-dialog", None);
-            action.connect_activate(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |_, _| {
-                    this.show_font_dialog();
-                }
-            ));
-            obj.add_action(&action);
-
             let editor_actions = SimpleActionGroup::new();
             obj.insert_action_group("editor", Some(&editor_actions));
 
@@ -1009,94 +999,21 @@ mod imp {
         }
 
         fn show_preferences(&self) {
-            let obj = self.obj();
-            let settings = self.settings();
-            let dialog = PreferencesDialog::new();
-            dialog.set_title("Preferences");
-            let page = PreferencesPage::new();
-            dialog.add(&page);
-
-            let group_appearance = PreferencesGroup::new();
-            group_appearance.set_title("Appearance");
-            let row_appearance_font = ActionRow::builder()
-                .title("Change Font")
-                .activatable(true)
-                .subtitle("Customize font size and typeface.")
-                .build();
-            row_appearance_font.connect_activated(clone!(
-                #[weak]
-                obj,
-                move |_| {
-                    WidgetExt::activate_action(&obj, "win.show-font-dialog", None).unwrap();
-                }
-            ));
-            group_appearance.add(&row_appearance_font);
-            page.add(&group_appearance);
-
-            let group_editor = PreferencesGroup::new();
-            group_editor.set_title("Editor");
-            let row_editor_minimap = SwitchRow::builder()
-                .title("Show Minimap")
-                .subtitle("Show document overview on the right side of the editor.")
-                .build();
-            settings
-                .bind("editor-show-minimap", &row_editor_minimap, "active")
-                .flags(SettingsBindFlags::DEFAULT)
-                .build();
-            let row_editor_minimap = PreferencesRow::builder()
-                .title("Show Minimap")
-                .child(&row_editor_minimap)
-                .build();
-            group_editor.add(&row_editor_minimap);
-            page.add(&group_editor);
-
-            let group_library = PreferencesGroup::new();
-            group_library.set_title("Library");
-            let row_editor_minimap = SwitchRow::builder()
-                .title("Ignore hidden files")
-                .subtitle("Files and folders starting with \".\" won't show up in the library.")
-                .build();
-            settings
-                .bind("library-ignore-hidden-files", &row_editor_minimap, "active")
-                .flags(SettingsBindFlags::DEFAULT)
-                .build();
-            let row_editor_minimap = PreferencesRow::builder()
-                .title("Ignore hidden files")
-                .child(&row_editor_minimap)
-                .build();
-            group_library.add(&row_editor_minimap);
-            page.add(&group_library);
-
-            dialog.present(Some(&*obj));
-        }
-
-        fn show_font_dialog(&self) {
-            let obj = self.obj();
-
-            let font_family = self.settings().string("editor-font-family");
-            let font_size = self.settings().uint("editor-font-size");
-            let mut initial = FontDescription::new();
-            initial.set_family(&font_family);
-            initial.set_size(font_size as i32 * pango::SCALE);
-
-            FontDialog::builder().modal(true).build().choose_font(
-                Some(obj.as_ref()),
-                Some(&initial),
-                None::<&Cancellable>,
-                clone!(
-                    #[weak (rename_to = this)]
+            let dialog = PreferencesDialog::new(self.settings().clone());
+            dialog.connect_closure(
+                "font-changed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
                     self,
-                    move |result| {
-                        let Ok(font) = result else {
-                            return;
-                        };
-
+                    move |_: PreferencesDialog, font: FontDescription| {
                         if let Err(e) = this.set_editor_font(font) {
                             this.toast(&e.to_string());
                         }
                     }
                 ),
             );
+            dialog.present(Some(&*self.obj()));
         }
 
         fn set_editor_font(&self, font: FontDescription) -> Result<(), glib::error::BoolError> {

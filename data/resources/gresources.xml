@@ -18,6 +18,7 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library_project_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/preferences_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/sheet_stats.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/shortcuts.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>

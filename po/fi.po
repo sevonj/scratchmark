@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-26 01:14+0300\n"
+"POT-Creation-Date: 2025-10-26 21:36+0200\n"
 "PO-Revision-Date: 2025-10-17 16:46+0300\n"
 "Last-Translator: Sevonj <>\n"
 "Language-Team: Finnish\n"
@@ -19,16 +19,16 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 49.0\n"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:2
+#: data/org.scratchmark.Scratchmark.desktop.in:3
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:3
+#: data/org.scratchmark.Scratchmark.desktop.in:4
 msgid "Markdown editor"
 msgstr "Markdown-editori"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:9
+#: data/org.scratchmark.Scratchmark.desktop.in:10
 msgid "Scratchmark Markdown editor"
 msgstr "Scratchmark Markdown-editori"
 
@@ -207,6 +207,35 @@ msgstr "Sulje projekti"
 #: data/resources/ui/library_sheet_context_menu.ui:14
 msgid "Duplicate"
 msgstr "Luo kopio"
+
+#: data/resources/ui/preferences_dialog.ui:6
+#, fuzzy
+msgid "General"
+msgstr "Yleiset"
+
+#: data/resources/ui/preferences_dialog.ui:13
+msgid "Change font"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:14
+msgid "Customize font size and typeface"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:19
+msgid "Show Minimap"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:20
+msgid "Show overview of the document on the right side"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:30
+msgid "Ignore Hidden Files"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:31
+msgid "Files and folders with a preceding \".\" won't show up in the library"
+msgstr ""
 
 #: data/resources/ui/sheet_stats.ui:18
 msgid "Statistics"
