@@ -987,14 +987,9 @@ mod imp {
 
         fn show_about(&self) {
             let obj = self.obj();
-            let dialog = AboutDialog::new();
-            dialog.set_application_icon(APP_ID);
-            dialog.set_application_name("Scratchmark");
-            dialog.set_developer_name("Sevonj & co.");
-            dialog.set_issue_url("https://github.com/sevonj/scratchmark/issues/");
+            let builder = Builder::from_resource("/org/scratchmark/Scratchmark/ui/about_dialog.ui");
+            let dialog: AboutDialog = builder.object("dialog").unwrap();
             dialog.set_version(config::VERSION);
-            dialog.set_website("https://github.com/sevonj/scratchmark/");
-            dialog.set_support_url("https://github.com/sevonj/scratchmark/discussions/");
             dialog.present(Some(&*obj));
         }
 

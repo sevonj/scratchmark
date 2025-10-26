@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="AdwAboutDialog" id="dialog">
+    <property name="application_name" translatable="no">Scratchmark</property>
+    <property name="developer_name" translatable="no">Sevonj &amp; co.</property>
+    <property name="application_icon" translatable="no">org.scratchmark.Scratchmark</property>
+    <property name="issue_url" translatable="no">https://github.com/sevonj/scratchmark/issues/</property>
+    <property name="website" translatable="no">https://github.com/sevonj/scratchmark/</property>
+    <property name="support_url" translatable="no">https://github.com/sevonj/scratchmark/discussions/</property>
+  </object>
+</interface>
