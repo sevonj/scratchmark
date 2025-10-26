@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-26 21:36+0200\n"
+"POT-Creation-Date: 2025-10-26 21:47+0200\n"
 "PO-Revision-Date: 2025-10-22 01:07-0300\n"
 "Last-Translator: Filipe Motta <luizfilipemotta@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -209,6 +209,7 @@ msgid "Delete Permanently"
 msgstr "Excluir folha"
 
 #: data/resources/ui/library_project_context_menu.ui:18
+#: data/resources/ui/library_project_err_placeholder_context_menu.ui:6
 msgid "Close Project"
 msgstr "Fechar projeto"
 

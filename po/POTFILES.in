@@ -11,6 +11,7 @@ data/resources/ui/library_browser.ui
 data/resources/ui/library_drafts_context_menu.ui
 data/resources/ui/library_folder_context_menu.ui
 data/resources/ui/library_project_context_menu.ui
+data/resources/ui/library_project_err_placeholder_context_menu.ui
 data/resources/ui/library_sheet_context_menu.ui
 data/resources/ui/preferences_dialog.ui
 data/resources/ui/sheet_stats.ui
