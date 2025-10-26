@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="PreferencesDialog" parent="AdwPreferencesDialog">
+    <child>
+      <object class="AdwPreferencesPage">
+        <property name="title" translatable="yes">General</property>
+        <property name="icon-name">applications-graphics-symbolic</property>
+        <child>
+          <object class="AdwPreferencesGroup">
+            <child>
+              <object class="AdwActionRow" id="editor_font_button">
+                <property name="activatable">true</property>
+                <property name="title" translatable="yes">Change font</property>
+                <property name="subtitle" translatable="yes">Customize font size and typeface</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSwitchRow" id="editor_minimap_toggle">
+                <property name="title" translatable="yes">Show Minimap</property>
+                <property name="subtitle" translatable="yes">Show overview of the document on the right side</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <property name="icon-name">applications-graphics-symbolic</property>
+        <child>
+          <object class="AdwPreferencesGroup">
+            <child>
+              <object class="AdwSwitchRow" id="library_ignore_hidden_files_toggle">
+                <property name="title" translatable="yes">Ignore Hidden Files</property>
+                <property name="subtitle" translatable="yes">Files and folders with a preceding "." won't show up in the library</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
