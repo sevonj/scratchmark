@@ -235,28 +235,28 @@ msgstr ""
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
 
-#: data/resources/ui/sheet_stats.ui:18
+#: data/resources/ui/editor_doc_stats.ui:18
 msgid "Statistics"
 msgstr ""
 
-#: data/resources/ui/sheet_stats.ui:32
+#: data/resources/ui/editor_doc_stats.ui:32
 msgid "Characters"
 msgstr ""
 
-#: data/resources/ui/sheet_stats.ui:45 data/resources/ui/sheet_stats.ui:73
-#: data/resources/ui/sheet_stats.ui:101 data/resources/ui/sheet_stats.ui:129
+#: data/resources/ui/editor_doc_stats.ui:45 data/resources/ui/editor_doc_stats.ui:73
+#: data/resources/ui/editor_doc_stats.ui:101 data/resources/ui/editor_doc_stats.ui:129
 msgid "N/A"
 msgstr ""
 
-#: data/resources/ui/sheet_stats.ui:60
+#: data/resources/ui/editor_doc_stats.ui:60
 msgid "Excluding Spaces"
 msgstr ""
 
-#: data/resources/ui/sheet_stats.ui:88
+#: data/resources/ui/editor_doc_stats.ui:88
 msgid "Words"
 msgstr ""
 
-#: data/resources/ui/sheet_stats.ui:116
+#: data/resources/ui/editor_doc_stats.ui:116
 msgid "Lines"
 msgstr ""
 
