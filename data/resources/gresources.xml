@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/scratchmark/Scratchmark">
+    <file preprocess="xml-stripblanks" compressed="true">ui/editor_doc_stats.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_format_bar.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_minimap.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_placeholder.ui</file>
@@ -19,7 +20,6 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/preferences_dialog.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/sheet_stats.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/shortcuts.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window_title.ui</file>
