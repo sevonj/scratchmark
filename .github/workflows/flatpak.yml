@@ -58,7 +58,7 @@ jobs:
             echo "PRERELEASE=false" >> $GITHUB_ENV
           fi
       - name: Download Artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: Scratchmark-x86_64.flatpak
       - name: Release
