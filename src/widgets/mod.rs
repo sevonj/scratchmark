@@ -1,4 +1,5 @@
 mod editor;
+mod editor_doc_stats;
 mod editor_format_bar;
 mod editor_minimap;
 mod editor_placeholder;
@@ -11,11 +12,11 @@ mod library_project;
 mod library_project_err_placeholder;
 mod library_sheet;
 mod preferences_dialog;
-mod sheet_stats;
 mod window;
 mod window_title;
 
 pub use editor::Editor;
+pub use editor_doc_stats::EditorDocStats;
 pub use editor_format_bar::EditorFormatBar;
 pub use editor_minimap::EditorMinimap;
 pub use editor_placeholder::EditorPlaceholder;
@@ -28,6 +29,5 @@ pub use library_project::LibraryProject;
 pub use library_project_err_placeholder::LibraryProjectErrPlaceholder;
 pub use library_sheet::LibrarySheet;
 pub use preferences_dialog::PreferencesDialog;
-pub use sheet_stats::SheetStats;
 pub use window::Window;
 pub use window_title::WindowTitle;

@@ -31,11 +31,11 @@ mod imp {
     use gtk::gio::SimpleAction;
     use sourceview5::View;
 
-    use super::SheetStatsData;
+    use super::DocumentStatsData;
     use crate::util;
+    use crate::widgets::EditorDocStats;
     use crate::widgets::EditorMinimap;
     use crate::widgets::EditorSearchBar;
-    use crate::widgets::SheetStats;
 
     use super::NOT_CANCELLABLE;
 
@@ -47,8 +47,8 @@ mod imp {
         pub(super) source_view: TemplateChild<View>,
         pub(super) source_view_css_provider: CssProvider,
         #[template_child]
-        pub(super) document_stats: TemplateChild<SheetStats>,
-        pub(super) document_stats_data: Cell<SheetStatsData>,
+        pub(super) document_stats: TemplateChild<EditorDocStats>,
+        pub(super) document_stats_data: Cell<DocumentStatsData>,
 
         #[template_child]
         pub(super) search_bar: TemplateChild<EditorSearchBar>,
@@ -80,7 +80,7 @@ mod imp {
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
-            SheetStats::ensure_type();
+            EditorDocStats::ensure_type();
             EditorMinimap::ensure_type();
 
             klass.bind_template();
@@ -582,11 +582,11 @@ impl Editor {
             #[weak]
             this,
             move |buffer| {
-                this.refresh_stats(buffer);
+                this.refresh_document_stats(buffer);
                 this.set_unsaved_changes(true);
             }
         ));
-        this.refresh_stats(&buffer);
+        this.refresh_document_stats(&buffer);
         Ok(this)
     }
 
@@ -643,13 +643,13 @@ impl Editor {
             .load_from_string(&formatted);
     }
 
-    pub fn sheet_stats(&self) -> SheetStatsData {
+    pub fn document_stats(&self) -> DocumentStatsData {
         self.imp().document_stats_data.get()
     }
 
-    fn refresh_stats(&self, buffer: &Buffer) {
+    fn refresh_document_stats(&self, buffer: &Buffer) {
         let imp = self.imp();
-        let stats = SheetStatsData::from_buffer(buffer);
+        let stats = DocumentStatsData::from_buffer(buffer);
         imp.document_stats.set_stats(&stats);
         imp.document_stats_data.replace(stats);
         self.emit_by_name::<()>("stats-changed", &[]);
@@ -704,14 +704,14 @@ impl Editor {
 }
 
 #[derive(Debug, Default, Clone, Copy)]
-pub struct SheetStatsData {
+pub struct DocumentStatsData {
     pub num_lines: i32,
     pub num_chars: i32,
     pub num_spaces: i32,
     pub num_words: i32,
 }
 
-impl SheetStatsData {
+impl DocumentStatsData {
     pub fn from_buffer(buffer: &Buffer) -> Self {
         let num_lines = buffer.line_count();
         let num_chars = buffer.char_count();
