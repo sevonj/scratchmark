@@ -6,8 +6,8 @@ mod imp {
     use gtk::Label;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/sheet_stats.ui")]
-    pub struct SheetStats {
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor_doc_stats.ui")]
+    pub struct EditorDocStats {
         #[template_child]
         pub(super) lab_num_chars: TemplateChild<Label>,
         #[template_child]
@@ -19,9 +19,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for SheetStats {
-        const NAME: &'static str = "SheetStats";
-        type Type = super::SheetStats;
+    impl ObjectSubclass for EditorDocStats {
+        const NAME: &'static str = "EditorDocStats";
+        type Type = super::EditorDocStats;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -33,36 +33,36 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for SheetStats {
+    impl ObjectImpl for EditorDocStats {
         fn constructed(&self) {
             self.parent_constructed();
         }
     }
 
-    impl WidgetImpl for SheetStats {}
-    impl BinImpl for SheetStats {}
+    impl WidgetImpl for EditorDocStats {}
+    impl BinImpl for EditorDocStats {}
 }
 
 use adw::subclass::prelude::ObjectSubclassIsExt;
 use glib::Object;
 use gtk::glib;
 
-use crate::widgets::editor::SheetStatsData;
+use crate::widgets::editor::DocumentStatsData;
 
 glib::wrapper! {
-    pub struct SheetStats(ObjectSubclass<imp::SheetStats>)
+    pub struct EditorDocStats(ObjectSubclass<imp::EditorDocStats>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl Default for SheetStats {
+impl Default for EditorDocStats {
     fn default() -> Self {
         Object::builder().build()
     }
 }
 
-impl SheetStats {
-    pub fn set_stats(&self, data: &SheetStatsData) {
+impl EditorDocStats {
+    pub fn set_stats(&self, data: &DocumentStatsData) {
         let imp = self.imp();
         imp.lab_num_chars.set_label(&format!("{}", data.num_chars));
         imp.lab_num_nospace
