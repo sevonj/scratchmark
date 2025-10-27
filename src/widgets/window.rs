@@ -126,7 +126,7 @@ mod imp {
                 .bind("win-height", obj.as_ref(), "default-height")
                 .build();
             settings
-                .bind("is-maximized", obj.as_ref(), "maximized")
+                .bind("win-is-maximized", obj.as_ref(), "maximized")
                 .build();
             let library_browser: &LibraryBrowser = self.library_browser.as_ref();
             settings
