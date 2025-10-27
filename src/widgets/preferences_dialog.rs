@@ -30,6 +30,9 @@ mod imp {
         editor_minimap_toggle: TemplateChild<SwitchRow>,
 
         #[template_child]
+        general_autosave_toggle: TemplateChild<SwitchRow>,
+
+        #[template_child]
         library_ignore_hidden_files_toggle: TemplateChild<SwitchRow>,
     }
 
@@ -85,6 +88,12 @@ mod imp {
             let editor_minimap_toggle: &SwitchRow = self.editor_minimap_toggle.as_ref();
             settings
                 .bind("editor-show-minimap", editor_minimap_toggle, "active")
+                .flags(SettingsBindFlags::DEFAULT)
+                .build();
+
+            let general_autosave_toggle: &SwitchRow = self.general_autosave_toggle.as_ref();
+            settings
+                .bind("autosave", general_autosave_toggle, "active")
                 .flags(SettingsBindFlags::DEFAULT)
                 .build();
 

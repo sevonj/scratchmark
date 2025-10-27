@@ -147,6 +147,11 @@ mod imp {
                     }
                 ),
             );
+            let window_title: &WindowTitle = self.window_title.as_ref();
+            settings
+                .bind("autosave", window_title, "autosave")
+                .flags(SettingsBindFlags::DEFAULT)
+                .build();
             self.settings
                 .set(settings)
                 .expect("`settings` should not be set before calling `setup_settings`.");
