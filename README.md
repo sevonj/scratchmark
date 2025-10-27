@@ -1,8 +1,12 @@
 [![CI](https://github.com/sevonj/scratchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/sevonj/scratchmark/actions/workflows/ci.yml)
 
-# Scratchmark
+<div align="center">
 
 ![app icon](data/icons/hicolor/scalable/apps/org.scratchmark.Scratchmark.svg)
+
+# Scratchmark
+
+</div>
 
 Scratchmark is an organized Markdown editor designed for note keeping and writing. It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
 
