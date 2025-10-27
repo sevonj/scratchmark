@@ -606,7 +606,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_, _| {
-                    this.show_about();
+                    this.show_about_dialog();
                 }
             ));
             obj.add_action(&action);
@@ -960,7 +960,12 @@ mod imp {
 
         fn close_editor(&self) -> Result<(), ScratchmarkError> {
             if let Some(editor) = self.editor.borrow_mut().as_ref() {
-                editor.save()?;
+                if self.settings().boolean("autosave") {
+                    editor.save()?;
+                } else if editor.unsaved_changes() {
+                    self.show_unsaved_changes_dialog(editor);
+                    return Err(ScratchmarkError::UnsavedChanges);
+                }
             }
             self.editor.replace(None);
 
@@ -990,11 +995,52 @@ mod imp {
             obj.action_set_enabled("editor.shiftreturn", enabled);
         }
 
-        fn show_about(&self) {
+        fn show_about_dialog(&self) {
             let obj = self.obj();
             let builder = Builder::from_resource("/org/scratchmark/Scratchmark/ui/about_dialog.ui");
             let dialog: AboutDialog = builder.object("dialog").unwrap();
             dialog.set_version(config::VERSION);
+            dialog.present(Some(&*obj));
+        }
+
+        fn show_unsaved_changes_dialog(&self, editor: &Editor) {
+            let obj = self.obj();
+            let builder = Builder::from_resource(
+                "/org/scratchmark/Scratchmark/ui/editor_unsaved_changes_dialog.ui",
+            );
+            let dialog: AlertDialog = builder.object("dialog").unwrap();
+            dialog.connect_response(
+                None,
+                clone!(
+                    #[weak(rename_to = this)]
+                    self,
+                    #[weak]
+                    editor,
+                    move |_, response| {
+                        match response {
+                            "save" => {
+                                if let Err(e) = editor.save() {
+                                    this.toast(&e.to_string());
+                                    return;
+                                }
+                                if let Err(e) = this.close_editor() {
+                                    this.toast(&e.to_string());
+                                }
+                            }
+                            "discard" => {
+                                editor.set_unsaved_changes(false);
+                                if let Err(e) = this.close_editor() {
+                                    this.toast(&e.to_string());
+                                }
+                            }
+                            "cancel" => {
+                                return;
+                            }
+                            x => panic!("Unexpected response from unsaved dialog: '{x}'"),
+                        }
+                    }
+                ),
+            );
             dialog.present(Some(&*obj));
         }
 
