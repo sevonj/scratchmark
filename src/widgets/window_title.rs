@@ -20,6 +20,8 @@ mod imp {
         filename: RefCell<Option<String>>,
         #[property(get, set)]
         unsaved_changes: Cell<bool>,
+        #[property(get, set)]
+        autosave: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -60,7 +62,7 @@ mod imp {
                 return;
             };
 
-            let unsaved_indicator = if self.unsaved_changes.get() {
+            let unsaved_indicator = if self.unsaved_changes.get() && !self.autosave.get() {
                 "⦁ "
             } else {
                 ""

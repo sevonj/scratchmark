@@ -8,6 +8,7 @@ pub enum ScratchmarkError {
     FolderMoveFail,
     InvalidChars,
     FileChanged,
+    UnsavedChanges,
 }
 
 impl Error for ScratchmarkError {}
@@ -21,6 +22,7 @@ impl std::fmt::Display for ScratchmarkError {
             Self::FolderMoveFail => write!(f, "Couldn't move folder."),
             Self::InvalidChars => write!(f, "File contains invalid characters."),
             Self::FileChanged => write!(f, "File has changed on disk."),
+            Self::UnsavedChanges => write!(f, "Document has unsaved changes."),
         }
     }
 }
