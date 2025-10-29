@@ -1013,7 +1013,7 @@ mod imp {
 
         fn set_editor_font(&self, font: FontDescription) -> Result<(), glib::error::BoolError> {
             let family = font.family().unwrap_or_default();
-            let size = (font.size() / pango::SCALE) as u32;
+            let size = font.size() as u32;
 
             self.settings().set_uint("editor-font-size", size)?;
             self.settings().set_string("editor-font-family", &family)?;
