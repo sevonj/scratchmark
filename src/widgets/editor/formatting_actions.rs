@@ -174,3 +174,63 @@ pub fn format_code(buffer: TextBuffer) {
     let bound = buffer.iter_at_offset(offset + replacement.len() as i32);
     buffer.select_range(&ins, &bound);
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[macro_export]
+    macro_rules! buf {
+        ( $t:expr ) => {{
+            let buffer = TextBuffer::default();
+            buffer.set_text($t);
+            buffer
+        }};
+    }
+    
+    #[macro_export]
+    macro_rules! select_all {
+        ( $buf:expr ) => {{ $buf.select_range(&$buf.start_iter(), &$buf.end_iter()) }};
+    }
+
+    #[macro_export]
+    macro_rules! cursor_to_off {
+        ( $buf:expr ) => {{ $buf.select_range(&$buf.start_iter(), &$buf.end_iter()) }};
+    }
+
+    #[macro_export]
+    macro_rules! contents {
+        ( $buf:expr ) => {{ $buf.text(&$buf.start_iter(), &$buf.end_iter(), true) }};
+    }
+
+    #[test]
+    fn test_format_bold() {
+        let buffer = buf!("");
+        select_all!(&buffer);
+        format_bold(buffer.clone());
+        assert_eq!(contents!(buffer), "****");
+        format_bold(buffer.clone());
+        assert_eq!(contents!(buffer), "");
+
+        let buffer = buf!("text");
+        select_all!(&buffer);
+        format_bold(buffer.clone());
+        assert_eq!(contents!(buffer), "**text**");
+        format_bold(buffer.clone());
+        assert_eq!(contents!(buffer), "text");
+
+        let buffer = buf!("text");
+        buffer.place_cursor(&buffer.iter_at_offset(2));
+        format_bold(buffer.clone());
+        assert_eq!(contents!(buffer), "te****xt");
+        format_bold(buffer.clone());
+        assert_eq!(contents!(buffer), "text");
+
+        let buffer = buf!("  text\ntext\ntext  \n");
+        select_all!(&buffer);
+        format_bold(buffer.clone());
+        assert_eq!(contents!(buffer), "**  text\ntext\ntext  \n**");
+        format_bold(buffer.clone());
+        assert_eq!(contents!(buffer), "  text\ntext\ntext  \n");
+    }
+}
