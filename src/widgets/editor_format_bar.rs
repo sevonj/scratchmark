@@ -106,6 +106,20 @@ mod imp {
             ));
             self.actions.add_action(&action);
 
+            let action = SimpleAction::new("blockquote", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_action, _parameter| {
+                    if let Some(editor) = this.editor.borrow().as_ref() {
+                        editor
+                            .activate_action("editor.format-blockquote", None)
+                            .unwrap();
+                    }
+                }
+            ));
+            self.actions.add_action(&action);
+
             let action = SimpleAction::new("code", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]

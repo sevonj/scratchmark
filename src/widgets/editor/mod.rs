@@ -301,6 +301,14 @@ mod imp {
             ));
             actions.add_action(&action);
 
+            let action = gio::SimpleAction::new("format-blockquote", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| formatting_actions::format_blockquote(this.source_view.buffer())
+            ));
+            actions.add_action(&action);
+
             let action = gio::SimpleAction::new("format-code", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
