@@ -4,16 +4,28 @@
     <child>
       <object class="AdwPreferencesPage">
         <property name="title" translatable="yes">General</property>
-        <property name="icon-name">applications-graphics-symbolic</property>
         <child>
           <object class="AdwPreferencesGroup">
+            <property name="title" translatable="yes">Font</property>
             <child>
               <object class="AdwActionRow" id="editor_font_button">
                 <property name="activatable">true</property>
-                <property name="title" translatable="yes">Change font</property>
+                <property name="title" translatable="yes">Change Font</property>
                 <property name="subtitle" translatable="yes">Customize font size and typeface</property>
               </object>
             </child>
+            <child>
+              <object class="AdwActionRow" id="editor_font_reset_button">
+                <property name="activatable">true</property>
+                <property name="title" translatable="yes">Reset to Default</property>
+                <property name="subtitle" translatable="yes">Use default font</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="title" translatable="yes">Editor</property>
             <child>
               <object class="AdwSwitchRow" id="editor_minimap_toggle">
                 <property name="title" translatable="yes">Show Minimap</property>
@@ -22,9 +34,9 @@
             </child>
           </object>
         </child>
-        <property name="icon-name">applications-graphics-symbolic</property>
         <child>
           <object class="AdwPreferencesGroup">
+            <property name="title" translatable="yes">Library</property>
             <child>
               <object class="AdwSwitchRow" id="library_ignore_hidden_files_toggle">
                 <property name="title" translatable="yes">Ignore Hidden Files</property>

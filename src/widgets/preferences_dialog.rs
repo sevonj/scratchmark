@@ -25,7 +25,8 @@ mod imp {
 
         #[template_child]
         editor_font_button: TemplateChild<ActionRow>,
-
+        #[template_child]
+        editor_font_reset_button: TemplateChild<ActionRow>,
         #[template_child]
         editor_minimap_toggle: TemplateChild<SwitchRow>,
 
@@ -82,6 +83,12 @@ mod imp {
                 move |_| this.show_font_dialog()
             ));
 
+            self.editor_font_reset_button.connect_activated(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_| this.reset_font()
+            ));
+
             let editor_minimap_toggle: &SwitchRow = self.editor_minimap_toggle.as_ref();
             settings
                 .bind("editor-show-minimap", editor_minimap_toggle, "active")
@@ -118,13 +125,31 @@ mod imp {
                     #[weak]
                     obj,
                     move |result| {
-                        let Ok(font) = result else {
+                        let Ok(mut font) = result else {
                             return;
                         };
+                        let font_size = font.size();
+                        font.set_size(font_size / pango::SCALE);
                         obj.emit_by_name("font-changed", &[&font])
                     }
                 ),
             );
+        }
+
+        fn reset_font(&self) {
+            let obj = self.obj();
+            let settings = self.settings.get().unwrap();
+
+            settings.reset("editor-font-family");
+            settings.reset("editor-font-size");
+            let font_family = settings.string("editor-font-family");
+            let font_size = settings.uint("editor-font-size");
+
+            let mut font = FontDescription::default();
+            font.set_family(&font_family);
+            font.set_size(font_size as i32);
+
+            obj.emit_by_name("font-changed", &[&font])
         }
     }
 }
