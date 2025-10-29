@@ -78,12 +78,13 @@
                 </child>
               </object>
             </child-->
-            <!--child>
+            <child>
               <object class="GtkToggleButton">
                 <property name="icon-name">quotation-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Blockquote</property>
+                <property name="action-name">formatbar.blockquote</property>
               </object>
-            </child-->
+            </child>
             <!--child>
               <object class="GtkBox">
                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
