@@ -3,45 +3,45 @@
   <author>sevonj</author>
   <_description>Default Theme for Scratchmark</_description>
 
-  <!-- https://gitlab.gnome.org/GNOME/gtksourceview/-/blob/master/data/language-specs/markdown.lang -->
-
   <!--style name="selection" foreground="#" background="#" /-->
-  <style name="search-match" foreground="#000000" background="#e5a50a77" /> 
+  <style name="search-match" foreground="#000000" background="#e5a50a77" />
 
   <!-- transparent bg -->
   <style name="text" background="#00000000" />
 
-  <!-- formatting: heading -->
-  <style name="def:heading" foreground="#LightSeaGreen" scale="xx-large" bold="true" />
-  <!-- formatting: italic -->
-  <style name="def:emphasis" italic="true" />
-  <!-- formatting: bold -->
-  <style name="def:strong-emphasis" bold="true" />
-  <!-- formatting: striketrough -->
-  <style name="def:deletion" strikethrough="true" foreground="#CadetBlue" />
-  <!-- formatting: code block -->
-  <style name="def:inline-code" foreground="#gray" />
-  <!-- formatting: code span -->
-  <style name="def:preformatted-section" foreground="#gray" />
+  <!-- Color: LightSeaGreen and darker shades -->
+  <style name="markdown:h1" foreground="#20b2aa" scale="xx-large" bold="true" />
+  <style name="markdown:h2" foreground="#23948e" scale="x-large" bold="true" />
+  <style name="markdown:h3" foreground="#23928b" scale="large" bold="true" />
+  <style name="markdown:h4" foreground="#22736e" scale="medium" bold="true" />
+  <style name="markdown:h5" foreground="#205c58" scale="medium" bold="true" />
+  <style name="markdown:h6" foreground="#205c58" scale="medium" bold="true" />
+  <style name="markdown:bold" bold="true" />
+  <style name="markdown:italic" italic="true" />
+  <style name="markdown:bold-italic" bold="true" italic="true" />
+  <style name="markdown:code" foreground="#gray" />
+  <style name="markdown:strikethrough" strikethrough="true" foreground="#CadetBlue" />
+  <style name="markdown:highlight" background="#e5a50a33" />
+  <!-- TODO style name="markdown:subscript" /-->
+  <!-- TODO style name="markdown:superscript" /-->
 
+  <style name="markdown:blockquote" foreground="#gray" />
+  <style name="markdown:list" foreground="#gray" />
+  <style name="markdown:horizontal-rule" foreground="#gray" />
+  <style name="markdown:escape" foreground="#gray" />
+
+  <!-- Old, TODO -->
+   
   <!-- links: text -->
-  <style name="def:link-text" />
+  <!--style name="def:link-text" /-->
   <!-- links: url -->
-  <style name="def:link-destination" foreground="#SteelBlue" />
+  <!--style name="def:link-destination" foreground="#SteelBlue" /-->
   <!-- links: reference link id -->
-  <style name="def:preprocessor" foreground="#SteelBlue" />
+  <!--style name="def:preprocessor" foreground="#SteelBlue" /-->
   <!-- links: image / link alt text -->
-  <style name="def:constant" />
-
+  <!--style name="def:constant" /-->
   <!-- misc: slash escape -->
-  <style name="def:special-char" foreground="#gray" />
   <!-- misc: image exclamation mark -->
-  <style name="def:link-symbol" foreground="#gray" />
-  <!-- misc: list marker -->
-  <style name="def:list-marker" foreground="#gray" />
-  <!-- misc: block quote marker -->
-  <style name="def:shebang" foreground="#gray" />
-  <!-- misc: horizontal rules -->
-  <style name="def:thematic-break" foreground="#gray" />
+  <!--style name="def:link-symbol" foreground="#gray" /-->
 
 </style-scheme>

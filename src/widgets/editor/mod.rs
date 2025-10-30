@@ -289,6 +289,14 @@ mod imp {
             ));
             actions.add_action(&action);
 
+            let action = gio::SimpleAction::new("format-highlight", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| formatting_actions::format_highlight(this.source_view.buffer())
+            ));
+            actions.add_action(&action);
+
             let action = gio::SimpleAction::new("format-heading", Some(VariantTy::INT32));
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
