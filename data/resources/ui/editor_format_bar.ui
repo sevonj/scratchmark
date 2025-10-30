@@ -24,13 +24,6 @@
                     <property name="action-name">formatbar.italic</property>
                   </object>
                 </child>
-                <!--child>
-                  <object class="GtkButton">
-                    <property name="icon-name">format-text-underline-symbolic</property>
-                    <property name="tooltip-text" translatable="yes">Underline</property>
-                    <property name="action-name">formatbar.underline</property>
-                  </object>
-                </child-->
                 <child>
                   <object class="GtkButton">
                     <property name="icon-name">md-format-strikethrough-symbolic</property>
