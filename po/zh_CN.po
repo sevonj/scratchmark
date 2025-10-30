@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 19:49+0200\n"
+"POT-Creation-Date: 2025-10-30 20:17+0200\n"
 "PO-Revision-Date: 2025-10-24 01:20+0800\n"
 "Last-Translator: Rain Ding <Sulasalias@emailasso.net>\n"
 "Language-Team: \n"
@@ -89,27 +89,27 @@ msgstr "粗体 (Ctrl+B)"
 msgid "Italic (Ctrl+I)"
 msgstr "斜体 (Ctrl+I)"
 
-#: data/resources/ui/editor_format_bar.ui:37
+#: data/resources/ui/editor_format_bar.ui:30
 msgid "Strikethrough"
 msgstr "删除线"
 
-#: data/resources/ui/editor_format_bar.ui:44
+#: data/resources/ui/editor_format_bar.ui:37
 msgid "Highlight"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:56
+#: data/resources/ui/editor_format_bar.ui:49
 msgid "Heading 1"
 msgstr "标题 "
 
-#: data/resources/ui/editor_format_bar.ui:64
+#: data/resources/ui/editor_format_bar.ui:57
 msgid "Heading 2"
 msgstr "标题 "
 
-#: data/resources/ui/editor_format_bar.ui:91
+#: data/resources/ui/editor_format_bar.ui:84
 msgid "Blockquote"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:124
+#: data/resources/ui/editor_format_bar.ui:117
 msgid "Code"
 msgstr "代码"
 

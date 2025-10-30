@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 19:49+0200\n"
+"POT-Creation-Date: 2025-10-30 20:17+0200\n"
 "PO-Revision-Date: 2025-10-08 16:08+0300\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
@@ -93,27 +93,27 @@ msgstr "Kalın (Ctrl+B)"
 msgid "Italic (Ctrl+I)"
 msgstr "Eğik (Ctrl+I)"
 
-#: data/resources/ui/editor_format_bar.ui:37
+#: data/resources/ui/editor_format_bar.ui:30
 msgid "Strikethrough"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:44
+#: data/resources/ui/editor_format_bar.ui:37
 msgid "Highlight"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:56
+#: data/resources/ui/editor_format_bar.ui:49
 msgid "Heading 1"
 msgstr "Başlık 1"
 
-#: data/resources/ui/editor_format_bar.ui:64
+#: data/resources/ui/editor_format_bar.ui:57
 msgid "Heading 2"
 msgstr "Başlık 2"
 
-#: data/resources/ui/editor_format_bar.ui:91
+#: data/resources/ui/editor_format_bar.ui:84
 msgid "Blockquote"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:124
+#: data/resources/ui/editor_format_bar.ui:117
 msgid "Code"
 msgstr "Kod"
 
