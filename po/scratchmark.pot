@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-26 21:47+0200\n"
+"POT-Creation-Date: 2025-10-30 19:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,33 @@ msgid ""
 "personal notes, or maybe a recipe book."
 msgstr ""
 
+#: data/resources/ui/editor_doc_stats.ui:18
+msgid "Statistics"
+msgstr ""
+
+#: data/resources/ui/editor_doc_stats.ui:32
+msgid "Characters"
+msgstr ""
+
+#: data/resources/ui/editor_doc_stats.ui:45
+#: data/resources/ui/editor_doc_stats.ui:73
+#: data/resources/ui/editor_doc_stats.ui:101
+#: data/resources/ui/editor_doc_stats.ui:129
+msgid "N/A"
+msgstr ""
+
+#: data/resources/ui/editor_doc_stats.ui:60
+msgid "Excluding Spaces"
+msgstr ""
+
+#: data/resources/ui/editor_doc_stats.ui:88
+msgid "Words"
+msgstr ""
+
+#: data/resources/ui/editor_doc_stats.ui:116
+msgid "Lines"
+msgstr ""
+
 #: data/resources/ui/editor_format_bar.ui:16
 msgid "Bold (Ctrl+B)"
 msgstr ""
@@ -64,15 +91,23 @@ msgstr ""
 msgid "Strikethrough"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:49
+#: data/resources/ui/editor_format_bar.ui:44
+msgid "Highlight"
+msgstr ""
+
+#: data/resources/ui/editor_format_bar.ui:56
 msgid "Heading 1"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:57
+#: data/resources/ui/editor_format_bar.ui:64
 msgid "Heading 2"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:116
+#: data/resources/ui/editor_format_bar.ui:91
+msgid "Blockquote"
+msgstr ""
+
+#: data/resources/ui/editor_format_bar.ui:124
 msgid "Code"
 msgstr ""
 
@@ -160,7 +195,8 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
-#: data/resources/ui/library_browser.ui:38 data/resources/ui/window.ui:19
+#: data/resources/ui/library_browser.ui:38
+#: data/resources/ui/preferences_dialog.ui:39 data/resources/ui/window.ui:19
 msgid "Library"
 msgstr ""
 
@@ -211,53 +247,44 @@ msgstr ""
 msgid "General"
 msgstr ""
 
+#: data/resources/ui/preferences_dialog.ui:9
+msgid "Font"
+msgstr ""
+
 #: data/resources/ui/preferences_dialog.ui:13
-msgid "Change font"
+msgid "Change Font"
 msgstr ""
 
 #: data/resources/ui/preferences_dialog.ui:14
 msgid "Customize font size and typeface"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:19
-msgid "Show Minimap"
-msgstr ""
-
 #: data/resources/ui/preferences_dialog.ui:20
-msgid "Show overview of the document on the right side"
+msgid "Reset to Default"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:30
-msgid "Ignore Hidden Files"
+#: data/resources/ui/preferences_dialog.ui:21
+msgid "Use default font"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:28
+msgid "Editor"
 msgstr ""
 
 #: data/resources/ui/preferences_dialog.ui:31
+msgid "Show Minimap"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:32
+msgid "Show overview of the document on the right side"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:42
+msgid "Ignore Hidden Files"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:43
 msgid "Files and folders with a preceding \".\" won't show up in the library"
-msgstr ""
-
-#: data/resources/ui/editor_doc_stats.ui:18
-msgid "Statistics"
-msgstr ""
-
-#: data/resources/ui/editor_doc_stats.ui:32
-msgid "Characters"
-msgstr ""
-
-#: data/resources/ui/editor_doc_stats.ui:45 data/resources/ui/editor_doc_stats.ui:73
-#: data/resources/ui/editor_doc_stats.ui:101 data/resources/ui/editor_doc_stats.ui:129
-msgid "N/A"
-msgstr ""
-
-#: data/resources/ui/editor_doc_stats.ui:60
-msgid "Excluding Spaces"
-msgstr ""
-
-#: data/resources/ui/editor_doc_stats.ui:88
-msgid "Words"
-msgstr ""
-
-#: data/resources/ui/editor_doc_stats.ui:116
-msgid "Lines"
 msgstr ""
 
 #: data/resources/ui/shortcuts.ui:11

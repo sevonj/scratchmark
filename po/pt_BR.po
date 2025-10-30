@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-26 21:47+0200\n"
+"POT-Creation-Date: 2025-10-30 19:49+0200\n"
 "PO-Revision-Date: 2025-10-22 01:07-0300\n"
 "Last-Translator: Filipe Motta <luizfilipemotta@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -58,6 +58,33 @@ msgstr ""
 "Os documentos são organizados em pastas, as quais podem conter um projeto de "
 "escrita, notas pessoais, ou talvez um livro de receitas."
 
+#: data/resources/ui/editor_doc_stats.ui:18
+msgid "Statistics"
+msgstr "Estatísticas"
+
+#: data/resources/ui/editor_doc_stats.ui:32
+msgid "Characters"
+msgstr "Caracteres"
+
+#: data/resources/ui/editor_doc_stats.ui:45
+#: data/resources/ui/editor_doc_stats.ui:73
+#: data/resources/ui/editor_doc_stats.ui:101
+#: data/resources/ui/editor_doc_stats.ui:129
+msgid "N/A"
+msgstr "Nenhum"
+
+#: data/resources/ui/editor_doc_stats.ui:60
+msgid "Excluding Spaces"
+msgstr "Desconsiderando espaços"
+
+#: data/resources/ui/editor_doc_stats.ui:88
+msgid "Words"
+msgstr "Palavras"
+
+#: data/resources/ui/editor_doc_stats.ui:116
+msgid "Lines"
+msgstr "Linhas"
+
 #: data/resources/ui/editor_format_bar.ui:16
 msgid "Bold (Ctrl+B)"
 msgstr "Negrito (Ctrl+B)"
@@ -70,15 +97,23 @@ msgstr "Itálico (Ctrl+I)"
 msgid "Strikethrough"
 msgstr "Tachado"
 
-#: data/resources/ui/editor_format_bar.ui:49
+#: data/resources/ui/editor_format_bar.ui:44
+msgid "Highlight"
+msgstr ""
+
+#: data/resources/ui/editor_format_bar.ui:56
 msgid "Heading 1"
 msgstr "Cabeçalho 1"
 
-#: data/resources/ui/editor_format_bar.ui:57
+#: data/resources/ui/editor_format_bar.ui:64
 msgid "Heading 2"
 msgstr "Cabeçalho 2"
 
-#: data/resources/ui/editor_format_bar.ui:116
+#: data/resources/ui/editor_format_bar.ui:91
+msgid "Blockquote"
+msgstr ""
+
+#: data/resources/ui/editor_format_bar.ui:124
 msgid "Code"
 msgstr "Código"
 
@@ -167,7 +202,8 @@ msgstr "Criar"
 msgid "Rename"
 msgstr "Renomear"
 
-#: data/resources/ui/library_browser.ui:38 data/resources/ui/window.ui:19
+#: data/resources/ui/library_browser.ui:38
+#: data/resources/ui/preferences_dialog.ui:39 data/resources/ui/window.ui:19
 msgid "Library"
 msgstr "Biblioteca"
 
@@ -222,54 +258,46 @@ msgstr "Duplicar"
 msgid "General"
 msgstr "Geral"
 
+#: data/resources/ui/preferences_dialog.ui:9
+msgid "Font"
+msgstr ""
+
 #: data/resources/ui/preferences_dialog.ui:13
-msgid "Change font"
+msgid "Change Font"
 msgstr ""
 
 #: data/resources/ui/preferences_dialog.ui:14
 msgid "Customize font size and typeface"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:19
+#: data/resources/ui/preferences_dialog.ui:20
+msgid "Reset to Default"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:21
+msgid "Use default font"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:28
+#, fuzzy
+msgid "Editor"
+msgstr "Editor"
+
+#: data/resources/ui/preferences_dialog.ui:31
 msgid "Show Minimap"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:20
+#: data/resources/ui/preferences_dialog.ui:32
 msgid "Show overview of the document on the right side"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:30
+#: data/resources/ui/preferences_dialog.ui:42
 msgid "Ignore Hidden Files"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:31
+#: data/resources/ui/preferences_dialog.ui:43
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
-
-#: data/resources/ui/sheet_stats.ui:18
-msgid "Statistics"
-msgstr "Estatísticas"
-
-#: data/resources/ui/sheet_stats.ui:32
-msgid "Characters"
-msgstr "Caracteres"
-
-#: data/resources/ui/sheet_stats.ui:45 data/resources/ui/sheet_stats.ui:73
-#: data/resources/ui/sheet_stats.ui:101 data/resources/ui/sheet_stats.ui:129
-msgid "N/A"
-msgstr "Nenhum"
-
-#: data/resources/ui/sheet_stats.ui:60
-msgid "Excluding Spaces"
-msgstr "Desconsiderando espaços"
-
-#: data/resources/ui/sheet_stats.ui:88
-msgid "Words"
-msgstr "Palavras"
-
-#: data/resources/ui/sheet_stats.ui:116
-msgid "Lines"
-msgstr "Linhas"
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"

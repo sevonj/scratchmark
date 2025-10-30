@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-26 21:47+0200\n"
+"POT-Creation-Date: 2025-10-30 19:49+0200\n"
 "PO-Revision-Date: 2025-10-24 01:20+0800\n"
 "Last-Translator: Rain Ding <Sulasalias@emailasso.net>\n"
 "Language-Team: \n"
@@ -54,6 +54,33 @@ msgid ""
 msgstr ""
 "文件被整理到文件夹中，这些文件夹可能包含写作项目、个人笔记，或是食谱集。"
 
+#: data/resources/ui/editor_doc_stats.ui:18
+msgid "Statistics"
+msgstr "统计数据"
+
+#: data/resources/ui/editor_doc_stats.ui:32
+msgid "Characters"
+msgstr "字符"
+
+#: data/resources/ui/editor_doc_stats.ui:45
+#: data/resources/ui/editor_doc_stats.ui:73
+#: data/resources/ui/editor_doc_stats.ui:101
+#: data/resources/ui/editor_doc_stats.ui:129
+msgid "N/A"
+msgstr "N/A"
+
+#: data/resources/ui/editor_doc_stats.ui:60
+msgid "Excluding Spaces"
+msgstr "不包含空格"
+
+#: data/resources/ui/editor_doc_stats.ui:88
+msgid "Words"
+msgstr "单词"
+
+#: data/resources/ui/editor_doc_stats.ui:116
+msgid "Lines"
+msgstr "行"
+
 #: data/resources/ui/editor_format_bar.ui:16
 msgid "Bold (Ctrl+B)"
 msgstr "粗体 (Ctrl+B)"
@@ -66,15 +93,23 @@ msgstr "斜体 (Ctrl+I)"
 msgid "Strikethrough"
 msgstr "删除线"
 
-#: data/resources/ui/editor_format_bar.ui:49
+#: data/resources/ui/editor_format_bar.ui:44
+msgid "Highlight"
+msgstr ""
+
+#: data/resources/ui/editor_format_bar.ui:56
 msgid "Heading 1"
 msgstr "标题 "
 
-#: data/resources/ui/editor_format_bar.ui:57
+#: data/resources/ui/editor_format_bar.ui:64
 msgid "Heading 2"
 msgstr "标题 "
 
-#: data/resources/ui/editor_format_bar.ui:116
+#: data/resources/ui/editor_format_bar.ui:91
+msgid "Blockquote"
+msgstr ""
+
+#: data/resources/ui/editor_format_bar.ui:124
 msgid "Code"
 msgstr "代码"
 
@@ -162,7 +197,8 @@ msgstr "创建"
 msgid "Rename"
 msgstr "重命名"
 
-#: data/resources/ui/library_browser.ui:38 data/resources/ui/window.ui:19
+#: data/resources/ui/library_browser.ui:38
+#: data/resources/ui/preferences_dialog.ui:39 data/resources/ui/window.ui:19
 msgid "Library"
 msgstr "库"
 
@@ -214,54 +250,46 @@ msgstr "复制"
 msgid "General"
 msgstr "通用"
 
+#: data/resources/ui/preferences_dialog.ui:9
+msgid "Font"
+msgstr ""
+
 #: data/resources/ui/preferences_dialog.ui:13
-msgid "Change font"
+msgid "Change Font"
 msgstr ""
 
 #: data/resources/ui/preferences_dialog.ui:14
 msgid "Customize font size and typeface"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:19
+#: data/resources/ui/preferences_dialog.ui:20
+msgid "Reset to Default"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:21
+msgid "Use default font"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:28
+#, fuzzy
+msgid "Editor"
+msgstr "编辑"
+
+#: data/resources/ui/preferences_dialog.ui:31
 msgid "Show Minimap"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:20
+#: data/resources/ui/preferences_dialog.ui:32
 msgid "Show overview of the document on the right side"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:30
+#: data/resources/ui/preferences_dialog.ui:42
 msgid "Ignore Hidden Files"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:31
+#: data/resources/ui/preferences_dialog.ui:43
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
-
-#: data/resources/ui/sheet_stats.ui:18
-msgid "Statistics"
-msgstr "统计数据"
-
-#: data/resources/ui/sheet_stats.ui:32
-msgid "Characters"
-msgstr "字符"
-
-#: data/resources/ui/sheet_stats.ui:45 data/resources/ui/sheet_stats.ui:73
-#: data/resources/ui/sheet_stats.ui:101 data/resources/ui/sheet_stats.ui:129
-msgid "N/A"
-msgstr "N/A"
-
-#: data/resources/ui/sheet_stats.ui:60
-msgid "Excluding Spaces"
-msgstr "不包含空格"
-
-#: data/resources/ui/sheet_stats.ui:88
-msgid "Words"
-msgstr "单词"
-
-#: data/resources/ui/sheet_stats.ui:116
-msgid "Lines"
-msgstr "行"
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"

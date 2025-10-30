@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-26 21:47+0200\n"
+"POT-Creation-Date: 2025-10-30 19:49+0200\n"
 "PO-Revision-Date: 2025-10-10 16:32+0200\n"
 "Last-Translator: Łukasz Horodecki <dakilla@gmail.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -58,6 +58,33 @@ msgstr ""
 "Dokumenty są zorganizowane w katalogach, które mogą zawierać projekt "
 "pisarski, osobiste notatki lub książkę kucharską."
 
+#: data/resources/ui/editor_doc_stats.ui:18
+msgid "Statistics"
+msgstr "Statystyki"
+
+#: data/resources/ui/editor_doc_stats.ui:32
+msgid "Characters"
+msgstr "Znaki"
+
+#: data/resources/ui/editor_doc_stats.ui:45
+#: data/resources/ui/editor_doc_stats.ui:73
+#: data/resources/ui/editor_doc_stats.ui:101
+#: data/resources/ui/editor_doc_stats.ui:129
+msgid "N/A"
+msgstr "N/A"
+
+#: data/resources/ui/editor_doc_stats.ui:60
+msgid "Excluding Spaces"
+msgstr "Z wyłączeniem spacji"
+
+#: data/resources/ui/editor_doc_stats.ui:88
+msgid "Words"
+msgstr "Słowa"
+
+#: data/resources/ui/editor_doc_stats.ui:116
+msgid "Lines"
+msgstr "Linie"
+
 #: data/resources/ui/editor_format_bar.ui:16
 msgid "Bold (Ctrl+B)"
 msgstr "Pogrubienie (Ctrl+B)"
@@ -70,15 +97,23 @@ msgstr "Kursywa (Ctrl+I)"
 msgid "Strikethrough"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:49
+#: data/resources/ui/editor_format_bar.ui:44
+msgid "Highlight"
+msgstr ""
+
+#: data/resources/ui/editor_format_bar.ui:56
 msgid "Heading 1"
 msgstr "Nagłówek 1"
 
-#: data/resources/ui/editor_format_bar.ui:57
+#: data/resources/ui/editor_format_bar.ui:64
 msgid "Heading 2"
 msgstr "Nagłówek 2"
 
-#: data/resources/ui/editor_format_bar.ui:116
+#: data/resources/ui/editor_format_bar.ui:91
+msgid "Blockquote"
+msgstr ""
+
+#: data/resources/ui/editor_format_bar.ui:124
 msgid "Code"
 msgstr "Kod"
 
@@ -167,7 +202,8 @@ msgstr "Utwórz"
 msgid "Rename"
 msgstr "Zmień nazwę"
 
-#: data/resources/ui/library_browser.ui:38 data/resources/ui/window.ui:19
+#: data/resources/ui/library_browser.ui:38
+#: data/resources/ui/preferences_dialog.ui:39 data/resources/ui/window.ui:19
 msgid "Library"
 msgstr "Biblioteka"
 
@@ -222,54 +258,46 @@ msgstr "Duplikuj"
 msgid "General"
 msgstr "Ogólne"
 
+#: data/resources/ui/preferences_dialog.ui:9
+msgid "Font"
+msgstr ""
+
 #: data/resources/ui/preferences_dialog.ui:13
-msgid "Change font"
+msgid "Change Font"
 msgstr ""
 
 #: data/resources/ui/preferences_dialog.ui:14
 msgid "Customize font size and typeface"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:19
+#: data/resources/ui/preferences_dialog.ui:20
+msgid "Reset to Default"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:21
+msgid "Use default font"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:28
+#, fuzzy
+msgid "Editor"
+msgstr "Edytor"
+
+#: data/resources/ui/preferences_dialog.ui:31
 msgid "Show Minimap"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:20
+#: data/resources/ui/preferences_dialog.ui:32
 msgid "Show overview of the document on the right side"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:30
+#: data/resources/ui/preferences_dialog.ui:42
 msgid "Ignore Hidden Files"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:31
+#: data/resources/ui/preferences_dialog.ui:43
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
-
-#: data/resources/ui/sheet_stats.ui:18
-msgid "Statistics"
-msgstr "Statystyki"
-
-#: data/resources/ui/sheet_stats.ui:32
-msgid "Characters"
-msgstr "Znaki"
-
-#: data/resources/ui/sheet_stats.ui:45 data/resources/ui/sheet_stats.ui:73
-#: data/resources/ui/sheet_stats.ui:101 data/resources/ui/sheet_stats.ui:129
-msgid "N/A"
-msgstr "N/A"
-
-#: data/resources/ui/sheet_stats.ui:60
-msgid "Excluding Spaces"
-msgstr "Z wyłączeniem spacji"
-
-#: data/resources/ui/sheet_stats.ui:88
-msgid "Words"
-msgstr "Słowa"
-
-#: data/resources/ui/sheet_stats.ui:116
-msgid "Lines"
-msgstr "Linie"
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
