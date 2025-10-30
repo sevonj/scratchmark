@@ -44,6 +44,7 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/md-codeblock-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/md-format-h1-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/md-format-h2-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/md-format-highlight-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/md-format-strikethrough-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/md-horizontal-rule-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/md-italic-symbolic.svg</file>

@@ -38,6 +38,13 @@
                     <property name="action-name">formatbar.strikethrough</property>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkToggleButton">
+                    <property name="icon-name">md-format-highlight-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Highlight</property>
+                    <property name="action-name">formatbar.highlight</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
