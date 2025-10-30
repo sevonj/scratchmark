@@ -35,13 +35,16 @@ pub fn format_bold(buffer: TextBuffer) {
         format!("**{selection}**")
     };
 
-    buffer.delete_selection(true, true);
-    let mut iter = buffer.iter_at_mark(&buffer.get_insert());
-    buffer.insert(&mut iter, &replacement);
+    buffer.begin_user_action();
 
-    let ins = buffer.iter_at_offset(offset);
-    let bound = buffer.iter_at_mark(&buffer.get_insert());
-    buffer.select_range(&ins, &bound);
+    buffer.delete_selection(true, true);
+    buffer.insert_at_cursor(&replacement);
+    buffer.select_range(
+        &buffer.iter_at_offset(offset),
+        &buffer.iter_at_mark(&buffer.get_insert()),
+    );
+
+    buffer.end_user_action();
 }
 
 pub fn format_italic(buffer: TextBuffer) {
@@ -73,13 +76,16 @@ pub fn format_italic(buffer: TextBuffer) {
         format!("*{selection}*")
     };
 
-    buffer.delete_selection(true, true);
-    let mut iter = buffer.iter_at_mark(&buffer.get_insert());
-    buffer.insert(&mut iter, &replacement);
+    buffer.begin_user_action();
 
-    let ins = buffer.iter_at_offset(offset);
-    let bound = buffer.iter_at_mark(&buffer.get_insert());
-    buffer.select_range(&ins, &bound);
+    buffer.delete_selection(true, true);
+    buffer.insert_at_cursor(&replacement);
+    buffer.select_range(
+        &buffer.iter_at_offset(offset),
+        &buffer.iter_at_mark(&buffer.get_insert()),
+    );
+
+    buffer.end_user_action();
 }
 
 pub fn format_strikethrough(buffer: TextBuffer) {
@@ -105,13 +111,16 @@ pub fn format_strikethrough(buffer: TextBuffer) {
         format!("~~{selection}~~")
     };
 
-    buffer.delete_selection(true, true);
-    let mut iter = buffer.iter_at_mark(&buffer.get_insert());
-    buffer.insert(&mut iter, &replacement);
+    buffer.begin_user_action();
 
-    let ins = buffer.iter_at_offset(offset);
-    let bound = buffer.iter_at_mark(&buffer.get_insert());
-    buffer.select_range(&ins, &bound);
+    buffer.delete_selection(true, true);
+    buffer.insert_at_cursor(&replacement);
+    buffer.select_range(
+        &buffer.iter_at_offset(offset),
+        &buffer.iter_at_mark(&buffer.get_insert()),
+    );
+
+    buffer.end_user_action();
 }
 
 pub fn format_highlight(buffer: TextBuffer) {
@@ -137,13 +146,16 @@ pub fn format_highlight(buffer: TextBuffer) {
         format!("=={selection}==")
     };
 
-    buffer.delete_selection(true, true);
-    let mut iter = buffer.iter_at_mark(&buffer.get_insert());
-    buffer.insert(&mut iter, &replacement);
+    buffer.begin_user_action();
 
-    let ins = buffer.iter_at_offset(offset);
-    let bound = buffer.iter_at_mark(&buffer.get_insert());
-    buffer.select_range(&ins, &bound);
+    buffer.delete_selection(true, true);
+    buffer.insert_at_cursor(&replacement);
+    buffer.select_range(
+        &buffer.iter_at_offset(offset),
+        &buffer.iter_at_mark(&buffer.get_insert()),
+    );
+
+    buffer.end_user_action();
 }
 
 pub fn format_heading(buffer: TextBuffer, heading_size: i32) {
@@ -187,9 +199,12 @@ pub fn format_heading(buffer: TextBuffer, heading_size: i32) {
         format!("{new_header}{old_line}")
     };
 
+    buffer.begin_user_action();
+
     buffer.delete(&mut start, &mut end);
-    let mut iter = buffer.iter_at_mark(&buffer.get_insert());
-    buffer.insert(&mut iter, &replacement);
+    buffer.insert_at_cursor(&replacement);
+
+    buffer.end_user_action();
 }
 
 pub fn format_blockquote(buffer: TextBuffer) {
@@ -237,6 +252,8 @@ pub fn format_blockquote(buffer: TextBuffer) {
         }
     }
 
+    buffer.begin_user_action();
+
     buffer.delete(&mut start_iter, &mut end_iter);
 
     let mut start_iter = buffer.iter_at_line(first_line).unwrap();
@@ -250,6 +267,8 @@ pub fn format_blockquote(buffer: TextBuffer) {
         .unwrap_or_else(|| buffer.end_iter());
 
     buffer.select_range(&start_iter, &end_iter);
+
+    buffer.end_user_action();
 }
 
 pub fn format_code(buffer: TextBuffer) {
@@ -267,13 +286,16 @@ pub fn format_code(buffer: TextBuffer) {
         format!("`{selection}`")
     };
 
-    buffer.delete_selection(true, true);
-    let mut iter = buffer.iter_at_mark(&buffer.get_insert());
-    buffer.insert(&mut iter, &replacement);
+    buffer.begin_user_action();
 
-    let ins = buffer.iter_at_offset(offset);
-    let bound = buffer.iter_at_offset(offset + replacement.len() as i32);
-    buffer.select_range(&ins, &bound);
+    buffer.delete_selection(true, true);
+    buffer.insert_at_cursor(&replacement);
+    buffer.select_range(
+        &buffer.iter_at_offset(offset),
+        &buffer.iter_at_mark(&buffer.get_insert()),
+    );
+
+    buffer.end_user_action();
 }
 
 fn range_around_cursor(buffer: &TextBuffer, distance: i32) -> Option<(TextIter, TextIter)> {
