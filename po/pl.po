@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 20:17+0200\n"
+"POT-Creation-Date: 2025-11-01 17:36+0200\n"
 "PO-Revision-Date: 2025-10-10 16:32+0200\n"
 "Last-Translator: Łukasz Horodecki <dakilla@gmail.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -311,69 +311,74 @@ msgstr "Przełącz pełny ekran"
 
 #: data/resources/ui/shortcuts.ui:20
 msgctxt "shortcut window"
+msgid "Toggle Focus Mode"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:26
+msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencje"
 
-#: data/resources/ui/shortcuts.ui:26
+#: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
 msgid "Show Shortcuts"
 msgstr "Skróty klawiszowe"
 
-#: data/resources/ui/shortcuts.ui:34
+#: data/resources/ui/shortcuts.ui:40
 msgctxt "shortcut window"
 msgid "Document"
 msgstr "Dokument"
 
-#: data/resources/ui/shortcuts.ui:37
+#: data/resources/ui/shortcuts.ui:43
 #, fuzzy
 msgctxt "shortcut window"
 msgid "New Document"
 msgstr "Nowy arkusz"
 
-#: data/resources/ui/shortcuts.ui:43
+#: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "Add Project"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:49
+#: data/resources/ui/shortcuts.ui:55
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Save Document"
 msgstr "Zapisz arkusz"
 
-#: data/resources/ui/shortcuts.ui:55
+#: data/resources/ui/shortcuts.ui:61
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Rename Document"
 msgstr "Zmień nazwę arkusza"
 
-#: data/resources/ui/shortcuts.ui:61
+#: data/resources/ui/shortcuts.ui:67
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Close Document"
 msgstr "Zamknij arkusz"
 
-#: data/resources/ui/shortcuts.ui:69
+#: data/resources/ui/shortcuts.ui:75
 msgctxt "shortcut window"
 msgid "Editor"
 msgstr "Edytor"
 
-#: data/resources/ui/shortcuts.ui:72
+#: data/resources/ui/shortcuts.ui:78
 msgctxt "shortcut window"
 msgid "Search Text"
 msgstr "Szukaj tekstu"
 
-#: data/resources/ui/shortcuts.ui:78
+#: data/resources/ui/shortcuts.ui:84
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr "Szukaj i zastąp tekst"
 
-#: data/resources/ui/shortcuts.ui:86
+#: data/resources/ui/shortcuts.ui:92
 msgctxt "shortcut window"
 msgid "Library"
 msgstr "Biblioteka"
 
-#: data/resources/ui/shortcuts.ui:89
+#: data/resources/ui/shortcuts.ui:95
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Ręczne odświeżenie"
@@ -387,7 +392,7 @@ msgstr "Przełącz panel boczny (F9)"
 msgid "New Document (Ctrl+N)"
 msgstr "Nowy arkusz (Ctr+N)"
 
-#: data/resources/ui/window.ui:69 data/resources/ui/window.ui:150
+#: data/resources/ui/window.ui:69
 msgid "Exit Fullscreen"
 msgstr "Opuść pełny ekran"
 
@@ -424,20 +429,28 @@ msgid "Search and Replace"
 msgstr "Szukaj i zamień"
 
 #: data/resources/ui/window.ui:145
-msgid "Enter Fullscreen"
-msgstr "Włącz pełny ekran"
+#, fuzzy
+msgid "Toggle Fullscreen"
+msgstr "Przełącz pełny ekran"
 
-#: data/resources/ui/window.ui:157
+#: data/resources/ui/window.ui:149
+msgid "Toggle Focus Mode"
+msgstr ""
+
+#: data/resources/ui/window.ui:155
 msgid "Preferences"
 msgstr "Preferencje"
 
-#: data/resources/ui/window.ui:161
+#: data/resources/ui/window.ui:159
 msgid "Keyboard Shortcuts"
 msgstr "Skróty klawiszowe"
 
-#: data/resources/ui/window.ui:165
+#: data/resources/ui/window.ui:163
 msgid "About Scratchmark"
 msgstr "O programie"
+
+#~ msgid "Enter Fullscreen"
+#~ msgstr "Włącz pełny ekran"
 
 #~ msgid "New Folder"
 #~ msgstr "Nowy katalog"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 20:17+0200\n"
+"POT-Creation-Date: 2025-11-01 17:36+0200\n"
 "PO-Revision-Date: 2025-10-08 16:08+0300\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
@@ -311,69 +311,74 @@ msgstr "Tam Ekrana Geç"
 
 #: data/resources/ui/shortcuts.ui:20
 msgctxt "shortcut window"
+msgid "Toggle Focus Mode"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:26
+msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: data/resources/ui/shortcuts.ui:26
+#: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
 msgid "Show Shortcuts"
 msgstr "Kısayolları Göster"
 
-#: data/resources/ui/shortcuts.ui:34
+#: data/resources/ui/shortcuts.ui:40
 msgctxt "shortcut window"
 msgid "Document"
 msgstr "Belge"
 
-#: data/resources/ui/shortcuts.ui:37
+#: data/resources/ui/shortcuts.ui:43
 #, fuzzy
 msgctxt "shortcut window"
 msgid "New Document"
 msgstr "Yeni Sayfa"
 
-#: data/resources/ui/shortcuts.ui:43
+#: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "Add Project"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:49
+#: data/resources/ui/shortcuts.ui:55
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Save Document"
 msgstr "Sayfayı Kaydet"
 
-#: data/resources/ui/shortcuts.ui:55
+#: data/resources/ui/shortcuts.ui:61
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Rename Document"
 msgstr "Sayfayı Yeniden Adlandır"
 
-#: data/resources/ui/shortcuts.ui:61
+#: data/resources/ui/shortcuts.ui:67
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Close Document"
 msgstr "Sayfayı Kapat"
 
-#: data/resources/ui/shortcuts.ui:69
+#: data/resources/ui/shortcuts.ui:75
 msgctxt "shortcut window"
 msgid "Editor"
 msgstr "Düzenleyici"
 
-#: data/resources/ui/shortcuts.ui:72
+#: data/resources/ui/shortcuts.ui:78
 msgctxt "shortcut window"
 msgid "Search Text"
 msgstr "Metin Ara"
 
-#: data/resources/ui/shortcuts.ui:78
+#: data/resources/ui/shortcuts.ui:84
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr "Metin Ara ve Değiştir"
 
-#: data/resources/ui/shortcuts.ui:86
+#: data/resources/ui/shortcuts.ui:92
 msgctxt "shortcut window"
 msgid "Library"
 msgstr "Kitaplık"
 
-#: data/resources/ui/shortcuts.ui:89
+#: data/resources/ui/shortcuts.ui:95
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Elle Yenile"
@@ -387,7 +392,7 @@ msgstr "Kenar Çubuğunu Aç/Kapat (F9)"
 msgid "New Document (Ctrl+N)"
 msgstr "Yeni Sayfa (Ctrl+N)"
 
-#: data/resources/ui/window.ui:69 data/resources/ui/window.ui:150
+#: data/resources/ui/window.ui:69
 msgid "Exit Fullscreen"
 msgstr "Tam Ekrandan Çık"
 
@@ -424,20 +429,28 @@ msgid "Search and Replace"
 msgstr "Ara ve Değiştir"
 
 #: data/resources/ui/window.ui:145
-msgid "Enter Fullscreen"
+#, fuzzy
+msgid "Toggle Fullscreen"
 msgstr "Tam Ekrana Geç"
 
-#: data/resources/ui/window.ui:157
+#: data/resources/ui/window.ui:149
+msgid "Toggle Focus Mode"
+msgstr ""
+
+#: data/resources/ui/window.ui:155
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: data/resources/ui/window.ui:161
+#: data/resources/ui/window.ui:159
 msgid "Keyboard Shortcuts"
 msgstr "Klavye Kısayolları"
 
-#: data/resources/ui/window.ui:165
+#: data/resources/ui/window.ui:163
 msgid "About Scratchmark"
 msgstr "Scratchmark Hakkında"
+
+#~ msgid "Enter Fullscreen"
+#~ msgstr "Tam Ekrana Geç"
 
 #~ msgid "New Folder"
 #~ msgstr "Yeni Klasör"
