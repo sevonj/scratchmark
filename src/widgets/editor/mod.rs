@@ -333,6 +333,7 @@ mod imp {
                     Signal::builder("close-requested").build(),
                     Signal::builder("saved-as").build(),
                     Signal::builder("stats-changed").build(),
+                    Signal::builder("buffer-changed").build(),
                     Signal::builder("toast")
                         .param_types([String::static_type()])
                         .build(),
@@ -424,6 +425,7 @@ impl Editor {
             move |buffer| {
                 this.refresh_document_stats(buffer);
                 this.set_unsaved_changes(true);
+                this.emit_by_name::<()>("buffer-changed", &[]);
             }
         ));
         this.refresh_document_stats(&buffer);

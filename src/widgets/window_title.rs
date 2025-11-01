@@ -20,6 +20,8 @@ mod imp {
         filename: RefCell<Option<String>>,
         #[property(get, set)]
         unsaved_changes: Cell<bool>,
+        #[property(get, set)]
+        focus_mode: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -60,14 +62,20 @@ mod imp {
                 return;
             };
 
-            let unsaved_indicator = if self.unsaved_changes.get() {
+            let unsaved = if self.unsaved_changes.get() {
                 "⦁ "
             } else {
                 ""
             };
 
+            let focus = if self.focus_mode.get() {
+                " (Focus Mode)"
+            } else {
+                ""
+            };
+
             self.window_title
-                .set_title(&format!("{unsaved_indicator}{filename}"));
+                .set_title(&format!("{unsaved}{filename}{focus}"));
         }
     }
 }
