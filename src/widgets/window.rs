@@ -6,13 +6,11 @@ mod imp {
     use adw::subclass::prelude::*;
     use glib::{clone, closure_local};
     use gtk::glib;
-    use gtk::pango;
 
     use adw::{
         AboutDialog, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView,
         Toast, ToastOverlay, ToolbarStyle, ToolbarView,
     };
-    use glib::VariantTy;
     use gtk::gio::Cancellable;
     use gtk::gio::File;
     use gtk::gio::FileCopyFlags;
@@ -20,11 +18,13 @@ mod imp {
     use gtk::gio::SettingsBindFlags;
     use gtk::gio::SimpleAction;
     use gtk::gio::SimpleActionGroup;
+    use gtk::glib::Properties;
+    use gtk::glib::VariantTy;
+    use gtk::pango::FontDescription;
     use gtk::{
         Builder, Button, CompositeTemplate, EventControllerMotion, MenuButton, Revealer,
         ToggleButton,
     };
-    use pango::FontDescription;
 
     use crate::APP_ID;
     use crate::config;
@@ -41,7 +41,8 @@ mod imp {
     use crate::widgets::PreferencesDialog;
     use crate::widgets::WindowTitle;
 
-    #[derive(CompositeTemplate, Default)]
+    #[derive(CompositeTemplate, Default, Properties)]
+    #[properties(wrapper_type = super::Window)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/window.ui")]
     pub struct Window {
         #[template_child]
@@ -55,7 +56,10 @@ mod imp {
         sidebar_toolbar_view: TemplateChild<ToolbarView>,
         #[template_child]
         sidebar_toggle: TemplateChild<ToggleButton>,
-        sidebar_uncollapsed_open: Cell<bool>,
+        /// Bound to setting. Does not directly map to sidebar visibility, because even when this
+        /// is true, the sidebar can be hidden by focus mode or too narrow window.
+        #[property(get, set)]
+        sidebar_open: Cell<bool>,
 
         #[template_child]
         main_page: TemplateChild<NavigationPage>,
@@ -87,6 +91,14 @@ mod imp {
         library_browser: LibraryBrowser,
         editor: RefCell<Option<Editor>>,
 
+        motion_controller: EventControllerMotion,
+
+        #[property(get, set)]
+        focus_mode_enabled: Cell<bool>,
+        #[property(get, set)]
+        focus_mode_active: Cell<bool>,
+        focus_mode_cursor_position: Cell<(f64, f64)>,
+
         settings: OnceCell<Settings>,
     }
 
@@ -108,6 +120,7 @@ mod imp {
         }
     }
 
+    #[glib::derived_properties]
     impl ObjectImpl for Window {
         fn constructed(&self) {
             self.parent_constructed();
@@ -128,6 +141,24 @@ mod imp {
             settings
                 .bind("win-is-maximized", obj.as_ref(), "maximized")
                 .build();
+            settings
+                .bind("library-show-sidebar", obj.as_ref(), "sidebar-open")
+                .build();
+            let editor_sidebar_toggle: &ToggleButton = self.editor_sidebar_toggle.as_ref();
+            settings
+                .bind("editor-show-sidebar", editor_sidebar_toggle, "active")
+                .build();
+            let format_bar: &EditorFormatBar = self.format_bar.as_ref();
+            settings
+                .bind("editor-show-formatbar", format_bar, "visible")
+                .build();
+            settings
+                .bind("focus-mode-enabled", obj.as_ref(), "focus-mode-enabled")
+                .build();
+            let window_title: &WindowTitle = self.window_title.as_ref();
+            settings
+                .bind("focus-mode-enabled", window_title, "focus-mode")
+                .build();
             let library_browser: &LibraryBrowser = self.library_browser.as_ref();
             settings
                 .bind(
@@ -147,9 +178,46 @@ mod imp {
                     }
                 ),
             );
+
+            obj.connect_notify(Some("focus-mode-enabled"), move |obj, _| {
+                let focus_mode_enabled = obj.focus_mode_enabled();
+                obj.action_set_enabled("win.enable-focus", !focus_mode_enabled);
+                obj.action_set_enabled("win.disable-focus", focus_mode_enabled);
+                obj.imp().set_focus_mode_active(focus_mode_enabled)
+            });
+
             self.settings
                 .set(settings)
                 .expect("`settings` should not be set before calling `setup_settings`.");
+            obj.add_controller(self.motion_controller.clone());
+
+            self.motion_controller.connect_motion(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_controller, x, y| {
+                    if this.obj().focus_mode_active() {
+                        // Exit focus mode if cursor moved
+                        const THRESHOLD: f64 = 100.;
+                        let (start_x, start_y) = this.focus_mode_cursor_position.get();
+                        let (delta_x, delta_y) = (x - start_x, y - start_y);
+                        if (delta_x * delta_x + delta_y * delta_y).sqrt() > THRESHOLD {
+                            this.set_focus_mode_active(false);
+                        }
+                    } else {
+                        this.focus_mode_cursor_position.replace((x, y));
+                    }
+                }
+            ));
+            self.motion_controller.connect_enter(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_controller, _x, _y| this.set_focus_mode_active(false)
+            ));
+            self.motion_controller.connect_leave(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_controller| this.set_focus_mode_active(false)
+            ));
 
             self.editor_sidebar_toggle.set_sensitive(false);
 
@@ -428,6 +496,38 @@ mod imp {
                 ),
             );
 
+            if !self.top_split.is_collapsed() {
+                // Get initial state from setting.
+                self.top_split.set_show_sidebar(obj.sidebar_open());
+            }
+
+            self.sidebar_toggle.connect_active_notify(clone!(
+                #[weak]
+                obj,
+                move |sidebar_toggle| {
+                    // Sidebar toggle clicked
+                    if obj.imp().top_split.is_collapsed() {
+                        // Window is narrow, sidebar is an overlay. Do not change the setting.
+                        return;
+                    }
+                    if obj.focus_mode_active() {
+                        return;
+                    }
+                    obj.set_sidebar_open(sidebar_toggle.is_active())
+                }
+            ));
+
+            self.top_split.connect_collapsed_notify(clone!(
+                #[weak]
+                obj,
+                move |top_split| {
+                    if !top_split.is_collapsed() {
+                        // Sidebar was uncollapsed, get uncollapsed state from setting again.
+                        top_split.set_show_sidebar(obj.sidebar_open());
+                    }
+                }
+            ));
+
             let sidebar_toggle: &ToggleButton = self.sidebar_toggle.as_ref();
             self.top_split
                 .bind_property("show-sidebar", sidebar_toggle, "active")
@@ -453,29 +553,11 @@ mod imp {
             self.editor_sidebar_toggle.connect_active_notify(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_| {
+                move |toggle| {
+                    if let Some(editor) = this.editor.borrow().as_ref() {
+                        editor.set_show_sidebar(toggle.is_active());
+                    }
                     this.update_toolbar_style();
-                }
-            ));
-
-            self.top_split.connect_collapsed_notify(clone!(
-                #[weak (rename_to = this)]
-                self,
-                move |top_split| {
-                    if !top_split.is_collapsed() {
-                        top_split.set_show_sidebar(this.sidebar_uncollapsed_open.get());
-                    }
-                }
-            ));
-
-            self.sidebar_toggle.connect_active_notify(clone!(
-                #[weak (rename_to = this)]
-                self,
-                move |sidebar_toggle| {
-                    if !this.top_split.is_collapsed() {
-                        this.sidebar_uncollapsed_open
-                            .replace(sidebar_toggle.is_active());
-                    }
                 }
             ));
 
@@ -493,32 +575,36 @@ mod imp {
                 move |_| this.on_close_request()
             ));
 
-            let action_fullscreen = SimpleAction::new("fullscreen", None);
-            action_fullscreen.connect_activate(clone!(
+            let action = SimpleAction::new("toggle-fullscreen", None);
+            action.connect_activate(clone!(
                 #[weak]
                 obj,
-                move |_, _| obj.fullscreen()
+                move |_, _| obj.set_fullscreened(!obj.is_fullscreen())
             ));
-            obj.add_action(&action_fullscreen);
+            obj.add_action(&action);
 
-            let action_unfullscreen = SimpleAction::new("unfullscreen", None);
-            action_unfullscreen.connect_activate(clone!(
+            let action = SimpleAction::new("unfullscreen", None);
+            action.connect_activate(clone!(
                 #[weak]
                 obj,
                 move |_, _| obj.unfullscreen()
             ));
-            obj.add_action(&action_unfullscreen);
+            obj.add_action(&action);
+
+            let action = SimpleAction::new("toggle-focus", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_, _| obj.set_focus_mode_enabled(!obj.focus_mode_enabled())
+            ));
+            obj.add_action(&action);
 
             obj.connect_fullscreened_notify(clone!(
                 #[weak (rename_to = this)]
                 self,
-                #[weak]
-                action_fullscreen,
-                #[weak]
-                action_unfullscreen,
-                move |_| this.on_fullscreen_changed(action_fullscreen, action_unfullscreen)
+                move |_| this.update_toolbar_visibility()
             ));
-            self.on_fullscreen_changed(action_fullscreen, action_unfullscreen);
+            self.update_toolbar_visibility();
             self.setup_fullscreen_headerbar();
 
             let action = SimpleAction::new("file-new", None);
@@ -631,8 +717,7 @@ mod imp {
                     #[weak]
                     this,
                     move |_action, param| {
-                        let editor_opt = this.editor.borrow();
-                        if let Some(editor) = editor_opt.as_ref() {
+                        if let Some(editor) = this.editor.borrow().as_ref() {
                             editor.activate_action(&name, param).expect(&name);
                         }
                     }
@@ -687,13 +772,53 @@ mod imp {
             let format_bar_open = self.format_bar_toggle.is_active();
             let editor_sidebar_open =
                 self.editor.borrow().is_some() && self.editor_sidebar_toggle.is_active();
-            let fullscreen = self.obj().is_fullscreen();
-            let style = if format_bar_open || editor_sidebar_open || fullscreen {
+            let is_fullscreen = self.obj().is_fullscreen();
+            let style = if format_bar_open || editor_sidebar_open || is_fullscreen {
                 ToolbarStyle::Raised
             } else {
                 ToolbarStyle::Flat
             };
             self.main_toolbar_view.set_top_bar_style(style);
+        }
+
+        fn set_focus_mode_active(&self, mut active: bool) {
+            let obj = self.obj();
+            if !obj.focus_mode_enabled() {
+                active = false;
+            }
+            if let Some(editor) = self.editor.borrow().as_ref() {
+                editor.set_show_sidebar(self.editor_sidebar_toggle.is_active() && !active);
+            } else {
+                active = false;
+            }
+            obj.set_focus_mode_active(active);
+            self.top_split
+                .set_show_sidebar(obj.sidebar_open() && !active);
+            self.update_toolbar_visibility();
+            self.update_toolbar_style();
+        }
+
+        fn update_toolbar_visibility(&self) {
+            let obj = self.obj();
+            let focus_mode_active = obj.focus_mode_active();
+            let is_fullscreen = obj.is_fullscreen();
+
+            self.main_toolbar_view
+                .set_reveal_top_bars(!focus_mode_active);
+            self.main_header_revealer.set_reveal_child(!is_fullscreen);
+
+            if is_fullscreen {
+                self.unfullscreen_button.set_visible(true);
+                self.main_header_bar.set_show_end_title_buttons(false);
+                obj.action_set_enabled("win.fullscreen", false);
+                obj.action_set_enabled("win.unfullscreen", true);
+            } else {
+                self.unfullscreen_button.set_visible(false);
+                self.main_header_bar.set_show_end_title_buttons(true);
+                obj.action_set_enabled("win.fullscreen", true);
+                obj.action_set_enabled("win.unfullscreen", false);
+            }
+            self.update_toolbar_style();
         }
 
         fn toast(&self, title: &str) {
@@ -711,14 +836,6 @@ mod imp {
                 }
                 self.load_sheet(open_sheet_path);
             }
-
-            let show_sidebar = settings.boolean("library-show-sidebar");
-            self.sidebar_uncollapsed_open.replace(show_sidebar);
-            self.top_split.set_show_sidebar(show_sidebar);
-            self.format_bar
-                .set_visible(settings.boolean("editor-show-formatbar"));
-            self.editor_sidebar_toggle
-                .set_active(settings.boolean("editor-show-sidebar"));
 
             let open_projects = settings.strv("library-project-paths");
             for path in open_projects {
@@ -740,13 +857,6 @@ mod imp {
                 .map(|e| e.path())
                 .unwrap_or_default();
             settings.set_string("open-document-path", open_document_path.to_str().unwrap())?;
-
-            settings.set_boolean("library-show-sidebar", self.sidebar_uncollapsed_open.get())?;
-            settings.set_boolean("editor-show-formatbar", self.format_bar.is_visible())?;
-            settings.set_boolean(
-                "editor-show-sidebar",
-                self.editor_sidebar_toggle.is_active(),
-            )?;
 
             let expanded_folders = self.library_browser.expanded_folder_paths();
             settings.set_strv("library-expanded-folders", expanded_folders)?;
@@ -806,10 +916,7 @@ mod imp {
             let font_size = self.settings().uint("editor-font-size");
             editor.set_font(font_family.as_str(), font_size);
 
-            self.editor_sidebar_toggle
-                .bind_property("active", &editor, "show_sidebar")
-                .sync_create()
-                .build();
+            editor.set_show_sidebar(self.editor_sidebar_toggle.is_active());
 
             self.editor_sidebar_toggle.set_sensitive(true);
 
@@ -838,6 +945,18 @@ mod imp {
                         this.library_browser.refresh_content();
                         this.library_browser.set_selected_sheet(Some(editor.path()));
                         this.update_window_title();
+                    }
+                ),
+            );
+
+            editor.connect_closure(
+                "buffer-changed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_: Editor| {
+                        this.set_focus_mode_active(true);
                     }
                 ),
             );
@@ -966,6 +1085,7 @@ mod imp {
             self.format_bar.bind_editor(None);
             self.editor_sidebar_toggle.set_sensitive(false);
             self.editor_actions_set_enabled(false);
+            self.set_focus_mode_active(false);
             self.update_toolbar_style();
             Ok(())
         }
@@ -1035,30 +1155,8 @@ mod imp {
             glib::Propagation::Proceed
         }
 
-        fn on_fullscreen_changed(
-            &self,
-            action_fullscreen: SimpleAction,
-            action_unfullscreen: SimpleAction,
-        ) {
-            if self.obj().is_fullscreen() {
-                self.unfullscreen_button.set_visible(true);
-                self.main_header_revealer.set_reveal_child(false);
-                self.main_header_bar.set_show_end_title_buttons(false);
-                action_fullscreen.set_enabled(false);
-                action_unfullscreen.set_enabled(true);
-            } else {
-                self.unfullscreen_button.set_visible(false);
-                self.main_header_revealer.set_reveal_child(true);
-                self.main_header_bar.set_show_end_title_buttons(true);
-                action_fullscreen.set_enabled(true);
-                action_unfullscreen.set_enabled(false);
-            }
-            self.update_toolbar_style();
-        }
-
         fn setup_fullscreen_headerbar(&self) {
-            let motion_controller = EventControllerMotion::new();
-            motion_controller.connect_motion(clone!(
+            self.motion_controller.connect_motion(clone!(
                 #[weak(rename_to = this)]
                 self,
                 move |_controller, x, y| {
@@ -1087,7 +1185,6 @@ mod imp {
                     }
                 }
             ));
-            self.obj().add_controller(motion_controller);
         }
     }
 }

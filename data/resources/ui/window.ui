@@ -43,7 +43,7 @@
                   <object class="AdwToolbarView" id="main_toolbar_view">
                     <child type="top">
                       <object class="GtkRevealer" id="main_header_revealer">
-                        <property name="reveal-child" translatable="no">True</property>
+                        <property name="reveal-child">True</property>
                         <child>
                           <object class="AdwHeaderBar" id="main_header_bar">
                             <property name="show-start-title-buttons">False</property>
@@ -142,14 +142,12 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Enter Fullscreen</attribute>
-        <attribute name="action">win.fullscreen</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="label" translatable="yes">Toggle Fullscreen</attribute>
+        <attribute name="action">win.toggle-fullscreen</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Exit Fullscreen</attribute>
-        <attribute name="action">win.unfullscreen</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="label" translatable="yes">Toggle Focus Mode</attribute>
+        <attribute name="action">win.toggle-focus</attribute>
       </item>
     </section>
     <section>
