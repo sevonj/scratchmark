@@ -46,6 +46,22 @@
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <url type="translate">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.5.0" date="2025-10-21">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.8</url>
+      <description translate="no">
+        <ul>
+          <li>Feature: Ignore hidden files</li>
+          <li>Feature: Unsaved changes indicator</li>
+          <li>Feature: Reset font to default</li>
+          <li>Feature: Support extended markdown syntax for highlighting</li>
+          <li>Fix: Revise unclear terminology</li>
+          <li>Fix: One formatting action took 2 steps to undo</li>
+          <li>Fix: Formatting actions may change text selection range</li>
+          <li>Add Brazilian Portugese translation</li>
+          <li>Add Simplified Chinese translation</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.4.7" date="2025-10-21">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.7</url>
       <description translate="no">
