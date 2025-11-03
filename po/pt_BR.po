@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-01 17:36+0200\n"
-"PO-Revision-Date: 2025-10-22 01:07-0300\n"
+"PO-Revision-Date: 2025-11-03 01:12-0300\n"
 "Last-Translator: Filipe Motta <luizfilipemotta@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
 "Language: pt_BR\n"
@@ -99,7 +99,7 @@ msgstr "Tachado"
 
 #: data/resources/ui/editor_format_bar.ui:37
 msgid "Highlight"
-msgstr ""
+msgstr "Destaque"
 
 #: data/resources/ui/editor_format_bar.ui:49
 msgid "Heading 1"
@@ -111,7 +111,7 @@ msgstr "Cabeçalho 2"
 
 #: data/resources/ui/editor_format_bar.ui:84
 msgid "Blockquote"
-msgstr ""
+msgstr "Citação"
 
 #: data/resources/ui/editor_format_bar.ui:117
 msgid "Code"
@@ -122,9 +122,8 @@ msgid "Nothing Open"
 msgstr "Nada aberto"
 
 #: data/resources/ui/editor_placeholder.ui:11
-#, fuzzy
 msgid "Create a new document or open an existing one from the sidebar"
-msgstr "Crie uma nova folha ou abra uma existente a partir da barra lateral"
+msgstr "Crie um novo documento ou abra um existente a partir da barra lateral"
 
 #: data/resources/ui/editor_search_bar.ui:26
 msgid "Search"
@@ -214,17 +213,15 @@ msgstr "Adicionar projeto"
 #: data/resources/ui/library_drafts_context_menu.ui:6
 #: data/resources/ui/library_folder_context_menu.ui:6
 #: data/resources/ui/library_project_context_menu.ui:6
-#, fuzzy
 msgid "New Document"
-msgstr "Nova folha"
+msgstr "Novo documento"
 
 #: data/resources/ui/library_drafts_context_menu.ui:10
 #: data/resources/ui/library_folder_context_menu.ui:10
 #: data/resources/ui/library_project_context_menu.ui:10
 #: data/resources/ui/window.ui:28
-#, fuzzy
 msgid "Create Subfolder"
-msgstr "Criar pasta"
+msgstr "Criar subpasta"
 
 #: data/resources/ui/library_drafts_context_menu.ui:14
 #: data/resources/ui/library_folder_context_menu.ui:14
@@ -240,9 +237,8 @@ msgstr "Mover para a Lixeira"
 
 #: data/resources/ui/library_folder_context_menu.ui:26
 #: data/resources/ui/library_sheet_context_menu.ui:22
-#, fuzzy
 msgid "Delete Permanently"
-msgstr "Excluir folha"
+msgstr "Excluir permanentemente"
 
 #: data/resources/ui/library_project_context_menu.ui:18
 #: data/resources/ui/library_project_err_placeholder_context_menu.ui:6
@@ -254,50 +250,48 @@ msgid "Duplicate"
 msgstr "Duplicar"
 
 #: data/resources/ui/preferences_dialog.ui:6
-#, fuzzy
 msgid "General"
 msgstr "Geral"
 
 #: data/resources/ui/preferences_dialog.ui:9
 msgid "Font"
-msgstr ""
+msgstr "Fonte"
 
 #: data/resources/ui/preferences_dialog.ui:13
 msgid "Change Font"
-msgstr ""
+msgstr "Escolher fonte"
 
 #: data/resources/ui/preferences_dialog.ui:14
 msgid "Customize font size and typeface"
-msgstr ""
+msgstr "Personalizar tamanho e fonte a ser usada"
 
 #: data/resources/ui/preferences_dialog.ui:20
 msgid "Reset to Default"
-msgstr ""
+msgstr "Redefinir para padrão"
 
 #: data/resources/ui/preferences_dialog.ui:21
 msgid "Use default font"
-msgstr ""
+msgstr "Usar a fonte padrão"
 
 #: data/resources/ui/preferences_dialog.ui:28
-#, fuzzy
 msgid "Editor"
 msgstr "Editor"
 
 #: data/resources/ui/preferences_dialog.ui:31
 msgid "Show Minimap"
-msgstr ""
+msgstr "Mostrar minimapa"
 
 #: data/resources/ui/preferences_dialog.ui:32
 msgid "Show overview of the document on the right side"
-msgstr ""
+msgstr "Mostrar visão geral do documento no lado direito"
 
 #: data/resources/ui/preferences_dialog.ui:42
 msgid "Ignore Hidden Files"
-msgstr ""
+msgstr "Ignorar arquivos ocultos"
 
 #: data/resources/ui/preferences_dialog.ui:43
 msgid "Files and folders with a preceding \".\" won't show up in the library"
-msgstr ""
+msgstr "Arquivos e pastas precedidos por um \".\" não aparecerão na biblioteca"
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
@@ -312,7 +306,7 @@ msgstr "Ativar/Desativar tela cheia"
 #: data/resources/ui/shortcuts.ui:20
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
-msgstr ""
+msgstr "Ativar/Desativar Modo Foco"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
@@ -330,10 +324,9 @@ msgid "Document"
 msgstr "Documento"
 
 #: data/resources/ui/shortcuts.ui:43
-#, fuzzy
 msgctxt "shortcut window"
 msgid "New Document"
-msgstr "Nova folha"
+msgstr "Nova documento"
 
 #: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
@@ -341,22 +334,19 @@ msgid "Add Project"
 msgstr "Adicionar projeto"
 
 #: data/resources/ui/shortcuts.ui:55
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Save Document"
-msgstr "Salvar folha"
+msgstr "Salvar documento"
 
 #: data/resources/ui/shortcuts.ui:61
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Rename Document"
-msgstr "Renomear folha"
+msgstr "Renomear documento"
 
 #: data/resources/ui/shortcuts.ui:67
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Close Document"
-msgstr "Fechar folha"
+msgstr "Fechar documento"
 
 #: data/resources/ui/shortcuts.ui:75
 msgctxt "shortcut window"
@@ -388,9 +378,8 @@ msgid "Toggle Sidebar (F9)"
 msgstr "Ativar/Desativar barra lateral"
 
 #: data/resources/ui/window.ui:63
-#, fuzzy
 msgid "New Document (Ctrl+N)"
-msgstr "Nova Folha (Ctrl + N)"
+msgstr "Nova documento (Ctrl + N)"
 
 #: data/resources/ui/window.ui:69
 msgid "Exit Fullscreen"
@@ -429,13 +418,12 @@ msgid "Search and Replace"
 msgstr "Pesquisar e substituir"
 
 #: data/resources/ui/window.ui:145
-#, fuzzy
 msgid "Toggle Fullscreen"
 msgstr "Ativar/Desativar tela cheia"
 
 #: data/resources/ui/window.ui:149
 msgid "Toggle Focus Mode"
-msgstr ""
+msgstr "Ativar/Desativar Modo Foco"
 
 #: data/resources/ui/window.ui:155
 msgid "Preferences"
