@@ -95,11 +95,11 @@ msgstr "Kursywa (Ctrl+I)"
 
 #: data/resources/ui/editor_format_bar.ui:30
 msgid "Strikethrough"
-msgstr ""
+msgstr "Przekreślenie"
 
 #: data/resources/ui/editor_format_bar.ui:37
 msgid "Highlight"
-msgstr ""
+msgstr "Wyróżnienie"
 
 #: data/resources/ui/editor_format_bar.ui:49
 msgid "Heading 1"
@@ -111,7 +111,7 @@ msgstr "Nagłówek 2"
 
 #: data/resources/ui/editor_format_bar.ui:84
 msgid "Blockquote"
-msgstr ""
+msgstr "Cytat blokowy"
 
 #: data/resources/ui/editor_format_bar.ui:117
 msgid "Code"
@@ -209,14 +209,14 @@ msgstr "Biblioteka"
 
 #: data/resources/ui/library_browser.ui:53 data/resources/ui/window.ui:119
 msgid "Add Project"
-msgstr ""
+msgstr "Dodaj projekt"
 
 #: data/resources/ui/library_drafts_context_menu.ui:6
 #: data/resources/ui/library_folder_context_menu.ui:6
 #: data/resources/ui/library_project_context_menu.ui:6
 #, fuzzy
 msgid "New Document"
-msgstr "Nowy arkusz"
+msgstr "Nowy dokument"
 
 #: data/resources/ui/library_drafts_context_menu.ui:10
 #: data/resources/ui/library_folder_context_menu.ui:10
@@ -224,7 +224,7 @@ msgstr "Nowy arkusz"
 #: data/resources/ui/window.ui:28
 #, fuzzy
 msgid "Create Subfolder"
-msgstr "Utwórz katalog"
+msgstr "Utwórz podkatalog"
 
 #: data/resources/ui/library_drafts_context_menu.ui:14
 #: data/resources/ui/library_folder_context_menu.ui:14
@@ -242,7 +242,7 @@ msgstr "Przenieś do śmieci"
 #: data/resources/ui/library_sheet_context_menu.ui:22
 #, fuzzy
 msgid "Delete Permanently"
-msgstr "Usuń arkusz"
+msgstr "Usuń trwale"
 
 #: data/resources/ui/library_project_context_menu.ui:18
 #: data/resources/ui/library_project_err_placeholder_context_menu.ui:6
@@ -260,23 +260,23 @@ msgstr "Ogólne"
 
 #: data/resources/ui/preferences_dialog.ui:9
 msgid "Font"
-msgstr ""
+msgstr "Czcionka"
 
 #: data/resources/ui/preferences_dialog.ui:13
 msgid "Change Font"
-msgstr ""
+msgstr "Zmień czcionkę"
 
 #: data/resources/ui/preferences_dialog.ui:14
 msgid "Customize font size and typeface"
-msgstr ""
+msgstr "Dostosuj czcionkę i jej rozmiar"
 
 #: data/resources/ui/preferences_dialog.ui:20
 msgid "Reset to Default"
-msgstr ""
+msgstr "Przywróć domyślne"
 
 #: data/resources/ui/preferences_dialog.ui:21
 msgid "Use default font"
-msgstr ""
+msgstr "Użyj domyślnej czcionki"
 
 #: data/resources/ui/preferences_dialog.ui:28
 #, fuzzy
@@ -285,19 +285,19 @@ msgstr "Edytor"
 
 #: data/resources/ui/preferences_dialog.ui:31
 msgid "Show Minimap"
-msgstr ""
+msgstr "Pokaż minimapę"
 
 #: data/resources/ui/preferences_dialog.ui:32
 msgid "Show overview of the document on the right side"
-msgstr ""
+msgstr "Pokaż podgląd dokumentu po prawej stronie"
 
 #: data/resources/ui/preferences_dialog.ui:42
 msgid "Ignore Hidden Files"
-msgstr ""
+msgstr "Ignoruj ukryte pliki"
 
 #: data/resources/ui/preferences_dialog.ui:43
 msgid "Files and folders with a preceding \".\" won't show up in the library"
-msgstr ""
+msgstr "Pliki i katalogi zaczynające się od \".\" nie będą widoczne w bibliotece"
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
@@ -312,7 +312,7 @@ msgstr "Przełącz pełny ekran"
 #: data/resources/ui/shortcuts.ui:20
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
-msgstr ""
+msgstr "Przełącz tryb skupienia"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
@@ -333,30 +333,30 @@ msgstr "Dokument"
 #, fuzzy
 msgctxt "shortcut window"
 msgid "New Document"
-msgstr "Nowy arkusz"
+msgstr "Nowy dokument"
 
 #: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "Add Project"
-msgstr ""
+msgstr "Dodaj projekt"
 
 #: data/resources/ui/shortcuts.ui:55
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Save Document"
-msgstr "Zapisz arkusz"
+msgstr "Zapisz dokument"
 
 #: data/resources/ui/shortcuts.ui:61
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Rename Document"
-msgstr "Zmień nazwę arkusza"
+msgstr "Zmień nazwę dokumentu"
 
 #: data/resources/ui/shortcuts.ui:67
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Close Document"
-msgstr "Zamknij arkusz"
+msgstr "Zamknij dokument"
 
 #: data/resources/ui/shortcuts.ui:75
 msgctxt "shortcut window"
@@ -390,7 +390,7 @@ msgstr "Przełącz panel boczny (F9)"
 #: data/resources/ui/window.ui:63
 #, fuzzy
 msgid "New Document (Ctrl+N)"
-msgstr "Nowy arkusz (Ctr+N)"
+msgstr "Nowy dokument (Ctr+N)"
 
 #: data/resources/ui/window.ui:69
 msgid "Exit Fullscreen"
@@ -435,7 +435,7 @@ msgstr "Przełącz pełny ekran"
 
 #: data/resources/ui/window.ui:149
 msgid "Toggle Focus Mode"
-msgstr ""
+msgstr "Przełącz tryb skupienia"
 
 #: data/resources/ui/window.ui:155
 msgid "Preferences"
@@ -463,4 +463,4 @@ msgstr "O programie"
 
 #, fuzzy
 #~ msgid "Rename Document"
-#~ msgstr "Zmień nazwę akrusza"
+#~ msgstr "Zmień nazwę dokumentu"
