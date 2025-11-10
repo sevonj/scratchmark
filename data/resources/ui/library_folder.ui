@@ -7,7 +7,7 @@
                 <child>
                     <object class="AdwBin" id="expand_button_cont">
                         <child>
-                            <object class="GtkButton" id="expand_button">
+                            <object class="GtkToggleButton" id="expand_button">
                                 <style>
                                     <class name="flat" />
                                 </style>

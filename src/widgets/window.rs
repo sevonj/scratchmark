@@ -740,7 +740,6 @@ mod imp {
                     .editor_actions_set_enabled(this.imp().editor.borrow().is_some());
             });
 
-            self.library_browser.add_drafts_project();
             self.load_state();
         }
     }
@@ -836,7 +835,10 @@ mod imp {
                 }
                 self.load_sheet(open_sheet_path);
             }
-
+            self.library_browser
+                .set_selected_folder_from_last_session(Some(PathBuf::from(
+                    settings.string("selected-folder-path"),
+                )));
             let open_projects = settings.strv("library-project-paths");
             for path in open_projects {
                 self.library_browser.add_project(PathBuf::from(path));
@@ -857,7 +859,10 @@ mod imp {
                 .map(|e| e.path())
                 .unwrap_or_default();
             settings.set_string("open-document-path", open_document_path.to_str().unwrap())?;
-
+            settings.set_string(
+                "selected-folder-path",
+                self.library_browser.selected_folder().to_str().unwrap(),
+            )?;
             let expanded_folders = self.library_browser.expanded_folder_paths();
             settings.set_strv("library-expanded-folders", expanded_folders)?;
             let open_projects = self.library_browser.open_project_paths();

@@ -32,6 +32,11 @@ mod imp {
         pub(super) projects_container: TemplateChild<gtk::Box>,
 
         pub(super) selected_sheet: RefCell<Option<PathBuf>>,
+        #[property(get, set)]
+        selected_folder: RefCell<PathBuf>,
+        /// Cleared when found.
+        #[property(nullable, get, set)]
+        selected_folder_from_last_session: RefCell<Option<PathBuf>>,
         pub(super) projects: RefCell<HashMap<PathBuf, LibraryProject>>,
 
         #[property(get, set)]
@@ -86,6 +91,11 @@ mod imp {
                 }
             ));
             actions.add_action(&action);
+
+            let drafts = LibraryProject::new_draft_table();
+            let drafts_path = drafts.root_path();
+            self.load_project(drafts);
+            self.select_folder(drafts_path);
         }
 
         fn signals() -> &'static [Signal] {
@@ -137,6 +147,7 @@ mod imp {
 
         pub(super) fn load_project(&self, project: LibraryProject) {
             let obj = self.obj();
+            self.connect_folder(project.root_folder());
             project.connect_closure(
                 "folder-added",
                 false,
@@ -183,8 +194,38 @@ mod imp {
             project.refresh_content();
         }
 
+        pub(super) fn select_folder(&self, path: PathBuf) {
+            let obj = self.obj();
+            let Some(new_folder) = obj.get_folder(&path) else {
+                return;
+            };
+            if let Some(old_folder) = obj.get_folder(&obj.selected_folder()) {
+                old_folder.set_is_selected(false);
+            }
+            new_folder.set_is_selected(true);
+            obj.set_selected_folder(path);
+        }
+
         fn connect_folder(&self, folder: LibraryFolder) {
             let obj = self.obj();
+            let path = folder.path();
+
+            if obj.selected_folder_from_last_session().as_ref() == Some(&path) {
+                self.select_folder(path);
+                obj.set_selected_folder_from_last_session(None::<PathBuf>);
+            }
+
+            folder.connect_closure(
+                "selected",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |folder: LibraryFolder| {
+                        this.select_folder(folder.path());
+                    }
+                ),
+            );
 
             folder.connect_closure(
                 "rename-requested",
@@ -412,15 +453,6 @@ impl LibraryBrowser {
             }
         }
         None
-    }
-
-    pub fn add_drafts_project(&self) {
-        let drafts = LibraryProject::new_draft_table();
-        assert!(
-            self.imp().projects.borrow().get(&drafts.path()).is_none(),
-            "Draft table created multiple times!"
-        );
-        self.imp().load_project(drafts);
     }
 
     pub fn add_project(&self, path: PathBuf) {

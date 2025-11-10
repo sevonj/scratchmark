@@ -4,33 +4,43 @@ mod imp {
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
-    use glib::clone;
     use gtk::gdk;
     use gtk::gio;
     use gtk::glib;
+    use gtk::glib::clone;
     use gtk::glib::closure_local;
     use gtk::prelude::*;
 
-    use gdk::Rectangle;
-    use gio::{MenuModel, SimpleActionGroup};
-    use glib::Binding;
-    use glib::subclass::Signal;
-    use gtk::{Builder, Button, FileLauncher, Image, Label, PopoverMenu};
-    use gtk::{CompositeTemplate, TemplateChild};
-    use gtk::{DragSource, DropTarget};
+    use gio::MenuModel;
+    use gio::SimpleActionGroup;
+    use gtk::Builder;
+    use gtk::Button;
+    use gtk::CompositeTemplate;
+    use gtk::DragSource;
+    use gtk::DropTarget;
+    use gtk::FileLauncher;
+    use gtk::Image;
+    use gtk::Label;
+    use gtk::PopoverMenu;
+    use gtk::TemplateChild;
+    use gtk::ToggleButton;
+    use gtk::glib::Binding;
+    use gtk::glib::Properties;
+    use gtk::glib::subclass::Signal;
 
     use crate::data::FolderObject;
     use crate::util;
     use crate::widgets::ItemRenamePopover;
     use crate::widgets::LibrarySheet;
 
-    #[derive(CompositeTemplate, Default)]
+    #[derive(CompositeTemplate, Default, Properties)]
+    #[properties(wrapper_type = super::LibraryFolder)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library_folder.ui")]
     pub struct LibraryFolder {
         #[template_child]
         pub(super) expand_button_cont: TemplateChild<adw::Bin>,
         #[template_child]
-        pub(super) expand_button: TemplateChild<Button>,
+        pub(super) expand_button: TemplateChild<ToggleButton>,
         #[template_child]
         pub(super) expand_icon: TemplateChild<Image>,
         #[template_child]
@@ -56,6 +66,9 @@ mod imp {
         pub(super) context_menu_popover: RefCell<Option<PopoverMenu>>,
         pub(super) rename_popover: RefCell<Option<ItemRenamePopover>>,
         pub(super) drag_source: RefCell<Option<DragSource>>,
+
+        #[property(get, set)]
+        pub(super) is_selected: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -73,18 +86,27 @@ mod imp {
         }
     }
 
+    #[glib::derived_properties]
     impl ObjectImpl for LibraryFolder {
         fn constructed(&self) {
+            let obj = self.obj();
             self.parent_constructed();
 
             self.setup_drop();
 
-            let this = self;
+            let expand_button: &ToggleButton = self.expand_button.as_ref();
+            obj.bind_property("is_selected", expand_button, "active")
+                .build();
+
             self.expand_button.connect_clicked(clone!(
-                #[weak]
-                this,
-                move |_| {
+                #[weak(rename_to = this)]
+                self,
+                move |expand_button| {
+                    let obj = this.obj();
+                    let is_selected = obj.is_selected();
                     this.toggle_expand();
+                    expand_button.set_active(is_selected);
+                    obj.emit_by_name::<()>("selected", &[]);
                 }
             ));
 
@@ -95,6 +117,7 @@ mod imp {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
+                    Signal::builder("selected").build(),
                     Signal::builder("rename-requested")
                         .param_types([PathBuf::static_type()])
                         .build(),
@@ -232,7 +255,8 @@ mod imp {
                 move |gesture, _n, x, y| {
                     gesture.set_state(gtk::EventSequenceState::Claimed);
                     if let Some(popover) = this.context_menu_popover.borrow().as_ref() {
-                        popover.set_pointing_to(Some(&Rectangle::new(x as i32, y as i32, 1, 1)));
+                        popover
+                            .set_pointing_to(Some(&gdk::Rectangle::new(x as i32, y as i32, 1, 1)));
                         popover.popup();
                     };
                 }
