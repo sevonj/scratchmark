@@ -482,11 +482,14 @@ mod imp {
                     move |_popover: ItemCreatePopover, path: PathBuf| this.create_folder(path)
                 ),
             );
+            self.library_browser
+                .bind_property("selected-folder", &new_folder_popover, "parent-path")
+                .build();
 
-            let new_sheet_popover = ItemCreatePopover::for_sheet();
+            let new_document_popover = ItemCreatePopover::for_document();
             self.new_document_button
-                .set_popover(Some(&new_sheet_popover));
-            new_sheet_popover.connect_closure(
+                .set_popover(Some(&new_document_popover));
+            new_document_popover.connect_closure(
                 "committed",
                 false,
                 closure_local!(
@@ -495,6 +498,9 @@ mod imp {
                     move |_popover: ItemCreatePopover, path: PathBuf| this.create_sheet(path)
                 ),
             );
+            self.library_browser
+                .bind_property("selected-folder", &new_document_popover, "parent-path")
+                .build();
 
             if !self.top_split.is_collapsed() {
                 // Get initial state from setting.
