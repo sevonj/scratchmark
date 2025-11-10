@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 17:36+0200\n"
+"POT-Creation-Date: 2025-11-10 15:27+0200\n"
 "PO-Revision-Date: 2025-10-08 16:08+0300\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
@@ -20,7 +20,6 @@ msgstr ""
 "X-Generator: Poedit 3.7\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:3
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
@@ -35,10 +34,6 @@ msgstr "Scratchmark Markdown düzenleyici"
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
 msgid "Organized markdown editor"
 msgstr "Düzenlenmiş markdown düzenleyici"
-
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:12
-msgid "Sevonj"
-msgstr "Sevonj"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
 msgid "Write without distractions and keep your documents organized."
@@ -448,6 +443,9 @@ msgstr "Klavye Kısayolları"
 #: data/resources/ui/window.ui:163
 msgid "About Scratchmark"
 msgstr "Scratchmark Hakkında"
+
+#~ msgid "Sevonj"
+#~ msgstr "Sevonj"
 
 #~ msgid "Enter Fullscreen"
 #~ msgstr "Tam Ekrana Geç"

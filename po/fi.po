@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 17:36+0200\n"
+"POT-Creation-Date: 2025-11-10 15:27+0200\n"
 "PO-Revision-Date: 2025-11-02 20:31+0200\n"
 "Last-Translator: Sevonj <>\n"
 "Language-Team: Finnish\n"
@@ -20,7 +20,6 @@ msgstr ""
 "X-Generator: Gtranslator 49.0\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:3
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
@@ -35,10 +34,6 @@ msgstr "Scratchmark Markdown-editori"
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
 msgid "Organized markdown editor"
 msgstr ""
-
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:12
-msgid "Sevonj"
-msgstr "Sevonj"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
 msgid "Write without distractions and keep your documents organized."
@@ -433,3 +428,6 @@ msgstr "Pikanäppäimet"
 #: data/resources/ui/window.ui:163
 msgid "About Scratchmark"
 msgstr "Tietoja - Scratchmark"
+
+#~ msgid "Sevonj"
+#~ msgstr "Sevonj"

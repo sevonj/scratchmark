@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 17:36+0200\n"
+"POT-Creation-Date: 2025-11-10 15:27+0200\n"
 "PO-Revision-Date: 2025-11-03 01:12-0300\n"
 "Last-Translator: Filipe Motta <luizfilipemotta@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -20,7 +20,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:3
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
@@ -35,10 +34,6 @@ msgstr "Editor Markdown Scratchmark"
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
 msgid "Organized markdown editor"
 msgstr "Editor Markdown organizado"
-
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:12
-msgid "Sevonj"
-msgstr "Sevonj"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
 msgid "Write without distractions and keep your documents organized."
@@ -436,6 +431,9 @@ msgstr "Atalhos de teclado"
 #: data/resources/ui/window.ui:163
 msgid "About Scratchmark"
 msgstr "Sobre o Scratchmark"
+
+#~ msgid "Sevonj"
+#~ msgstr "Sevonj"
 
 #~ msgid "Enter Fullscreen"
 #~ msgstr "Entrar em tela cheia"

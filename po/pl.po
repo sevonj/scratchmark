@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 17:36+0200\n"
+"POT-Creation-Date: 2025-11-10 15:27+0200\n"
 "PO-Revision-Date: 2025-10-10 16:32+0200\n"
 "Last-Translator: Łukasz Horodecki <dakilla@gmail.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -20,7 +20,6 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:3
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
@@ -35,10 +34,6 @@ msgstr "Scratchmark edytor Markdown"
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
 msgid "Organized markdown editor"
 msgstr "Zorganizowany edytor Markdown"
-
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:12
-msgid "Sevonj"
-msgstr "Sevonj"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
 msgid "Write without distractions and keep your documents organized."
@@ -297,7 +292,8 @@ msgstr "Ignoruj ukryte pliki"
 
 #: data/resources/ui/preferences_dialog.ui:43
 msgid "Files and folders with a preceding \".\" won't show up in the library"
-msgstr "Pliki i katalogi zaczynające się od \".\" nie będą widoczne w bibliotece"
+msgstr ""
+"Pliki i katalogi zaczynające się od \".\" nie będą widoczne w bibliotece"
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
@@ -448,6 +444,9 @@ msgstr "Skróty klawiszowe"
 #: data/resources/ui/window.ui:163
 msgid "About Scratchmark"
 msgstr "O programie"
+
+#~ msgid "Sevonj"
+#~ msgstr "Sevonj"
 
 #~ msgid "Enter Fullscreen"
 #~ msgstr "Włącz pełny ekran"

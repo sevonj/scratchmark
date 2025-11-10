@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 17:36+0200\n"
+"POT-Creation-Date: 2025-11-10 15:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:3
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr ""
 
@@ -32,10 +31,6 @@ msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
 msgid "Organized markdown editor"
-msgstr ""
-
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:12
-msgid "Sevonj"
 msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
