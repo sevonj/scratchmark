@@ -190,8 +190,6 @@ mod imp {
             obj.bind_property("ignore_hidden_files", &project, "ignore_hidden_files")
                 .sync_create()
                 .build();
-
-            project.refresh_content();
         }
 
         pub(super) fn select_folder(&self, path: PathBuf) {
@@ -462,7 +460,9 @@ impl LibraryBrowser {
                 return;
             }
         }
-        self.imp().load_project(LibraryProject::new(path));
+        let project = LibraryProject::new(path);
+        self.imp().load_project(project.clone());
+        project.refresh_content();
     }
 
     pub fn remove_project(&self, path: &Path) {
