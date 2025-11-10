@@ -845,6 +845,7 @@ mod imp {
                 .set_selected_folder_from_last_session(Some(PathBuf::from(
                     settings.string("selected-folder-path"),
                 )));
+            self.library_browser.refresh_content();
             let open_projects = settings.strv("library-project-paths");
             for path in open_projects {
                 self.library_browser.add_project(PathBuf::from(path));
