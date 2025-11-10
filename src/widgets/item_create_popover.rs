@@ -1,6 +1,7 @@
 mod imp {
 
     use std::cell::Cell;
+    use std::cell::RefCell;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
@@ -11,21 +12,23 @@ mod imp {
     use gtk::prelude::*;
 
     use gtk::Button;
+    use gtk::CompositeTemplate;
     use gtk::Entry;
     use gtk::Label;
-    use gtk::{CompositeTemplate, TemplateChild};
+    use gtk::TemplateChild;
+    use gtk::glib::Properties;
 
     use crate::util::FilenameStatus;
-    use crate::util::path_builtin_library;
 
     #[derive(Debug, Default, Clone, Copy)]
     pub(super) enum Kind {
         #[default]
         Folder,
-        Sheet,
+        Document,
     }
 
-    #[derive(CompositeTemplate, Default)]
+    #[derive(CompositeTemplate, Default, Properties)]
+    #[properties(wrapper_type = super::ItemCreatePopover)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/item_create_popover.ui")]
     pub struct ItemCreatePopover {
         #[template_child]
@@ -36,6 +39,9 @@ mod imp {
         pub(super) name_error_label: TemplateChild<Label>,
 
         pub(super) kind: Cell<Kind>,
+
+        #[property(get, set)]
+        parent_path: RefCell<PathBuf>,
 
         can_commit: Cell<bool>,
     }
@@ -55,6 +61,7 @@ mod imp {
         }
     }
 
+    #[glib::derived_properties]
     impl ObjectImpl for ItemCreatePopover {
         fn constructed(&self) {
             self.parent_constructed();
@@ -154,9 +161,9 @@ mod imp {
         fn filepath(&self) -> PathBuf {
             let filename = match self.kind.get() {
                 Kind::Folder => self.name_field.text().to_string(),
-                Kind::Sheet => self.name_field.text().to_string() + ".md",
+                Kind::Document => self.name_field.text().to_string() + ".md",
             };
-            path_builtin_library().join(&filename)
+            self.obj().parent_path().join(&filename)
         }
     }
 }
@@ -179,9 +186,9 @@ impl ItemCreatePopover {
         this
     }
 
-    pub fn for_sheet() -> Self {
+    pub fn for_document() -> Self {
         let this: Self = Object::builder().build();
-        this.imp().kind.replace(imp::Kind::Sheet);
+        this.imp().kind.replace(imp::Kind::Document);
         this
     }
 }

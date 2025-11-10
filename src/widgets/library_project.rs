@@ -245,31 +245,36 @@ mod imp {
         }
 
         fn add_subfolder(&self, path: PathBuf, depth: u32) {
-            let mut subfolders = self.subfolders.borrow_mut();
-            if subfolders.contains_key(&path) {
+            if self.subfolders.borrow().contains_key(&path) {
                 return;
             }
-
             let folder = LibraryFolder::new(&FolderObject::new(path.clone(), depth));
-            self.connect_folder(folder.clone());
-            subfolders.insert(path.clone(), folder.clone());
 
-            let parent_path = path.parent().unwrap();
-            if let Some(parent) = subfolders.get(parent_path) {
-                parent.add_subfolder(folder.clone());
-            } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
-                self.root_folder
-                    .borrow()
-                    .as_ref()
-                    .unwrap()
-                    .add_subfolder(folder.clone());
-            } else {
-                panic!("Tried to add a folder, but couldn't find its parent.");
+            {
+                let mut subfolders = self.subfolders.borrow_mut();
+                subfolders.insert(path.clone(), folder.clone());
+
+                let parent_path = path.parent().unwrap();
+                if let Some(parent) = subfolders.get(parent_path) {
+                    parent.add_subfolder(folder.clone());
+                } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
+                    self.root_folder
+                        .borrow()
+                        .as_ref()
+                        .unwrap()
+                        .add_subfolder(folder.clone());
+                } else {
+                    panic!(
+                        "Tried to add a folder, but couldn't find its parent: '{path:?}' '{parent_path:?}'"
+                    );
+                }
             }
 
             if self.expanded_folders.borrow().contains(&path) {
                 folder.set_expanded(true);
             }
+
+            self.connect_folder(folder.clone());
         }
 
         fn add_sheet(&self, path: PathBuf, depth: u32) {
