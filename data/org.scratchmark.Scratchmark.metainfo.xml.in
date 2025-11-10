@@ -2,14 +2,14 @@
 <component type="desktop-application">
   <id>org.scratchmark.Scratchmark</id>
 
-  <name>Scratchmark</name>
+  <name translate="no">Scratchmark</name>
   <summary>Organized markdown editor</summary>
 
   <metadata_license>CC-BY-4.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
 
   <developer id="fi.sevonj">
-    <name>Sevonj</name>
+    <name translate="no">Sevonj</name>
   </developer>
 
   <description>
