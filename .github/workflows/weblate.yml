@@ -5,15 +5,16 @@ on: [workflow_dispatch]
 #     - cron: "0 8 * * 0"
 
 jobs:
-  build-test-lint:
+  update-translation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
       - name: Install dependencies
         run: "sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install -y wlc"
       - name: Fetch from weblate
-        run: wlc --url 'https://translate.codeberg.org/api/projects/scratchmark' --key ${{ secrets.WEBLATE_API_KEY }} download --output po
-      - run: "unzip -oj po/scratchmark-app.zip -d po"
+        run: "wlc --url 'https://translate.codeberg.org/api/projects/scratchmark' --key '${{ secrets.WEBLATE_API_KEY }}' download --output po"
+      - name: "Unzip"
+        run: "unzip -oj po/scratchmark-app.zip -d po"
       - name: Commit
         run: "git stage po && git commit -m 'chore: po'"
       - name: "PR"
