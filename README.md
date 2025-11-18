@@ -38,7 +38,7 @@ Scratchmark is an organized Markdown editor designed for note keeping and writin
 <p style="font-size: 3em; font-variant-caps: small-caps;">i want <b>you</b></p>
 <p style="font-size: 3em;">🫵</p>
 <p style="font-size: 2em; font-variant-caps: small-caps;">to contribute</p>
-<p>Scratchmark is a volunteer effort.<br>Enlist now!</p>
+<p>Enlist now!</p>
 
 </div>
 

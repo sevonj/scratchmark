@@ -16,7 +16,10 @@ jobs:
       - name: "Unzip"
         run: "unzip -oj po/scratchmark-app.zip -d po"
       - name: Commit
-        run: "git stage po && git commit -m 'chore: po'"
+        run: |
+          git config --global user.name 'sevonj'
+          git config --global user.email 'sevonj@users.noreply.github.com'
+          git stage po && git commit -m 'chore: po'
       - name: "PR"
         run: "gh pr create -B master -H i18n --title 'chore: update translations'"
         env:
