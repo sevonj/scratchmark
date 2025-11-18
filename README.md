@@ -1,4 +1,5 @@
-[![CI](https://github.com/sevonj/scratchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/sevonj/scratchmark/actions/workflows/ci.yml)
+[![CI Status Badge](https://github.com/sevonj/scratchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/sevonj/scratchmark/actions/workflows/ci.yml)
+[![Translation Status Badge](https://translate.codeberg.org/widget/scratchmark/app/svg-badge.svg)](https://translate.codeberg.org/projects/scratchmark/app)
 
 <div align="center">
 
@@ -30,11 +31,23 @@ Scratchmark is an organized Markdown editor designed for note keeping and writin
 
 (planned)
 
+## Contribute
+
+<div align="center">
+
+<p style="font-size: 3em; font-variant-caps: small-caps;">i want <b>you</b></p>
+<p style="font-size: 3em;">🫵</p>
+<p style="font-size: 2em; font-variant-caps: small-caps;">to contribute</p>
+<p>Scratchmark is a volunteer effort.<br>Enlist now!</p>
+
+</div>
+
+[➜ Translation](https://translate.codeberg.org/projects/scratchmark/app/)  
+[➜ Project Backlog](https://github.com/users/sevonj/projects/20)
+
 ## Developers
 
-Scratchmark is written in Rust and uses GTK4 + Libadwaita for UI.
-
-[➜ Project backlog](https://github.com/users/sevonj/projects/20)
+Scratchmark is written in Rust and uses GTK4 and Libadwaita for UI.
 
 ### License
 
