@@ -21,6 +21,6 @@ jobs:
           git config --global user.email 'sevonj@users.noreply.github.com'
           git stage po && git commit -m 'chore: po'
       - name: "PR"
-        run: "gh pr create -B master -H i18n --title 'chore: update translations'"
+        run: "gh pr create -B master -H i18n --title 'chore: update translations' --body 'Files fetched from https://translate.codeberg.org/projects/scratchmark/app/ by action workflow.'"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
