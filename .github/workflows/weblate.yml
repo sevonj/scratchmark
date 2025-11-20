@@ -4,6 +4,9 @@ on: [workflow_dispatch]
 #   schedule:
 #     - cron: "0 8 * * 0"
 
+permissions:
+  pull-requests: write
+
 jobs:
   update-translation:
     runs-on: ubuntu-latest
