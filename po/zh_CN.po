@@ -1,433 +1,321 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the scratchmark package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# Anonymous <anonymous@noreply.codeberg.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-10 15:27+0200\n"
-"PO-Revision-Date: 2025-10-24 01:20+0800\n"
-"Last-Translator: Rain Ding <Sulasalias@emailasso.net>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-11-20 12:33+0000\n"
+"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://"
+"translate.codeberg.org/projects/scratchmark/app/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.14\n"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:3
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:4
 msgid "Markdown editor"
 msgstr "Markdown 编辑"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:10
 msgid "Scratchmark Markdown editor"
 msgstr "Scratchmark Markdown 编辑器"
 
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
 msgid "Organized markdown editor"
 msgstr "结构化标记语言编辑器"
 
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
 msgid "Write without distractions and keep your documents organized."
 msgstr "专注写作，远离干扰，保持文档井然有序。"
 
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:17
 msgid "Editing features are designed to stay out of sight when not needed."
 msgstr "编辑功能在不需要时保持不可见状态。"
 
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:18
 msgid ""
 "Documents are organized into folders, which may contain a writing project, "
 "personal notes, or maybe a recipe book."
 msgstr ""
 "文件被整理到文件夹中，这些文件夹可能包含写作项目、个人笔记，或是食谱集。"
 
-#: data/resources/ui/editor_doc_stats.ui:18
 msgid "Statistics"
 msgstr "统计数据"
 
-#: data/resources/ui/editor_doc_stats.ui:32
 msgid "Characters"
 msgstr "字符"
 
-#: data/resources/ui/editor_doc_stats.ui:45
-#: data/resources/ui/editor_doc_stats.ui:73
-#: data/resources/ui/editor_doc_stats.ui:101
-#: data/resources/ui/editor_doc_stats.ui:129
 msgid "N/A"
 msgstr "N/A"
 
-#: data/resources/ui/editor_doc_stats.ui:60
 msgid "Excluding Spaces"
 msgstr "不包含空格"
 
-#: data/resources/ui/editor_doc_stats.ui:88
 msgid "Words"
 msgstr "单词"
 
-#: data/resources/ui/editor_doc_stats.ui:116
 msgid "Lines"
 msgstr "行"
 
-#: data/resources/ui/editor_format_bar.ui:16
 msgid "Bold (Ctrl+B)"
 msgstr "粗体 (Ctrl+B)"
 
-#: data/resources/ui/editor_format_bar.ui:23
 msgid "Italic (Ctrl+I)"
 msgstr "斜体 (Ctrl+I)"
 
-#: data/resources/ui/editor_format_bar.ui:30
 msgid "Strikethrough"
 msgstr "删除线"
 
-#: data/resources/ui/editor_format_bar.ui:37
 msgid "Highlight"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:49
 msgid "Heading 1"
 msgstr "标题 "
 
-#: data/resources/ui/editor_format_bar.ui:57
 msgid "Heading 2"
 msgstr "标题 "
 
-#: data/resources/ui/editor_format_bar.ui:84
 msgid "Blockquote"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:117
 msgid "Code"
 msgstr "代码"
 
-#: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
 msgstr "无打开"
 
-#: data/resources/ui/editor_placeholder.ui:11
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr "创建新文档或从侧边栏打开现有文档"
 
-#: data/resources/ui/editor_search_bar.ui:26
 msgid "Search"
 msgstr "搜索"
 
-#: data/resources/ui/editor_search_bar.ui:39
-#: data/resources/ui/editor_search_bar.ui:136
 msgid "Replace"
 msgstr "替换"
 
-#: data/resources/ui/editor_search_bar.ui:63
 msgid "Match Case"
 msgstr "匹配大小写"
 
-#: data/resources/ui/editor_search_bar.ui:69
 msgid "Whole Words"
 msgstr "完整单词"
 
-#: data/resources/ui/editor_search_bar.ui:75
 msgid "Use Regex"
 msgstr "使用正则表达式"
 
-#: data/resources/ui/editor_search_bar.ui:85
 msgid "?"
 msgstr "？"
 
-#: data/resources/ui/editor_search_bar.ui:98
 msgid "Previous Match (Shift + Return)"
 msgstr "上一个匹配 (Shift + Return)"
 
-#: data/resources/ui/editor_search_bar.ui:105
 msgid "Next Match (Return)"
 msgstr "新匹配 (Return)"
 
-#: data/resources/ui/editor_search_bar.ui:113
 msgid "Search and Replace (Ctrl+F)"
 msgstr "查找与替换 (Ctrl+F)"
 
-#: data/resources/ui/editor_search_bar.ui:119
 msgid "Close Search"
 msgstr "关闭查找"
 
-#: data/resources/ui/editor_search_bar.ui:137
 msgid "Replace (Return)"
 msgstr "替换 (Return)"
 
-#: data/resources/ui/editor_search_bar.ui:143
 msgid "Replace All"
 msgstr "替换全部"
 
-#: data/resources/ui/editor_search_bar.ui:144
 msgid "Replace All (Shift + Return)"
 msgstr "替换全部 (Shift + Return)"
 
-#: data/resources/ui/editor.ui:16
 msgid "File changed on disk"
 msgstr "磁盘上的文件已更改"
 
-#: data/resources/ui/editor.ui:17
 msgid "Resolve"
 msgstr "解析"
 
-#: data/resources/ui/item_create_popover.ui:10
-#: data/resources/ui/item_rename_popover.ui:10
 msgid "Name..."
 msgstr "文件名..."
 
-#: data/resources/ui/item_create_popover.ui:15
 msgid "Create"
 msgstr "创建"
 
-#: data/resources/ui/item_rename_popover.ui:15
-#: data/resources/ui/library_folder_context_menu.ui:18
-#: data/resources/ui/library_sheet_context_menu.ui:10
 msgid "Rename"
 msgstr "重命名"
 
-#: data/resources/ui/library_browser.ui:38
-#: data/resources/ui/preferences_dialog.ui:39 data/resources/ui/window.ui:19
 msgid "Library"
 msgstr "库"
 
-#: data/resources/ui/library_browser.ui:53 data/resources/ui/window.ui:119
 msgid "Add Project"
 msgstr "添加计划"
 
-#: data/resources/ui/library_drafts_context_menu.ui:6
-#: data/resources/ui/library_folder_context_menu.ui:6
-#: data/resources/ui/library_project_context_menu.ui:6
 msgid "New Document"
 msgstr "新文档"
 
-#: data/resources/ui/library_drafts_context_menu.ui:10
-#: data/resources/ui/library_folder_context_menu.ui:10
-#: data/resources/ui/library_project_context_menu.ui:10
-#: data/resources/ui/window.ui:28
 msgid "Create Subfolder"
 msgstr "创建子文件夹"
 
-#: data/resources/ui/library_drafts_context_menu.ui:14
-#: data/resources/ui/library_folder_context_menu.ui:14
-#: data/resources/ui/library_project_context_menu.ui:14
-#: data/resources/ui/library_sheet_context_menu.ui:6
 msgid "Show in File Manager"
 msgstr "在文件管理器中显示"
 
-#: data/resources/ui/library_folder_context_menu.ui:22
-#: data/resources/ui/library_sheet_context_menu.ui:18
 msgid "Move to Trash"
 msgstr "移动到回收站"
 
-#: data/resources/ui/library_folder_context_menu.ui:26
-#: data/resources/ui/library_sheet_context_menu.ui:22
 msgid "Delete Permanently"
 msgstr "永久删除"
 
-#: data/resources/ui/library_project_context_menu.ui:18
-#: data/resources/ui/library_project_err_placeholder_context_menu.ui:6
 msgid "Close Project"
 msgstr "关闭计划"
 
-#: data/resources/ui/library_sheet_context_menu.ui:14
 msgid "Duplicate"
 msgstr "复制"
 
-#: data/resources/ui/preferences_dialog.ui:6
 #, fuzzy
 msgid "General"
 msgstr "通用"
 
-#: data/resources/ui/preferences_dialog.ui:9
 msgid "Font"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:13
 msgid "Change Font"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:14
 msgid "Customize font size and typeface"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:20
 msgid "Reset to Default"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:21
 msgid "Use default font"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:28
 #, fuzzy
 msgid "Editor"
 msgstr "编辑"
 
-#: data/resources/ui/preferences_dialog.ui:31
 msgid "Show Minimap"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:32
 msgid "Show overview of the document on the right side"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:42
 msgid "Ignore Hidden Files"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:43
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
 msgid "General"
 msgstr "通用"
 
-#: data/resources/ui/shortcuts.ui:14
 msgctxt "shortcut window"
 msgid "Toggle Fullscreen"
 msgstr "全屏"
 
-#: data/resources/ui/shortcuts.ui:20
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "设置"
 
-#: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
 msgid "Show Shortcuts"
 msgstr "显示快捷键"
 
-#: data/resources/ui/shortcuts.ui:40
 msgctxt "shortcut window"
 msgid "Document"
 msgstr "文档"
 
-#: data/resources/ui/shortcuts.ui:43
 msgctxt "shortcut window"
 msgid "New Document"
 msgstr "新文档"
 
-#: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "Add Project"
 msgstr "添加计划"
 
-#: data/resources/ui/shortcuts.ui:55
 msgctxt "shortcut window"
 msgid "Save Document"
 msgstr "保存文档"
 
-#: data/resources/ui/shortcuts.ui:61
 msgctxt "shortcut window"
 msgid "Rename Document"
 msgstr "重命名文档"
 
-#: data/resources/ui/shortcuts.ui:67
 msgctxt "shortcut window"
 msgid "Close Document"
 msgstr "关闭文档"
 
-#: data/resources/ui/shortcuts.ui:75
 msgctxt "shortcut window"
 msgid "Editor"
 msgstr "编辑"
 
-#: data/resources/ui/shortcuts.ui:78
 msgctxt "shortcut window"
 msgid "Search Text"
 msgstr "查找文本"
 
-#: data/resources/ui/shortcuts.ui:84
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr "查找并替换文本"
 
-#: data/resources/ui/shortcuts.ui:92
 msgctxt "shortcut window"
 msgid "Library"
 msgstr "库"
 
-#: data/resources/ui/shortcuts.ui:95
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "手动刷新"
 
-#: data/resources/ui/window.ui:57
 msgid "Toggle Sidebar (F9)"
 msgstr "切换侧边栏 (F9)"
 
-#: data/resources/ui/window.ui:63
 msgid "New Document (Ctrl+N)"
 msgstr "新文档 (Ctrl+N)"
 
-#: data/resources/ui/window.ui:69
 msgid "Exit Fullscreen"
 msgstr "退出全屏"
 
-#: data/resources/ui/window.ui:78
 msgid "Menu"
 msgstr "菜单"
 
-#: data/resources/ui/window.ui:85
 msgid "Document Info"
 msgstr "文档信息"
 
-#: data/resources/ui/window.ui:91
 msgid "Formatting Toolbar"
 msgstr "格式化工具栏"
 
-#: data/resources/ui/window.ui:115
 msgid "New"
 msgstr "新建"
 
-#: data/resources/ui/window.ui:125
 msgid "Save"
 msgstr "保存"
 
-#: data/resources/ui/window.ui:129
 msgid "Close"
 msgstr "关闭"
 
-#: data/resources/ui/window.ui:135
 msgid "Search Text"
 msgstr "查找文本"
 
-#: data/resources/ui/window.ui:139
 msgid "Search and Replace"
 msgstr "查找与替换"
 
-#: data/resources/ui/window.ui:145
 #, fuzzy
 msgid "Toggle Fullscreen"
 msgstr "全屏"
 
-#: data/resources/ui/window.ui:149
 msgid "Toggle Focus Mode"
 msgstr ""
 
-#: data/resources/ui/window.ui:155
 msgid "Preferences"
 msgstr "设置"
 
-#: data/resources/ui/window.ui:159
 msgid "Keyboard Shortcuts"
 msgstr "键盘快捷键"
 
-#: data/resources/ui/window.ui:163
 msgid "About Scratchmark"
 msgstr "关于 Scratchmark"
 

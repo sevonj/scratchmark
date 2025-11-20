@@ -4,428 +4,318 @@
 # Automatically generated, 2025.
 # Sevonj <>, 2025.
 #
+# Anonymous <anonymous@noreply.codeberg.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-10 15:27+0200\n"
-"PO-Revision-Date: 2025-11-02 20:31+0200\n"
-"Last-Translator: Sevonj <>\n"
-"Language-Team: Finnish\n"
+"PO-Revision-Date: 2025-11-20 12:32+0000\n"
+"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"Language-Team: Finnish <https://translate.codeberg.org/projects/scratchmark/"
+"app/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 49.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.14\n"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:3
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:4
 msgid "Markdown editor"
 msgstr "Markdown-editori"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:10
 msgid "Scratchmark Markdown editor"
 msgstr "Scratchmark Markdown-editori"
 
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
 msgid "Organized markdown editor"
 msgstr ""
 
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
 msgid "Write without distractions and keep your documents organized."
 msgstr ""
 
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:17
 msgid "Editing features are designed to stay out of sight when not needed."
 msgstr ""
 
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:18
 msgid ""
 "Documents are organized into folders, which may contain a writing project, "
 "personal notes, or maybe a recipe book."
 msgstr ""
 
-#: data/resources/ui/editor_doc_stats.ui:18
 msgid "Statistics"
 msgstr "Tilastot"
 
-#: data/resources/ui/editor_doc_stats.ui:32
 msgid "Characters"
 msgstr "Merkkejä"
 
-#: data/resources/ui/editor_doc_stats.ui:45
-#: data/resources/ui/editor_doc_stats.ui:73
-#: data/resources/ui/editor_doc_stats.ui:101
-#: data/resources/ui/editor_doc_stats.ui:129
 msgid "N/A"
 msgstr "N/A"
 
-#: data/resources/ui/editor_doc_stats.ui:60
 msgid "Excluding Spaces"
 msgstr "Poislukien välilyönnit"
 
-#: data/resources/ui/editor_doc_stats.ui:88
 msgid "Words"
 msgstr "Sanoja"
 
-#: data/resources/ui/editor_doc_stats.ui:116
 msgid "Lines"
 msgstr "Rivejä"
 
-#: data/resources/ui/editor_format_bar.ui:16
 msgid "Bold (Ctrl+B)"
 msgstr "Lihavointi (Ctrl+B)"
 
-#: data/resources/ui/editor_format_bar.ui:23
 msgid "Italic (Ctrl+I)"
 msgstr "Kursivointi (Ctrl+I)"
 
-#: data/resources/ui/editor_format_bar.ui:30
 msgid "Strikethrough"
 msgstr "Yliviivaus"
 
-#: data/resources/ui/editor_format_bar.ui:37
 msgid "Highlight"
 msgstr "Korostus"
 
-#: data/resources/ui/editor_format_bar.ui:49
 msgid "Heading 1"
 msgstr "Otsikko 1"
 
-#: data/resources/ui/editor_format_bar.ui:57
 msgid "Heading 2"
 msgstr "Otsikko 2"
 
-#: data/resources/ui/editor_format_bar.ui:84
 msgid "Blockquote"
 msgstr "Lainaus"
 
-#: data/resources/ui/editor_format_bar.ui:117
 msgid "Code"
 msgstr "Koodi"
 
-#: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
 msgstr "Ei avattua tiedostoa"
 
-#: data/resources/ui/editor_placeholder.ui:11
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr "Luo uusi tiedosto tai avaa olemassaoleva sivupalkista"
 
-#: data/resources/ui/editor_search_bar.ui:26
 msgid "Search"
 msgstr "Etsi"
 
-#: data/resources/ui/editor_search_bar.ui:39
-#: data/resources/ui/editor_search_bar.ui:136
 msgid "Replace"
 msgstr "Korvaa"
 
-#: data/resources/ui/editor_search_bar.ui:63
 msgid "Match Case"
 msgstr "Huomioi kirjainkoko"
 
-#: data/resources/ui/editor_search_bar.ui:69
 msgid "Whole Words"
 msgstr "Kokonaiset sanat"
 
-#: data/resources/ui/editor_search_bar.ui:75
 msgid "Use Regex"
 msgstr "Säännölliset lausekkeet (Regex)"
 
-#: data/resources/ui/editor_search_bar.ui:85
 msgid "?"
 msgstr "?"
 
-#: data/resources/ui/editor_search_bar.ui:98
 msgid "Previous Match (Shift + Return)"
 msgstr "Edellinen osuma (Shift + Enter)"
 
-#: data/resources/ui/editor_search_bar.ui:105
 msgid "Next Match (Return)"
 msgstr "Seuraava osuma (Enter)"
 
-#: data/resources/ui/editor_search_bar.ui:113
 msgid "Search and Replace (Ctrl+F)"
 msgstr "Etsi ja korvaa (Ctrl+F)"
 
-#: data/resources/ui/editor_search_bar.ui:119
 msgid "Close Search"
 msgstr "Sulje"
 
-#: data/resources/ui/editor_search_bar.ui:137
 msgid "Replace (Return)"
 msgstr "Korvaa (Enter)"
 
-#: data/resources/ui/editor_search_bar.ui:143
 msgid "Replace All"
 msgstr "Korvaa kaikki"
 
-#: data/resources/ui/editor_search_bar.ui:144
 msgid "Replace All (Shift + Return)"
 msgstr "Replace All (Shift + Return)"
 
-#: data/resources/ui/editor.ui:16
 msgid "File changed on disk"
 msgstr "Tiedosto on muuttunut levyllä"
 
-#: data/resources/ui/editor.ui:17
 msgid "Resolve"
 msgstr "Ratkaise"
 
-#: data/resources/ui/item_create_popover.ui:10
-#: data/resources/ui/item_rename_popover.ui:10
 msgid "Name..."
 msgstr "Nimi..."
 
-#: data/resources/ui/item_create_popover.ui:15
 msgid "Create"
 msgstr "Luo"
 
-#: data/resources/ui/item_rename_popover.ui:15
-#: data/resources/ui/library_folder_context_menu.ui:18
-#: data/resources/ui/library_sheet_context_menu.ui:10
 msgid "Rename"
 msgstr "Nimeä uudelleen"
 
-#: data/resources/ui/library_browser.ui:38
-#: data/resources/ui/preferences_dialog.ui:39 data/resources/ui/window.ui:19
 msgid "Library"
 msgstr "Kirjasto"
 
-#: data/resources/ui/library_browser.ui:53 data/resources/ui/window.ui:119
 msgid "Add Project"
 msgstr "Lisää projekti"
 
-#: data/resources/ui/library_drafts_context_menu.ui:6
-#: data/resources/ui/library_folder_context_menu.ui:6
-#: data/resources/ui/library_project_context_menu.ui:6
 msgid "New Document"
 msgstr "Uusi tiedosto"
 
-#: data/resources/ui/library_drafts_context_menu.ui:10
-#: data/resources/ui/library_folder_context_menu.ui:10
-#: data/resources/ui/library_project_context_menu.ui:10
-#: data/resources/ui/window.ui:28
 msgid "Create Subfolder"
 msgstr "Luo alikansio"
 
-#: data/resources/ui/library_drafts_context_menu.ui:14
-#: data/resources/ui/library_folder_context_menu.ui:14
-#: data/resources/ui/library_project_context_menu.ui:14
-#: data/resources/ui/library_sheet_context_menu.ui:6
 msgid "Show in File Manager"
 msgstr "Näytä tiedostoselaimessa"
 
-#: data/resources/ui/library_folder_context_menu.ui:22
-#: data/resources/ui/library_sheet_context_menu.ui:18
 msgid "Move to Trash"
 msgstr "Siirrä roskakoriin"
 
-#: data/resources/ui/library_folder_context_menu.ui:26
-#: data/resources/ui/library_sheet_context_menu.ui:22
 msgid "Delete Permanently"
 msgstr "Poista pysyvästi"
 
-#: data/resources/ui/library_project_context_menu.ui:18
-#: data/resources/ui/library_project_err_placeholder_context_menu.ui:6
 msgid "Close Project"
 msgstr "Sulje projekti"
 
-#: data/resources/ui/library_sheet_context_menu.ui:14
 msgid "Duplicate"
 msgstr "Luo kopio"
 
-#: data/resources/ui/preferences_dialog.ui:6
 msgid "General"
 msgstr "Yleiset"
 
-#: data/resources/ui/preferences_dialog.ui:9
 msgid "Font"
 msgstr "Fontti"
 
-#: data/resources/ui/preferences_dialog.ui:13
 msgid "Change Font"
 msgstr "Vaida fontti"
 
-#: data/resources/ui/preferences_dialog.ui:14
 msgid "Customize font size and typeface"
 msgstr "Muokkaa fontin kokoa ja kirjasinta"
 
-#: data/resources/ui/preferences_dialog.ui:20
 msgid "Reset to Default"
 msgstr "Palauta oletukseksi"
 
-#: data/resources/ui/preferences_dialog.ui:21
 msgid "Use default font"
 msgstr "Käytä oletusfonttia"
 
-#: data/resources/ui/preferences_dialog.ui:28
 msgid "Editor"
 msgstr "Editori"
 
-#: data/resources/ui/preferences_dialog.ui:31
 msgid "Show Minimap"
 msgstr "Näytä minikartta"
 
-#: data/resources/ui/preferences_dialog.ui:32
 msgid "Show overview of the document on the right side"
 msgstr "Näytä yleiskatsaus tiedostosta oikealla puolella"
 
-#: data/resources/ui/preferences_dialog.ui:42
 msgid "Ignore Hidden Files"
 msgstr "Ohita piilotetut tiedostot"
 
-#: data/resources/ui/preferences_dialog.ui:43
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
 "Tiedostot ja kansiot, jotka alkavat pisteellä (\".\") eivät näy kirjastossa"
 
-#: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Yleiset"
 
-#: data/resources/ui/shortcuts.ui:14
 msgctxt "shortcut window"
 msgid "Toggle Fullscreen"
 msgstr "Koko näytön tila"
 
-#: data/resources/ui/shortcuts.ui:20
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
 msgstr "Fokustila"
 
-#: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Asetukset"
 
-#: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
 msgid "Show Shortcuts"
 msgstr "Näytä pikanäppäimet"
 
-#: data/resources/ui/shortcuts.ui:40
 msgctxt "shortcut window"
 msgid "Document"
 msgstr "Tiedosto"
 
-#: data/resources/ui/shortcuts.ui:43
 msgctxt "shortcut window"
 msgid "New Document"
 msgstr "Uusi tiedosto"
 
-#: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "Add Project"
 msgstr "Lisää projekti"
 
-#: data/resources/ui/shortcuts.ui:55
 msgctxt "shortcut window"
 msgid "Save Document"
 msgstr "Tallenna"
 
-#: data/resources/ui/shortcuts.ui:61
 msgctxt "shortcut window"
 msgid "Rename Document"
 msgstr "Nimeä uudelleen"
 
-#: data/resources/ui/shortcuts.ui:67
 msgctxt "shortcut window"
 msgid "Close Document"
 msgstr "Sulje"
 
-#: data/resources/ui/shortcuts.ui:75
 msgctxt "shortcut window"
 msgid "Editor"
 msgstr "Editori"
 
-#: data/resources/ui/shortcuts.ui:78
 msgctxt "shortcut window"
 msgid "Search Text"
 msgstr "Etsi tekstiä"
 
-#: data/resources/ui/shortcuts.ui:84
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr "Etsi ja korvaa tesktiä"
 
-#: data/resources/ui/shortcuts.ui:92
 msgctxt "shortcut window"
 msgid "Library"
 msgstr "Kirjasto"
 
-#: data/resources/ui/shortcuts.ui:95
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Päivitä kirjasto"
 
-#: data/resources/ui/window.ui:57
 msgid "Toggle Sidebar (F9)"
 msgstr "Avaa/sulje sivupalkki (F9)"
 
-#: data/resources/ui/window.ui:63
 msgid "New Document (Ctrl+N)"
 msgstr "Uusi tiedosto (Ctrl+N)"
 
-#: data/resources/ui/window.ui:69
 msgid "Exit Fullscreen"
 msgstr "Poistu koko näytön tilasta"
 
-#: data/resources/ui/window.ui:78
 msgid "Menu"
 msgstr "Valikko"
 
-#: data/resources/ui/window.ui:85
 msgid "Document Info"
 msgstr "Tiedoston tiedot"
 
-#: data/resources/ui/window.ui:91
 msgid "Formatting Toolbar"
 msgstr "Muotoilupalkki"
 
-#: data/resources/ui/window.ui:115
 msgid "New"
 msgstr "Uusi"
 
-#: data/resources/ui/window.ui:125
 msgid "Save"
 msgstr "Tallenna"
 
-#: data/resources/ui/window.ui:129
 msgid "Close"
 msgstr "Sulje"
 
-#: data/resources/ui/window.ui:135
 msgid "Search Text"
 msgstr "Etsi tekstiä"
 
-#: data/resources/ui/window.ui:139
 msgid "Search and Replace"
 msgstr "Etsi ja korvaa"
 
-#: data/resources/ui/window.ui:145
 msgid "Toggle Fullscreen"
 msgstr "Koko näytön tila"
 
-#: data/resources/ui/window.ui:149
 msgid "Toggle Focus Mode"
 msgstr "Fokustila"
 
-#: data/resources/ui/window.ui:155
 msgid "Preferences"
 msgstr "Asetukset"
 
-#: data/resources/ui/window.ui:159
 msgid "Keyboard Shortcuts"
 msgstr "Pikanäppäimet"
 
-#: data/resources/ui/window.ui:163
 msgid "About Scratchmark"
 msgstr "Tietoja - Scratchmark"
 

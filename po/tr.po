@@ -3,49 +3,43 @@
 # This file is distributed under the same license as the org.scratchmark.Scratchmark package.
 #
 # Sabri Ünal <yakushabb@gmail.com>, 2025.
-#
+# Anonymous <anonymous@noreply.codeberg.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-10 15:27+0200\n"
-"PO-Revision-Date: 2025-10-08 16:08+0300\n"
-"Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
-"Language-Team: Türkçe <takim@gnome.org.tr>\n"
+"PO-Revision-Date: 2025-11-20 12:33+0000\n"
+"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"Language-Team: Turkish <https://translate.codeberg.org/projects/scratchmark/"
+"app/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Weblate 5.14\n"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:3
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:4
 msgid "Markdown editor"
 msgstr "Markdown düzenleyici"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:10
 msgid "Scratchmark Markdown editor"
 msgstr "Scratchmark Markdown düzenleyici"
 
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
 msgid "Organized markdown editor"
 msgstr "Düzenlenmiş markdown düzenleyici"
 
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
 msgid "Write without distractions and keep your documents organized."
 msgstr "Dikkatiniz dağılmadan yazın ve belgelerinizi düzenli tutun."
 
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:17
 msgid "Editing features are designed to stay out of sight when not needed."
 msgstr ""
 "Düzenleme özellikleri, ihtiyaç duyulmadığında gözden uzak kalacak şekilde "
 "tasarlanmıştır."
 
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:18
 msgid ""
 "Documents are organized into folders, which may contain a writing project, "
 "personal notes, or maybe a recipe book."
@@ -53,394 +47,289 @@ msgstr ""
 "Belgeler, yazı projesi, kişisel notlar ya da belki bir yemek tarifi kitabı "
 "içerebilen klasörler halinde düzenlenir."
 
-#: data/resources/ui/editor_doc_stats.ui:18
 msgid "Statistics"
 msgstr "İstatistikler"
 
-#: data/resources/ui/editor_doc_stats.ui:32
 msgid "Characters"
 msgstr "Karakterler"
 
-#: data/resources/ui/editor_doc_stats.ui:45
-#: data/resources/ui/editor_doc_stats.ui:73
-#: data/resources/ui/editor_doc_stats.ui:101
-#: data/resources/ui/editor_doc_stats.ui:129
 msgid "N/A"
 msgstr "Yok"
 
-#: data/resources/ui/editor_doc_stats.ui:60
 msgid "Excluding Spaces"
 msgstr "Boşluklar Hariç"
 
-#: data/resources/ui/editor_doc_stats.ui:88
 msgid "Words"
 msgstr "Sözcük"
 
-#: data/resources/ui/editor_doc_stats.ui:116
 msgid "Lines"
 msgstr "Satır"
 
-#: data/resources/ui/editor_format_bar.ui:16
 msgid "Bold (Ctrl+B)"
 msgstr "Kalın (Ctrl+B)"
 
-#: data/resources/ui/editor_format_bar.ui:23
 msgid "Italic (Ctrl+I)"
 msgstr "Eğik (Ctrl+I)"
 
-#: data/resources/ui/editor_format_bar.ui:30
 msgid "Strikethrough"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:37
 msgid "Highlight"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:49
 msgid "Heading 1"
 msgstr "Başlık 1"
 
-#: data/resources/ui/editor_format_bar.ui:57
 msgid "Heading 2"
 msgstr "Başlık 2"
 
-#: data/resources/ui/editor_format_bar.ui:84
 msgid "Blockquote"
 msgstr ""
 
-#: data/resources/ui/editor_format_bar.ui:117
 msgid "Code"
 msgstr "Kod"
 
-#: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
 msgstr "Hiçbir Şey Açık Değil"
 
-#: data/resources/ui/editor_placeholder.ui:11
 #, fuzzy
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr "Kenar çubuğundan yeni sayfa oluşturun ya da var olan sayfayı açın"
 
-#: data/resources/ui/editor_search_bar.ui:26
 msgid "Search"
 msgstr "Ara"
 
-#: data/resources/ui/editor_search_bar.ui:39
-#: data/resources/ui/editor_search_bar.ui:136
 msgid "Replace"
 msgstr "Değiştir"
 
-#: data/resources/ui/editor_search_bar.ui:63
 msgid "Match Case"
 msgstr "Büyük Küçük Harf Eşleştir"
 
-#: data/resources/ui/editor_search_bar.ui:69
 msgid "Whole Words"
 msgstr "Tam Sözcükler"
 
-#: data/resources/ui/editor_search_bar.ui:75
 msgid "Use Regex"
 msgstr "Kurallı İfade Kullan"
 
-#: data/resources/ui/editor_search_bar.ui:85
 msgid "?"
 msgstr "?"
 
-#: data/resources/ui/editor_search_bar.ui:98
 msgid "Previous Match (Shift + Return)"
 msgstr "Önceki Eşleşme (Shift + Return)"
 
-#: data/resources/ui/editor_search_bar.ui:105
 msgid "Next Match (Return)"
 msgstr "Sonraki Eşleşme (Enter)"
 
-#: data/resources/ui/editor_search_bar.ui:113
 msgid "Search and Replace (Ctrl+F)"
 msgstr "Ara ve Değiştir (Ctrl+F)"
 
-#: data/resources/ui/editor_search_bar.ui:119
 msgid "Close Search"
 msgstr "Aramayı Kapat"
 
-#: data/resources/ui/editor_search_bar.ui:137
 msgid "Replace (Return)"
 msgstr "Değiştir (Enter)"
 
-#: data/resources/ui/editor_search_bar.ui:143
 msgid "Replace All"
 msgstr "Tümünü Değiştir"
 
-#: data/resources/ui/editor_search_bar.ui:144
 msgid "Replace All (Shift + Return)"
 msgstr "Tümünü Değiştir (Shift + Enter)"
 
-#: data/resources/ui/editor.ui:16
 msgid "File changed on disk"
 msgstr "Dosya disk üzerinde değiştirildi"
 
-#: data/resources/ui/editor.ui:17
 msgid "Resolve"
 msgstr "Çözümle"
 
-#: data/resources/ui/item_create_popover.ui:10
-#: data/resources/ui/item_rename_popover.ui:10
 msgid "Name..."
 msgstr "Ad..."
 
-#: data/resources/ui/item_create_popover.ui:15
 msgid "Create"
 msgstr "Oluştur"
 
-#: data/resources/ui/item_rename_popover.ui:15
-#: data/resources/ui/library_folder_context_menu.ui:18
-#: data/resources/ui/library_sheet_context_menu.ui:10
 msgid "Rename"
 msgstr "Yeniden Adlandır"
 
-#: data/resources/ui/library_browser.ui:38
-#: data/resources/ui/preferences_dialog.ui:39 data/resources/ui/window.ui:19
 msgid "Library"
 msgstr "Kitaplık"
 
-#: data/resources/ui/library_browser.ui:53 data/resources/ui/window.ui:119
 msgid "Add Project"
 msgstr ""
 
-#: data/resources/ui/library_drafts_context_menu.ui:6
-#: data/resources/ui/library_folder_context_menu.ui:6
-#: data/resources/ui/library_project_context_menu.ui:6
 #, fuzzy
 msgid "New Document"
 msgstr "Yeni Sayfa"
 
-#: data/resources/ui/library_drafts_context_menu.ui:10
-#: data/resources/ui/library_folder_context_menu.ui:10
-#: data/resources/ui/library_project_context_menu.ui:10
-#: data/resources/ui/window.ui:28
 #, fuzzy
 msgid "Create Subfolder"
 msgstr "Klasör Oluştur"
 
-#: data/resources/ui/library_drafts_context_menu.ui:14
-#: data/resources/ui/library_folder_context_menu.ui:14
-#: data/resources/ui/library_project_context_menu.ui:14
-#: data/resources/ui/library_sheet_context_menu.ui:6
 msgid "Show in File Manager"
 msgstr "Dosya Yöneticisinde Göster"
 
-#: data/resources/ui/library_folder_context_menu.ui:22
-#: data/resources/ui/library_sheet_context_menu.ui:18
 msgid "Move to Trash"
 msgstr "Çöpe Taşı"
 
-#: data/resources/ui/library_folder_context_menu.ui:26
-#: data/resources/ui/library_sheet_context_menu.ui:22
 #, fuzzy
 msgid "Delete Permanently"
 msgstr "Sayfayı Sil"
 
-#: data/resources/ui/library_project_context_menu.ui:18
-#: data/resources/ui/library_project_err_placeholder_context_menu.ui:6
 msgid "Close Project"
 msgstr "Projeyi Kapat"
 
-#: data/resources/ui/library_sheet_context_menu.ui:14
 msgid "Duplicate"
 msgstr "Çoğalt"
 
-#: data/resources/ui/preferences_dialog.ui:6
 #, fuzzy
 msgid "General"
 msgstr "Genel"
 
-#: data/resources/ui/preferences_dialog.ui:9
 msgid "Font"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:13
 msgid "Change Font"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:14
 msgid "Customize font size and typeface"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:20
 msgid "Reset to Default"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:21
 msgid "Use default font"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:28
 #, fuzzy
 msgid "Editor"
 msgstr "Düzenleyici"
 
-#: data/resources/ui/preferences_dialog.ui:31
 msgid "Show Minimap"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:32
 msgid "Show overview of the document on the right side"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:42
 msgid "Ignore Hidden Files"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:43
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Genel"
 
-#: data/resources/ui/shortcuts.ui:14
 msgctxt "shortcut window"
 msgid "Toggle Fullscreen"
 msgstr "Tam Ekrana Geç"
 
-#: data/resources/ui/shortcuts.ui:20
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
 msgid "Show Shortcuts"
 msgstr "Kısayolları Göster"
 
-#: data/resources/ui/shortcuts.ui:40
 msgctxt "shortcut window"
 msgid "Document"
 msgstr "Belge"
 
-#: data/resources/ui/shortcuts.ui:43
 #, fuzzy
 msgctxt "shortcut window"
 msgid "New Document"
 msgstr "Yeni Sayfa"
 
-#: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "Add Project"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:55
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Save Document"
 msgstr "Sayfayı Kaydet"
 
-#: data/resources/ui/shortcuts.ui:61
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Rename Document"
 msgstr "Sayfayı Yeniden Adlandır"
 
-#: data/resources/ui/shortcuts.ui:67
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Close Document"
 msgstr "Sayfayı Kapat"
 
-#: data/resources/ui/shortcuts.ui:75
 msgctxt "shortcut window"
 msgid "Editor"
 msgstr "Düzenleyici"
 
-#: data/resources/ui/shortcuts.ui:78
 msgctxt "shortcut window"
 msgid "Search Text"
 msgstr "Metin Ara"
 
-#: data/resources/ui/shortcuts.ui:84
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr "Metin Ara ve Değiştir"
 
-#: data/resources/ui/shortcuts.ui:92
 msgctxt "shortcut window"
 msgid "Library"
 msgstr "Kitaplık"
 
-#: data/resources/ui/shortcuts.ui:95
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Elle Yenile"
 
-#: data/resources/ui/window.ui:57
 msgid "Toggle Sidebar (F9)"
 msgstr "Kenar Çubuğunu Aç/Kapat (F9)"
 
-#: data/resources/ui/window.ui:63
 #, fuzzy
 msgid "New Document (Ctrl+N)"
 msgstr "Yeni Sayfa (Ctrl+N)"
 
-#: data/resources/ui/window.ui:69
 msgid "Exit Fullscreen"
 msgstr "Tam Ekrandan Çık"
 
-#: data/resources/ui/window.ui:78
 msgid "Menu"
 msgstr "Menü"
 
-#: data/resources/ui/window.ui:85
 msgid "Document Info"
 msgstr "Belge Bilgisi"
 
-#: data/resources/ui/window.ui:91
 msgid "Formatting Toolbar"
 msgstr "Biçimlendirme Araç Çubuğu"
 
-#: data/resources/ui/window.ui:115
 msgid "New"
 msgstr "Yeni"
 
-#: data/resources/ui/window.ui:125
 msgid "Save"
 msgstr "Kaydet"
 
-#: data/resources/ui/window.ui:129
 msgid "Close"
 msgstr "Kapat"
 
-#: data/resources/ui/window.ui:135
 msgid "Search Text"
 msgstr "Metin Ara"
 
-#: data/resources/ui/window.ui:139
 msgid "Search and Replace"
 msgstr "Ara ve Değiştir"
 
-#: data/resources/ui/window.ui:145
 #, fuzzy
 msgid "Toggle Fullscreen"
 msgstr "Tam Ekrana Geç"
 
-#: data/resources/ui/window.ui:149
 msgid "Toggle Focus Mode"
 msgstr ""
 
-#: data/resources/ui/window.ui:155
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: data/resources/ui/window.ui:159
 msgid "Keyboard Shortcuts"
 msgstr "Klavye Kısayolları"
 
-#: data/resources/ui/window.ui:163
 msgid "About Scratchmark"
 msgstr "Scratchmark Hakkında"
 
