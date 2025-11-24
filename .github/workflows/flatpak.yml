@@ -14,7 +14,7 @@ jobs:
           sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
           sudo flatpak install -y org.flatpak.Builder
       - name: checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: flatpak-builder-lint
         run: flatpak run --command=flatpak-builder-lint org.flatpak.Builder appstream  data/org.scratchmark.Scratchmark.metainfo.xml.in
   flatpak:
@@ -25,7 +25,7 @@ jobs:
       options: --privileged
     steps:
       - name: checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: dependencies
         run: pip3 install tomlkit
       - name: flatpak-cargo-generator
