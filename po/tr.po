@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-10 15:27+0200\n"
-"PO-Revision-Date: 2025-11-20 12:33+0000\n"
-"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"POT-Creation-Date: 2025-11-20 15:43+0200\n"
+"PO-Revision-Date: 2025-11-23 22:10+0000\n"
+"Last-Translator: yakushabb <yakushabb@gmail.com>\n"
 "Language-Team: Turkish <https://translate.codeberg.org/projects/scratchmark/"
 "app/tr/>\n"
 "Language: tr\n"
@@ -72,10 +72,10 @@ msgid "Italic (Ctrl+I)"
 msgstr "Eğik (Ctrl+I)"
 
 msgid "Strikethrough"
-msgstr ""
+msgstr "Üstü Çizili"
 
 msgid "Highlight"
-msgstr ""
+msgstr "Vurgula"
 
 msgid "Heading 1"
 msgstr "Başlık 1"
@@ -84,7 +84,7 @@ msgid "Heading 2"
 msgstr "Başlık 2"
 
 msgid "Blockquote"
-msgstr ""
+msgstr "Blok Alıntı"
 
 msgid "Code"
 msgstr "Kod"
@@ -92,9 +92,8 @@ msgstr "Kod"
 msgid "Nothing Open"
 msgstr "Hiçbir Şey Açık Değil"
 
-#, fuzzy
 msgid "Create a new document or open an existing one from the sidebar"
-msgstr "Kenar çubuğundan yeni sayfa oluşturun ya da var olan sayfayı açın"
+msgstr "Kenar çubuğundan yeni belge oluşturun ya da var olan belgeyi açın"
 
 msgid "Search"
 msgstr "Ara"
@@ -154,15 +153,13 @@ msgid "Library"
 msgstr "Kitaplık"
 
 msgid "Add Project"
-msgstr ""
+msgstr "Proje Ekle"
 
-#, fuzzy
 msgid "New Document"
-msgstr "Yeni Sayfa"
+msgstr "Yeni Belge"
 
-#, fuzzy
 msgid "Create Subfolder"
-msgstr "Klasör Oluştur"
+msgstr "Alt Klasör Oluştur"
 
 msgid "Show in File Manager"
 msgstr "Dosya Yöneticisinde Göster"
@@ -170,9 +167,8 @@ msgstr "Dosya Yöneticisinde Göster"
 msgid "Move to Trash"
 msgstr "Çöpe Taşı"
 
-#, fuzzy
 msgid "Delete Permanently"
-msgstr "Sayfayı Sil"
+msgstr "Kalıcı Olarak Sil"
 
 msgid "Close Project"
 msgstr "Projeyi Kapat"
@@ -180,40 +176,38 @@ msgstr "Projeyi Kapat"
 msgid "Duplicate"
 msgstr "Çoğalt"
 
-#, fuzzy
 msgid "General"
 msgstr "Genel"
 
 msgid "Font"
-msgstr ""
+msgstr "Yazı Tipi"
 
 msgid "Change Font"
-msgstr ""
+msgstr "Yazı Tipini Değiştir"
 
 msgid "Customize font size and typeface"
-msgstr ""
+msgstr "Yazı tipini ve boyutunu özelleştir"
 
 msgid "Reset to Default"
-msgstr ""
+msgstr "Öntanımlı Değerlere Sıfırla"
 
 msgid "Use default font"
-msgstr ""
+msgstr "Öntanımlı yazı tipini kullan"
 
-#, fuzzy
 msgid "Editor"
 msgstr "Düzenleyici"
 
 msgid "Show Minimap"
-msgstr ""
+msgstr "Küçük Haritayı Göster"
 
 msgid "Show overview of the document on the right side"
-msgstr ""
+msgstr "Belgenin genel görünümünü sağ kenarda göster"
 
 msgid "Ignore Hidden Files"
-msgstr ""
+msgstr "Gizli Dosyaları Görmezden Gel"
 
 msgid "Files and folders with a preceding \".\" won't show up in the library"
-msgstr ""
+msgstr "Önünde \".\" bulunan dosyalar ve klasörler kitaplıkta görünmez"
 
 msgctxt "shortcut window"
 msgid "General"
@@ -221,11 +215,11 @@ msgstr "Genel"
 
 msgctxt "shortcut window"
 msgid "Toggle Fullscreen"
-msgstr "Tam Ekrana Geç"
+msgstr "Tam Ekranı Aç/Kapat"
 
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
-msgstr ""
+msgstr "Odaklanma Kipini Aç/Kapat"
 
 msgctxt "shortcut window"
 msgid "Preferences"
@@ -239,29 +233,25 @@ msgctxt "shortcut window"
 msgid "Document"
 msgstr "Belge"
 
-#, fuzzy
 msgctxt "shortcut window"
 msgid "New Document"
-msgstr "Yeni Sayfa"
+msgstr "Yeni Belge"
 
 msgctxt "shortcut window"
 msgid "Add Project"
-msgstr ""
+msgstr "Proje Ekle"
 
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Save Document"
-msgstr "Sayfayı Kaydet"
+msgstr "Belgeyi Kaydet"
 
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Rename Document"
-msgstr "Sayfayı Yeniden Adlandır"
+msgstr "belgeyi Yeniden Adlandır"
 
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Close Document"
-msgstr "Sayfayı Kapat"
+msgstr "Belgeyi Kapat"
 
 msgctxt "shortcut window"
 msgid "Editor"
@@ -286,9 +276,8 @@ msgstr "Elle Yenile"
 msgid "Toggle Sidebar (F9)"
 msgstr "Kenar Çubuğunu Aç/Kapat (F9)"
 
-#, fuzzy
 msgid "New Document (Ctrl+N)"
-msgstr "Yeni Sayfa (Ctrl+N)"
+msgstr "Yeni Belge (Ctrl+N)"
 
 msgid "Exit Fullscreen"
 msgstr "Tam Ekrandan Çık"
@@ -317,12 +306,11 @@ msgstr "Metin Ara"
 msgid "Search and Replace"
 msgstr "Ara ve Değiştir"
 
-#, fuzzy
 msgid "Toggle Fullscreen"
-msgstr "Tam Ekrana Geç"
+msgstr "Tam Ekranı Aç/Kapat"
 
 msgid "Toggle Focus Mode"
-msgstr ""
+msgstr "Odaklanma Kipini Aç/Kapat"
 
 msgid "Preferences"
 msgstr "Tercihler"
