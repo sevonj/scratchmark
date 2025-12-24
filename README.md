@@ -71,7 +71,7 @@ The app needs its settings schema, and the lookup path seemingly can't be set in
 
 Pull requests are gatekept by [this workflow.](https://github.com/sevonj/scratchmark/blob/master/.github/workflows/rust.yml) It will check if the code
 
-- builds
+- builds (you don't say)
 - passes unit tests (run `cargo test`)
 - has linter warnings (run `cargo clippy`)
 - is formatted (run `cargo fmt`)
@@ -102,5 +102,5 @@ Build & install:
 
 ```sh
 cd build-aux
-sh generate_flatpak.sh && sudo flatpak install Scratchmark.flatpak
+sh generate_flatpak.sh && flatpak install Scratchmark.flatpak --user -y
 ```
