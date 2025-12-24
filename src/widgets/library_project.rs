@@ -278,17 +278,15 @@ mod imp {
         }
 
         fn add_sheet(&self, path: PathBuf, depth: u32) {
-            let mut sheets = self.sheets.borrow_mut();
-            let subfolders = self.subfolders.borrow();
-            if sheets.contains_key(&path) {
+            if self.sheets.borrow().contains_key(&path) {
                 return;
             }
 
             let sheet = LibrarySheet::new(&SheetObject::new(path.clone(), depth));
-            sheets.insert(path.clone(), sheet.clone());
+            self.sheets.borrow_mut().insert(path.clone(), sheet.clone());
 
             let parent_path = path.parent().unwrap();
-            if let Some(parent) = subfolders.get(parent_path) {
+            if let Some(parent) = self.subfolders.borrow().get(parent_path) {
                 parent.add_sheet(sheet.clone());
             } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
                 self.root_folder

@@ -58,8 +58,8 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Rename Document</property>
-                <property name="action-name">win.file-rename-open</property>
+                <property name="title" translatable="yes" context="shortcut window">Rename</property>
+                <property name="action-name">win.file-rename-selected</property>
               </object>
             </child>
             <child>

@@ -1,4 +1,5 @@
 mod imp {
+    use std::cell::Cell;
     use std::cell::RefCell;
     use std::path::PathBuf;
     use std::sync::OnceLock;
@@ -11,18 +12,21 @@ mod imp {
     use gtk::glib;
     use gtk::prelude::*;
 
-    use gdk::Rectangle;
-    use gio::{MenuModel, SimpleActionGroup};
-    use glib::Binding;
-    use glib::subclass::Signal;
     use gtk::DragSource;
     use gtk::ToggleButton;
+    use gtk::gdk::Rectangle;
+    use gtk::gio::MenuModel;
+    use gtk::gio::SimpleActionGroup;
+    use gtk::glib::Binding;
+    use gtk::glib::Properties;
+    use gtk::glib::subclass::Signal;
     use gtk::{Builder, CompositeTemplate, FileLauncher, Label, PopoverMenu, TemplateChild};
 
     use crate::data::SheetObject;
     use crate::widgets::ItemRenamePopover;
 
-    #[derive(CompositeTemplate, Default)]
+    #[derive(CompositeTemplate, Default, Properties)]
+    #[properties(wrapper_type = super::LibrarySheet)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library_sheet.ui")]
     pub struct LibrarySheet {
         #[template_child]
@@ -38,6 +42,9 @@ mod imp {
         context_menu_popover: RefCell<Option<PopoverMenu>>,
         pub(super) rename_popover: RefCell<Option<ItemRenamePopover>>,
         pub(super) drag_source: RefCell<Option<DragSource>>,
+
+        #[property(get, set)]
+        pub(super) is_selected: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -55,6 +62,7 @@ mod imp {
         }
     }
 
+    #[glib::derived_properties]
     impl ObjectImpl for LibrarySheet {
         fn constructed(&self) {
             self.parent_constructed();
@@ -64,10 +72,16 @@ mod imp {
             self.setup_rename_menu();
             self.setup_drag();
 
+            let button: &ToggleButton = self.button.as_ref();
+            obj.bind_property("is_selected", button, "active").build();
+
             self.button.connect_clicked(clone!(
-                #[weak]
-                obj,
-                move |_| {
+                #[weak(rename_to = this)]
+                self,
+                move |button| {
+                    let obj = this.obj();
+                    let is_selected = obj.is_selected();
+                    button.set_active(is_selected);
                     obj.emit_by_name::<()>("selected", &[]);
                 }
             ));
@@ -292,10 +306,6 @@ impl LibrarySheet {
             .copy(&dupe_file, FileCopyFlags::NONE, None::<&Cancellable>, None)
             .expect("File dupe failed");
         self.emit_by_name::<()>("duplicated", &[]);
-    }
-
-    pub fn set_active(&self, is_active: bool) {
-        self.imp().button.set_active(is_active);
     }
 
     fn bind(&self, data: &SheetObject) {
