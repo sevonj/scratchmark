@@ -3,6 +3,7 @@ mod imp {
     use std::cell::RefCell;
     use std::collections::HashMap;
     use std::ops::Deref;
+    use std::path::Path;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
@@ -140,10 +141,47 @@ mod imp {
     impl BinImpl for LibraryBrowser {}
 
     impl LibraryBrowser {
+        pub(super) fn has_folder(&self, path: &Path) -> bool {
+            for project in self.projects.borrow().deref().values() {
+                if path.starts_with(project.path()) {
+                    return project.has_folder(path);
+                }
+            }
+            false
+        }
+
+        pub(super) fn has_document(&self, path: &Path) -> bool {
+            for project in self.projects.borrow().deref().values() {
+                if path.starts_with(project.path()) {
+                    return project.has_document(path);
+                }
+            }
+            false
+        }
+
+        pub(super) fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
+            for project in self.projects.borrow().deref().values() {
+                if path.starts_with(project.path()) {
+                    return project.get_folder(path);
+                }
+            }
+            None
+        }
+
+        pub(super) fn get_document(&self, path: &Path) -> Option<LibrarySheet> {
+            for project in self.projects.borrow().deref().values() {
+                if path.starts_with(project.path()) {
+                    return project.get_sheet(path);
+                }
+            }
+            None
+        }
+
         pub(super) fn refresh_content(&self) {
             for project in self.projects.borrow().deref().values() {
                 project.refresh_content();
             }
+            self.refresh_selection();
         }
 
         pub(super) fn load_project(&self, project: LibraryProject) {
@@ -390,6 +428,39 @@ mod imp {
                 ),
             );
         }
+
+        /// Attempts to select a valid item if current selection path is bad
+        pub(super) fn refresh_selection(&self) {
+            let obj = self.obj();
+            let selected_path = obj.selected_item_path();
+            let selection_is_gone =
+                !self.has_document(&selected_path) && !self.has_folder(&selected_path);
+            if selection_is_gone {
+                if let Some(ancestor) = self.find_existing_ancestor(&selected_path) {
+                    self.select_item(ancestor);
+                } else if let Some(first_project_root) = self.projects.borrow().keys().next() {
+                    self.select_item(first_project_root.to_path_buf());
+                }
+            }
+        }
+
+        fn find_existing_ancestor(&self, item_path: &Path) -> Option<PathBuf> {
+            for project in self.projects.borrow().deref().values() {
+                let project_path = project.path();
+                if item_path.starts_with(&project_path) {
+                    let mut working_path = item_path.to_path_buf();
+                    while working_path != project_path {
+                        let parent = working_path.parent()?;
+                        if project.has_folder(parent) {
+                            return Some(parent.to_path_buf());
+                        }
+                        working_path = parent.to_path_buf();
+                    }
+                    break;
+                }
+            }
+            None
+        }
     }
 }
 
@@ -448,21 +519,11 @@ impl LibraryBrowser {
     }
 
     pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
-        for project in self.imp().projects.borrow().deref().values() {
-            if path.starts_with(project.path()) {
-                return project.get_folder(path);
-            }
-        }
-        None
+        self.imp().get_folder(path)
     }
 
     pub fn get_sheet(&self, path: &Path) -> Option<LibrarySheet> {
-        for project in self.imp().projects.borrow().deref().values() {
-            if path.starts_with(project.path()) {
-                return project.get_sheet(path);
-            }
-        }
-        None
+        self.imp().get_document(path)
     }
 
     pub fn add_project(&self, path: PathBuf) {
@@ -481,6 +542,7 @@ impl LibraryBrowser {
         let imp = self.imp();
         let project = imp.projects.borrow_mut().remove(path).unwrap();
         imp.projects_container.remove(&project);
+        imp.refresh_selection();
     }
 
     pub fn refresh_content(&self) {

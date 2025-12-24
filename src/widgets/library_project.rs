@@ -481,15 +481,22 @@ impl LibraryProject {
         imp.expanded_folders.borrow_mut().insert(path);
     }
 
+    pub fn has_folder(&self, path: &Path) -> bool {
+        self.imp().subfolders.borrow().contains_key(path) || *path == self.root_path()
+    }
+
+    pub fn has_document(&self, path: &Path) -> bool {
+        self.imp().sheets.borrow().contains_key(path)
+    }
+
     pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
         let sub = self.imp().subfolders.borrow().get(path).cloned();
         if sub.is_some() {
-            sub
+            return sub;
         } else if *path == self.root_path() {
-            Some(self.root_folder())
-        } else {
-            None
+            return Some(self.root_folder());
         }
+        None
     }
 
     pub fn get_sheet(&self, path: &Path) -> Option<LibrarySheet> {
