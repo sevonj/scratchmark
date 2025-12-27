@@ -313,15 +313,13 @@ mod imp {
 
                         let original_path = folder.path();
                         let new_path = util::incremented_path(new_path);
+                        let selected_item_path = this.library_browser.selected_item_path();
 
                         let editor_opt = this.editor.borrow();
                         let open_document_affected = editor_opt
                             .as_ref()
                             .is_some_and(|e| e.path().starts_with(&original_path));
-                        let selected_item_affected = this
-                            .library_browser
-                            .selected_item_path()
-                            .starts_with(&original_path);
+                        let selected_item_affected = selected_item_path.starts_with(&original_path);
 
                         if open_document_affected {
                             editor_opt.as_ref().unwrap().cancel_filemon();
@@ -346,8 +344,7 @@ mod imp {
                             editor_opt.as_ref().unwrap().set_path(sheet_path);
                         }
                         if selected_item_affected {
-                            let open_document_path = editor_opt.as_ref().unwrap().path();
-                            let relative = open_document_path.strip_prefix(folder.path()).unwrap();
+                            let relative = selected_item_path.strip_prefix(folder.path()).unwrap();
                             let new_selected_path = new_path.join(relative);
                             this.library_browser
                                 .set_selected_item_path(new_selected_path);
