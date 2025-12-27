@@ -77,7 +77,7 @@ pub fn untitled_folder_path(dir: PathBuf) -> PathBuf {
 }
 
 /// Returns an unused filepath with a placeholder name
-pub fn untitled_sheet_path(dir: PathBuf) -> PathBuf {
+pub fn untitled_document_path(dir: PathBuf) -> PathBuf {
     assert!(dir.is_dir());
     let path = dir.join("Untitled.md");
     incremented_path(path)
@@ -120,7 +120,7 @@ pub fn create_folder(path: &Path) -> Result<(), ScratchmarkError> {
     Ok(())
 }
 
-pub fn create_sheet_file(path: &Path) -> Result<(), ScratchmarkError> {
+pub fn create_document(path: &Path) -> Result<(), ScratchmarkError> {
     let mut file = match OpenOptions::new().write(true).create_new(true).open(path) {
         Ok(f) => f,
         Err(e) => {

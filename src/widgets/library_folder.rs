@@ -31,7 +31,7 @@ mod imp {
     use crate::data::FolderObject;
     use crate::util;
     use crate::widgets::ItemRenamePopover;
-    use crate::widgets::LibrarySheet;
+    use crate::widgets::LibraryDocument;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::LibraryFolder)]
@@ -61,7 +61,7 @@ mod imp {
         pub(super) bindings: RefCell<Vec<Binding>>,
         pub(super) expanded: RefCell<bool>,
         pub(super) subdirs: RefCell<Vec<super::LibraryFolder>>,
-        pub(super) sheets: RefCell<Vec<LibrarySheet>>,
+        pub(super) documents: RefCell<Vec<LibraryDocument>>,
 
         pub(super) context_menu_popover: RefCell<Option<PopoverMenu>>,
         pub(super) rename_popover: RefCell<Option<ItemRenamePopover>>,
@@ -189,16 +189,16 @@ mod imp {
         }
 
         fn sort_children(&self) {
-            let mut sheets = self.sheets.borrow_mut();
-            if !sheets.is_empty() {
-                fn compare(a: &LibrarySheet, b: &LibrarySheet) -> std::cmp::Ordering {
+            let mut documents = self.documents.borrow_mut();
+            if !documents.is_empty() {
+                fn compare(a: &LibraryDocument, b: &LibraryDocument) -> std::cmp::Ordering {
                     a.stem().to_lowercase().cmp(&b.stem().to_lowercase())
                 }
-                sheets.sort_unstable_by(compare);
+                documents.sort_unstable_by(compare);
 
-                for i in (0..sheets.len() - 1).rev() {
-                    let child = &sheets[i + 1];
-                    let sibling = Some(&sheets[i]);
+                for i in (0..documents.len() - 1).rev() {
+                    let child = &documents[i + 1];
+                    let sibling = Some(&documents[i]);
                     self.documents_vbox.reorder_child_after(child, sibling);
                 }
             }
@@ -231,9 +231,9 @@ mod imp {
             self.subdirs.borrow_mut().push(folder);
         }
 
-        pub(super) fn add_sheet(&self, sheet: LibrarySheet) {
-            self.documents_vbox.append(&sheet);
-            self.sheets.borrow_mut().push(sheet);
+        pub(super) fn add_document(&self, doc: LibraryDocument) {
+            self.documents_vbox.append(&doc);
+            self.documents.borrow_mut().push(doc);
         }
 
         pub(super) fn setup_context_menu(&self, resource_path: &str) {
@@ -317,7 +317,7 @@ mod imp {
 
             let drop_target = DropTarget::new(glib::types::Type::INVALID, gdk::DragAction::COPY);
             drop_target.set_types(&[
-                LibrarySheet::static_type(),
+                LibraryDocument::static_type(),
                 super::LibraryFolder::static_type(),
             ]);
             drop_target.connect_drop(clone!(
@@ -326,15 +326,15 @@ mod imp {
                 #[upgrade_or]
                 false,
                 move |_: &DropTarget, value: &glib::Value, _: f64, _: f64| {
-                    if let Ok(sheet) = value.get::<LibrarySheet>() {
-                        let old_path = sheet.path();
+                    if let Ok(doc) = value.get::<LibraryDocument>() {
+                        let old_path = doc.path();
                         let filename = old_path.file_name().unwrap();
                         let target_path = obj.path();
                         let new_path = target_path.join(filename);
                         if new_path == old_path {
                             return true;
                         }
-                        sheet.rename(new_path);
+                        doc.rename(new_path);
                         obj.imp().set_expanded(true);
                         return true;
                     } else if let Ok(folder) = value.get::<super::LibraryFolder>() {
@@ -373,8 +373,8 @@ mod imp {
                 #[weak]
                 obj,
                 move |_action, _parameter| {
-                    let path = util::untitled_sheet_path(obj.path());
-                    if let Err(e) = util::create_sheet_file(&path) {
+                    let path = util::untitled_document_path(obj.path());
+                    if let Err(e) = util::create_document(&path) {
                         obj.emit_by_name::<()>("notify-err", &[&e.to_string()]);
                         return;
                     }
@@ -486,7 +486,7 @@ use gtk::prelude::*;
 use glib::Object;
 
 use crate::data::FolderObject;
-use crate::widgets::LibrarySheet;
+use crate::widgets::LibraryDocument;
 
 glib::wrapper! {
     pub struct LibraryFolder(ObjectSubclass<imp::LibraryFolder>)
@@ -561,16 +561,16 @@ impl LibraryFolder {
         self.imp().add_subfolder(folder);
     }
 
-    pub fn add_sheet(&self, sheet: LibrarySheet) {
-        self.imp().add_sheet(sheet);
+    pub fn add_document(&self, doc: LibraryDocument) {
+        self.imp().add_document(doc);
     }
 
     pub fn remove_subfolder(&self, folder: &LibraryFolder) {
         self.imp().subdirs_vbox.remove(folder);
     }
 
-    pub fn remove_sheet(&self, sheet: &LibrarySheet) {
-        self.imp().documents_vbox.remove(sheet);
+    pub fn remove_document(&self, doc: &LibraryDocument) {
+        self.imp().documents_vbox.remove(doc);
     }
 
     pub fn prompt_rename(&self) {

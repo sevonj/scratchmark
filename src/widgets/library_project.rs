@@ -22,11 +22,11 @@ mod imp {
     use gtk::CompositeTemplate;
     use gtk::glib::MainContext;
 
+    use crate::data::DocumentObject;
     use crate::data::FolderObject;
-    use crate::data::SheetObject;
+    use crate::widgets::LibraryDocument;
     use crate::widgets::LibraryFolder;
     use crate::widgets::LibraryProjectErrPlaceholder;
-    use crate::widgets::LibrarySheet;
 
     #[derive(Debug)]
     enum ProjectEntry {
@@ -43,7 +43,7 @@ mod imp {
 
         pub(super) root_folder: RefCell<Option<LibraryFolder>>,
         pub(super) subfolders: RefCell<HashMap<PathBuf, LibraryFolder>>,
-        pub(super) sheets: RefCell<HashMap<PathBuf, LibrarySheet>>,
+        pub(super) documents: RefCell<HashMap<PathBuf, LibraryDocument>>,
         /// Is this a builtin project (drafts)
         pub(super) is_builtin: Cell<bool>,
         /// Project folder is inaccessible or deleted
@@ -96,7 +96,7 @@ mod imp {
                                     imp.add_subfolder(path, depth);
                                 }
                                 ProjectEntry::File { path, depth } => {
-                                    imp.add_sheet(path, depth);
+                                    imp.add_document(path, depth);
                                 }
                             }
                         }
@@ -114,7 +114,7 @@ mod imp {
                         .param_types([LibraryFolder::static_type()])
                         .build(),
                     Signal::builder("document-added")
-                        .param_types([LibrarySheet::static_type()])
+                        .param_types([LibraryDocument::static_type()])
                         .build(),
                     Signal::builder("document-selected")
                         .param_types([PathBuf::static_type()])
@@ -123,19 +123,19 @@ mod imp {
                         .param_types([LibraryFolder::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("document-rename-requested")
-                        .param_types([LibrarySheet::static_type(), PathBuf::static_type()])
+                        .param_types([LibraryDocument::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
                         .param_types([LibraryFolder::static_type()])
                         .build(),
                     Signal::builder("document-delete-requested")
-                        .param_types([LibrarySheet::static_type()])
+                        .param_types([LibraryDocument::static_type()])
                         .build(),
                     Signal::builder("folder-trash-requested")
                         .param_types([LibraryFolder::static_type()])
                         .build(),
                     Signal::builder("document-trash-requested")
-                        .param_types([LibrarySheet::static_type()])
+                        .param_types([LibraryDocument::static_type()])
                         .build(),
                     Signal::builder("close-project-requested").build(),
                 ]
@@ -277,36 +277,38 @@ mod imp {
             self.connect_folder(folder.clone());
         }
 
-        fn add_sheet(&self, path: PathBuf, depth: u32) {
-            if self.sheets.borrow().contains_key(&path) {
+        fn add_document(&self, path: PathBuf, depth: u32) {
+            if self.documents.borrow().contains_key(&path) {
                 return;
             }
 
-            let sheet = LibrarySheet::new(&SheetObject::new(path.clone(), depth));
-            self.sheets.borrow_mut().insert(path.clone(), sheet.clone());
+            let doc = LibraryDocument::new(&DocumentObject::new(path.clone(), depth));
+            self.documents
+                .borrow_mut()
+                .insert(path.clone(), doc.clone());
 
             let parent_path = path.parent().unwrap();
             if let Some(parent) = self.subfolders.borrow().get(parent_path) {
-                parent.add_sheet(sheet.clone());
+                parent.add_document(doc.clone());
             } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
                 self.root_folder
                     .borrow()
                     .as_ref()
                     .unwrap()
-                    .add_sheet(sheet.clone());
+                    .add_document(doc.clone());
             } else {
-                panic!("Tried to add a sheet, but couldn't find its parent.");
+                panic!("Tried to add a document, but couldn't find its parent.");
             }
 
-            self.obj().emit_by_name::<()>("document-added", &[&sheet]);
+            self.obj().emit_by_name::<()>("document-added", &[&doc]);
         }
 
         /// Remove widgets for entries that don't exist in the library anymore
         fn prune(&self) {
             let mut subfolders = self.subfolders.borrow_mut();
-            let mut sheets = self.sheets.borrow_mut();
+            let mut documents = self.documents.borrow_mut();
             let mut dead_folders = vec![];
-            let mut dead_sheets = vec![];
+            let mut dead_documents = vec![];
             for (path, folder) in subfolders.iter() {
                 let is_hidden = path
                     .file_name()
@@ -329,25 +331,25 @@ mod imp {
                     }
                 }
             }
-            for (path, sheet) in sheets.iter() {
+            for (path, doc) in documents.iter() {
                 let is_hidden = path
                     .file_name()
                     .is_some_and(|s| s.as_encoded_bytes()[0] == b'.');
                 let prune_hidden = self.ignore_hidden_files.get() && is_hidden;
 
                 if !path.exists() || prune_hidden {
-                    dead_sheets.push(path.clone());
+                    dead_documents.push(path.clone());
 
                     let parent_path = path.parent().unwrap();
 
                     if let Some(parent) = subfolders.get(parent_path) {
-                        parent.remove_sheet(sheet);
+                        parent.remove_document(doc);
                     } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
                         self.root_folder
                             .borrow()
                             .as_ref()
                             .unwrap()
-                            .remove_sheet(sheet);
+                            .remove_document(doc);
                     }
                 }
             }
@@ -356,8 +358,10 @@ mod imp {
                     .remove(&path)
                     .expect("dead folder entry disappeared?");
             }
-            for path in dead_sheets {
-                sheets.remove(&path).expect("dead sheet entry disappeared?");
+            for path in dead_documents {
+                documents
+                    .remove(&path)
+                    .expect("dead doc entry disappeared?");
             }
         }
 
@@ -403,8 +407,8 @@ use glib::Object;
 use crate::data::FolderObject;
 use crate::util::path_builtin_library;
 
+use crate::widgets::LibraryDocument;
 use crate::widgets::LibraryFolder;
-use crate::widgets::LibrarySheet;
 
 glib::wrapper! {
     pub struct LibraryProject(ObjectSubclass<imp::LibraryProject>)
@@ -486,7 +490,7 @@ impl LibraryProject {
     }
 
     pub fn has_document(&self, path: &Path) -> bool {
-        self.imp().sheets.borrow().contains_key(path)
+        self.imp().documents.borrow().contains_key(path)
     }
 
     pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
@@ -499,8 +503,8 @@ impl LibraryProject {
         None
     }
 
-    pub fn get_sheet(&self, path: &Path) -> Option<LibrarySheet> {
-        self.imp().sheets.borrow().get(path).cloned()
+    pub fn get_document(&self, path: &Path) -> Option<LibraryDocument> {
+        self.imp().documents.borrow().get(path).cloned()
     }
 
     pub fn refresh_content(&self) {

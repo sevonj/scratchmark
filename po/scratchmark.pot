@@ -186,7 +186,7 @@ msgstr ""
 
 #: data/resources/ui/item_rename_popover.ui:15
 #: data/resources/ui/library_folder_context_menu.ui:18
-#: data/resources/ui/library_sheet_context_menu.ui:10
+#: data/resources/ui/library_document_context_menu.ui:10
 msgid "Rename"
 msgstr ""
 
@@ -215,17 +215,17 @@ msgstr ""
 #: data/resources/ui/library_drafts_context_menu.ui:14
 #: data/resources/ui/library_folder_context_menu.ui:14
 #: data/resources/ui/library_project_context_menu.ui:14
-#: data/resources/ui/library_sheet_context_menu.ui:6
+#: data/resources/ui/library_document_context_menu.ui:6
 msgid "Show in File Manager"
 msgstr ""
 
 #: data/resources/ui/library_folder_context_menu.ui:22
-#: data/resources/ui/library_sheet_context_menu.ui:18
+#: data/resources/ui/library_document_context_menu.ui:18
 msgid "Move to Trash"
 msgstr ""
 
 #: data/resources/ui/library_folder_context_menu.ui:26
-#: data/resources/ui/library_sheet_context_menu.ui:22
+#: data/resources/ui/library_document_context_menu.ui:22
 msgid "Delete Permanently"
 msgstr ""
 
@@ -234,7 +234,7 @@ msgstr ""
 msgid "Close Project"
 msgstr ""
 
-#: data/resources/ui/library_sheet_context_menu.ui:14
+#: data/resources/ui/library_document_context_menu.ui:14
 msgid "Duplicate"
 msgstr ""
 

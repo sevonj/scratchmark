@@ -22,13 +22,13 @@ mod imp {
     use gtk::glib::subclass::Signal;
     use gtk::{Builder, CompositeTemplate, FileLauncher, Label, PopoverMenu, TemplateChild};
 
-    use crate::data::SheetObject;
+    use crate::data::DocumentObject;
     use crate::widgets::ItemRenamePopover;
 
     #[derive(CompositeTemplate, Default, Properties)]
-    #[properties(wrapper_type = super::LibrarySheet)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_sheet.ui")]
-    pub struct LibrarySheet {
+    #[properties(wrapper_type = super::LibraryDocument)]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_document.ui")]
+    pub struct LibraryDocument {
         #[template_child]
         pub(super) button: TemplateChild<ToggleButton>,
         #[template_child]
@@ -36,7 +36,7 @@ mod imp {
         #[template_child]
         pub(super) title_row: TemplateChild<gtk::Box>,
 
-        pub(super) sheet_object: RefCell<Option<SheetObject>>,
+        pub(super) document_object: RefCell<Option<DocumentObject>>,
         pub(super) bindings: RefCell<Vec<Binding>>,
 
         context_menu_popover: RefCell<Option<PopoverMenu>>,
@@ -48,9 +48,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LibrarySheet {
-        const NAME: &'static str = "LibrarySheet";
-        type Type = super::LibrarySheet;
+    impl ObjectSubclass for LibraryDocument {
+        const NAME: &'static str = "LibraryDocument";
+        type Type = super::LibraryDocument;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -63,7 +63,7 @@ mod imp {
     }
 
     #[glib::derived_properties]
-    impl ObjectImpl for LibrarySheet {
+    impl ObjectImpl for LibraryDocument {
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
@@ -159,10 +159,10 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for LibrarySheet {}
-    impl BinImpl for LibrarySheet {}
+    impl WidgetImpl for LibraryDocument {}
+    impl BinImpl for LibraryDocument {}
 
-    impl LibrarySheet {
+    impl LibraryDocument {
         pub(super) fn prompt_rename(&self) {
             self.rename_popover.borrow().as_ref().unwrap().popup();
         }
@@ -171,7 +171,7 @@ mod imp {
             let obj = self.obj();
 
             let builder = Builder::from_resource(
-                "/org/scratchmark/Scratchmark/ui/library_sheet_context_menu.ui",
+                "/org/scratchmark/Scratchmark/ui/library_document_context_menu.ui",
             );
             let popover = builder.object::<MenuModel>("context-menu").unwrap();
             let menu = PopoverMenu::builder()
@@ -206,7 +206,7 @@ mod imp {
         fn setup_rename_menu(&self) {
             let obj = self.obj();
 
-            let menu = ItemRenamePopover::for_sheet();
+            let menu = ItemRenamePopover::for_document();
             menu.set_parent(&*obj);
 
             menu.connect_closure(
@@ -253,17 +253,17 @@ use gtk::prelude::*;
 use gio::{Cancellable, FileCopyFlags};
 use glib::Object;
 
-use crate::data::SheetObject;
+use crate::data::DocumentObject;
 use crate::util;
 
 glib::wrapper! {
-pub struct LibrarySheet(ObjectSubclass<imp::LibrarySheet>)
+pub struct LibraryDocument(ObjectSubclass<imp::LibraryDocument>)
     @extends adw::Bin, gtk::Widget,
     @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl LibrarySheet {
-    pub fn new(data: &SheetObject) -> Self {
+impl LibraryDocument {
+    pub fn new(data: &DocumentObject) -> Self {
         let this: Self = Object::builder().build();
         this.bind(data);
         this
@@ -271,19 +271,19 @@ impl LibrarySheet {
 
     pub fn path(&self) -> PathBuf {
         self.imp()
-            .sheet_object
+            .document_object
             .borrow()
             .as_ref()
-            .expect("LibrarySheet data uninitialized")
+            .expect("LibraryDocument data uninitialized")
             .path()
     }
 
     pub fn stem(&self) -> String {
         self.imp()
-            .sheet_object
+            .document_object
             .borrow()
             .as_ref()
-            .expect("LibrarySheet data uninitialized")
+            .expect("LibraryDocument data uninitialized")
             .stem()
     }
 
@@ -308,8 +308,8 @@ impl LibrarySheet {
         self.emit_by_name::<()>("duplicated", &[]);
     }
 
-    fn bind(&self, data: &SheetObject) {
-        self.imp().sheet_object.replace(Some(data.clone()));
+    fn bind(&self, data: &DocumentObject) {
+        self.imp().document_object.replace(Some(data.clone()));
         let path = data.path();
         self.imp()
             .rename_popover

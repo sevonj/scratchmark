@@ -7,25 +7,25 @@ mod imp {
     use gtk::prelude::*;
     use gtk::subclass::prelude::*;
 
-    use super::SheetData;
+    use super::DocumentData;
 
     #[derive(Properties, Default)]
-    #[properties(wrapper_type = super::SheetObject)]
-    pub struct SheetObject {
+    #[properties(wrapper_type = super::DocumentObject)]
+    pub struct DocumentObject {
         #[property(name = "path", get, set, type = PathBuf, member = path)]
         #[property(name = "depth", get, set, type = u32, member = depth)]
         #[property(name = "stem", get, set, type = String, member = stem)]
-        pub data: RefCell<SheetData>,
+        pub data: RefCell<DocumentData>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for SheetObject {
-        const NAME: &'static str = "LibrarySheetObject";
-        type Type = super::SheetObject;
+    impl ObjectSubclass for DocumentObject {
+        const NAME: &'static str = "LibraryDocumentObject";
+        type Type = super::DocumentObject;
     }
 
     #[glib::derived_properties]
-    impl ObjectImpl for SheetObject {}
+    impl ObjectImpl for DocumentObject {}
 }
 
 use std::path::PathBuf;
@@ -34,10 +34,10 @@ use glib::Object;
 use gtk::glib;
 
 glib::wrapper! {
-    pub struct SheetObject(ObjectSubclass<imp::SheetObject>);
+    pub struct DocumentObject(ObjectSubclass<imp::DocumentObject>);
 }
 
-impl SheetObject {
+impl DocumentObject {
     pub fn new(path: PathBuf, depth: u32) -> Self {
         let stem = path.file_stem().unwrap().to_string_lossy().into_owned();
         Object::builder()
@@ -49,7 +49,7 @@ impl SheetObject {
 }
 
 #[derive(Default, Debug)]
-pub struct SheetData {
+pub struct DocumentData {
     pub path: PathBuf,
     pub depth: u32,
     /// Use for display

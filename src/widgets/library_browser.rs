@@ -21,8 +21,8 @@ mod imp {
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Properties;
 
+    use crate::widgets::LibraryDocument;
     use crate::widgets::LibraryFolder;
-    use crate::widgets::LibrarySheet;
     use crate::widgets::library_project::LibraryProject;
 
     #[derive(CompositeTemplate, Default, Properties)]
@@ -111,19 +111,19 @@ mod imp {
                         .param_types([LibraryFolder::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("document-rename-requested")
-                        .param_types([LibrarySheet::static_type(), PathBuf::static_type()])
+                        .param_types([LibraryDocument::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
                         .param_types([LibraryFolder::static_type()])
                         .build(),
                     Signal::builder("document-delete-requested")
-                        .param_types([LibrarySheet::static_type()])
+                        .param_types([LibraryDocument::static_type()])
                         .build(),
                     Signal::builder("folder-trash-requested")
                         .param_types([LibraryFolder::static_type()])
                         .build(),
                     Signal::builder("document-trash-requested")
-                        .param_types([LibrarySheet::static_type()])
+                        .param_types([LibraryDocument::static_type()])
                         .build(),
                     Signal::builder("close-project-requested")
                         .param_types([PathBuf::static_type()])
@@ -168,10 +168,10 @@ mod imp {
             None
         }
 
-        pub(super) fn get_document(&self, path: &Path) -> Option<LibrarySheet> {
+        pub(super) fn get_document(&self, path: &Path) -> Option<LibraryDocument> {
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.path()) {
-                    return project.get_sheet(path);
+                    return project.get_document(path);
                 }
             }
             None
@@ -204,8 +204,8 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryProject, sheet: LibrarySheet| {
-                        this.connect_sheet(sheet);
+                    move |_: LibraryProject, document: LibraryDocument| {
+                        this.connect_document(document);
                     }
                 ),
             );
@@ -234,15 +234,15 @@ mod imp {
         pub(super) fn select_item(&self, path: PathBuf) {
             let obj = self.obj();
 
-            if let Some(old_selection) = obj.get_folder(&obj.selected_item_path()) {
+            if let Some(old_selection) = self.get_folder(&obj.selected_item_path()) {
                 old_selection.set_is_selected(false);
-            } else if let Some(old_selection) = obj.get_sheet(&obj.selected_item_path()) {
+            } else if let Some(old_selection) = self.get_document(&obj.selected_item_path()) {
                 old_selection.set_is_selected(false);
             }
 
-            if let Some(new_selection) = obj.get_folder(&path) {
+            if let Some(new_selection) = self.get_folder(&path) {
                 new_selection.set_is_selected(true);
-            } else if let Some(new_selection) = obj.get_sheet(&path) {
+            } else if let Some(new_selection) = self.get_document(&path) {
                 new_selection.set_is_selected(true);
             }
 
@@ -355,10 +355,10 @@ mod imp {
             );
         }
 
-        fn connect_sheet(&self, sheet: LibrarySheet) {
+        fn connect_document(&self, doc: LibraryDocument) {
             let obj = self.obj();
 
-            let path = sheet.path();
+            let path = doc.path();
             let is_open = Some(&path) == obj.imp().open_document.borrow().as_ref();
 
             if is_open || obj.selected_item_from_last_session().as_ref() == Some(&path) {
@@ -366,63 +366,63 @@ mod imp {
                 obj.set_selected_item_from_last_session(None::<PathBuf>);
             }
 
-            sheet.connect_closure(
+            doc.connect_closure(
                 "selected",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |sheet: LibrarySheet| {
-                        this.select_item(sheet.path());
-                        let path = sheet.path();
+                    move |doc: LibraryDocument| {
+                        this.select_item(doc.path());
+                        let path = doc.path();
                         this.obj().emit_by_name::<()>("document-selected", &[&path]);
                     }
                 ),
             );
 
-            sheet.connect_closure(
+            doc.connect_closure(
                 "duplicated",
                 false,
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibrarySheet| {
+                    move |_: LibraryDocument| {
                         obj.refresh_content();
                     }
                 ),
             );
 
-            sheet.connect_closure(
+            doc.connect_closure(
                 "rename-requested",
                 false,
                 closure_local!(
                     #[weak]
                     obj,
-                    move |sheet: LibrarySheet, new_path: PathBuf| {
-                        obj.emit_by_name::<()>("document-rename-requested", &[&sheet, &new_path]);
+                    move |doc: LibraryDocument, new_path: PathBuf| {
+                        obj.emit_by_name::<()>("document-rename-requested", &[&doc, &new_path]);
                     }
                 ),
             );
 
-            sheet.connect_closure(
+            doc.connect_closure(
                 "trash-requested",
                 false,
                 closure_local!(
                     #[weak]
                     obj,
-                    move |button: LibrarySheet| {
+                    move |button: LibraryDocument| {
                         obj.emit_by_name::<()>("document-trash-requested", &[&button]);
                     }
                 ),
             );
 
-            sheet.connect_closure(
+            doc.connect_closure(
                 "delete-requested",
                 false,
                 closure_local!(
                     #[weak]
                     obj,
-                    move |button: LibrarySheet| {
+                    move |button: LibraryDocument| {
                         obj.emit_by_name::<()>("document-delete-requested", &[&button]);
                     }
                 ),
@@ -473,8 +473,8 @@ use gtk::glib;
 use glib::Object;
 use gtk::prelude::BoxExt;
 
+use crate::widgets::LibraryDocument;
 use crate::widgets::LibraryProject;
-use crate::widgets::LibrarySheet;
 
 use super::LibraryFolder;
 
@@ -522,7 +522,7 @@ impl LibraryBrowser {
         self.imp().get_folder(path)
     }
 
-    pub fn get_sheet(&self, path: &Path) -> Option<LibrarySheet> {
+    pub fn get_document(&self, path: &Path) -> Option<LibraryDocument> {
         self.imp().get_document(path)
     }
 
@@ -560,7 +560,7 @@ impl LibraryBrowser {
     pub fn prompt_rename_selected(&self) {
         if let Some(dir) = self.get_folder(&self.selected_item_path()) {
             dir.prompt_rename();
-        } else if let Some(doc) = self.get_sheet(&self.selected_item_path()) {
+        } else if let Some(doc) = self.get_document(&self.selected_item_path()) {
             doc.prompt_rename();
         }
     }

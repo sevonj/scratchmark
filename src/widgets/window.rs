@@ -36,8 +36,8 @@ mod imp {
     use crate::widgets::EditorPlaceholder;
     use crate::widgets::ItemCreatePopover;
     use crate::widgets::LibraryBrowser;
+    use crate::widgets::LibraryDocument;
     use crate::widgets::LibraryFolder;
-    use crate::widgets::LibrarySheet;
     use crate::widgets::PreferencesDialog;
     use crate::widgets::WindowTitle;
 
@@ -234,7 +234,7 @@ mod imp {
                     #[weak(rename_to = this)]
                     self,
                     move |_: LibraryBrowser, path: PathBuf| {
-                        this.load_sheet(path);
+                        this.load_document(path);
                     }
                 ),
             );
@@ -257,8 +257,8 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryBrowser, sheet: LibrarySheet| {
-                        obj.imp().trash_sheet(sheet);
+                    move |_: LibraryBrowser, doc: LibraryDocument| {
+                        obj.imp().trash_document(doc);
                     }
                 ),
             );
@@ -338,10 +338,10 @@ mod imp {
                         if open_document_affected {
                             let open_document_path = editor_opt.as_ref().unwrap().path();
                             let relative = open_document_path.strip_prefix(folder.path()).unwrap();
-                            let sheet_path = new_path.join(relative);
+                            let doc_path = new_path.join(relative);
                             this.library_browser
-                                .set_open_document_path(Some(sheet_path.clone()));
-                            editor_opt.as_ref().unwrap().set_path(sheet_path);
+                                .set_open_document_path(Some(doc_path.clone()));
+                            editor_opt.as_ref().unwrap().set_path(doc_path);
                         }
                         if selected_item_affected {
                             let relative = selected_item_path.strip_prefix(folder.path()).unwrap();
@@ -367,15 +367,14 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_browser: LibraryBrowser, sheet: LibrarySheet, new_path: PathBuf| {
-                        let original_path = sheet.path();
+                    move |_browser: LibraryBrowser, doc: LibraryDocument, new_path: PathBuf| {
+                        let original_path = doc.path();
                         let new_path = util::incremented_path(new_path);
 
                         let editor_opt = this.editor.borrow();
-                        let open_sheet_affected = editor_opt
-                            .as_ref()
-                            .is_some_and(|e| e.path() == sheet.path());
-                        if open_sheet_affected {
+                        let open_doc_affected =
+                            editor_opt.as_ref().is_some_and(|e| e.path() == doc.path());
+                        if open_doc_affected {
                             editor_opt.as_ref().unwrap().cancel_filemon();
                         }
                         let new_file = File::for_path(&new_path);
@@ -388,7 +387,7 @@ mod imp {
                             println!("{e}");
                             this.toast("Couldn't move file.");
                         }
-                        if open_sheet_affected {
+                        if open_doc_affected {
                             this.library_browser
                                 .set_open_document_path(Some(new_path.clone()));
                             editor_opt.as_ref().unwrap().set_path(new_path);
@@ -411,11 +410,11 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryBrowser, sheet: LibrarySheet| {
-                        let heading = "Delete sheet?";
+                    move |_: LibraryBrowser, doc: LibraryDocument| {
+                        let heading = "Delete document?";
                         let body = format!(
                             "Are you sure you want to permanently delete {}?",
-                            sheet.stem()
+                            doc.stem()
                         );
                         let dialog = AlertDialog::new(Some(heading), Some(&body));
                         dialog.add_response("cancel", "Cancel");
@@ -431,10 +430,10 @@ mod imp {
                                 #[weak]
                                 obj,
                                 #[weak]
-                                sheet,
+                                doc,
                                 move |_: AlertDialog, response: String| {
                                     if response == "commit-delete" {
-                                        obj.imp().delete_sheet(sheet);
+                                        obj.imp().delete_document(doc);
                                     }
                                 }
                             ),
@@ -508,7 +507,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_popover: ItemCreatePopover, path: PathBuf| this.create_sheet(path)
+                    move |_popover: ItemCreatePopover, path: PathBuf| this.create_document(path)
                 ),
             );
             self.library_browser
@@ -657,7 +656,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_, _| {
-                    this.save_sheet();
+                    this.save_document();
                 }
             ));
             obj.add_action(&action);
@@ -852,11 +851,11 @@ mod imp {
 
             let open_document_path = settings.string("open-document-path");
             if !open_document_path.is_empty() {
-                let open_sheet_path = PathBuf::from(open_document_path);
-                if !open_sheet_path.exists() {
-                    self.toast("Opened sheet has been moved or deleted.");
+                let open_document_path = PathBuf::from(open_document_path);
+                if !open_document_path.exists() {
+                    self.toast("Opened document has been moved or deleted.");
                 }
-                self.load_sheet(open_sheet_path);
+                self.load_document(open_document_path);
             }
             self.library_browser
                 .set_selected_item_from_last_session(Some(PathBuf::from(
@@ -908,25 +907,25 @@ mod imp {
                 .set_expanded(true);
         }
 
-        fn create_sheet(&self, path: PathBuf) {
+        fn create_document(&self, path: PathBuf) {
             if let Err(e) = self.close_editor() {
                 self.toast(&e.to_string());
                 return;
             }
-            if let Err(e) = util::create_sheet_file(&path) {
+            if let Err(e) = util::create_document(&path) {
                 self.toast(&e.to_string());
                 self.library_browser.refresh_content();
                 return;
             }
             self.library_browser.refresh_content();
-            self.load_sheet(path);
+            self.load_document(path);
             self.library_browser
                 .get_folder(&util::path_builtin_library())
                 .unwrap()
                 .set_expanded(true);
         }
 
-        fn load_sheet(&self, path: PathBuf) {
+        fn load_document(&self, path: PathBuf) {
             if let Err(e) = self.close_editor() {
                 self.toast(&e.to_string());
                 return;
@@ -1032,8 +1031,8 @@ mod imp {
             self.library_browser.refresh_content();
         }
 
-        fn trash_sheet(&self, sheet: LibrarySheet) {
-            let path = sheet.path();
+        fn trash_document(&self, doc: LibraryDocument) {
+            let path = doc.path();
             let currently_open = self
                 .editor
                 .borrow()
@@ -1072,8 +1071,8 @@ mod imp {
             self.library_browser.refresh_content();
         }
 
-        fn delete_sheet(&self, sheet: LibrarySheet) {
-            let path = sheet.path();
+        fn delete_document(&self, doc: LibraryDocument) {
+            let path = doc.path();
             let currently_open = self
                 .editor
                 .borrow()
@@ -1090,7 +1089,7 @@ mod imp {
             self.library_browser.refresh_content();
         }
 
-        fn save_sheet(&self) {
+        fn save_document(&self) {
             let mut editor_bind = self.editor.borrow_mut();
             let Some(editor) = editor_bind.as_mut() else {
                 return;

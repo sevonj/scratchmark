@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <template class="LibrarySheet" parent="AdwBin">
+    <template class="LibraryDocument" parent="AdwBin">
         <child>
             <object class="GtkToggleButton" id="button">
                 <style>

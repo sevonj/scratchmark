@@ -22,7 +22,7 @@ mod imp {
     pub(super) enum Kind {
         #[default]
         Folder,
-        Sheet,
+        Document,
     }
 
     #[derive(CompositeTemplate, Default)]
@@ -113,7 +113,7 @@ mod imp {
             let path = self.original_path.borrow();
             let text = match self.kind.get() {
                 Kind::Folder => path.file_name(),
-                Kind::Sheet => path.file_stem(),
+                Kind::Document => path.file_stem(),
             };
             let text = text.unwrap().to_string_lossy().into_owned();
             self.name_field.set_text(&text);
@@ -169,7 +169,7 @@ mod imp {
         fn filepath(&self) -> PathBuf {
             let filename = match self.kind.get() {
                 Kind::Folder => self.name_field.text().to_string(),
-                Kind::Sheet => self.name_field.text().to_string() + ".md",
+                Kind::Document => self.name_field.text().to_string() + ".md",
             };
             self.parent_path().join(&filename)
         }
@@ -196,9 +196,9 @@ impl ItemRenamePopover {
         this
     }
 
-    pub fn for_sheet() -> Self {
+    pub fn for_document() -> Self {
         let this: Self = Object::builder().build();
-        this.imp().kind.replace(imp::Kind::Sheet);
+        this.imp().kind.replace(imp::Kind::Document);
         this
     }
 }

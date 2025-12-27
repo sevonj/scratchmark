@@ -11,6 +11,8 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/item_create_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/item_rename_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_browser.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library_document_context_menu.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library_document.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_drafts_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder.ui</file>
@@ -18,8 +20,6 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library_project_err_placeholder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_project.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_project_context_menu.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet_context_menu.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_sheet.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/preferences_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/shortcuts.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>

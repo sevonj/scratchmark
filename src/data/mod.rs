@@ -1,5 +1,5 @@
+mod document_data;
 mod folder_data;
-mod sheet_data;
 
+pub use document_data::DocumentObject;
 pub use folder_data::FolderObject;
-pub use sheet_data::SheetObject;
