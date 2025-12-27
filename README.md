@@ -47,6 +47,8 @@ Scratchmark is intended to become a spiritual successor to [ThiefMD](https://git
 [➜ Translation](https://translate.codeberg.org/projects/scratchmark/app/)  
 [➜ Project Backlog](https://github.com/users/sevonj/projects/20)
 
+If you find an issue that's important to you, give it a thumbs up.
+
 ## Developers
 
 Scratchmark is written in Rust and uses GTK4 and Libadwaita for UI.
