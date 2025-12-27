@@ -28,6 +28,8 @@ mod imp {
 
     use crate::APP_ID;
     use crate::config;
+    use crate::data::DocumentObject;
+    use crate::data::FolderObject;
     use crate::error::ScratchmarkError;
     use crate::util;
 
@@ -36,8 +38,6 @@ mod imp {
     use crate::widgets::EditorPlaceholder;
     use crate::widgets::ItemCreatePopover;
     use crate::widgets::LibraryBrowser;
-    use crate::widgets::LibraryDocument;
-    use crate::widgets::LibraryFolder;
     use crate::widgets::PreferencesDialog;
     use crate::widgets::WindowTitle;
 
@@ -245,8 +245,8 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryBrowser, folder: LibraryFolder| {
-                        obj.imp().trash_folder(folder);
+                    move |_: LibraryBrowser, folder: FolderObject| {
+                        obj.imp().trash_folder(&folder);
                     }
                 ),
             );
@@ -257,8 +257,8 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryBrowser, doc: LibraryDocument| {
-                        obj.imp().trash_document(doc);
+                    move |_: LibraryBrowser, doc: DocumentObject| {
+                        obj.imp().trash_document(&doc);
                     }
                 ),
             );
@@ -269,7 +269,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryBrowser, folder: LibraryFolder| {
+                    move |_: LibraryBrowser, folder: FolderObject| {
                         let heading = "Delete folder?";
                         let body = format!(
                             "Are you sure you want to permanently delete {}?",
@@ -292,7 +292,7 @@ mod imp {
                                 folder,
                                 move |_: AlertDialog, response: String| {
                                     if response == "commit-delete" {
-                                        obj.imp().delete_folder(folder);
+                                        obj.imp().delete_folder(&folder);
                                     }
                                 }
                             ),
@@ -308,7 +308,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_browser: LibraryBrowser, folder: LibraryFolder, new_path: PathBuf| {
+                    move |_browser: LibraryBrowser, folder: FolderObject, new_path: PathBuf| {
                         assert!(!folder.is_root());
 
                         let original_path = folder.path();
@@ -367,7 +367,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_browser: LibraryBrowser, doc: LibraryDocument, new_path: PathBuf| {
+                    move |_browser: LibraryBrowser, doc: DocumentObject, new_path: PathBuf| {
                         let original_path = doc.path();
                         let new_path = util::incremented_path(new_path);
 
@@ -410,7 +410,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryBrowser, doc: LibraryDocument| {
+                    move |_: LibraryBrowser, doc: DocumentObject| {
                         let heading = "Delete document?";
                         let body = format!(
                             "Are you sure you want to permanently delete {}?",
@@ -433,7 +433,7 @@ mod imp {
                                 doc,
                                 move |_: AlertDialog, response: String| {
                                     if response == "commit-delete" {
-                                        obj.imp().delete_document(doc);
+                                        obj.imp().delete_document(&doc);
                                     }
                                 }
                             ),
@@ -1009,7 +1009,7 @@ mod imp {
             self.update_toolbar_style();
         }
 
-        fn trash_folder(&self, folder: LibraryFolder) {
+        fn trash_folder(&self, folder: &FolderObject) {
             assert!(!folder.is_root());
 
             let path = folder.path();
@@ -1031,7 +1031,7 @@ mod imp {
             self.library_browser.refresh_content();
         }
 
-        fn trash_document(&self, doc: LibraryDocument) {
+        fn trash_document(&self, doc: &DocumentObject) {
             let path = doc.path();
             let currently_open = self
                 .editor
@@ -1051,7 +1051,7 @@ mod imp {
             self.library_browser.refresh_content();
         }
 
-        fn delete_folder(&self, folder: LibraryFolder) {
+        fn delete_folder(&self, folder: &FolderObject) {
             assert!(!folder.is_root());
 
             let path = folder.path();
@@ -1071,7 +1071,7 @@ mod imp {
             self.library_browser.refresh_content();
         }
 
-        fn delete_document(&self, doc: LibraryDocument) {
+        fn delete_document(&self, doc: &DocumentObject) {
             let path = doc.path();
             let currently_open = self
                 .editor

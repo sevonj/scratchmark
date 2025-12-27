@@ -26,10 +26,8 @@ mod imp {
     use gtk::ToggleButton;
     use gtk::glib::Binding;
     use gtk::glib::Properties;
-    use gtk::glib::subclass::Signal;
 
     use crate::data::FolderObject;
-    use crate::util;
     use crate::widgets::ItemRenamePopover;
     use crate::widgets::LibraryDocument;
 
@@ -57,7 +55,7 @@ mod imp {
         pub(super) title_row: TemplateChild<gtk::Box>,
 
         pub(super) is_project_root: Cell<bool>,
-        pub(super) folder_object: RefCell<Option<FolderObject>>,
+        pub(super) folder_object: OnceLock<FolderObject>,
         pub(super) bindings: RefCell<Vec<Binding>>,
         pub(super) expanded: RefCell<bool>,
         pub(super) subdirs: RefCell<Vec<super::LibraryFolder>>,
@@ -106,40 +104,11 @@ mod imp {
                     let is_selected = obj.is_selected();
                     this.toggle_expand();
                     expand_button.set_active(is_selected);
-                    obj.emit_by_name::<()>("selected", &[]);
+                    this.folder_object().select();
                 }
             ));
 
             self.set_expanded(false);
-        }
-
-        fn signals() -> &'static [Signal] {
-            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
-            SIGNALS.get_or_init(|| {
-                vec![
-                    Signal::builder("selected").build(),
-                    Signal::builder("rename-requested")
-                        .param_types([PathBuf::static_type()])
-                        .build(),
-                    Signal::builder("trash-requested")
-                        .param_types([super::LibraryFolder::static_type()])
-                        .build(),
-                    Signal::builder("delete-requested")
-                        .param_types([super::LibraryFolder::static_type()])
-                        .build(),
-                    Signal::builder("close-project-requested").build(),
-                    Signal::builder("subfolder-created")
-                        .param_types([PathBuf::static_type()])
-                        .build(),
-                    Signal::builder("document-created")
-                        .param_types([PathBuf::static_type()])
-                        .build(),
-                    // Error that should be toasted to the user
-                    Signal::builder("notify-err")
-                        .param_types([String::static_type()])
-                        .build(),
-                ]
-            })
         }
     }
 
@@ -151,22 +120,18 @@ mod imp {
             self.rename_popover.borrow().as_ref().unwrap().popup();
         }
 
+        pub(super) fn folder_object(&self) -> &FolderObject {
+            self.folder_object.get().unwrap()
+        }
+
         /// Filepath
         pub(super) fn path(&self) -> PathBuf {
-            self.folder_object
-                .borrow()
-                .as_ref()
-                .expect("LibraryFolder data uninitialized")
-                .path()
+            self.folder_object().path()
         }
 
         /// Display name
         pub(super) fn name(&self) -> String {
-            self.folder_object
-                .borrow()
-                .as_ref()
-                .expect("LibraryFolder data uninitialized")
-                .name()
+            self.folder_object().name()
         }
 
         pub(super) fn set_expanded(&self, expanded: bool) {
@@ -284,10 +249,10 @@ mod imp {
                 "committed",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
+                    #[weak(rename_to = this)]
+                    self,
                     move |_popover: ItemRenamePopover, path: PathBuf| {
-                        obj.emit_by_name::<()>("rename-requested", &[&path]);
+                        this.folder_object().rename(path);
                     }
                 ),
             );
@@ -370,34 +335,24 @@ mod imp {
 
             let action = gio::SimpleAction::new("create-document", None);
             action.connect_activate(clone!(
-                #[weak]
-                obj,
+                #[weak(rename_to = this)]
+                self,
                 move |_action, _parameter| {
-                    let path = util::untitled_document_path(obj.path());
-                    if let Err(e) = util::create_document(&path) {
-                        obj.emit_by_name::<()>("notify-err", &[&e.to_string()]);
-                        return;
-                    }
-                    obj.emit_by_name::<()>("document-created", &[&path]);
-                    obj.imp().sort_children();
-                    obj.imp().set_expanded(true);
+                    this.folder_object().create_document();
+                    this.sort_children();
+                    this.set_expanded(true);
                 }
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("create-subfolder", None);
             action.connect_activate(clone!(
-                #[weak]
-                obj,
+                #[weak(rename_to = this)]
+                self,
                 move |_action, _parameter| {
-                    let path = util::untitled_folder_path(obj.path());
-                    if let Err(e) = util::create_folder(&path) {
-                        obj.emit_by_name::<()>("notify-err", &[&e.to_string()]);
-                        return;
-                    }
-                    obj.emit_by_name::<()>("subfolder-created", &[&path]);
-                    obj.imp().sort_children();
-                    obj.imp().set_expanded(true);
+                    this.folder_object().create_subfolder();
+                    this.sort_children();
+                    this.set_expanded(true);
                 }
             ));
             actions.add_action(&action);
@@ -422,7 +377,6 @@ mod imp {
             let obj = self.obj();
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("subfolder", Some(&actions));
-            let obj = self.obj();
 
             let action = gio::SimpleAction::new("rename-begin", None);
             action.connect_activate(clone!(
@@ -437,22 +391,20 @@ mod imp {
 
             let action = gio::SimpleAction::new("trash", None);
             action.connect_activate(clone!(
-                #[weak]
-                obj,
+                #[weak(rename_to = this)]
+                self,
                 move |_action, _parameter| {
-                    assert!(!obj.is_root());
-                    obj.emit_by_name::<()>("trash-requested", &[&obj]);
+                    this.folder_object().trash();
                 }
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("delete", None);
             action.connect_activate(clone!(
-                #[weak]
-                obj,
+                #[weak(rename_to = this)]
+                self,
                 move |_action, _parameter| {
-                    assert!(!obj.is_root());
-                    obj.emit_by_name::<()>("delete-requested", &[&obj]);
+                    this.folder_object().delete();
                 }
             ));
             actions.add_action(&action);
@@ -465,11 +417,10 @@ mod imp {
 
             let action = gio::SimpleAction::new("close-project", None);
             action.connect_activate(clone!(
-                #[weak]
-                obj,
+                #[weak(rename_to = this)]
+                self,
                 move |_action, _parameter| {
-                    assert!(obj.is_root());
-                    obj.emit_by_name::<()>("close-project-requested", &[]);
+                    this.folder_object().close_project();
                 }
             ));
             actions.add_action(&action);
@@ -534,6 +485,10 @@ impl LibraryFolder {
         this
     }
 
+    pub fn folder_object(&self) -> &FolderObject {
+        self.imp().folder_object()
+    }
+
     /// Is root folder of library
     pub fn is_root(&self) -> bool {
         self.imp().is_project_root.get()
@@ -578,14 +533,12 @@ impl LibraryFolder {
     }
 
     pub fn rename(&self, path: PathBuf) {
-        assert!(!self.is_root());
-        assert!(path.parent().is_some_and(|p| p.is_dir()));
-        self.emit_by_name::<()>("rename-requested", &[&path]);
+        self.folder_object().rename(path);
     }
 
     fn bind(&self, data: &FolderObject) {
         let imp = self.imp();
-        imp.folder_object.replace(Some(data.clone()));
+        imp.folder_object.get_or_init(|| data.clone());
         let path = data.path();
         if let Some(rename_popover) = imp.rename_popover.borrow().as_ref() {
             rename_popover.set_path(path);

@@ -19,7 +19,6 @@ mod imp {
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Binding;
     use gtk::glib::Properties;
-    use gtk::glib::subclass::Signal;
     use gtk::{Builder, CompositeTemplate, FileLauncher, Label, PopoverMenu, TemplateChild};
 
     use crate::data::DocumentObject;
@@ -36,7 +35,7 @@ mod imp {
         #[template_child]
         pub(super) title_row: TemplateChild<gtk::Box>,
 
-        pub(super) document_object: RefCell<Option<DocumentObject>>,
+        pub(super) document_object: OnceLock<DocumentObject>,
         pub(super) bindings: RefCell<Vec<Binding>>,
 
         context_menu_popover: RefCell<Option<PopoverMenu>>,
@@ -82,7 +81,7 @@ mod imp {
                     let obj = this.obj();
                     let is_selected = obj.is_selected();
                     button.set_active(is_selected);
-                    obj.emit_by_name::<()>("selected", &[]);
+                    this.document_object().select();
                 }
             ));
 
@@ -114,48 +113,33 @@ mod imp {
 
             let action = gio::SimpleAction::new("duplicate", None);
             action.connect_activate(clone!(
-                #[weak]
-                obj,
+                #[weak(rename_to = this)]
+                self,
                 move |_action, _parameter| {
-                    obj.duplicate();
+                    this.document_object().duplicate();
                 }
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("trash", None);
             action.connect_activate(clone!(
-                #[weak]
-                obj,
+                #[weak(rename_to = this)]
+                self,
                 move |_action, _parameter| {
-                    obj.emit_by_name::<()>("trash-requested", &[]);
+                    this.document_object().trash();
                 }
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("delete", None);
             action.connect_activate(clone!(
-                #[weak]
-                obj,
+                #[weak(rename_to = this)]
+                self,
                 move |_action, _parameter| {
-                    obj.emit_by_name::<()>("delete-requested", &[]);
+                    this.document_object().delete();
                 }
             ));
             actions.add_action(&action);
-        }
-
-        fn signals() -> &'static [Signal] {
-            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
-            SIGNALS.get_or_init(|| {
-                vec![
-                    Signal::builder("selected").build(),
-                    Signal::builder("duplicated").build(),
-                    Signal::builder("rename-requested")
-                        .param_types([PathBuf::static_type()])
-                        .build(),
-                    Signal::builder("trash-requested").build(),
-                    Signal::builder("delete-requested").build(),
-                ]
-            })
         }
     }
 
@@ -165,6 +149,10 @@ mod imp {
     impl LibraryDocument {
         pub(super) fn prompt_rename(&self) {
             self.rename_popover.borrow().as_ref().unwrap().popup();
+        }
+
+        pub(super) fn document_object(&self) -> &DocumentObject {
+            self.document_object.get().unwrap()
         }
 
         fn setup_context_menu(&self) {
@@ -213,10 +201,10 @@ mod imp {
                 "committed",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
+                    #[weak(rename_to = this)]
+                    self,
                     move |_popover: ItemRenamePopover, path: PathBuf| {
-                        obj.emit_by_name::<()>("rename-requested", &[&path]);
+                        this.document_object().rename(path);
                     }
                 ),
             );
@@ -246,15 +234,12 @@ mod imp {
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
-use gtk::gio;
 use gtk::glib;
 use gtk::prelude::*;
 
-use gio::{Cancellable, FileCopyFlags};
 use glib::Object;
 
 use crate::data::DocumentObject;
-use crate::util;
 
 glib::wrapper! {
 pub struct LibraryDocument(ObjectSubclass<imp::LibraryDocument>)
@@ -269,22 +254,16 @@ impl LibraryDocument {
         this
     }
 
+    pub fn document_object(&self) -> &DocumentObject {
+        self.imp().document_object()
+    }
+
     pub fn path(&self) -> PathBuf {
-        self.imp()
-            .document_object
-            .borrow()
-            .as_ref()
-            .expect("LibraryDocument data uninitialized")
-            .path()
+        self.document_object().path()
     }
 
     pub fn stem(&self) -> String {
-        self.imp()
-            .document_object
-            .borrow()
-            .as_ref()
-            .expect("LibraryDocument data uninitialized")
-            .stem()
+        self.document_object().stem()
     }
 
     pub fn prompt_rename(&self) {
@@ -292,37 +271,20 @@ impl LibraryDocument {
     }
 
     pub fn rename(&self, path: PathBuf) {
-        assert!(path.parent().is_some_and(|p| p.is_dir()));
-        self.emit_by_name::<()>("rename-requested", &[&path]);
-    }
-
-    /// Create a copy of this file
-    pub fn duplicate(&self) {
-        let self_path = self.path();
-        let self_file = gio::File::for_path(&self_path);
-        let dupe_path = util::incremented_path(self_path);
-        let dupe_file = gio::File::for_path(&dupe_path);
-        self_file
-            .copy(&dupe_file, FileCopyFlags::NONE, None::<&Cancellable>, None)
-            .expect("File dupe failed");
-        self.emit_by_name::<()>("duplicated", &[]);
+        self.document_object().rename(path);
     }
 
     fn bind(&self, data: &DocumentObject) {
-        self.imp().document_object.replace(Some(data.clone()));
-        let path = data.path();
-        self.imp()
-            .rename_popover
-            .borrow()
-            .as_ref()
-            .unwrap()
-            .set_path(path);
+        let imp = self.imp();
+        imp.document_object.get_or_init(|| data.clone());
 
-        self.imp()
-            .title_row
+        let path = data.path();
+        imp.rename_popover.borrow().as_ref().unwrap().set_path(path);
+
+        imp.title_row
             .set_margin_start(20 + 12 * data.depth() as i32);
-        let title_label = self.imp().document_name_label.get();
-        let mut bindings = self.imp().bindings.borrow_mut();
+        let title_label = imp.document_name_label.get();
+        let mut bindings = imp.bindings.borrow_mut();
 
         let title_binding = data
             .bind_property("stem", &title_label, "label")

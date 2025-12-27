@@ -21,6 +21,8 @@ mod imp {
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Properties;
 
+    use crate::data::DocumentObject;
+    use crate::data::FolderObject;
     use crate::widgets::LibraryDocument;
     use crate::widgets::LibraryFolder;
     use crate::widgets::library_project::LibraryProject;
@@ -108,22 +110,22 @@ mod imp {
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-rename-requested")
-                        .param_types([LibraryFolder::static_type(), PathBuf::static_type()])
+                        .param_types([FolderObject::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("document-rename-requested")
-                        .param_types([LibraryDocument::static_type(), PathBuf::static_type()])
+                        .param_types([DocumentObject::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
-                        .param_types([LibraryFolder::static_type()])
+                        .param_types([FolderObject::static_type()])
                         .build(),
                     Signal::builder("document-delete-requested")
-                        .param_types([LibraryDocument::static_type()])
+                        .param_types([DocumentObject::static_type()])
                         .build(),
                     Signal::builder("folder-trash-requested")
-                        .param_types([LibraryFolder::static_type()])
+                        .param_types([FolderObject::static_type()])
                         .build(),
                     Signal::builder("document-trash-requested")
-                        .param_types([LibraryDocument::static_type()])
+                        .param_types([DocumentObject::static_type()])
                         .build(),
                     Signal::builder("close-project-requested")
                         .param_types([PathBuf::static_type()])
@@ -186,15 +188,15 @@ mod imp {
 
         pub(super) fn load_project(&self, project: LibraryProject) {
             let obj = self.obj();
-            self.connect_folder(project.root_folder());
+            self.connect_folder(project.root_folder().folder_object());
             project.connect_closure(
                 "folder-added",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryProject, folder: LibraryFolder| {
-                        this.connect_folder(folder);
+                    move |_: LibraryProject, folder: FolderObject| {
+                        this.connect_folder(&folder);
                     }
                 ),
             );
@@ -205,7 +207,7 @@ mod imp {
                     #[weak(rename_to = this)]
                     self,
                     move |_: LibraryProject, document: LibraryDocument| {
-                        this.connect_document(document);
+                        this.connect_document(document.document_object());
                     }
                 ),
             );
@@ -249,7 +251,7 @@ mod imp {
             obj.set_selected_item_path(path.clone());
         }
 
-        fn connect_folder(&self, folder: LibraryFolder) {
+        fn connect_folder(&self, folder: &FolderObject) {
             let obj = self.obj();
             let path = folder.path();
 
@@ -264,7 +266,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |folder: LibraryFolder| {
+                    move |folder: FolderObject| {
                         this.select_item(folder.path());
                     }
                 ),
@@ -276,7 +278,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |folder: LibraryFolder, new_path: PathBuf| {
+                    move |folder: FolderObject, new_path: PathBuf| {
                         obj.emit_by_name::<()>("folder-rename-requested", &[&folder, &new_path]);
                     }
                 ),
@@ -288,7 +290,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryFolder, path: PathBuf| {
+                    move |_: FolderObject, path: PathBuf| {
                         obj.emit_by_name::<()>("document-selected", &[&path]);
                     }
                 ),
@@ -300,7 +302,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryFolder, _path: PathBuf| {
+                    move |_: FolderObject, _path: PathBuf| {
                         this.refresh_content();
                     }
                 ),
@@ -312,7 +314,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryFolder, _path: PathBuf| {
+                    move |_: FolderObject, _path: PathBuf| {
                         this.refresh_content();
                     }
                 ),
@@ -324,7 +326,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryFolder, folder: LibraryFolder| {
+                    move |folder: FolderObject| {
                         obj.emit_by_name::<()>("folder-trash-requested", &[&folder]);
                     }
                 ),
@@ -336,7 +338,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryFolder, folder: LibraryFolder| {
+                    move |folder: FolderObject| {
                         obj.emit_by_name::<()>("folder-delete-requested", &[&folder]);
                     }
                 ),
@@ -348,14 +350,14 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryFolder, msg: String| {
+                    move |_: FolderObject, msg: String| {
                         obj.emit_by_name::<()>("notify-err", &[&msg]);
                     }
                 ),
             );
         }
 
-        fn connect_document(&self, doc: LibraryDocument) {
+        fn connect_document(&self, doc: &DocumentObject) {
             let obj = self.obj();
 
             let path = doc.path();
@@ -372,7 +374,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |doc: LibraryDocument| {
+                    move |doc: DocumentObject| {
                         this.select_item(doc.path());
                         let path = doc.path();
                         this.obj().emit_by_name::<()>("document-selected", &[&path]);
@@ -386,7 +388,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryDocument| {
+                    move |_doc: DocumentObject| {
                         obj.refresh_content();
                     }
                 ),
@@ -398,7 +400,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |doc: LibraryDocument, new_path: PathBuf| {
+                    move |doc: DocumentObject, new_path: PathBuf| {
                         obj.emit_by_name::<()>("document-rename-requested", &[&doc, &new_path]);
                     }
                 ),
@@ -410,8 +412,8 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |button: LibraryDocument| {
-                        obj.emit_by_name::<()>("document-trash-requested", &[&button]);
+                    move |doc: DocumentObject| {
+                        obj.emit_by_name::<()>("document-trash-requested", &[&doc]);
                     }
                 ),
             );
@@ -422,8 +424,8 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |button: LibraryDocument| {
-                        obj.emit_by_name::<()>("document-delete-requested", &[&button]);
+                    move |doc: DocumentObject| {
+                        obj.emit_by_name::<()>("document-delete-requested", &[&doc]);
                     }
                 ),
             );

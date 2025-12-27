@@ -111,7 +111,7 @@ mod imp {
             SIGNALS.get_or_init(|| {
                 vec![
                     Signal::builder("folder-added")
-                        .param_types([LibraryFolder::static_type()])
+                        .param_types([FolderObject::static_type()])
                         .build(),
                     Signal::builder("document-added")
                         .param_types([LibraryDocument::static_type()])
@@ -120,22 +120,19 @@ mod imp {
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-rename-requested")
-                        .param_types([LibraryFolder::static_type(), PathBuf::static_type()])
+                        .param_types([FolderObject::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("document-rename-requested")
                         .param_types([LibraryDocument::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
-                        .param_types([LibraryFolder::static_type()])
+                        .param_types([FolderObject::static_type()])
                         .build(),
                     Signal::builder("document-delete-requested")
                         .param_types([LibraryDocument::static_type()])
                         .build(),
                     Signal::builder("folder-trash-requested")
-                        .param_types([LibraryFolder::static_type()])
-                        .build(),
-                    Signal::builder("document-trash-requested")
-                        .param_types([LibraryDocument::static_type()])
+                        .param_types([FolderObject::static_type()])
                         .build(),
                     Signal::builder("close-project-requested").build(),
                 ]
@@ -151,7 +148,7 @@ mod imp {
             assert!(self.root_folder.borrow().is_none());
             let vbox = &self.project_root_vbox;
             vbox.append(&root_folder);
-            self.connect_folder(root_folder.clone());
+            self.connect_folder(root_folder.folder_object());
             self.root_folder.replace(Some(root_folder));
         }
 
@@ -274,7 +271,7 @@ mod imp {
                 folder.set_expanded(true);
             }
 
-            self.connect_folder(folder.clone());
+            self.connect_folder(folder.folder_object());
         }
 
         fn add_document(&self, path: PathBuf, depth: u32) {
@@ -365,7 +362,7 @@ mod imp {
             }
         }
 
-        fn connect_folder(&self, folder: LibraryFolder) {
+        fn connect_folder(&self, folder: &FolderObject) {
             self.obj().emit_by_name::<()>("folder-added", &[&folder]);
 
             folder.connect_closure(
@@ -374,7 +371,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryFolder, _path: PathBuf| {
+                    move |_: FolderObject, _path: PathBuf| {
                         this.refresh_content();
                     }
                 ),
@@ -386,7 +383,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryFolder, _path: PathBuf| {
+                    move |_: FolderObject, _path: PathBuf| {
                         this.refresh_content();
                     }
                 ),
@@ -428,7 +425,7 @@ impl LibraryProject {
             closure_local!(
                 #[weak]
                 this,
-                move |_: LibraryFolder| {
+                move |_: FolderObject| {
                     this.emit_by_name::<()>("close-project-requested", &[]);
                 }
             ),
