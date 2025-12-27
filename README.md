@@ -9,7 +9,9 @@
 
 </div>
 
-Scratchmark is an organized Markdown editor designed for note keeping and writing. It's intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
+Scratchmark is a text editor for Markdown, suitable for both keeping notes, and writing longer texts with minimal distractions. It's designed around organizing your files in a folder structure. You can add your own folders into the library.
+
+Scratchmark is intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
 
 ![screenshot](data/screenshots/screenshot_a_light.png)
 
@@ -51,7 +53,7 @@ Scratchmark is written in Rust and uses GTK4 and Libadwaita for UI.
 
 ### License
 
-Scratchmark is licensed GPL-3.0-or-later. Some parts may *additionally* be available under other licenses, such as MIT.
+Scratchmark is licensed GPL-3.0-or-later. Some parts may _additionally_ be available under other licenses, such as MIT.
 
 ### Building
 
