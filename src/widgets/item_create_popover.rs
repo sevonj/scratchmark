@@ -40,8 +40,9 @@ mod imp {
 
         pub(super) kind: Cell<Kind>,
 
+        /// Selection in library - can be file or dir
         #[property(get, set)]
-        parent_path: RefCell<PathBuf>,
+        selected_item_path: RefCell<PathBuf>,
 
         can_commit: Cell<bool>,
     }
@@ -163,7 +164,18 @@ mod imp {
                 Kind::Folder => self.name_field.text().to_string(),
                 Kind::Document => self.name_field.text().to_string() + ".md",
             };
-            self.obj().parent_path().join(&filename)
+
+            let selected_path = self.obj().selected_item_path();
+            let parent_path = if selected_path.is_dir() {
+                // Is dir -- don't change path
+                selected_path
+            } else if selected_path.is_file() {
+                // Is file -- use parent path
+                selected_path.parent().unwrap().to_path_buf()
+            } else {
+                PathBuf::default()
+            };
+            parent_path.join(&filename)
         }
     }
 }

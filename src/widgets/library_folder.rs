@@ -147,6 +147,10 @@ mod imp {
     impl BinImpl for LibraryFolder {}
 
     impl LibraryFolder {
+        pub(super) fn prompt_rename(&self) {
+            self.rename_popover.borrow().as_ref().unwrap().popup();
+        }
+
         /// Filepath
         pub(super) fn path(&self) -> PathBuf {
             self.folder_object
@@ -567,6 +571,10 @@ impl LibraryFolder {
 
     pub fn remove_sheet(&self, sheet: &LibrarySheet) {
         self.imp().documents_vbox.remove(sheet);
+    }
+
+    pub fn prompt_rename(&self) {
+        self.imp().prompt_rename();
     }
 
     pub fn rename(&self, path: PathBuf) {

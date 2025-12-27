@@ -313,12 +313,15 @@ mod imp {
 
                         let original_path = folder.path();
                         let new_path = util::incremented_path(new_path);
+                        let selected_item_path = this.library_browser.selected_item_path();
 
                         let editor_opt = this.editor.borrow();
-                        let open_sheet_affected = editor_opt
+                        let open_document_affected = editor_opt
                             .as_ref()
                             .is_some_and(|e| e.path().starts_with(&original_path));
-                        if open_sheet_affected {
+                        let selected_item_affected = selected_item_path.starts_with(&original_path);
+
+                        if open_document_affected {
                             editor_opt.as_ref().unwrap().cancel_filemon();
                         }
 
@@ -332,17 +335,23 @@ mod imp {
                             this.toast(&e.to_string());
                         }
 
-                        if open_sheet_affected {
-                            let selected_sheet = editor_opt.as_ref().unwrap().path();
-                            let relative = selected_sheet.strip_prefix(folder.path()).unwrap();
+                        if open_document_affected {
+                            let open_document_path = editor_opt.as_ref().unwrap().path();
+                            let relative = open_document_path.strip_prefix(folder.path()).unwrap();
                             let sheet_path = new_path.join(relative);
                             this.library_browser
-                                .set_selected_sheet(Some(sheet_path.clone()));
+                                .set_open_document_path(Some(sheet_path.clone()));
                             editor_opt.as_ref().unwrap().set_path(sheet_path);
+                        }
+                        if selected_item_affected {
+                            let relative = selected_item_path.strip_prefix(folder.path()).unwrap();
+                            let new_selected_path = new_path.join(relative);
+                            this.library_browser
+                                .set_selected_item_path(new_selected_path);
                         }
 
                         assert_eq!(
-                            this.library_browser.selected_sheet(),
+                            this.library_browser.open_document_path(),
                             this.editor.borrow().as_ref().map(|e| e.path())
                         );
 
@@ -381,12 +390,12 @@ mod imp {
                         }
                         if open_sheet_affected {
                             this.library_browser
-                                .set_selected_sheet(Some(new_path.clone()));
+                                .set_open_document_path(Some(new_path.clone()));
                             editor_opt.as_ref().unwrap().set_path(new_path);
                         }
 
                         assert_eq!(
-                            this.library_browser.selected_sheet(),
+                            this.library_browser.open_document_path(),
                             this.editor.borrow().as_ref().map(|e| e.path())
                         );
 
@@ -483,7 +492,11 @@ mod imp {
                 ),
             );
             self.library_browser
-                .bind_property("selected-folder", &new_folder_popover, "parent-path")
+                .bind_property(
+                    "selected-item-path",
+                    &new_folder_popover,
+                    "selected-item-path",
+                )
                 .build();
 
             let new_document_popover = ItemCreatePopover::for_document();
@@ -499,7 +512,11 @@ mod imp {
                 ),
             );
             self.library_browser
-                .bind_property("selected-folder", &new_document_popover, "parent-path")
+                .bind_property(
+                    "selected-item-path",
+                    &new_document_popover,
+                    "selected-item-path",
+                )
                 .build();
 
             if !self.top_split.is_collapsed() {
@@ -657,12 +674,12 @@ mod imp {
             ));
             obj.add_action(&action);
 
-            let action = SimpleAction::new("file-rename-open", None);
+            let action = SimpleAction::new("file-rename-selected", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
                 move |_, _| {
-                    this.library_browser.rename_selected_sheet();
+                    this.library_browser.prompt_rename_selected();
                 }
             ));
             obj.add_action(&action);
@@ -842,7 +859,7 @@ mod imp {
                 self.load_sheet(open_sheet_path);
             }
             self.library_browser
-                .set_selected_folder_from_last_session(Some(PathBuf::from(
+                .set_selected_item_from_last_session(Some(PathBuf::from(
                     settings.string("selected-folder-path"),
                 )));
             self.library_browser.refresh_content();
@@ -868,7 +885,7 @@ mod imp {
             settings.set_string("open-document-path", open_document_path.to_str().unwrap())?;
             settings.set_string(
                 "selected-folder-path",
-                self.library_browser.selected_folder().to_str().unwrap(),
+                self.library_browser.selected_item_path().to_str().unwrap(),
             )?;
             let expanded_folders = self.library_browser.expanded_folder_paths();
             settings.set_strv("library-expanded-folders", expanded_folders)?;
@@ -955,7 +972,8 @@ mod imp {
                     self,
                     move |editor: Editor| {
                         this.library_browser.refresh_content();
-                        this.library_browser.set_selected_sheet(Some(editor.path()));
+                        this.library_browser
+                            .set_open_document_path(Some(editor.path()));
                         this.update_window_title();
                     }
                 ),
@@ -986,7 +1004,7 @@ mod imp {
             self.main_toolbar_view.set_content(Some(&editor));
             self.format_bar.bind_editor(Some(editor.clone()));
             self.editor.replace(Some(editor));
-            self.library_browser.set_selected_sheet(Some(path));
+            self.library_browser.set_open_document_path(Some(path));
             self.editor_actions_set_enabled(true);
             self.update_window_title();
             self.update_toolbar_style();
@@ -1093,7 +1111,7 @@ mod imp {
             self.main_toolbar_view
                 .set_content(Some(&EditorPlaceholder::default()));
             self.update_window_title();
-            self.library_browser.set_selected_sheet(None);
+            self.library_browser.set_open_document_path(None);
             self.format_bar.bind_editor(None);
             self.editor_sidebar_toggle.set_sensitive(false);
             self.editor_actions_set_enabled(false);
@@ -1105,7 +1123,7 @@ mod imp {
         fn editor_actions_set_enabled(&self, enabled: bool) {
             let obj = self.obj();
             obj.action_set_enabled("win.file-save", enabled);
-            obj.action_set_enabled("win.file-rename-open", enabled);
+            obj.action_set_enabled("win.file-rename-selected", enabled);
             obj.action_set_enabled("win.file-close", enabled);
             obj.action_set_enabled("editor.format-bold", enabled);
             obj.action_set_enabled("editor.format-italic", enabled);

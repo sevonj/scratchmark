@@ -3,6 +3,7 @@ mod imp {
     use std::cell::RefCell;
     use std::collections::HashMap;
     use std::ops::Deref;
+    use std::path::Path;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
@@ -31,12 +32,13 @@ mod imp {
         #[template_child]
         pub(super) projects_container: TemplateChild<gtk::Box>,
 
-        pub(super) selected_sheet: RefCell<Option<PathBuf>>,
+        pub(super) open_document: RefCell<Option<PathBuf>>,
         #[property(get, set)]
-        selected_folder: RefCell<PathBuf>,
+        selected_item_path: RefCell<PathBuf>,
+
         /// Cleared when found.
         #[property(nullable, get, set)]
-        selected_folder_from_last_session: RefCell<Option<PathBuf>>,
+        selected_item_from_last_session: RefCell<Option<PathBuf>>,
         pub(super) projects: RefCell<HashMap<PathBuf, LibraryProject>>,
 
         #[property(get, set)]
@@ -95,7 +97,7 @@ mod imp {
             let drafts = LibraryProject::new_draft_table();
             let drafts_path = drafts.root_path();
             self.load_project(drafts);
-            self.select_folder(drafts_path);
+            self.select_item(drafts_path);
         }
 
         fn signals() -> &'static [Signal] {
@@ -139,10 +141,47 @@ mod imp {
     impl BinImpl for LibraryBrowser {}
 
     impl LibraryBrowser {
+        pub(super) fn has_folder(&self, path: &Path) -> bool {
+            for project in self.projects.borrow().deref().values() {
+                if path.starts_with(project.path()) {
+                    return project.has_folder(path);
+                }
+            }
+            false
+        }
+
+        pub(super) fn has_document(&self, path: &Path) -> bool {
+            for project in self.projects.borrow().deref().values() {
+                if path.starts_with(project.path()) {
+                    return project.has_document(path);
+                }
+            }
+            false
+        }
+
+        pub(super) fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
+            for project in self.projects.borrow().deref().values() {
+                if path.starts_with(project.path()) {
+                    return project.get_folder(path);
+                }
+            }
+            None
+        }
+
+        pub(super) fn get_document(&self, path: &Path) -> Option<LibrarySheet> {
+            for project in self.projects.borrow().deref().values() {
+                if path.starts_with(project.path()) {
+                    return project.get_sheet(path);
+                }
+            }
+            None
+        }
+
         pub(super) fn refresh_content(&self) {
             for project in self.projects.borrow().deref().values() {
                 project.refresh_content();
             }
+            self.refresh_selection();
         }
 
         pub(super) fn load_project(&self, project: LibraryProject) {
@@ -192,25 +231,31 @@ mod imp {
                 .build();
         }
 
-        pub(super) fn select_folder(&self, path: PathBuf) {
+        pub(super) fn select_item(&self, path: PathBuf) {
             let obj = self.obj();
-            let Some(new_folder) = obj.get_folder(&path) else {
-                return;
-            };
-            if let Some(old_folder) = obj.get_folder(&obj.selected_folder()) {
-                old_folder.set_is_selected(false);
+
+            if let Some(old_selection) = obj.get_folder(&obj.selected_item_path()) {
+                old_selection.set_is_selected(false);
+            } else if let Some(old_selection) = obj.get_sheet(&obj.selected_item_path()) {
+                old_selection.set_is_selected(false);
             }
-            new_folder.set_is_selected(true);
-            obj.set_selected_folder(path);
+
+            if let Some(new_selection) = obj.get_folder(&path) {
+                new_selection.set_is_selected(true);
+            } else if let Some(new_selection) = obj.get_sheet(&path) {
+                new_selection.set_is_selected(true);
+            }
+
+            obj.set_selected_item_path(path.clone());
         }
 
         fn connect_folder(&self, folder: LibraryFolder) {
             let obj = self.obj();
             let path = folder.path();
 
-            if obj.selected_folder_from_last_session().as_ref() == Some(&path) {
-                self.select_folder(path);
-                obj.set_selected_folder_from_last_session(None::<PathBuf>);
+            if obj.selected_item_from_last_session().as_ref() == Some(&path) {
+                self.select_item(path);
+                obj.set_selected_item_from_last_session(None::<PathBuf>);
             }
 
             folder.connect_closure(
@@ -220,7 +265,7 @@ mod imp {
                     #[weak(rename_to = this)]
                     self,
                     move |folder: LibraryFolder| {
-                        this.select_folder(folder.path());
+                        this.select_item(folder.path());
                     }
                 ),
             );
@@ -313,19 +358,24 @@ mod imp {
         fn connect_sheet(&self, sheet: LibrarySheet) {
             let obj = self.obj();
 
-            let is_selected = Some(sheet.path()) == *obj.imp().selected_sheet.borrow();
-            sheet.set_active(is_selected);
+            let path = sheet.path();
+            let is_open = Some(&path) == obj.imp().open_document.borrow().as_ref();
+
+            if is_open || obj.selected_item_from_last_session().as_ref() == Some(&path) {
+                self.select_item(path);
+                obj.set_selected_item_from_last_session(None::<PathBuf>);
+            }
 
             sheet.connect_closure(
                 "selected",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
+                    #[weak(rename_to = this)]
+                    self,
                     move |sheet: LibrarySheet| {
-                        sheet.set_active(false);
+                        this.select_item(sheet.path());
                         let path = sheet.path();
-                        obj.emit_by_name::<()>("document-selected", &[&path]);
+                        this.obj().emit_by_name::<()>("document-selected", &[&path]);
                     }
                 ),
             );
@@ -377,6 +427,39 @@ mod imp {
                     }
                 ),
             );
+        }
+
+        /// Attempts to select a valid item if current selection path is bad
+        pub(super) fn refresh_selection(&self) {
+            let obj = self.obj();
+            let selected_path = obj.selected_item_path();
+            let selection_is_gone =
+                !self.has_document(&selected_path) && !self.has_folder(&selected_path);
+            if selection_is_gone {
+                if let Some(ancestor) = self.find_existing_ancestor(&selected_path) {
+                    self.select_item(ancestor);
+                } else if let Some(first_project_root) = self.projects.borrow().keys().next() {
+                    self.select_item(first_project_root.to_path_buf());
+                }
+            }
+        }
+
+        fn find_existing_ancestor(&self, item_path: &Path) -> Option<PathBuf> {
+            for project in self.projects.borrow().deref().values() {
+                let project_path = project.path();
+                if item_path.starts_with(&project_path) {
+                    let mut working_path = item_path.to_path_buf();
+                    while working_path != project_path {
+                        let parent = working_path.parent()?;
+                        if project.has_folder(parent) {
+                            return Some(parent.to_path_buf());
+                        }
+                        working_path = parent.to_path_buf();
+                    }
+                    break;
+                }
+            }
+            None
         }
     }
 }
@@ -436,21 +519,11 @@ impl LibraryBrowser {
     }
 
     pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
-        for project in self.imp().projects.borrow().deref().values() {
-            if path.starts_with(project.path()) {
-                return project.get_folder(path);
-            }
-        }
-        None
+        self.imp().get_folder(path)
     }
 
     pub fn get_sheet(&self, path: &Path) -> Option<LibrarySheet> {
-        for project in self.imp().projects.borrow().deref().values() {
-            if path.starts_with(project.path()) {
-                return project.get_sheet(path);
-            }
-        }
-        None
+        self.imp().get_document(path)
     }
 
     pub fn add_project(&self, path: PathBuf) {
@@ -469,39 +542,26 @@ impl LibraryBrowser {
         let imp = self.imp();
         let project = imp.projects.borrow_mut().remove(path).unwrap();
         imp.projects_container.remove(&project);
+        imp.refresh_selection();
     }
 
     pub fn refresh_content(&self) {
         self.imp().refresh_content();
     }
 
-    pub fn selected_sheet(&self) -> Option<PathBuf> {
-        self.imp().selected_sheet.borrow().clone()
+    pub fn open_document_path(&self) -> Option<PathBuf> {
+        self.imp().open_document.borrow().clone()
     }
 
-    pub fn set_selected_sheet(&self, path: Option<PathBuf>) {
-        if let Some(old_path) = self.imp().selected_sheet.borrow().as_ref()
-            && let Some(old_button) = self.get_sheet(old_path)
-        {
-            old_button.set_active(false);
-        }
-
-        if let Some(path) = &path
-            && let Some(button) = self.get_sheet(path)
-        {
-            button.set_active(true);
-        };
-
-        self.imp().selected_sheet.replace(path);
+    pub fn set_open_document_path(&self, path: Option<PathBuf>) {
+        self.imp().open_document.replace(path);
     }
 
-    pub fn rename_selected_sheet(&self) {
-        let Some(selected_path) = self.selected_sheet() else {
-            return;
-        };
-
-        if let Some(sheet) = self.get_sheet(&selected_path) {
-            sheet.prompt_rename();
+    pub fn prompt_rename_selected(&self) {
+        if let Some(dir) = self.get_folder(&self.selected_item_path()) {
+            dir.prompt_rename();
+        } else if let Some(doc) = self.get_sheet(&self.selected_item_path()) {
+            doc.prompt_rename();
         }
     }
 }
