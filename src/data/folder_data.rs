@@ -10,15 +10,15 @@ mod imp {
 
     use glib::Properties;
 
-    use super::FolderData;
-
     #[derive(Properties, Default)]
     #[properties(wrapper_type = super::FolderObject)]
     pub struct FolderObject {
-        #[property(name = "path", get, set, type = PathBuf, member = path)]
-        #[property(name = "depth", get, set, type = u32, member = depth)]
-        #[property(name = "name", get, set, type = String, member = name)]
-        pub data: RefCell<FolderData>,
+        #[property(get, set)]
+        pub(super) path: RefCell<PathBuf>,
+        #[property(get, set)]
+        pub(super) depth: RefCell<u32>,
+        #[property(get, set)]
+        pub(super) name: RefCell<String>,
     }
 
     #[glib::object_subclass]
@@ -125,12 +125,4 @@ impl FolderObject {
         }
         self.emit_by_name::<()>("document-created", &[&path]);
     }
-}
-
-#[derive(Default, Debug)]
-pub struct FolderData {
-    pub path: PathBuf,
-    pub depth: u32,
-    /// Use for display
-    pub name: String,
 }
