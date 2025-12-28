@@ -56,6 +56,7 @@ use gtk::gio::FileCopyFlags;
 use gtk::glib::Object;
 use gtk::glib::object::ObjectExt;
 
+use crate::error::ScratchmarkError;
 use crate::util;
 
 glib::wrapper! {
@@ -89,9 +90,12 @@ impl DocumentObject {
         self.emit_by_name::<()>("duplicated", &[]);
     }
 
-    pub fn rename(&self, path: PathBuf) {
-        assert!(path.parent().is_some_and(|p| p.is_dir()));
+    pub fn rename(&self, path: PathBuf) -> Result<(), ScratchmarkError> {
+        if !path.parent().is_some_and(|p| p.is_dir()) {
+            return Err(ScratchmarkError::InvalidPath);
+        }
         self.emit_by_name::<()>("rename-requested", &[&path]);
+        Ok(())
     }
 
     pub fn trash(&self) {
@@ -100,5 +104,40 @@ impl DocumentObject {
 
     pub fn delete(&self) {
         self.emit_by_name::<()>("delete-requested", &[]);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    use gtk::glib::closure_local;
+
+    use super::*;
+
+    const PROJECT_ROOT: &str = env!("CARGO_MANIFEST_DIR");
+
+    #[test]
+    fn test_move_valid_path() {
+        let doc = DocumentObject::new("path/to/".into(), 1);
+        assert!(
+            doc.rename(PathBuf::from(PROJECT_ROOT).join("test").join("new_file.md"))
+                .is_ok()
+        );
+    }
+
+    #[test]
+    fn test_move_invalid_path_noparent() {
+        let doc = DocumentObject::new("path/to/".into(), 1);
+        doc.connect_closure(
+            "rename-requested",
+            false,
+            closure_local!(move |_doc: DocumentObject, _path: PathBuf| {
+                assert!(false, "Signal emitted");
+            }),
+        );
+        assert_eq!(
+            doc.rename(PathBuf::from("/")),
+            Err(ScratchmarkError::InvalidPath)
+        );
     }
 }

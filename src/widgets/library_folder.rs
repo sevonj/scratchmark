@@ -252,7 +252,9 @@ mod imp {
                     #[weak(rename_to = this)]
                     self,
                     move |_popover: ItemRenamePopover, path: PathBuf| {
-                        this.folder_object().rename(path);
+                        if let Err(e) = this.folder_object().rename(path) {
+                            this.folder_object().notify(&e.to_string())
+                        }
                     }
                 ),
             );
@@ -338,7 +340,9 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    this.folder_object().create_document();
+                    if let Err(e) = this.folder_object().create_document() {
+                        this.folder_object().notify(&e.to_string())
+                    }
                     this.sort_children();
                     this.set_expanded(true);
                 }
@@ -350,7 +354,9 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    this.folder_object().create_subfolder();
+                    if let Err(e) = this.folder_object().create_subfolder() {
+                        this.folder_object().notify(&e.to_string())
+                    }
                     this.sort_children();
                     this.set_expanded(true);
                 }
@@ -394,7 +400,9 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    this.folder_object().trash();
+                    if let Err(e) = this.folder_object().trash() {
+                        this.folder_object().notify(&e.to_string())
+                    }
                 }
             ));
             actions.add_action(&action);
@@ -404,7 +412,9 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    this.folder_object().delete();
+                    if let Err(e) = this.folder_object().delete() {
+                        this.folder_object().notify(&e.to_string())
+                    }
                 }
             ));
             actions.add_action(&action);
@@ -420,7 +430,9 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    this.folder_object().close_project();
+                    if let Err(e) = this.folder_object().close_project() {
+                        this.folder_object().notify(&e.to_string())
+                    }
                 }
             ));
             actions.add_action(&action);
@@ -533,7 +545,9 @@ impl LibraryFolder {
     }
 
     pub fn rename(&self, path: PathBuf) {
-        self.folder_object().rename(path);
+        if let Err(e) = self.folder_object().rename(path) {
+            self.folder_object().notify(&e.to_string())
+        }
     }
 
     fn bind(&self, data: &FolderObject) {

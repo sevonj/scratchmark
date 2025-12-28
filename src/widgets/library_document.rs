@@ -204,7 +204,9 @@ mod imp {
                     #[weak(rename_to = this)]
                     self,
                     move |_popover: ItemRenamePopover, path: PathBuf| {
-                        this.document_object().rename(path);
+                        if let Err(e) = this.document_object().rename(path) {
+                            this.document_object().notify(&e.to_string())
+                        }
                     }
                 ),
             );
@@ -271,7 +273,9 @@ impl LibraryDocument {
     }
 
     pub fn rename(&self, path: PathBuf) {
-        self.document_object().rename(path);
+        if let Err(e) = self.document_object().rename(path) {
+            self.document_object().notify(&e.to_string())
+        }
     }
 
     fn bind(&self, data: &DocumentObject) {
