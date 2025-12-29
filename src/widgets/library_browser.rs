@@ -368,6 +368,10 @@ mod imp {
                 obj.set_selected_item_from_last_session(None::<PathBuf>);
             }
 
+            if is_open {
+                doc.set_is_open_in_editor(true);
+            }
+
             doc.connect_closure(
                 "selected",
                 false,
@@ -556,6 +560,15 @@ impl LibraryBrowser {
     }
 
     pub fn set_open_document_path(&self, path: Option<PathBuf>) {
+        if let Some(old) = self
+            .open_document_path()
+            .and_then(|path| self.get_document(&path))
+        {
+            old.document_object().set_is_open_in_editor(false);
+        }
+        if let Some(new) = path.as_ref().and_then(|path| self.get_document(path)) {
+            new.document_object().set_is_open_in_editor(true);
+        }
         self.imp().open_document.replace(path);
     }
 

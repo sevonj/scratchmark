@@ -22,6 +22,8 @@ mod imp {
         pub(super) stem: RefCell<String>,
         #[property(get, set)]
         pub(super) is_selected: Cell<bool>,
+        #[property(get, set)]
+        pub(super) is_open_in_editor: Cell<bool>,
     }
 
     #[glib::object_subclass]

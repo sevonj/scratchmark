@@ -28,6 +28,8 @@ mod imp {
         #[template_child]
         pub(super) button: TemplateChild<ToggleButton>,
         #[template_child]
+        pub(super) open_in_editor_indicator: TemplateChild<Label>,
+        #[template_child]
         pub(super) document_name_label: TemplateChild<Label>,
         #[template_child]
         pub(super) title_row: TemplateChild<gtk::Box>,
@@ -223,6 +225,7 @@ mod imp {
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
+use gtk::Label;
 use gtk::ToggleButton;
 use gtk::glib;
 use gtk::prelude::*;
@@ -271,15 +274,18 @@ impl LibraryDocument {
         imp.document_object.get_or_init(|| data.clone());
         let path = data.path();
 
-        let expand_button: &ToggleButton = imp.button.as_ref();
-        data.bind_property("is_selected", expand_button, "active")
+        let button: &ToggleButton = imp.button.as_ref();
+        data.bind_property("is_selected", button, "active")
             .bidirectional()
+            .build();
+
+        let open_in_editor_indicator: &Label = imp.open_in_editor_indicator.as_ref();
+        data.bind_property("is_open_in_editor", open_in_editor_indicator, "visible")
             .build();
 
         imp.rename_popover.borrow().as_ref().unwrap().set_path(path);
 
-        imp.title_row
-            .set_margin_start(20 + 12 * data.depth() as i32);
+        imp.title_row.set_margin_start(12 * data.depth() as i32);
         let title_label = imp.document_name_label.get();
         let mut bindings = imp.bindings.borrow_mut();
 
