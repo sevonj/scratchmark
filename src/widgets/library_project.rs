@@ -419,7 +419,7 @@ impl LibraryProject {
         let this: Self = Object::builder().build();
         this.imp().is_builtin.replace(false);
         let root = LibraryFolder::new_project_root(&FolderObject::new(path.clone(), 0));
-        root.connect_closure(
+        root.folder_object().connect_closure(
             "close-project-requested",
             false,
             closure_local!(
