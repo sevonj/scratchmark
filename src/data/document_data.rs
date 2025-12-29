@@ -118,6 +118,7 @@ mod tests {
 
     #[test]
     fn test_move_valid_path() {
+        std::fs::create_dir_all(PathBuf::from(PROJECT_ROOT).join("test")).unwrap();
         let doc = DocumentObject::new("path/to/".into(), 1);
         assert!(
             doc.rename(PathBuf::from(PROJECT_ROOT).join("test").join("new_file.md"))
