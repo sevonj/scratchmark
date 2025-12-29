@@ -7,26 +7,45 @@
                     <class name="flat" />
                 </style>
                 <child>
-                    <object class="GtkBox" id="title_row">
-                        <property name="orientation">0</property>
-                        <property name="spacing">4</property>
+                    <object class="GtkBox">
+                        <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                         <child>
-                            <object class="GtkImage">
-                                <style>
-                                    <class name="dim-label" />
-                                </style>
-                                <property name="icon-name">text-x-generic-symbolic</property>
-                                <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
+                            <object class="AdwBin">
+                                <property name="width-request">20</property>
+                                <child>
+                                    <object class="GtkLabel" id="open_in_editor_indicator">
+                                        <style>
+                                            <class name="dim-label" />
+                                        </style>
+                                        <property name="label" translatable="no">⦁</property>
+                                        <property name="visible">false</property>
+                                    </object>
+                                </child>
                             </object>
                         </child>
                         <child>
-                            <object class="GtkLabel" id="document_name_label">
-                                <property name="label" translatable="no">document-name-here</property>
-                                <property name="xalign">0</property>
-                                <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
-                                <attributes>
-                                    <attribute name="weight" value="PANGO_WEIGHT_NORMAL" />
-                                </attributes>
+                            <object class="GtkBox" id="title_row">
+                                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                    <object class="GtkImage">
+                                        <style>
+                                            <class name="dim-label" />
+                                        </style>
+                                        <property name="icon-name">text-x-generic-symbolic</property>
+                                        <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="document_name_label">
+                                        <property name="label" translatable="no">document-name-here</property>
+                                        <property name="xalign">0</property>
+                                        <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
+                                        <attributes>
+                                            <attribute name="weight" value="PANGO_WEIGHT_NORMAL" />
+                                        </attributes>
+                                    </object>
+                                </child>
                             </object>
                         </child>
                     </object>
