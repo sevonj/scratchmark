@@ -1,4 +1,5 @@
 mod imp {
+    use std::cell::Cell;
     use std::cell::RefCell;
     use std::path::PathBuf;
     use std::sync::OnceLock;
@@ -16,9 +17,11 @@ mod imp {
         #[property(get, set)]
         pub(super) path: RefCell<PathBuf>,
         #[property(get, set)]
-        pub(super) depth: RefCell<u32>,
+        pub(super) depth: Cell<u32>,
         #[property(get, set)]
         pub(super) name: RefCell<String>,
+        #[property(get, set)]
+        pub(super) is_selected: Cell<bool>,
     }
 
     #[glib::object_subclass]

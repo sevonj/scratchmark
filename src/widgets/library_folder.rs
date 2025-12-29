@@ -25,14 +25,12 @@ mod imp {
     use gtk::TemplateChild;
     use gtk::ToggleButton;
     use gtk::glib::Binding;
-    use gtk::glib::Properties;
 
     use crate::data::FolderObject;
     use crate::widgets::ItemRenamePopover;
     use crate::widgets::LibraryDocument;
 
-    #[derive(CompositeTemplate, Default, Properties)]
-    #[properties(wrapper_type = super::LibraryFolder)]
+    #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library_folder.ui")]
     pub struct LibraryFolder {
         #[template_child]
@@ -64,9 +62,6 @@ mod imp {
         pub(super) context_menu_popover: RefCell<Option<PopoverMenu>>,
         pub(super) rename_popover: RefCell<Option<ItemRenamePopover>>,
         pub(super) drag_source: RefCell<Option<DragSource>>,
-
-        #[property(get, set)]
-        pub(super) is_selected: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -84,26 +79,17 @@ mod imp {
         }
     }
 
-    #[glib::derived_properties]
     impl ObjectImpl for LibraryFolder {
         fn constructed(&self) {
-            let obj = self.obj();
             self.parent_constructed();
 
             self.setup_drop();
 
-            let expand_button: &ToggleButton = self.expand_button.as_ref();
-            obj.bind_property("is_selected", expand_button, "active")
-                .build();
-
             self.expand_button.connect_clicked(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |expand_button| {
-                    let obj = this.obj();
-                    let is_selected = obj.is_selected();
+                move |_| {
                     this.toggle_expand();
-                    expand_button.set_active(is_selected);
                     this.folder_object().select();
                 }
             ));
@@ -447,6 +433,7 @@ use gtk::glib;
 use gtk::prelude::*;
 
 use glib::Object;
+use gtk::ToggleButton;
 
 use crate::data::FolderObject;
 use crate::widgets::LibraryDocument;
@@ -554,6 +541,12 @@ impl LibraryFolder {
         let imp = self.imp();
         imp.folder_object.get_or_init(|| data.clone());
         let path = data.path();
+
+        let expand_button: &ToggleButton = imp.expand_button.as_ref();
+        data.bind_property("is_selected", expand_button, "active")
+            .bidirectional()
+            .build();
+
         if let Some(rename_popover) = imp.rename_popover.borrow().as_ref() {
             rename_popover.set_path(path);
         }

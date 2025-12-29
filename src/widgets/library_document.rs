@@ -1,5 +1,4 @@
 mod imp {
-    use std::cell::Cell;
     use std::cell::RefCell;
     use std::path::PathBuf;
     use std::sync::OnceLock;
@@ -18,14 +17,12 @@ mod imp {
     use gtk::gio::MenuModel;
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Binding;
-    use gtk::glib::Properties;
     use gtk::{Builder, CompositeTemplate, FileLauncher, Label, PopoverMenu, TemplateChild};
 
     use crate::data::DocumentObject;
     use crate::widgets::ItemRenamePopover;
 
-    #[derive(CompositeTemplate, Default, Properties)]
-    #[properties(wrapper_type = super::LibraryDocument)]
+    #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library_document.ui")]
     pub struct LibraryDocument {
         #[template_child]
@@ -41,9 +38,6 @@ mod imp {
         context_menu_popover: RefCell<Option<PopoverMenu>>,
         pub(super) rename_popover: RefCell<Option<ItemRenamePopover>>,
         pub(super) drag_source: RefCell<Option<DragSource>>,
-
-        #[property(get, set)]
-        pub(super) is_selected: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -61,7 +55,6 @@ mod imp {
         }
     }
 
-    #[glib::derived_properties]
     impl ObjectImpl for LibraryDocument {
         fn constructed(&self) {
             self.parent_constructed();
@@ -71,16 +64,10 @@ mod imp {
             self.setup_rename_menu();
             self.setup_drag();
 
-            let button: &ToggleButton = self.button.as_ref();
-            obj.bind_property("is_selected", button, "active").build();
-
             self.button.connect_clicked(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |button| {
-                    let obj = this.obj();
-                    let is_selected = obj.is_selected();
-                    button.set_active(is_selected);
+                move |_| {
                     this.document_object().select();
                 }
             ));
@@ -236,6 +223,7 @@ mod imp {
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
+use gtk::ToggleButton;
 use gtk::glib;
 use gtk::prelude::*;
 
@@ -281,8 +269,13 @@ impl LibraryDocument {
     fn bind(&self, data: &DocumentObject) {
         let imp = self.imp();
         imp.document_object.get_or_init(|| data.clone());
-
         let path = data.path();
+
+        let expand_button: &ToggleButton = imp.button.as_ref();
+        data.bind_property("is_selected", expand_button, "active")
+            .bidirectional()
+            .build();
+
         imp.rename_popover.borrow().as_ref().unwrap().set_path(path);
 
         imp.title_row

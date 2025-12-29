@@ -237,15 +237,15 @@ mod imp {
             let obj = self.obj();
 
             if let Some(old_selection) = self.get_folder(&obj.selected_item_path()) {
-                old_selection.set_is_selected(false);
+                old_selection.folder_object().set_is_selected(false);
             } else if let Some(old_selection) = self.get_document(&obj.selected_item_path()) {
-                old_selection.set_is_selected(false);
+                old_selection.document_object().set_is_selected(false);
             }
 
             if let Some(new_selection) = self.get_folder(&path) {
-                new_selection.set_is_selected(true);
+                new_selection.folder_object().set_is_selected(true);
             } else if let Some(new_selection) = self.get_document(&path) {
-                new_selection.set_is_selected(true);
+                new_selection.document_object().set_is_selected(true);
             }
 
             obj.set_selected_item_path(path.clone());
