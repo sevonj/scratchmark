@@ -13,9 +13,9 @@
   </developer>
 
   <description>
-    <h1># Markdown Editor for Writing</h1>
-    <p><b>**Scratchmark**</b> is a pleasant text editor for writing. It tries to give you everything you need and otherwise stay out of your way so you can just focus on writing. The app can be used for writing essays and making quick notes alike. Its file management is built around a folder structure that can handle large projects with lots of files. You can add any folder on your computer to the library, and move files around by dragging and dropping.</p>
-    <p>It uses Markdown, which means that <mark>==all text formatting can be done by typing.==</mark></p>
+    <p># Markdown Editor for Writing</p>
+    <p>**Scratchmark** is a pleasant text editor for writing. It tries to give you everything you need and otherwise stay out of your way so you can just focus on writing. The app can be used for writing essays and making quick notes alike. Its file management is built around a folder structure that can handle large projects with lots of files. You can add any folder on your computer to the library, and move files around by dragging and dropping.</p>
+    <p>It uses Markdown, which means that ==all text formatting can be done by typing.==</p>
     <p>Scratchmark is designed and developed by a power user, but that doesn't mean you need to work on learning the app first. The editor is simple and intuitive, so anyone should be able to just pick it up and start writing. It can display simple writing statistics, and has features, such as focus mode and fullscreen support to reduce distractions.</p>
     <p>Markdown is an open and widely used markup language. Documents created with Scratchmark are more or less compatible with other similar apps. If you already have a "notebook" or a project from another app, you can just add the folder to Scratchmark's library. This also goes the other way: if you've had enough of Scratchmark, it's easy to switch to something else.</p>
   </description>
@@ -45,8 +45,18 @@
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <url type="translate">https://github.com/sevonj/scratchmark</url>
   <releases>
+    <release version="v1.6.0" date="2025-12-30">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.6.0</url>
+      <description translate="no">
+        <ul>
+          <li>Feature: Selectable folders</li>
+          <li>Fix: Hidden files shown when they shouldn't</li>
+          <li>Misc: Icon redesign, goodbye placeholder</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.5.0" date="2025-10-21">
-      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.4.8</url>
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.5.0</url>
       <description translate="no">
         <ul>
           <li>Feature: Ignore hidden files</li>
