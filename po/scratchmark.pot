@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-10 15:19+0200\n"
+"POT-Creation-Date: 2025-12-30 18:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,21 +30,37 @@ msgid "Scratchmark Markdown editor"
 msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
-msgid "Organized markdown editor"
+msgid "Markdown editor for writing"
 msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
-msgid "Write without distractions and keep your documents organized."
+msgid "# Markdown Editor for Writing"
 msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:17
-msgid "Editing features are designed to stay out of sight when not needed."
+msgid "**Scratchmark**"
 msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:18
+msgid "==all text formatting can be done by typing.=="
+msgstr ""
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:19
 msgid ""
-"Documents are organized into folders, which may contain a writing project, "
-"personal notes, or maybe a recipe book."
+"Scratchmark is designed and developed by a power user, but that doesn't mean "
+"you need to work on learning the app first. The editor is simple and "
+"intuitive, so anyone should be able to just pick it up and start writing. It "
+"can display simple writing statistics, and has features, such as focus mode "
+"and fullscreen support to reduce distractions."
+msgstr ""
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:20
+msgid ""
+"Markdown is an open and widely used markup language. Documents created with "
+"Scratchmark are more or less compatible with other similar apps. If you "
+"already have a \"notebook\" or a project from another app, you can just add "
+"the folder to Scratchmark's library. This also goes the other way: if you've "
+"had enough of Scratchmark, it's easy to switch to something else."
 msgstr ""
 
 #: data/resources/ui/editor_doc_stats.ui:18
@@ -185,8 +201,8 @@ msgid "Create"
 msgstr ""
 
 #: data/resources/ui/item_rename_popover.ui:15
-#: data/resources/ui/library_folder_context_menu.ui:18
 #: data/resources/ui/library_document_context_menu.ui:10
+#: data/resources/ui/library_folder_context_menu.ui:18
 msgid "Rename"
 msgstr ""
 
@@ -197,6 +213,27 @@ msgstr ""
 
 #: data/resources/ui/library_browser.ui:53 data/resources/ui/window.ui:119
 msgid "Add Project"
+msgstr ""
+
+#: data/resources/ui/library_document_context_menu.ui:6
+#: data/resources/ui/library_drafts_context_menu.ui:14
+#: data/resources/ui/library_folder_context_menu.ui:14
+#: data/resources/ui/library_project_context_menu.ui:14
+msgid "Show in File Manager"
+msgstr ""
+
+#: data/resources/ui/library_document_context_menu.ui:14
+msgid "Duplicate"
+msgstr ""
+
+#: data/resources/ui/library_document_context_menu.ui:18
+#: data/resources/ui/library_folder_context_menu.ui:22
+msgid "Move to Trash"
+msgstr ""
+
+#: data/resources/ui/library_document_context_menu.ui:22
+#: data/resources/ui/library_folder_context_menu.ui:26
+msgid "Delete Permanently"
 msgstr ""
 
 #: data/resources/ui/library_drafts_context_menu.ui:6
@@ -212,30 +249,9 @@ msgstr ""
 msgid "Create Subfolder"
 msgstr ""
 
-#: data/resources/ui/library_drafts_context_menu.ui:14
-#: data/resources/ui/library_folder_context_menu.ui:14
-#: data/resources/ui/library_project_context_menu.ui:14
-#: data/resources/ui/library_document_context_menu.ui:6
-msgid "Show in File Manager"
-msgstr ""
-
-#: data/resources/ui/library_folder_context_menu.ui:22
-#: data/resources/ui/library_document_context_menu.ui:18
-msgid "Move to Trash"
-msgstr ""
-
-#: data/resources/ui/library_folder_context_menu.ui:26
-#: data/resources/ui/library_document_context_menu.ui:22
-msgid "Delete Permanently"
-msgstr ""
-
 #: data/resources/ui/library_project_context_menu.ui:18
 #: data/resources/ui/library_project_err_placeholder_context_menu.ui:6
 msgid "Close Project"
-msgstr ""
-
-#: data/resources/ui/library_document_context_menu.ui:14
-msgid "Duplicate"
 msgstr ""
 
 #: data/resources/ui/preferences_dialog.ui:6
@@ -329,7 +345,7 @@ msgstr ""
 
 #: data/resources/ui/shortcuts.ui:61
 msgctxt "shortcut window"
-msgid "Rename Document"
+msgid "Rename"
 msgstr ""
 
 #: data/resources/ui/shortcuts.ui:67

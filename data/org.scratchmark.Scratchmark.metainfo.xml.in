@@ -3,7 +3,7 @@
   <id>org.scratchmark.Scratchmark</id>
 
   <name translate="no">Scratchmark</name>
-  <summary>Organized markdown editor</summary>
+  <summary>Markdown editor for writing</summary>
 
   <metadata_license>CC-BY-4.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
@@ -13,24 +13,23 @@
   </developer>
 
   <description>
-    <p>Write without distractions and keep your documents organized.</p>
-    <p>Editing features are designed to stay out of sight when not needed.</p>
-    <p>Documents are organized into folders, which may contain a writing project, personal notes, or maybe a recipe book.</p>
+    <h1># Markdown Editor for Writing</h1>
+    <p><b>**Scratchmark**</b> is a pleasant text editor for writing. It tries to give you everything you need and otherwise stay out of your way so you can just focus on writing. The app can be used for writing essays and making quick notes alike. Its file management is built around a folder structure that can handle large projects with lots of files. You can add any folder on your computer to the library, and move files around by dragging and dropping.</p>
+    <p>It uses Markdown, which means that <mark>==all text formatting can be done by typing.==</mark></p>
+    <p>Scratchmark is designed and developed by a power user, but that doesn't mean you need to work on learning the app first. The editor is simple and intuitive, so anyone should be able to just pick it up and start writing. It can display simple writing statistics, and has features, such as focus mode and fullscreen support to reduce distractions.</p>
+    <p>Markdown is an open and widely used markup language. Documents created with Scratchmark are more or less compatible with other similar apps. If you already have a "notebook" or a project from another app, you can just add the folder to Scratchmark's library. This also goes the other way: if you've had enough of Scratchmark, it's easy to switch to something else.</p>
   </description>
 
   <launchable type="desktop-id">org.scratchmark.Scratchmark.desktop</launchable>
   <screenshots>
     <screenshot type="default">
-      <image>
-        https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_a_light.png?raw=true</image>
+      <image>https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_a_light.png?raw=true</image>
     </screenshot>
     <screenshot>
-      <image>
-        https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_b_light.png?raw=true</image>
+      <image>https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_b_light.png?raw=true</image>
     </screenshot>
     <screenshot>
-      <image>
-        https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_c_dark.png?raw=true</image>
+      <image>https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_c_dark.png?raw=true</image>
     </screenshot>
   </screenshots>
 
