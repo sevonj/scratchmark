@@ -7,9 +7,11 @@
 
 # Scratchmark
 
+https://scratchmark.org
+
 </div>
 
-Scratchmark is a text editor for Markdown, suitable for both keeping notes, and writing longer texts with minimal distractions. It's designed around organizing your files in a folder structure. You can add your own folders into the library.
+**\*\*Scratchmark\*\*** is a pleasant Markdown editor for writing. It tries to give you everything you need and otherwise stay out of your way so you can just focus on writing. The app can be used for writing essays and making quick notes alike. Its file management is built around a folder structure that can handle large projects with lots of files. You can add any folder on your computer to the library, and move files around by dragging and dropping.
 
 Scratchmark is intended to become a spiritual successor to [ThiefMD](https://github.com/kmwallio/ThiefMD/).
 
