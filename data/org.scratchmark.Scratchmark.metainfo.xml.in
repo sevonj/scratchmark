@@ -43,7 +43,7 @@
   <url type="bugtracker">https://github.com/sevonj/scratchmark/issues</url>
   <url type="homepage">https://github.com/sevonj/scratchmark</url>
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
-  <url type="translate">https://github.com/sevonj/scratchmark</url>
+  <url type="translate">https://translate.codeberg.org/projects/scratchmark/app/</url>
   <releases>
     <release version="v1.6.0" date="2025-12-30">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.6.0</url>
