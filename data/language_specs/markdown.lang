@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- This language spec supports basic and extended syntax as described at https://markdownguide.org -->
+<!-- If you mess with regex, do it at regex.rs and only paste it here if it passes the tests! -->
 
 <language id="markdown" name="Markdown" version="2.0">
 
@@ -42,22 +43,22 @@
 
     <!-- Basic Syntax -->
     <context id="h1" style-ref="h1">
-      <match>^#(?!#).*</match>
+      <match>^ {0,3}#($| +.*)</match>
     </context>
     <context id="h2" style-ref="h2">
-      <match>^##(?!#).*</match>
+      <match>^ {0,3}##($| +.*)</match>
     </context>
     <context id="h3" style-ref="h3">
-      <match>^###(?!#).*</match>
+      <match>^ {0,3}###($| +.*)</match>
     </context>
     <context id="h4" style-ref="h4">
-      <match>^####(?!#).*</match>
+      <match>^ {0,3}####($| +.*)</match>
     </context>
     <context id="h5" style-ref="h5">
-      <match>^#####(?!#).*</match>
+      <match>^ {0,3}#####($| +.*)</match>
     </context>
     <context id="h6" style-ref="h6">
-      <match>^######(?!#).*</match>
+      <match>^ {0,3}######($| +.*)</match>
     </context>
     <context id="italic-asterisk" style-ref="italic">
       <match>(?&lt;!\*)\*(?!\\|\*| |\t).*?(?&lt;!\\|\*| |\t)\*(?!\*)</match>

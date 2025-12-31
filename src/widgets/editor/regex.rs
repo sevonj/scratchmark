@@ -3,7 +3,8 @@ use std::sync::LazyLock;
 use regex::Regex;
 
 /*
- * If you touch the regex here, make sure to do the same to the lang spec!
+ * Scroll down for langspec regex tests
+ * If you touch the regex here, make sure to do the same to the langspec!
  */
 
 pub static ATX_H_OPENING: LazyLock<Regex> =
@@ -11,7 +12,7 @@ pub static ATX_H_OPENING: LazyLock<Regex> =
 
 #[cfg(test)]
 mod tests {
-    use crate::widgets::editor::regex::ATX_H_OPENING;
+    use super::*;
 
     #[test]
     fn test_atx_h_opening_levels() {
@@ -123,5 +124,96 @@ mod tests {
         assert_eq!(ATX_H_OPENING.find(empty_h1).unwrap().as_str(), "# ");
         assert_eq!(ATX_H_OPENING.find(empty_h2).unwrap().as_str(), "## ");
         assert_eq!(ATX_H_OPENING.find(empty_h3).unwrap().as_str(), "### ");
+    }
+}
+
+#[cfg(test)]
+mod langspec_tests {
+    use std::sync::LazyLock;
+
+    use regex::Regex;
+
+    static ATX_H1_WHOLELINE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^ {0,3}#($| +.*)").unwrap());
+    static ATX_H2_WHOLELINE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^ {0,3}##($| +.*)").unwrap());
+    static ATX_H3_WHOLELINE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^ {0,3}###($| +.*)").unwrap());
+    static ATX_H4_WHOLELINE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^ {0,3}####($| +.*)").unwrap());
+    static ATX_H5_WHOLELINE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^ {0,3}#####($| +.*)").unwrap());
+    static ATX_H6_WHOLELINE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^ {0,3}######($| +.*)").unwrap());
+
+    fn heading_test_suite(regex: &LazyLock<Regex>, heading_level: usize) {
+        let h = String::from("#").repeat(heading_level as usize);
+
+        let h1 = format!("{h} foo");
+        assert_eq!(regex.find(&h1).unwrap().as_str(), h1);
+
+        let h1_ind1 = format!(" {h} foo");
+        let h1_ind2 = format!("  {h} foo");
+        let h1_ind3 = format!("   {h} foo");
+        let h1_ind4 = format!("    {h} foo");
+        assert_eq!(regex.find(&h1_ind1).unwrap().as_str(), h1_ind1);
+        assert_eq!(regex.find(&h1_ind2).unwrap().as_str(), h1_ind2);
+        assert_eq!(regex.find(&h1_ind3).unwrap().as_str(), h1_ind3);
+        assert!(regex.find(&h1_ind4).is_none());
+
+        let h1_closing1 = format!("{h} foo {h}");
+        let h1_closing2 = format!("{h} foo #");
+        let h1_closing3 = format!("{h} foo ###");
+        let h1_closing4 = format!("{h} foo ##  # ##");
+        let h1_closing5 = format!("{h} foo ## b");
+        assert_eq!(regex.find(&h1_closing1).unwrap().as_str(), h1_closing1);
+        assert_eq!(regex.find(&h1_closing2).unwrap().as_str(), h1_closing2);
+        assert_eq!(regex.find(&h1_closing3).unwrap().as_str(), h1_closing3);
+        assert_eq!(regex.find(&h1_closing4).unwrap().as_str(), h1_closing4);
+        assert_eq!(regex.find(&h1_closing5).unwrap().as_str(), h1_closing5);
+
+        let h1_empty1 = format!("{h}");
+        let h1_empty2 = format!("{h} ");
+        assert_eq!(regex.find(&h1_empty1).unwrap().as_str(), h1_empty1);
+        assert_eq!(regex.find(&h1_empty2).unwrap().as_str(), h1_empty2);
+
+        // Check for false positives from different size headings
+        for i in 1..=7 {
+            if i == heading_level {
+                continue;
+            }
+            let hi = format!("{} foo", String::from("#").repeat(i));
+            assert!(regex.find(&hi).is_none());
+        }
+    }
+
+    #[test]
+    fn test_atx_h1() {
+        heading_test_suite(&ATX_H1_WHOLELINE, 1);
+    }
+
+    #[test]
+    fn test_atx_h2() {
+        heading_test_suite(&ATX_H2_WHOLELINE, 2);
+    }
+
+    #[test]
+    fn test_atx_h3() {
+        heading_test_suite(&ATX_H3_WHOLELINE, 3);
+    }
+
+    #[test]
+    fn test_atx_h4() {
+        heading_test_suite(&ATX_H4_WHOLELINE, 4);
+    }
+
+    #[test]
+    fn test_atx_h5() {
+        heading_test_suite(&ATX_H5_WHOLELINE, 5);
+    }
+
+    #[test]
+    fn test_atx_h6() {
+        heading_test_suite(&ATX_H6_WHOLELINE, 6);
     }
 }
