@@ -10,6 +10,7 @@ async-channel = "2.5.0"
 gtk = { version = "0.9.7", package = "gtk4", features = ["v4_14"] }
 sourceview5 = "0.9.1"
 gettext-rs = { version = "0.7", features = ["gettext-system"] }
+regex = "1.12.2"
 
 [features]
 # Search for data files in install locations instead of source tree.

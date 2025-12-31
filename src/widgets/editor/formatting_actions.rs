@@ -2,9 +2,8 @@ use adw::prelude::*;
 
 use gtk::TextBuffer;
 use gtk::TextIter;
-use gtk::glib::Regex;
-use gtk::glib::RegexCompileFlags;
-use gtk::glib::RegexMatchFlags;
+
+use super::regex;
 
 pub fn format_bold(buffer: TextBuffer) {
     let is_bold = is_selection_bold(&buffer);
@@ -158,7 +157,7 @@ pub fn format_highlight(buffer: TextBuffer) {
     buffer.end_user_action();
 }
 
-pub fn format_heading(buffer: TextBuffer, heading_size: i32) {
+pub fn format_heading(buffer: TextBuffer, heading_level: i32) {
     let insert = buffer.get_insert();
     let insert_iter = buffer.iter_at_mark(&insert);
     let current_line = insert_iter.line();
@@ -173,37 +172,22 @@ pub fn format_heading(buffer: TextBuffer, heading_size: i32) {
     }
 
     let old_line = buffer.text(&start, &end, false);
+    let regex_match = regex::ATX_H_OPENING.find(&old_line);
+    let old_heading_level = regex_match
+        .map(|m| m.as_str().chars().filter(|c| *c == '#').count())
+        .unwrap_or(0) as i32;
 
-    let new_header = String::from("#").repeat(heading_size as usize) + " ";
-
-    let any_size_heading = Regex::new(
-        "^##* ",
-        RegexCompileFlags::DEFAULT,
-        RegexMatchFlags::DEFAULT,
-    )
-    .unwrap()
-    .unwrap();
-    let any_size_match = any_size_heading.match_(old_line.as_gstr(), RegexMatchFlags::DEFAULT);
-
-    let replacement = if old_line.starts_with(&new_header) {
-        old_line[(new_header.len())..].to_owned()
-    } else if any_size_match
-        .as_ref()
-        .map(|m| m.matches())
-        .unwrap_or(false)
-    {
-        let old_header_len = any_size_match.unwrap().fetch(0).unwrap().len();
-        let without_header = &old_line[old_header_len..];
-        format!("{new_header}{without_header}")
-    } else {
-        format!("{new_header}{old_line}")
+    let stripped_line = match regex_match {
+        Some(regex_match) => old_line[regex_match.len()..].to_owned(),
+        None => old_line.to_string(),
     };
 
     buffer.begin_user_action();
-
     buffer.delete(&mut start, &mut end);
-    buffer.insert_at_cursor(&replacement);
-
+    if old_heading_level != heading_level {
+        buffer.insert_at_cursor(&(String::from("#").repeat(heading_level as usize) + " "));
+    }
+    buffer.insert_at_cursor(&stripped_line);
     buffer.end_user_action();
 }
 
@@ -565,6 +549,45 @@ mod tests {
         assert_eq!(contents!(buffer), "==text==\n");
         format_highlight(buffer.clone());
         assert_eq!(contents!(buffer), "text\n");
+    }
+
+    #[test]
+    fn test_format_heading() {
+        let buffer = buf!("text");
+        select_all!(&buffer);
+        format_heading(buffer.clone(), 1);
+        assert_eq!(contents!(buffer), "# text");
+        format_heading(buffer.clone(), 2);
+        assert_eq!(contents!(buffer), "## text");
+        format_heading(buffer.clone(), 2);
+        assert_eq!(contents!(buffer), "text");
+        format_heading(buffer.clone(), 6);
+        assert_eq!(contents!(buffer), "###### text");
+        format_heading(buffer.clone(), 5);
+        assert_eq!(contents!(buffer), "##### text");
+        format_heading(buffer.clone(), 5);
+        assert_eq!(contents!(buffer), "text");
+    }
+
+    #[test]
+    fn test_format_heading_indent() {
+        let buffer = buf!(" # text");
+        format_heading(buffer.clone(), 2);
+        assert_eq!(contents!(buffer), "## text");
+        let buffer = buf!("   # text");
+        format_heading(buffer.clone(), 1);
+        assert_eq!(contents!(buffer), "text");
+    }
+
+    #[test]
+    fn test_format_heading_nospace() {
+        let buffer = buf!("#text");
+        format_heading(buffer.clone(), 2);
+        assert_eq!(contents!(buffer), "## #text");
+        format_heading(buffer.clone(), 1);
+        assert_eq!(contents!(buffer), "# #text");
+        format_heading(buffer.clone(), 1);
+        assert_eq!(contents!(buffer), "#text");
     }
 
     #[test]

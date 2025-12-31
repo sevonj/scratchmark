@@ -1,4 +1,5 @@
 mod formatting_actions;
+mod regex;
 
 mod imp {
     use std::cell::Cell;
