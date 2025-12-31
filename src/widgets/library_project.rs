@@ -392,7 +392,8 @@ mod imp {
     }
 }
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
+use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use gtk::glib;
