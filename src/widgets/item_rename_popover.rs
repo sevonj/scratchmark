@@ -1,6 +1,6 @@
 mod imp {
-
-    use std::cell::{Cell, RefCell};
+    use std::cell::Cell;
+    use std::cell::RefCell;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
@@ -12,9 +12,10 @@ mod imp {
 
     use glib::GString;
     use gtk::Button;
+    use gtk::CompositeTemplate;
     use gtk::Entry;
     use gtk::Label;
-    use gtk::{CompositeTemplate, TemplateChild};
+    use gtk::TemplateChild;
 
     use crate::util::FilenameStatus;
 

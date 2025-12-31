@@ -37,10 +37,12 @@ mod imp {
     impl BinImpl for EditorMinimap {}
 }
 
-use adw::subclass::prelude::ObjectSubclassIsExt;
-use glib::Object;
+use adw::subclass::prelude::*;
 use gtk::glib;
-use sourceview5::{View, prelude::MapExt};
+use sourceview5::prelude::*;
+
+use glib::Object;
+use sourceview5::View;
 
 glib::wrapper! {
     pub struct EditorMinimap(ObjectSubclass<imp::EditorMinimap>)

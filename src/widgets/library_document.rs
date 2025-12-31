@@ -11,13 +11,18 @@ mod imp {
     use gtk::glib;
     use gtk::prelude::*;
 
+    use gtk::Builder;
+    use gtk::CompositeTemplate;
     use gtk::DragSource;
+    use gtk::FileLauncher;
+    use gtk::Label;
+    use gtk::PopoverMenu;
+    use gtk::TemplateChild;
     use gtk::ToggleButton;
     use gtk::gdk::Rectangle;
     use gtk::gio::MenuModel;
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Binding;
-    use gtk::{Builder, CompositeTemplate, FileLauncher, Label, PopoverMenu, TemplateChild};
 
     use crate::data::DocumentObject;
     use crate::widgets::ItemRenamePopover;

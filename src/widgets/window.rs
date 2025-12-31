@@ -1,16 +1,32 @@
 mod imp {
-    use std::cell::{Cell, OnceCell, RefCell};
+    use std::cell::Cell;
+    use std::cell::OnceCell;
+    use std::cell::RefCell;
     use std::path::PathBuf;
 
     use adw::prelude::*;
     use adw::subclass::prelude::*;
-    use glib::{clone, closure_local};
+    use glib::clone;
+    use glib::closure_local;
     use gtk::glib;
 
-    use adw::{
-        AboutDialog, AlertDialog, ApplicationWindow, HeaderBar, NavigationPage, OverlaySplitView,
-        Toast, ToastOverlay, ToolbarStyle, ToolbarView,
-    };
+    use adw::AboutDialog;
+    use adw::AlertDialog;
+    use adw::ApplicationWindow;
+    use adw::HeaderBar;
+    use adw::NavigationPage;
+    use adw::OverlaySplitView;
+    use adw::Toast;
+    use adw::ToastOverlay;
+    use adw::ToolbarStyle;
+    use adw::ToolbarView;
+    use gtk::Builder;
+    use gtk::Button;
+    use gtk::CompositeTemplate;
+    use gtk::EventControllerMotion;
+    use gtk::MenuButton;
+    use gtk::Revealer;
+    use gtk::ToggleButton;
     use gtk::gio::Cancellable;
     use gtk::gio::File;
     use gtk::gio::FileCopyFlags;
@@ -21,10 +37,6 @@ mod imp {
     use gtk::glib::Properties;
     use gtk::glib::VariantTy;
     use gtk::pango::FontDescription;
-    use gtk::{
-        Builder, Button, CompositeTemplate, EventControllerMotion, MenuButton, Revealer,
-        ToggleButton,
-    };
 
     use crate::APP_ID;
     use crate::config;
