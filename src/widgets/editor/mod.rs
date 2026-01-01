@@ -1,4 +1,4 @@
-mod formatting_actions;
+mod formatting;
 mod regex;
 
 mod imp {
@@ -32,7 +32,7 @@ mod imp {
     use sourceview5::View;
 
     use super::DocumentStatsData;
-    use super::formatting_actions;
+    use super::formatting;
     use crate::util;
     use crate::widgets::EditorDocStats;
     use crate::widgets::EditorMinimap;
@@ -270,7 +270,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting_actions::format_bold(this.source_view.buffer())
+                move |_, _| formatting::format_bold(this.source_view.buffer())
             ));
             actions.add_action(&action);
 
@@ -278,7 +278,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting_actions::format_italic(this.source_view.buffer())
+                move |_, _| formatting::format_italic(this.source_view.buffer())
             ));
             actions.add_action(&action);
 
@@ -286,7 +286,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting_actions::format_strikethrough(this.source_view.buffer())
+                move |_, _| formatting::format_strikethrough(this.source_view.buffer())
             ));
             actions.add_action(&action);
 
@@ -294,7 +294,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting_actions::format_highlight(this.source_view.buffer())
+                move |_, _| formatting::format_highlight(this.source_view.buffer())
             ));
             actions.add_action(&action);
 
@@ -304,7 +304,7 @@ mod imp {
                 self,
                 move |_, param| {
                     let heading_size: i32 = param.unwrap().get().unwrap();
-                    formatting_actions::format_heading(this.source_view.buffer(), heading_size);
+                    formatting::format_heading(this.source_view.buffer(), heading_size);
                     this.source_view.grab_focus();
                 }
             ));
@@ -314,7 +314,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting_actions::format_blockquote(this.source_view.buffer())
+                move |_, _| formatting::format_blockquote(this.source_view.buffer())
             ));
             actions.add_action(&action);
 
@@ -322,7 +322,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting_actions::format_code(this.source_view.buffer())
+                move |_, _| formatting::format_code(this.source_view.buffer())
             ));
             actions.add_action(&action);
         }
