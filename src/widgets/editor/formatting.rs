@@ -5,7 +5,7 @@ use gtk::TextIter;
 
 use super::regex;
 
-pub fn format_bold(buffer: TextBuffer) {
+pub fn format_bold(buffer: &TextBuffer) {
     let is_bold = is_selection_bold(&buffer);
 
     let Some((start, end)) = buffer.selection_bounds() else {
@@ -46,7 +46,7 @@ pub fn format_bold(buffer: TextBuffer) {
     buffer.end_user_action();
 }
 
-pub fn format_italic(buffer: TextBuffer) {
+pub fn format_italic(buffer: &TextBuffer) {
     let is_italic = is_selection_italic(&buffer);
 
     let Some((start, end)) = buffer.selection_bounds() else {
@@ -87,7 +87,7 @@ pub fn format_italic(buffer: TextBuffer) {
     buffer.end_user_action();
 }
 
-pub fn format_strikethrough(buffer: TextBuffer) {
+pub fn format_strikethrough(buffer: &TextBuffer) {
     let Some((start, end)) = buffer.selection_bounds() else {
         let mut iter = buffer.iter_at_mark(&buffer.get_insert());
         let start_off = iter.offset();
@@ -122,7 +122,7 @@ pub fn format_strikethrough(buffer: TextBuffer) {
     buffer.end_user_action();
 }
 
-pub fn format_highlight(buffer: TextBuffer) {
+pub fn format_highlight(buffer: &TextBuffer) {
     let Some((start, end)) = buffer.selection_bounds() else {
         let mut iter = buffer.iter_at_mark(&buffer.get_insert());
         let start_off = iter.offset();
@@ -157,7 +157,7 @@ pub fn format_highlight(buffer: TextBuffer) {
     buffer.end_user_action();
 }
 
-pub fn format_heading(buffer: TextBuffer, heading_level: i32) {
+pub fn format_heading(buffer: &TextBuffer, heading_level: i32) {
     let insert = buffer.get_insert();
     let insert_iter = buffer.iter_at_mark(&insert);
     let current_line = insert_iter.line();
@@ -191,7 +191,7 @@ pub fn format_heading(buffer: TextBuffer, heading_level: i32) {
     buffer.end_user_action();
 }
 
-pub fn format_blockquote(buffer: TextBuffer) {
+pub fn format_blockquote(buffer: &TextBuffer) {
     let (selection_start, selection_end) = buffer.selection_bounds().unwrap_or_else(|| {
         let iter = buffer.iter_at_mark(&buffer.get_insert());
         (iter, iter)
@@ -255,7 +255,7 @@ pub fn format_blockquote(buffer: TextBuffer) {
     buffer.end_user_action();
 }
 
-pub fn format_code(buffer: TextBuffer) {
+pub fn format_code(buffer: &TextBuffer) {
     let Some((start, end)) = buffer.selection_bounds() else {
         return;
     };
@@ -405,9 +405,9 @@ mod tests {
     fn test_format_bold_empty() {
         let buffer = buf!("");
         select_all!(&buffer);
-        format_bold(buffer.clone());
+        format_bold(&buffer);
         assert_eq!(contents!(buffer), "****");
-        format_bold(buffer.clone());
+        format_bold(&buffer);
         assert_eq!(contents!(buffer), "");
     }
 
@@ -415,9 +415,9 @@ mod tests {
     fn test_format_bold() {
         let buffer = buf!("text");
         select_all!(&buffer);
-        format_bold(buffer.clone());
+        format_bold(&buffer);
         assert_eq!(contents!(buffer), "**text**");
-        format_bold(buffer.clone());
+        format_bold(&buffer);
         assert_eq!(contents!(buffer), "text");
     }
 
@@ -425,9 +425,9 @@ mod tests {
     fn test_format_bold_no_selection_within_word() {
         let buffer = buf!("text");
         buffer.place_cursor(&buffer.iter_at_offset(2));
-        format_bold(buffer.clone());
+        format_bold(&buffer);
         assert_eq!(contents!(buffer), "te****xt");
-        format_bold(buffer.clone());
+        format_bold(&buffer);
         assert_eq!(contents!(buffer), "text");
     }
 
@@ -435,9 +435,9 @@ mod tests {
     fn test_format_bold_surrounded_by_whitespace() {
         let buffer = buf!("  text\ntext\ntext  \n");
         select_all!(&buffer);
-        format_bold(buffer.clone());
+        format_bold(&buffer);
         assert_eq!(contents!(buffer), "**  text\ntext\ntext  \n**");
-        format_bold(buffer.clone());
+        format_bold(&buffer);
         assert_eq!(contents!(buffer), "  text\ntext\ntext  \n");
     }
 
@@ -445,9 +445,9 @@ mod tests {
     fn test_format_bold_from_italic() {
         let buffer = buf!("*text*");
         select_all!(&buffer);
-        format_bold(buffer.clone());
+        format_bold(&buffer);
         assert_eq!(contents!(buffer), "***text***");
-        format_bold(buffer.clone());
+        format_bold(&buffer);
         assert_eq!(contents!(buffer), "*text*");
     }
 
@@ -455,9 +455,9 @@ mod tests {
     fn test_format_italic_empty() {
         let buffer = buf!("");
         select_all!(&buffer);
-        format_italic(buffer.clone());
+        format_italic(&buffer);
         assert_eq!(contents!(buffer), "**");
-        format_italic(buffer.clone());
+        format_italic(&buffer);
         assert_eq!(contents!(buffer), "");
     }
 
@@ -465,9 +465,9 @@ mod tests {
     fn test_format_italic() {
         let buffer = buf!("text");
         select_all!(&buffer);
-        format_italic(buffer.clone());
+        format_italic(&buffer);
         assert_eq!(contents!(buffer), "*text*");
-        format_italic(buffer.clone());
+        format_italic(&buffer);
         assert_eq!(contents!(buffer), "text");
     }
 
@@ -475,9 +475,9 @@ mod tests {
     fn test_format_italic_no_selection_within_word() {
         let buffer = buf!("text");
         buffer.place_cursor(&buffer.iter_at_offset(2));
-        format_italic(buffer.clone());
+        format_italic(&buffer);
         assert_eq!(contents!(buffer), "te**xt");
-        format_italic(buffer.clone());
+        format_italic(&buffer);
         assert_eq!(contents!(buffer), "text");
     }
 
@@ -485,9 +485,9 @@ mod tests {
     fn test_format_italic_from_bold() {
         let buffer = buf!("**text**");
         select_all!(&buffer);
-        format_italic(buffer.clone());
+        format_italic(&buffer);
         assert_eq!(contents!(buffer), "***text***");
-        format_italic(buffer.clone());
+        format_italic(&buffer);
         assert_eq!(contents!(buffer), "**text**");
     }
 
@@ -495,9 +495,9 @@ mod tests {
     fn test_format_strikethrough() {
         let buffer = buf!("text");
         select_all!(&buffer);
-        format_strikethrough(buffer.clone());
+        format_strikethrough(&buffer);
         assert_eq!(contents!(buffer), "~~text~~");
-        format_strikethrough(buffer.clone());
+        format_strikethrough(&buffer);
         assert_eq!(contents!(buffer), "text");
     }
 
@@ -505,9 +505,9 @@ mod tests {
     fn test_format_strikethrough_multiline() {
         let buffer = buf!("text\n");
         select_all!(&buffer);
-        format_strikethrough(buffer.clone());
+        format_strikethrough(&buffer);
         assert_eq!(contents!(buffer), "~~text\n~~");
-        format_strikethrough(buffer.clone());
+        format_strikethrough(&buffer);
         assert_eq!(contents!(buffer), "text\n");
     }
 
@@ -515,9 +515,9 @@ mod tests {
     fn test_format_strikethrough_mid_multiline() {
         let buffer = buf!("text\n");
         buffer.select_range(&buffer.start_iter(), &buffer.iter_at_offset(4));
-        format_strikethrough(buffer.clone());
+        format_strikethrough(&buffer);
         assert_eq!(contents!(buffer), "~~text~~\n");
-        format_strikethrough(buffer.clone());
+        format_strikethrough(&buffer);
         assert_eq!(contents!(buffer), "text\n");
     }
 
@@ -525,9 +525,9 @@ mod tests {
     fn test_format_highlight() {
         let buffer = buf!("text");
         select_all!(&buffer);
-        format_highlight(buffer.clone());
+        format_highlight(&buffer);
         assert_eq!(contents!(buffer), "==text==");
-        format_highlight(buffer.clone());
+        format_highlight(&buffer);
         assert_eq!(contents!(buffer), "text");
     }
 
@@ -535,9 +535,9 @@ mod tests {
     fn test_format_highlight_multiline() {
         let buffer = buf!("text\n");
         select_all!(&buffer);
-        format_highlight(buffer.clone());
+        format_highlight(&buffer);
         assert_eq!(contents!(buffer), "==text\n==");
-        format_highlight(buffer.clone());
+        format_highlight(&buffer);
         assert_eq!(contents!(buffer), "text\n");
     }
 
@@ -545,9 +545,9 @@ mod tests {
     fn test_format_highlight_mid_multiline() {
         let buffer = buf!("text\n");
         buffer.select_range(&buffer.start_iter(), &buffer.iter_at_offset(4));
-        format_highlight(buffer.clone());
+        format_highlight(&buffer);
         assert_eq!(contents!(buffer), "==text==\n");
-        format_highlight(buffer.clone());
+        format_highlight(&buffer);
         assert_eq!(contents!(buffer), "text\n");
     }
 
@@ -555,38 +555,38 @@ mod tests {
     fn test_format_heading() {
         let buffer = buf!("text");
         select_all!(&buffer);
-        format_heading(buffer.clone(), 1);
+        format_heading(&buffer, 1);
         assert_eq!(contents!(buffer), "# text");
-        format_heading(buffer.clone(), 2);
+        format_heading(&buffer, 2);
         assert_eq!(contents!(buffer), "## text");
-        format_heading(buffer.clone(), 2);
+        format_heading(&buffer, 2);
         assert_eq!(contents!(buffer), "text");
-        format_heading(buffer.clone(), 6);
+        format_heading(&buffer, 6);
         assert_eq!(contents!(buffer), "###### text");
-        format_heading(buffer.clone(), 5);
+        format_heading(&buffer, 5);
         assert_eq!(contents!(buffer), "##### text");
-        format_heading(buffer.clone(), 5);
+        format_heading(&buffer, 5);
         assert_eq!(contents!(buffer), "text");
     }
 
     #[test]
     fn test_format_heading_indent() {
         let buffer = buf!(" # text");
-        format_heading(buffer.clone(), 2);
+        format_heading(&buffer, 2);
         assert_eq!(contents!(buffer), "## text");
         let buffer = buf!("   # text");
-        format_heading(buffer.clone(), 1);
+        format_heading(&buffer, 1);
         assert_eq!(contents!(buffer), "text");
     }
 
     #[test]
     fn test_format_heading_nospace() {
         let buffer = buf!("#text");
-        format_heading(buffer.clone(), 2);
+        format_heading(&buffer, 2);
         assert_eq!(contents!(buffer), "## #text");
-        format_heading(buffer.clone(), 1);
+        format_heading(&buffer, 1);
         assert_eq!(contents!(buffer), "# #text");
-        format_heading(buffer.clone(), 1);
+        format_heading(&buffer, 1);
         assert_eq!(contents!(buffer), "#text");
     }
 
@@ -594,9 +594,9 @@ mod tests {
     fn test_format_blockquote_empty() {
         let buffer = buf!("");
         select_all!(&buffer);
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "> ");
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "");
     }
 
@@ -604,9 +604,9 @@ mod tests {
     fn test_format_blockquote_word() {
         let buffer = buf!("text");
         select_all!(&buffer);
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "> text");
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "text");
     }
 
@@ -614,9 +614,9 @@ mod tests {
     fn test_format_blockquote_word_newline() {
         let buffer = buf!("text\n");
         select_all!(&buffer);
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "> text\n> ");
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "text\n");
     }
 
@@ -624,9 +624,9 @@ mod tests {
     fn test_format_blockquote_word_manylines() {
         let buffer = buf!("text\ntext\ntext");
         select_all!(&buffer);
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "> text\n> text\n> text");
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "text\ntext\ntext");
     }
 
@@ -634,9 +634,9 @@ mod tests {
     fn test_format_blockquote_word_manylines_trail() {
         let buffer = buf!("text\ntext\ntext\n");
         select_all!(&buffer);
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "> text\n> text\n> text\n> ");
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "text\ntext\ntext\n");
     }
 
@@ -647,9 +647,9 @@ mod tests {
             &buffer.iter_at_line(1).unwrap(),
             &buffer.iter_at_line_offset(1, 2).unwrap(),
         );
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "first\n> second\nlast");
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "first\nsecond\nlast");
     }
 
@@ -660,9 +660,9 @@ mod tests {
             &buffer.iter_at_line(1).unwrap(),
             &buffer.iter_at_line(2).unwrap(),
         );
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "first\n> second\n> \n\nlast");
-        format_blockquote(buffer.clone());
+        format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "first\nsecond\n\n\nlast");
     }
 
