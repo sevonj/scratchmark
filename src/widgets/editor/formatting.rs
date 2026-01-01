@@ -6,154 +6,145 @@ use gtk::TextIter;
 use super::regex;
 
 pub fn format_bold(buffer: &TextBuffer) {
-    let is_bold = is_selection_bold(&buffer);
+    if let Some((start, mut end)) = find_delim_range(buffer, "**") {
+        // Already bold, remove it
+        let start_off = start.offset();
+        let end_off = end.offset();
 
-    let Some((start, end)) = buffer.selection_bounds() else {
-        if is_bold {
-            // No selection, but we know there's asterisks around the cursor
-            let (mut start, mut end) = range_around_cursor(&buffer, 2).unwrap();
-            buffer.delete(&mut start, &mut end);
-        } else {
-            // No selection, insert asterisks around the cursor
-            let mut iter = buffer.iter_at_mark(&buffer.get_insert());
-            let start_off = iter.offset();
-            buffer.insert(&mut iter, "****");
-            let end_off = iter.offset();
-            let start = buffer.iter_at_offset(start_off);
-            let end = buffer.iter_at_offset(end_off);
-            buffer.select_range(&start, &end);
-        }
+        buffer.begin_user_action();
+        buffer.delete(&mut buffer.iter_at_offset(end_off - 2), &mut end);
+        buffer.delete(
+            &mut buffer.iter_at_offset(start_off),
+            &mut buffer.iter_at_offset(start_off + 2),
+        );
+        buffer.end_user_action();
         return;
-    };
-    let offset = start.offset();
-    let selection = buffer.text(&start, &end, false);
+    }
 
-    let replacement = if is_bold {
-        selection[2..(selection.len() - 2)].to_owned()
-    } else {
-        format!("**{selection}**")
-    };
+    if let Some((start, mut end)) = buffer
+        .selection_bounds()
+        .or_else(|| word_around_cursor(buffer))
+    {
+        let start_off = start.offset();
+
+        buffer.begin_user_action();
+        buffer.insert(&mut end, "**");
+        buffer.insert(&mut buffer.iter_at_offset(start_off), "**");
+        buffer.end_user_action();
+        return;
+    }
 
     buffer.begin_user_action();
-
-    buffer.delete_selection(true, true);
-    buffer.insert_at_cursor(&replacement);
-    buffer.select_range(
-        &buffer.iter_at_offset(offset),
-        &buffer.iter_at_mark(&buffer.get_insert()),
-    );
-
+    buffer.insert_at_cursor("****");
+    buffer.place_cursor(&buffer.iter_at_offset(buffer.cursor_position() - 2));
     buffer.end_user_action();
 }
 
 pub fn format_italic(buffer: &TextBuffer) {
-    let is_italic = is_selection_italic(&buffer);
+    let is_bold = find_delim_range(buffer, "**").is_some();
+    let is_both = find_delim_range(buffer, "***").is_some();
 
-    let Some((start, end)) = buffer.selection_bounds() else {
-        if is_italic {
-            // No selection, but we know there's asterisks around the cursor
-            let (mut start, mut end) = range_around_cursor(&buffer, 1).unwrap();
-            buffer.delete(&mut start, &mut end);
-        } else {
-            // No selection, insert asterisks around the cursor
-            let mut iter = buffer.iter_at_mark(&buffer.get_insert());
-            let start_off = iter.offset();
-            buffer.insert(&mut iter, "**");
-            let end_off = iter.offset();
-            let start = buffer.iter_at_offset(start_off);
-            let end = buffer.iter_at_offset(end_off);
-            buffer.select_range(&start, &end);
-        }
+    if (!is_bold || is_both)
+        && let Some((start, mut end)) = find_delim_range(buffer, "*")
+    {
+        // Already italic, remove it
+        let start_off = start.offset();
+        let end_off = end.offset();
+
+        buffer.begin_user_action();
+        buffer.delete(&mut buffer.iter_at_offset(end_off - 1), &mut end);
+        buffer.delete(
+            &mut buffer.iter_at_offset(start_off),
+            &mut buffer.iter_at_offset(start_off + 1),
+        );
+        buffer.end_user_action();
         return;
-    };
-    let offset = start.offset();
-    let selection = buffer.text(&start, &end, false);
+    }
 
-    let replacement = if is_italic {
-        selection[1..(selection.len() - 1)].to_owned()
-    } else {
-        format!("*{selection}*")
-    };
+    if let Some((start, mut end)) = buffer
+        .selection_bounds()
+        .or_else(|| word_around_cursor(buffer))
+    {
+        let start_off = start.offset();
+
+        buffer.begin_user_action();
+        buffer.insert(&mut end, "*");
+        buffer.insert(&mut buffer.iter_at_offset(start_off), "*");
+        buffer.end_user_action();
+        return;
+    }
 
     buffer.begin_user_action();
-
-    buffer.delete_selection(true, true);
-    buffer.insert_at_cursor(&replacement);
-    buffer.select_range(
-        &buffer.iter_at_offset(offset),
-        &buffer.iter_at_mark(&buffer.get_insert()),
-    );
-
+    buffer.insert_at_cursor("**");
+    buffer.place_cursor(&buffer.iter_at_offset(buffer.cursor_position() - 1));
     buffer.end_user_action();
 }
 
 pub fn format_strikethrough(buffer: &TextBuffer) {
-    let Some((start, end)) = buffer.selection_bounds() else {
-        let mut iter = buffer.iter_at_mark(&buffer.get_insert());
-        let start_off = iter.offset();
-        buffer.insert(&mut iter, "~~~~");
-        let end_off = iter.offset();
-        let start = buffer.iter_at_offset(start_off);
-        let end = buffer.iter_at_offset(end_off);
-        buffer.select_range(&start, &end);
+    if let Some((start, mut end)) = find_delim_range(buffer, "~~") {
+        let start_off = start.offset();
+        let end_off = end.offset();
+
+        buffer.begin_user_action();
+        buffer.delete(&mut buffer.iter_at_offset(end_off - 2), &mut end);
+        buffer.delete(
+            &mut buffer.iter_at_offset(start_off),
+            &mut buffer.iter_at_offset(start_off + 2),
+        );
+        buffer.end_user_action();
         return;
-    };
-    let offset = start.offset();
-    let selection = buffer.text(&start, &end, false);
+    }
 
-    let is_strikethrough =
-        selection.len() >= 4 && selection.starts_with("~~") && selection.ends_with("~~");
+    if let Some((start, mut end)) = buffer
+        .selection_bounds()
+        .or_else(|| word_around_cursor(buffer))
+    {
+        let start_off = start.offset();
 
-    let replacement = if is_strikethrough {
-        selection[2..(selection.len() - 2)].to_owned()
-    } else {
-        format!("~~{selection}~~")
-    };
+        buffer.begin_user_action();
+        buffer.insert(&mut end, "~~");
+        buffer.insert(&mut buffer.iter_at_offset(start_off), "~~");
+        buffer.end_user_action();
+        return;
+    }
 
     buffer.begin_user_action();
-
-    buffer.delete_selection(true, true);
-    buffer.insert_at_cursor(&replacement);
-    buffer.select_range(
-        &buffer.iter_at_offset(offset),
-        &buffer.iter_at_mark(&buffer.get_insert()),
-    );
-
+    buffer.insert_at_cursor("~~~~");
+    buffer.place_cursor(&buffer.iter_at_offset(buffer.cursor_position() - 2));
     buffer.end_user_action();
 }
 
 pub fn format_highlight(buffer: &TextBuffer) {
-    let Some((start, end)) = buffer.selection_bounds() else {
-        let mut iter = buffer.iter_at_mark(&buffer.get_insert());
-        let start_off = iter.offset();
-        buffer.insert(&mut iter, "====");
-        let end_off = iter.offset();
-        let start = buffer.iter_at_offset(start_off);
-        let end = buffer.iter_at_offset(end_off);
-        buffer.select_range(&start, &end);
+    if let Some((start, mut end)) = find_delim_range(buffer, "==") {
+        let start_off = start.offset();
+        let end_off = end.offset();
+
+        buffer.begin_user_action();
+        buffer.delete(&mut buffer.iter_at_offset(end_off - 2), &mut end);
+        buffer.delete(
+            &mut buffer.iter_at_offset(start_off),
+            &mut buffer.iter_at_offset(start_off + 2),
+        );
+        buffer.end_user_action();
         return;
-    };
-    let offset = start.offset();
-    let selection = buffer.text(&start, &end, true);
+    }
 
-    let is_strikethrough =
-        selection.len() >= 4 && selection.starts_with("==") && selection.ends_with("==");
+    if let Some((start, mut end)) = buffer
+        .selection_bounds()
+        .or_else(|| word_around_cursor(buffer))
+    {
+        let start_off = start.offset();
 
-    let replacement = if is_strikethrough {
-        selection[2..(selection.len() - 2)].to_owned()
-    } else {
-        format!("=={selection}==")
-    };
+        buffer.begin_user_action();
+        buffer.insert(&mut end, "==");
+        buffer.insert(&mut buffer.iter_at_offset(start_off), "==");
+        buffer.end_user_action();
+        return;
+    }
 
     buffer.begin_user_action();
-
-    buffer.delete_selection(true, true);
-    buffer.insert_at_cursor(&replacement);
-    buffer.select_range(
-        &buffer.iter_at_offset(offset),
-        &buffer.iter_at_mark(&buffer.get_insert()),
-    );
-
+    buffer.insert_at_cursor("====");
+    buffer.place_cursor(&buffer.iter_at_offset(buffer.cursor_position() - 2));
     buffer.end_user_action();
 }
 
@@ -208,7 +199,7 @@ pub fn format_blockquote(buffer: &TextBuffer) {
     let old_contents = buffer.text(&start_iter, &end_iter, true);
     let mut new_contents = String::new();
 
-    if is_selection_blockquote(first_line, last_line, &buffer) {
+    if is_selection_blockquote(first_line, last_line, buffer) {
         for (i, line) in old_contents.split('\n').enumerate() {
             let ln = first_line as usize + i;
             if ln > last_line as usize {
@@ -256,29 +247,36 @@ pub fn format_blockquote(buffer: &TextBuffer) {
 }
 
 pub fn format_code(buffer: &TextBuffer) {
-    let Some((start, end)) = buffer.selection_bounds() else {
+    if let Some((start, mut end)) = find_delim_range(buffer, "`") {
+        let start_off = start.offset();
+        let end_off = end.offset();
+
+        buffer.begin_user_action();
+        buffer.delete(&mut buffer.iter_at_offset(end_off - 1), &mut end);
+        buffer.delete(
+            &mut buffer.iter_at_offset(start_off),
+            &mut buffer.iter_at_offset(start_off + 1),
+        );
+        buffer.end_user_action();
         return;
-    };
-    let offset = start.offset();
-    let selection = buffer.text(&start, &end, false);
+    }
 
-    let is_code = selection.len() >= 2 && selection.starts_with("`") && selection.ends_with("`");
+    if let Some((start, mut end)) = buffer
+        .selection_bounds()
+        .or_else(|| word_around_cursor(buffer))
+    {
+        let start_off = start.offset();
 
-    let replacement = if is_code {
-        selection[1..(selection.len() - 1)].to_owned()
-    } else {
-        format!("`{selection}`")
-    };
+        buffer.begin_user_action();
+        buffer.insert(&mut end, "`");
+        buffer.insert(&mut buffer.iter_at_offset(start_off), "`");
+        buffer.end_user_action();
+        return;
+    }
 
     buffer.begin_user_action();
-
-    buffer.delete_selection(true, true);
-    buffer.insert_at_cursor(&replacement);
-    buffer.select_range(
-        &buffer.iter_at_offset(offset),
-        &buffer.iter_at_mark(&buffer.get_insert()),
-    );
-
+    buffer.insert_at_cursor("``");
+    buffer.place_cursor(&buffer.iter_at_offset(buffer.cursor_position() - 1));
     buffer.end_user_action();
 }
 
@@ -294,63 +292,93 @@ fn range_around_cursor(buffer: &TextBuffer, distance: i32) -> Option<(TextIter, 
     Some((start_iter, end_iter))
 }
 
-fn is_selection_italic(buffer: &TextBuffer) -> bool {
-    if is_selection_bold_and_italic(buffer) {
-        return true;
-    }
-    if is_selection_bold(buffer) {
-        return false;
+fn word_around_cursor(buffer: &TextBuffer) -> Option<(TextIter, TextIter)> {
+    let cursor = buffer.iter_at_mark(&buffer.get_insert());
+    let mut start = cursor;
+    let mut end = cursor;
+
+    loop {
+        let mut before_start = start;
+        if !before_start.backward_char() {
+            break; // Can't go further back
+        }
+        if buffer
+            .text(&before_start, &start, false)
+            .chars()
+            .next()
+            .unwrap()
+            .is_whitespace()
+        {
+            break;
+        }
+        start = before_start;
     }
 
-    let selection = buffer
-        .selection_bounds()
-        .or_else(|| range_around_cursor(buffer, 1));
-
-    let Some((start_iter, end_iter)) = selection else {
-        return false;
-    };
-    let line_contents = buffer.text(&start_iter, &end_iter, true);
-    if line_contents.len() < 2 || !line_contents.starts_with("*") || !line_contents.ends_with("*") {
-        return false;
+    loop {
+        let mut after_end = end;
+        if !after_end.forward_char() {
+            // Can't go further forward
+            after_end = buffer.end_iter();
+        }
+        if buffer
+            .text(&end, &after_end, false)
+            .chars()
+            .next()
+            .is_none_or(|c| c.is_whitespace())
+        {
+            break;
+        }
+        end = after_end;
     }
-    true
+
+    if start.offset() == end.offset() {
+        return None;
+    }
+    Some((start, end))
 }
 
-fn is_selection_bold(buffer: &TextBuffer) -> bool {
-    if is_selection_bold_and_italic(buffer) {
-        return true;
-    }
-    let selection = buffer
+/// Tries to find a range immediately around the cursor or selection starts and ends with delimiter
+fn find_delim_range(buffer: &TextBuffer, delimiter: &str) -> Option<(TextIter, TextIter)> {
+    if let Some((mut start, mut end)) = buffer
         .selection_bounds()
-        .or_else(|| range_around_cursor(buffer, 2));
-
-    let Some((start_iter, end_iter)) = selection else {
-        return false;
-    };
-    let line_contents = buffer.text(&start_iter, &end_iter, true);
-    if line_contents.len() < 4 || !line_contents.starts_with("**") || !line_contents.ends_with("**")
+        .or_else(|| word_around_cursor(buffer))
     {
-        return false;
-    }
-    true
-}
-
-fn is_selection_bold_and_italic(buffer: &TextBuffer) -> bool {
-    let selection = buffer
-        .selection_bounds()
-        .or_else(|| range_around_cursor(buffer, 3));
-
-    let Some((start_iter, end_iter)) = selection else {
-        return false;
-    };
-    let line_contents = buffer.text(&start_iter, &end_iter, true);
-    if line_contents.len() < 6
-        || !line_contents.starts_with("***")
-        || !line_contents.ends_with("***")
+        // Move start back to find delimiter
+        for _ in 0..(delimiter.len() + 1) {
+            if buffer.text(&start, &end, false).starts_with(delimiter) {
+                break;
+            }
+            if !start.backward_char() {
+                return None;
+            };
+        }
+        if !buffer.text(&start, &end, false).starts_with(delimiter) {
+            return None;
+        }
+        // Move end forward to find delimiter
+        for _ in 0..(delimiter.len() + 1) {
+            if buffer.text(&start, &end, false).ends_with(delimiter) {
+                break;
+            }
+            if !end.forward_char() {
+                end = buffer.end_iter();
+                break;
+            };
+        }
+        let final_text = buffer.text(&start, &end, false);
+        if !final_text.ends_with(delimiter) || final_text.len() < delimiter.len() * 2 {
+            return None;
+        }
+        return Some((start, end));
+    } else if let Some((start, end)) = range_around_cursor(buffer, 2)
+        && {
+            let text = buffer.text(&start, &end, false);
+            text.starts_with(delimiter) && text.ends_with(delimiter)
+        }
     {
-        return false;
+        return Some((start, end));
     }
-    true
+    None
 }
 
 /// True if **every** line in selection matches.
@@ -367,6 +395,7 @@ fn is_selection_blockquote(first_line: i32, last_line: i32, buffer: &TextBuffer)
     }
     true
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -422,11 +451,23 @@ mod tests {
     }
 
     #[test]
+    fn test_format_bold_cursor_placement() {
+        let buffer = buf!("text  text");
+        buffer.place_cursor(&buffer.iter_at_offset(5));
+        format_bold(&buffer);
+        assert_eq!(contents!(buffer), "text **** text");
+        buffer.place_cursor(&buffer.iter_at_offset(7));
+        format_bold(&buffer);
+        let buffer = buf!("text  text");
+        buffer.place_cursor(&buffer.iter_at_offset(5));
+    }
+
+    #[test]
     fn test_format_bold_no_selection_within_word() {
         let buffer = buf!("text");
         buffer.place_cursor(&buffer.iter_at_offset(2));
         format_bold(&buffer);
-        assert_eq!(contents!(buffer), "te****xt");
+        assert_eq!(contents!(buffer), "**text**");
         format_bold(&buffer);
         assert_eq!(contents!(buffer), "text");
     }
@@ -452,9 +493,18 @@ mod tests {
     }
 
     #[test]
+    fn test_format_bold_from_italic_within_word() {
+        let buffer = buf!("*text*");
+        buffer.place_cursor(&buffer.iter_at_offset(3));
+        format_bold(&buffer);
+        assert_eq!(contents!(buffer), "***text***");
+        format_bold(&buffer);
+        assert_eq!(contents!(buffer), "*text*");
+    }
+
+    #[test]
     fn test_format_italic_empty() {
         let buffer = buf!("");
-        select_all!(&buffer);
         format_italic(&buffer);
         assert_eq!(contents!(buffer), "**");
         format_italic(&buffer);
@@ -472,11 +522,23 @@ mod tests {
     }
 
     #[test]
+    fn test_format_italic_cursor_placement() {
+        let buffer = buf!("text  text");
+        buffer.place_cursor(&buffer.iter_at_offset(5));
+        format_italic(&buffer);
+        assert_eq!(contents!(buffer), "text ** text");
+        buffer.place_cursor(&buffer.iter_at_offset(6));
+        format_italic(&buffer);
+        let buffer = buf!("text  text");
+        buffer.place_cursor(&buffer.iter_at_offset(5));
+    }
+
+    #[test]
     fn test_format_italic_no_selection_within_word() {
         let buffer = buf!("text");
         buffer.place_cursor(&buffer.iter_at_offset(2));
         format_italic(&buffer);
-        assert_eq!(contents!(buffer), "te**xt");
+        assert_eq!(contents!(buffer), "*text*");
         format_italic(&buffer);
         assert_eq!(contents!(buffer), "text");
     }
@@ -485,6 +547,16 @@ mod tests {
     fn test_format_italic_from_bold() {
         let buffer = buf!("**text**");
         select_all!(&buffer);
+        format_italic(&buffer);
+        assert_eq!(contents!(buffer), "***text***");
+        format_italic(&buffer);
+        assert_eq!(contents!(buffer), "**text**");
+    }
+
+    #[test]
+    fn test_format_italic_from_bold_within_word() {
+        let buffer = buf!("**text**");
+        buffer.place_cursor(&buffer.iter_at_offset(4));
         format_italic(&buffer);
         assert_eq!(contents!(buffer), "***text***");
         format_italic(&buffer);
@@ -667,91 +739,86 @@ mod tests {
     }
 
     #[test]
-    fn test_is_selection_italic() {
+    fn test_find_delim_range() {
         let buffer = buf!("");
         select_all!(&buffer);
-        assert_eq!(is_selection_italic(&buffer), false);
+        assert!(find_delim_range(&buffer, "**").is_none());
 
-        let buffer = buf!("**");
-        assert_eq!(is_selection_italic(&buffer), false);
+        let buffer = buf!("*");
+        select_all!(&buffer);
+        assert!(find_delim_range(&buffer, "**").is_none());
 
         let buffer = buf!("**");
         select_all!(&buffer);
-        assert_eq!(is_selection_italic(&buffer), true);
+        assert!(find_delim_range(&buffer, "**").is_none());
 
-        let buffer = buf!("**");
+        let buffer = buf!("***");
+        select_all!(&buffer);
+        assert!(find_delim_range(&buffer, "**").is_none());
+
+        let buffer = buf!("****");
+        select_all!(&buffer);
+        let (start, end) = find_delim_range(&buffer, "**").unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "****");
+
+        let buffer = buf!("****");
+        buffer.place_cursor(&buffer.iter_at_offset(0));
+        let (start, end) = find_delim_range(&buffer, "**").unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "****");
         buffer.place_cursor(&buffer.iter_at_offset(1));
-        assert_eq!(is_selection_italic(&buffer), true);
-    }
+        let (start, end) = find_delim_range(&buffer, "**").unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "****");
+        buffer.place_cursor(&buffer.end_iter());
+        let (start, end) = find_delim_range(&buffer, "**").unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "****");
 
-    #[test]
-    fn test_is_selection_italic_exlusive() {
-        let buffer = buf!("****");
+        let buffer = buf!("Never **enough**");
         select_all!(&buffer);
-        assert_eq!(is_selection_italic(&buffer), false);
+        assert!(find_delim_range(&buffer, "**").is_none());
 
-        let buffer = buf!("****");
-        buffer.place_cursor(&buffer.iter_at_offset(2));
-        assert_eq!(is_selection_italic(&buffer), false);
+        let buffer = buf!("Never **enough** ");
+        buffer.place_cursor(&buffer.iter_at_offset(0));
+        assert!(find_delim_range(&buffer, "**").is_none());
+        buffer.place_cursor(&buffer.iter_at_offset(4));
+        assert!(find_delim_range(&buffer, "**").is_none());
+        buffer.place_cursor(&buffer.iter_at_offset(5));
+        assert!(find_delim_range(&buffer, "**").is_none());
 
-        let buffer = buf!("******");
-        select_all!(&buffer);
-        assert_eq!(is_selection_italic(&buffer), true);
+        buffer.place_cursor(&buffer.iter_at_offset(6));
+        let (start, end) = find_delim_range(&buffer, "**").unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "**enough**");
+        buffer.place_cursor(&buffer.iter_at_offset(9));
+        let (start, end) = find_delim_range(&buffer, "**").unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "**enough**");
+        buffer.place_cursor(&buffer.iter_at_offset(16));
+        let (start, end) = find_delim_range(&buffer, "**").unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "**enough**");
+        buffer.place_cursor(&buffer.end_iter());
+        assert!(find_delim_range(&buffer, "**").is_none());
 
-        let buffer = buf!("******");
-        buffer.place_cursor(&buffer.iter_at_offset(3));
-        assert_eq!(is_selection_italic(&buffer), true);
-    }
-
-    #[test]
-    fn test_is_selection_bold() {
-        let buffer = buf!("");
-        select_all!(&buffer);
-        assert_eq!(is_selection_bold(&buffer), false);
-
-        let buffer = buf!("****");
-        assert_eq!(is_selection_bold(&buffer), false);
-
-        let buffer = buf!("****");
-        select_all!(&buffer);
-        assert_eq!(is_selection_bold(&buffer), true);
-
-        let buffer = buf!("****");
-        buffer.place_cursor(&buffer.iter_at_offset(2));
-        assert_eq!(is_selection_bold(&buffer), true);
-    }
-
-    #[test]
-    fn test_is_selection_bold_exlusive() {
-        let buffer = buf!("******");
-        select_all!(&buffer);
-        assert_eq!(is_selection_bold(&buffer), true);
-
-        let buffer = buf!("******");
-        buffer.place_cursor(&buffer.iter_at_offset(3));
-        assert_eq!(is_selection_bold(&buffer), true);
-    }
-
-    #[test]
-    fn test_is_selection_bold_and_italic() {
-        let buffer = buf!("******");
-        assert_eq!(is_selection_bold_and_italic(&buffer), false);
-
-        let buffer = buf!("****");
-        select_all!(&buffer);
-        assert_eq!(is_selection_bold_and_italic(&buffer), false);
-
-        let buffer = buf!("*****");
-        select_all!(&buffer);
-        assert_eq!(is_selection_bold_and_italic(&buffer), false);
-
-        let buffer = buf!("******");
-        select_all!(&buffer);
-        assert_eq!(is_selection_bold_and_italic(&buffer), true);
-
-        let buffer = buf!("******");
-        buffer.place_cursor(&buffer.iter_at_offset(3));
-        assert_eq!(is_selection_bold_and_italic(&buffer), true);
+        // '**enough**'
+        buffer.select_range(&buffer.iter_at_offset(6), &buffer.iter_at_offset(16));
+        let (start, end) = find_delim_range(&buffer, "**").unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "**enough**");
+        // '*enough*'
+        buffer.select_range(&buffer.iter_at_offset(7), &buffer.iter_at_offset(15));
+        let (start, end) = find_delim_range(&buffer, "**").unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "**enough**");
+        // 'enough'
+        buffer.select_range(&buffer.iter_at_offset(8), &buffer.iter_at_offset(14));
+        let (start, end) = find_delim_range(&buffer, "**").unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "**enough**");
+        // '*enough'
+        buffer.select_range(&buffer.iter_at_offset(7), &buffer.iter_at_offset(14));
+        let (start, end) = find_delim_range(&buffer, "**").unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "**enough**");
+        // '*enough**'
+        buffer.select_range(&buffer.iter_at_offset(7), &buffer.iter_at_offset(16));
+        let (start, end) = find_delim_range(&buffer, "**").unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "**enough**");
+        // '*enough** '
+        buffer.select_range(&buffer.iter_at_offset(7), &buffer.iter_at_offset(17));
+        assert!(find_delim_range(&buffer, "**").is_none());
     }
 
     #[test]
@@ -835,5 +902,59 @@ mod tests {
         buffer.place_cursor(&buffer.iter_at_offset(3));
         let (start_iter, end_iter) = range_around_cursor(&buffer, 2).unwrap();
         assert_eq!(&buffer.text(&start_iter, &end_iter, true), "bcde");
+    }
+
+    #[test]
+    fn test_word_around_cursor() {
+        let buffer = buf!("spagublio");
+        buffer.place_cursor(&buffer.iter_at_offset(0));
+        let (start, end) = word_around_cursor(&buffer).unwrap();
+        assert_eq!(start.offset(), 0);
+        assert_eq!(end.offset(), 9);
+        buffer.place_cursor(&buffer.iter_at_offset(1));
+        let (start, end) = word_around_cursor(&buffer).unwrap();
+        assert_eq!(start.offset(), 0);
+        assert_eq!(end.offset(), 9);
+        buffer.place_cursor(&buffer.iter_at_offset(8));
+        let (start, end) = word_around_cursor(&buffer).unwrap();
+        assert_eq!(start.offset(), 0);
+        assert_eq!(end.offset(), 9);
+        buffer.place_cursor(&buffer.iter_at_offset(9));
+        let (start, end) = word_around_cursor(&buffer).unwrap();
+        assert_eq!(start.offset(), 0);
+        assert_eq!(end.offset(), 9);
+
+        let buffer = buf!("Why don't we just move on to\nthe cutting of the monitors");
+        buffer.place_cursor(&buffer.iter_at_offset(5)); // d_on't
+        let (start, end) = word_around_cursor(&buffer).unwrap();
+        assert_eq!(start.offset(), 4);
+        assert_eq!(end.offset(), 9);
+        buffer.place_cursor(&buffer.iter_at_offset(26)); // _to
+        let (start, end) = word_around_cursor(&buffer).unwrap();
+        assert_eq!(start.offset(), 26);
+        assert_eq!(end.offset(), 28);
+        buffer.place_cursor(&buffer.iter_at_offset(29)); // _the
+        let (start, end) = word_around_cursor(&buffer).unwrap();
+        assert_eq!(start.offset(), 29);
+        assert_eq!(end.offset(), 32);
+        buffer.place_cursor(&buffer.end_iter());
+        let (start, end) = word_around_cursor(&buffer).unwrap();
+        assert_eq!(start.offset(), buffer.end_iter().offset() - 8);
+        assert_eq!(end.offset(), buffer.end_iter().offset());
+
+        let buffer = buf!(" space around ");
+        buffer.place_cursor(&buffer.iter_at_offset(0));
+        assert!(word_around_cursor(&buffer).is_none());
+        buffer.place_cursor(&buffer.end_iter());
+        assert!(word_around_cursor(&buffer).is_none());
+        buffer.place_cursor(&buffer.iter_at_offset(3));
+        let (start, end) = word_around_cursor(&buffer).unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "space");
+        buffer.place_cursor(&buffer.iter_at_offset(12));
+        let (start, end) = word_around_cursor(&buffer).unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "around");
+        buffer.place_cursor(&buffer.iter_at_offset(13));
+        let (start, end) = word_around_cursor(&buffer).unwrap();
+        assert_eq!(buffer.text(&start, &end, false), "around");
     }
 }
