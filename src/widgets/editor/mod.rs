@@ -423,10 +423,8 @@ impl Editor {
         buffer.connect_changed(clone!(
             #[weak]
             this,
-            move |buffer| {
-                this.refresh_document_stats(buffer);
-                this.set_unsaved_changes(true);
-                this.emit_by_name::<()>("buffer-changed", &[]);
+            move |buffer: &Buffer| {
+                this.on_buffer_changed(buffer);
             }
         ));
         this.refresh_document_stats(&buffer);
@@ -543,6 +541,12 @@ impl Editor {
         let dirs: Vec<&str> = search_path.iter().map(GString::as_str).collect();
         lm.set_search_path(&dirs);
         lm
+    }
+
+    fn on_buffer_changed(&self, buffer: &Buffer) {
+        self.refresh_document_stats(buffer);
+        self.set_unsaved_changes(true);
+        self.emit_by_name::<()>("buffer-changed", &[]);
     }
 }
 
