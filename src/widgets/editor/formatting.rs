@@ -168,17 +168,22 @@ pub fn format_heading(buffer: &TextBuffer, heading_level: i32) {
         .map(|m| m.as_str().chars().filter(|c| *c == '#').count())
         .unwrap_or(0) as i32;
 
-    let stripped_line = match regex_match {
-        Some(regex_match) => old_line[regex_match.len()..].to_owned(),
-        None => old_line.to_string(),
-    };
-
     buffer.begin_user_action();
-    buffer.delete(&mut start, &mut end);
-    if old_heading_level != heading_level {
-        buffer.insert_at_cursor(&(String::from("#").repeat(heading_level as usize) + " "));
+    if let Some(regex_match) = regex::ATX_H_OPENING.find(&old_line) {
+        let mut opening_end = start;
+        opening_end.forward_chars(regex_match.len() as i32);
+        buffer.delete(&mut start, &mut opening_end);
     }
-    buffer.insert_at_cursor(&stripped_line);
+
+    if old_heading_level == heading_level {
+        buffer.end_user_action();
+        return;
+    }
+
+    buffer.insert(
+        &mut start,
+        &(String::from("#").repeat(heading_level as usize) + " "),
+    );
     buffer.end_user_action();
 }
 
@@ -648,6 +653,20 @@ mod tests {
         assert_eq!(contents!(buffer), "# #text");
         format_heading(&buffer, 1);
         assert_eq!(contents!(buffer), "#text");
+    }
+
+    #[test]
+    fn test_format_heading_cursor() {
+        let buffer = buf!(" # text");
+        buffer.place_cursor(&buffer.iter_at_offset(5));
+        format_heading(&buffer, 2);
+        assert_eq!(contents!(buffer), "## text");
+        assert_eq!(buffer.cursor_position(), 5);
+        let buffer = buf!("   # text");
+        buffer.place_cursor(&buffer.iter_at_offset(8));
+        format_heading(&buffer, 1);
+        assert_eq!(contents!(buffer), "text");
+        assert_eq!(buffer.cursor_position(), 3);
     }
 
     #[test]
