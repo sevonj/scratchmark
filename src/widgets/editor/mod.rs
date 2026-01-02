@@ -1,4 +1,5 @@
 mod formatting;
+mod markdown_buffer;
 mod regex;
 
 mod imp {
@@ -379,10 +380,7 @@ use sourceview5::prelude::*;
 
 use gtk::gio::Cancellable;
 use gtk::gio::FileCreateFlags;
-use gtk::glib::GString;
 use gtk::glib::Object;
-use sourceview5::Buffer;
-use sourceview5::LanguageManager;
 use sourceview5::SearchContext;
 use sourceview5::SearchSettings;
 use sourceview5::StyleSchemeManager;
@@ -390,6 +388,7 @@ use sourceview5::StyleSchemeManager;
 use crate::config::PKGDATADIR;
 use crate::error::ScratchmarkError;
 use crate::util;
+use markdown_buffer::MarkdownBuffer;
 
 const NOT_CANCELLABLE: Option<&Cancellable> = None;
 
@@ -403,32 +402,38 @@ impl Editor {
     pub fn new(path: PathBuf) -> Result<Self, ScratchmarkError> {
         let file = gtk::gio::File::for_path(&path);
         let text = util::read_file_to_string(&file)?;
-        let lm = Self::language_manager();
-        let lang = lm.language("markdown").unwrap();
-        let buffer = Buffer::with_language(&lang);
+        let buffer = MarkdownBuffer::default();
         buffer.set_text(&text);
 
         let search_settings = SearchSettings::default();
         search_settings.set_wrap_around(true);
         let search_context = SearchContext::new(&buffer, Some(&search_settings));
 
-        let this: Self = Object::builder().build();
+        let obj: Self = Object::builder().build();
+        let imp = obj.imp();
         Self::load_buffer_style_scheme(&buffer);
-        this.imp().file.replace(Some(file));
-        this.imp().path.replace(Some(path));
-        this.imp().source_view.set_monospace(true);
-        this.imp().source_view.set_buffer(Some(&buffer));
-        this.imp().search_bar.set_search_context(search_context);
-        this.imp().setup_filemon();
+        imp.file.replace(Some(file));
+        imp.path.replace(Some(path));
+        imp.source_view.set_monospace(true);
+        imp.source_view.set_buffer(Some(&buffer));
+        imp.search_bar.set_search_context(search_context);
+        imp.setup_filemon();
         buffer.connect_changed(clone!(
             #[weak]
-            this,
-            move |buffer: &Buffer| {
-                this.on_buffer_changed(buffer);
+            obj,
+            move |buffer: &MarkdownBuffer| {
+                obj.on_buffer_changed(buffer);
             }
         ));
-        this.refresh_document_stats(&buffer);
-        Ok(this)
+        imp.source_view.connect_paste_clipboard(clone!(
+            #[weak]
+            buffer,
+            move |_| {
+                buffer.open_paste();
+            }
+        ));
+        obj.refresh_document_stats(&buffer);
+        Ok(obj)
     }
 
     pub fn save(&self) -> Result<(), ScratchmarkError> {
@@ -488,7 +493,7 @@ impl Editor {
         self.imp().document_stats_data.get()
     }
 
-    fn refresh_document_stats(&self, buffer: &Buffer) {
+    fn refresh_document_stats(&self, buffer: &MarkdownBuffer) {
         let imp = self.imp();
         let stats = DocumentStatsData::from_buffer(buffer);
         imp.document_stats.set_stats(&stats);
@@ -496,7 +501,7 @@ impl Editor {
         self.emit_by_name::<()>("stats-changed", &[]);
     }
 
-    fn load_buffer_style_scheme(buffer: &Buffer) {
+    fn load_buffer_style_scheme(buffer: &MarkdownBuffer) {
         let scheme_id = "scratchmark";
 
         // Try fetching the scheme
@@ -522,28 +527,7 @@ impl Editor {
         println!("Failed to load scheme with id '{scheme_id}'.")
     }
 
-    fn language_manager() -> LanguageManager {
-        let lm = LanguageManager::default();
-        let mut search_path = lm.search_path();
-
-        #[cfg(feature = "installed")]
-        {
-            let lang_spec_dir = &format!("{PKGDATADIR}/language_specs");
-            search_path.insert(0, lang_spec_dir.into());
-        }
-        #[cfg(not(feature = "installed"))]
-        {
-            const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
-            let lang_spec_dir = format!("{MANIFEST_DIR}/data/language_specs");
-            search_path.insert(0, lang_spec_dir.into());
-        }
-
-        let dirs: Vec<&str> = search_path.iter().map(GString::as_str).collect();
-        lm.set_search_path(&dirs);
-        lm
-    }
-
-    fn on_buffer_changed(&self, buffer: &Buffer) {
+    fn on_buffer_changed(&self, buffer: &MarkdownBuffer) {
         self.refresh_document_stats(buffer);
         self.set_unsaved_changes(true);
         self.emit_by_name::<()>("buffer-changed", &[]);
@@ -559,7 +543,7 @@ pub struct DocumentStatsData {
 }
 
 impl DocumentStatsData {
-    pub fn from_buffer(buffer: &Buffer) -> Self {
+    pub fn from_buffer(buffer: &MarkdownBuffer) -> Self {
         let num_lines = buffer.line_count();
         let num_chars = buffer.char_count();
         let mut num_spaces = 0;
