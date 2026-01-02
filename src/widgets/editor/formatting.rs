@@ -401,7 +401,6 @@ mod tests {
     use super::*;
 
     /// Create buffer with text
-    #[macro_export]
     macro_rules! buf {
         ( $t:expr ) => {{
             let buffer = TextBuffer::default();
@@ -410,24 +409,13 @@ mod tests {
         }};
     }
 
-    #[macro_export]
     macro_rules! select_all {
         ( $buf:expr ) => {{ $buf.select_range(&$buf.start_iter(), &$buf.end_iter()) }};
     }
 
     /// Get full contents of buffer
-    #[macro_export]
     macro_rules! contents {
         ( $buf:expr ) => {{ $buf.text(&$buf.start_iter(), &$buf.end_iter(), true) }};
-    }
-
-    /// Get full contents of buffer
-    #[macro_export]
-    macro_rules! selection {
-        ( $buf:expr ) => {{
-            let (start_iter, end_iter) = $buf.selection_bounds().unwrap();
-            $buf.text(&start_iter, &end_iter, true)
-        }};
     }
 
     #[test]
