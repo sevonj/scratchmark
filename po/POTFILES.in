@@ -1,11 +1,11 @@
 data/org.scratchmark.Scratchmark.desktop.in
 data/org.scratchmark.Scratchmark.metainfo.xml.in
 data/org.scratchmark.Scratchmark.gschema.xml
+data/resources/ui/editor/editor.ui
 data/resources/ui/editor_doc_stats.ui
 data/resources/ui/editor_format_bar.ui
 data/resources/ui/editor_placeholder.ui
 data/resources/ui/editor_search_bar.ui
-data/resources/ui/editor.ui
 data/resources/ui/item_create_popover.ui
 data/resources/ui/item_rename_popover.ui
 data/resources/ui/library_browser.ui

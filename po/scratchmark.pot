@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-30 18:53+0200\n"
+"POT-Creation-Date: 2026-01-03 17:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,11 +38,19 @@ msgid "# Markdown Editor for Writing"
 msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:17
-msgid "**Scratchmark**"
+msgid ""
+"**Scratchmark** is a pleasant text editor for writing. It tries to give you "
+"everything you need and otherwise stay out of your way so you can just focus "
+"on the text. The app can be used for writing essays and making quick notes "
+"alike. Its file management is built around a folder structure that can "
+"handle large projects with lots of files. You can add any folder on your "
+"computer to the library, and move files around by dragging and dropping."
 msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:18
-msgid "==all text formatting can be done by typing.=="
+msgid ""
+"It uses Markdown, which means that ==all text formatting can be done by "
+"typing.=="
 msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:19
@@ -61,6 +69,14 @@ msgid ""
 "already have a \"notebook\" or a project from another app, you can just add "
 "the folder to Scratchmark's library. This also goes the other way: if you've "
 "had enough of Scratchmark, it's easy to switch to something else."
+msgstr ""
+
+#: data/resources/ui/editor/editor.ui:16
+msgid "File changed on disk"
+msgstr ""
+
+#: data/resources/ui/editor/editor.ui:17
+msgid "Resolve"
 msgstr ""
 
 #: data/resources/ui/editor_doc_stats.ui:18
@@ -107,11 +123,11 @@ msgid "Highlight"
 msgstr ""
 
 #: data/resources/ui/editor_format_bar.ui:49
-msgid "Heading 1"
+msgid "Heading 1 (Ctrl+1)"
 msgstr ""
 
 #: data/resources/ui/editor_format_bar.ui:57
-msgid "Heading 2"
+msgid "Heading 2 (Ctrl+2)"
 msgstr ""
 
 #: data/resources/ui/editor_format_bar.ui:84
@@ -181,14 +197,6 @@ msgstr ""
 
 #: data/resources/ui/editor_search_bar.ui:144
 msgid "Replace All (Shift + Return)"
-msgstr ""
-
-#: data/resources/ui/editor.ui:16
-msgid "File changed on disk"
-msgstr ""
-
-#: data/resources/ui/editor.ui:17
-msgid "Resolve"
 msgstr ""
 
 #: data/resources/ui/item_create_popover.ui:10
@@ -370,10 +378,55 @@ msgstr ""
 
 #: data/resources/ui/shortcuts.ui:92
 msgctxt "shortcut window"
-msgid "Library"
+msgid "Formatting"
 msgstr ""
 
 #: data/resources/ui/shortcuts.ui:95
+msgctxt "shortcut window"
+msgid "Bold"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:101
+msgctxt "shortcut window"
+msgid "Italic"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:107
+msgctxt "shortcut window"
+msgid "Heading 1"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:113
+msgctxt "shortcut window"
+msgid "Heading 2"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:119
+msgctxt "shortcut window"
+msgid "Heading 3"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:125
+msgctxt "shortcut window"
+msgid "Heading 4"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:131
+msgctxt "shortcut window"
+msgid "Heading 5"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:137
+msgctxt "shortcut window"
+msgid "Heading 6"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:145
+msgctxt "shortcut window"
+msgid "Library"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:148
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr ""
