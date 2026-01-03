@@ -6,16 +6,16 @@ mod imp {
     use sourceview5::Map;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor_minimap.ui")]
-    pub struct EditorMinimap {
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor/minimap.ui")]
+    pub struct Minimap {
         #[template_child]
         pub(super) map: TemplateChild<Map>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for EditorMinimap {
-        const NAME: &'static str = "EditorMinimap";
-        type Type = super::EditorMinimap;
+    impl ObjectSubclass for Minimap {
+        const NAME: &'static str = "Minimap";
+        type Type = super::Minimap;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -27,37 +27,37 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for EditorMinimap {
+    impl ObjectImpl for Minimap {
         fn constructed(&self) {
             self.parent_constructed();
         }
     }
 
-    impl WidgetImpl for EditorMinimap {}
-    impl BinImpl for EditorMinimap {}
+    impl WidgetImpl for Minimap {}
+    impl BinImpl for Minimap {}
 }
 
 use adw::subclass::prelude::*;
 use gtk::glib;
 use sourceview5::prelude::*;
 
+use super::editor_text_view::EditorTextView;
 use glib::Object;
-use sourceview5::View;
 
 glib::wrapper! {
-    pub struct EditorMinimap(ObjectSubclass<imp::EditorMinimap>)
+    pub struct Minimap(ObjectSubclass<imp::Minimap>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl Default for EditorMinimap {
+impl Default for Minimap {
     fn default() -> Self {
         Object::builder().build()
     }
 }
 
-impl EditorMinimap {
-    pub fn bind(&self, view: &View) {
+impl Minimap {
+    pub fn bind(&self, view: &EditorTextView) {
         self.imp().map.set_view(view);
     }
 }
