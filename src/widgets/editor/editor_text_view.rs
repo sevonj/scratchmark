@@ -1,5 +1,6 @@
 mod imp {
     use adw::subclass::prelude::*;
+    use gtk::TextIter;
     use gtk::glib;
     use gtk::prelude::*;
     use sourceview5::subclass::prelude::*;
@@ -38,10 +39,47 @@ mod imp {
     }
 
     impl WidgetImpl for EditorTextView {}
-    impl TextViewImpl for EditorTextView {}
+    impl TextViewImpl for EditorTextView {
+        fn copy_clipboard(&self) {
+            let buf = self.obj().buffer();
+            let cursor = buf.iter_at_offset(buf.cursor_position());
+            if !buf.has_selection()
+                && let Some((start, end)) = line_bounds(&buf, cursor.line())
+            {
+                buf.select_range(&start, &end);
+                self.parent_copy_clipboard();
+                buf.place_cursor(&cursor);
+                return;
+            }
+            self.parent_copy_clipboard();
+        }
+
+        fn cut_clipboard(&self) {
+            let buf = self.obj().buffer();
+            let cursor = buf.iter_at_offset(buf.cursor_position());
+            if !buf.has_selection()
+                && let Some((start, end)) = line_bounds(&buf, cursor.line())
+            {
+                buf.select_range(&start, &end);
+                self.parent_cut_clipboard();
+                return;
+            }
+            self.parent_cut_clipboard();
+        }
+    }
+
     impl ViewImpl for EditorTextView {}
 
     impl EditorTextView {}
+
+    fn line_bounds(buf: &gtk::TextBuffer, line: i32) -> Option<(TextIter, TextIter)> {
+        let start = buf.iter_at_line(line)?;
+        let mut end = buf.iter_at_line(line + 1).unwrap_or_else(|| buf.end_iter());
+        if end.line() != line {
+            end.backward_char();
+        }
+        Some((start, end))
+    }
 }
 
 use gtk::glib;
