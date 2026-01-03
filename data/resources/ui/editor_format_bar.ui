@@ -46,7 +46,7 @@
                 <child>
                   <object class="GtkButton">
                     <property name="icon-name">md-format-h1-symbolic</property>
-                    <property name="tooltip-text" translatable="yes">Heading 1</property>
+                    <property name="tooltip-text" translatable="yes">Heading 1 (Ctrl+1)</property>
                     <property name="action-name">formatbar.heading</property>
                     <property name="action-target">1</property>
                   </object>
@@ -54,7 +54,7 @@
                 <child>
                   <object class="GtkButton">
                     <property name="icon-name">md-format-h2-symbolic</property>
-                    <property name="tooltip-text" translatable="yes">Heading 2</property>
+                    <property name="tooltip-text" translatable="yes">Heading 2 (Ctrl+2)</property>
                     <property name="action-name">formatbar.heading</property>
                     <property name="action-target">2</property>
                   </object>
