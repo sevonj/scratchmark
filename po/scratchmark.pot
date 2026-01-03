@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-03 17:49+0200\n"
+"POT-Creation-Date: 2026-01-03 18:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,14 +67,6 @@ msgid ""
 "already have a \"notebook\" or a project from another app, you can just add "
 "the folder to Scratchmark's library. This also goes the other way: if you've "
 "had enough of Scratchmark, it's easy to switch to something else."
-msgstr ""
-
-#: data/resources/ui/editor/editor.ui:16
-msgid "File changed on disk"
-msgstr ""
-
-#: data/resources/ui/editor/editor.ui:17
-msgid "Resolve"
 msgstr ""
 
 #: data/resources/ui/editor_doc_stats.ui:18
@@ -258,6 +250,10 @@ msgstr ""
 #: data/resources/ui/library_project_context_menu.ui:18
 #: data/resources/ui/library_project_err_placeholder_context_menu.ui:6
 msgid "Close Project"
+msgstr ""
+
+#: data/resources/ui/library_project_err_placeholder.ui:28
+msgid "Project may have been moved or deleted."
 msgstr ""
 
 #: data/resources/ui/preferences_dialog.ui:6
@@ -491,4 +487,12 @@ msgstr ""
 
 #: data/resources/ui/window.ui:163
 msgid "About Scratchmark"
+msgstr ""
+
+#: data/resources/ui/editor/editor.ui:16
+msgid "File changed on disk"
+msgstr ""
+
+#: data/resources/ui/editor/editor.ui:17
+msgid "Resolve"
 msgstr ""
