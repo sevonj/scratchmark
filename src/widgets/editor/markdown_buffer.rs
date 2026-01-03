@@ -183,6 +183,7 @@ use sourceview5::LanguageManager;
 
 #[cfg(feature = "installed")]
 use crate::config::PKGDATADIR;
+use crate::data::DocumentStats;
 
 glib::wrapper! {
     pub struct MarkdownBuffer(ObjectSubclass<imp::MarkdownBuffer>)
@@ -199,6 +200,34 @@ impl Default for MarkdownBuffer {
 }
 
 impl MarkdownBuffer {
+    pub fn stats(&self) -> DocumentStats {
+        let num_lines = self.line_count();
+        let num_chars = self.char_count();
+        let mut num_spaces = 0;
+        let mut num_words = 0;
+        let mut prev_whitespace = true;
+        for i in 0..num_lines {
+            let start = self.iter_at_line(i).unwrap();
+            let end = self.iter_at_line(i + 1).unwrap_or_else(|| self.end_iter());
+            let text = self.text(&start, &end, true);
+            for char in text.chars() {
+                let is_whitespace = char.is_whitespace();
+                if is_whitespace {
+                    num_spaces += 1;
+                } else if prev_whitespace {
+                    num_words += 1;
+                }
+                prev_whitespace = is_whitespace;
+            }
+        }
+        DocumentStats {
+            num_lines,
+            num_chars,
+            num_spaces,
+            num_words,
+        }
+    }
+
     pub fn open_paste(&self) {
         self.imp().paste_in_progress.replace(true);
     }

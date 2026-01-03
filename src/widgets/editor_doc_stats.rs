@@ -47,7 +47,7 @@ use adw::subclass::prelude::ObjectSubclassIsExt;
 use glib::Object;
 use gtk::glib;
 
-use crate::widgets::editor::DocumentStatsData;
+use crate::data::DocumentStats;
 
 glib::wrapper! {
     pub struct EditorDocStats(ObjectSubclass<imp::EditorDocStats>)
@@ -62,7 +62,7 @@ impl Default for EditorDocStats {
 }
 
 impl EditorDocStats {
-    pub fn set_stats(&self, data: &DocumentStatsData) {
+    pub fn set_stats(&self, data: &DocumentStats) {
         let imp = self.imp();
         imp.lab_num_chars.set_label(&format!("{}", data.num_chars));
         imp.lab_num_nospace

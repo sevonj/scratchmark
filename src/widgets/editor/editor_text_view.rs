@@ -1,10 +1,15 @@
 mod imp {
     use adw::subclass::prelude::*;
     use gtk::glib;
+    use gtk::prelude::*;
     use sourceview5::subclass::prelude::*;
 
+    use gtk::CssProvider;
+
     #[derive(Debug, Default)]
-    pub struct EditorTextView {}
+    pub struct EditorTextView {
+        pub(super) source_view_css_provider: CssProvider,
+    }
 
     #[glib::object_subclass]
     impl ObjectSubclass for EditorTextView {
@@ -20,7 +25,15 @@ mod imp {
     impl ObjectImpl for EditorTextView {
         fn constructed(&self) {
             self.parent_constructed();
-            let _obj = self.obj();
+            let obj = self.obj();
+
+            // Deprecated, but the only way to do this at the moment?
+            // https://gnome.pages.gitlab.gnome.org/gtksourceview/gtksourceview5/class.View.html#changing-the-font
+            #[allow(deprecated)]
+            obj.style_context().add_provider(
+                &self.source_view_css_provider,
+                gtk::ffi::GTK_STYLE_PROVIDER_PRIORITY_USER as u32,
+            );
         }
     }
 
@@ -32,6 +45,7 @@ mod imp {
 }
 
 use gtk::glib;
+use gtk::subclass::prelude::*;
 
 use gtk::glib::Object;
 
@@ -44,5 +58,14 @@ glib::wrapper! {
 impl Default for EditorTextView {
     fn default() -> Self {
         Object::builder().build()
+    }
+}
+
+impl EditorTextView {
+    pub fn set_font(&self, family: &str, size: u32) {
+        let formatted = format!("textview {{font-family: {family}; font-size: {size}pt;}}");
+        self.imp()
+            .source_view_css_provider
+            .load_from_string(&formatted);
     }
 }

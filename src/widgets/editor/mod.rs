@@ -28,15 +28,14 @@ mod imp {
     use glib::VariantTy;
     use glib::subclass::Signal;
     use gtk::CompositeTemplate;
-    use gtk::CssProvider;
     use gtk::TemplateChild;
     use gtk::TextMark;
     use gtk::gio::SimpleAction;
 
-    use super::DocumentStatsData;
     use super::editor_text_view::EditorTextView;
     use super::formatting;
     use super::minimap::Minimap;
+    use crate::data::DocumentStats;
     use crate::util;
     use crate::widgets::EditorDocStats;
     use crate::widgets::EditorSearchBar;
@@ -49,10 +48,9 @@ mod imp {
     pub struct Editor {
         #[template_child]
         pub(super) source_view: TemplateChild<EditorTextView>,
-        pub(super) source_view_css_provider: CssProvider,
         #[template_child]
         pub(super) document_stats: TemplateChild<EditorDocStats>,
-        pub(super) document_stats_data: Cell<DocumentStatsData>,
+        pub(super) document_stats_data: Cell<DocumentStats>,
 
         #[template_child]
         pub(super) search_bar: TemplateChild<EditorSearchBar>,
@@ -101,14 +99,6 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
-
-            // Deprecated, but the only way to do this at the moment?
-            // https://gnome.pages.gitlab.gnome.org/gtksourceview/gtksourceview5/class.View.html#changing-the-font
-            #[allow(deprecated)]
-            self.source_view.style_context().add_provider(
-                &self.source_view_css_provider,
-                gtk::ffi::GTK_STYLE_PROVIDER_PRIORITY_USER as u32,
-            );
 
             self.search_bar.connect_closure(
                 "scroll-to-mark",
@@ -389,6 +379,7 @@ use sourceview5::SearchSettings;
 use sourceview5::StyleSchemeManager;
 
 use crate::config::PKGDATADIR;
+use crate::data::DocumentStats;
 use crate::error::ScratchmarkError;
 use crate::util;
 use markdown_buffer::MarkdownBuffer;
@@ -486,19 +477,16 @@ impl Editor {
     }
 
     pub fn set_font(&self, family: &str, size: u32) {
-        let formatted = format!("textview {{font-family: {family}; font-size: {size}pt;}}");
-        self.imp()
-            .source_view_css_provider
-            .load_from_string(&formatted);
+        self.imp().source_view.set_font(family, size);
     }
 
-    pub fn document_stats(&self) -> DocumentStatsData {
+    pub fn document_stats(&self) -> DocumentStats {
         self.imp().document_stats_data.get()
     }
 
     fn refresh_document_stats(&self, buffer: &MarkdownBuffer) {
         let imp = self.imp();
-        let stats = DocumentStatsData::from_buffer(buffer);
+        let stats = buffer.stats();
         imp.document_stats.set_stats(&stats);
         imp.document_stats_data.replace(stats);
         self.emit_by_name::<()>("stats-changed", &[]);
@@ -534,50 +522,5 @@ impl Editor {
         self.refresh_document_stats(buffer);
         self.set_unsaved_changes(true);
         self.emit_by_name::<()>("buffer-changed", &[]);
-    }
-}
-
-#[derive(Debug, Default, Clone, Copy)]
-pub struct DocumentStatsData {
-    pub num_lines: i32,
-    pub num_chars: i32,
-    pub num_spaces: i32,
-    pub num_words: i32,
-}
-
-impl DocumentStatsData {
-    pub fn from_buffer(buffer: &MarkdownBuffer) -> Self {
-        let num_lines = buffer.line_count();
-        let num_chars = buffer.char_count();
-        let mut num_spaces = 0;
-        let mut num_words = 0;
-
-        let mut prev_whitespace = true;
-
-        for i in 0..num_lines {
-            let start = buffer.iter_at_line(i).unwrap();
-            let end = buffer
-                .iter_at_line(i + 1)
-                .unwrap_or_else(|| buffer.end_iter());
-
-            let text = buffer.text(&start, &end, true);
-
-            for char in text.chars() {
-                let is_whitespace = char.is_whitespace();
-                if is_whitespace {
-                    num_spaces += 1;
-                } else if prev_whitespace {
-                    num_words += 1;
-                }
-                prev_whitespace = is_whitespace;
-            }
-        }
-
-        Self {
-            num_lines,
-            num_chars,
-            num_spaces,
-            num_words,
-        }
     }
 }
