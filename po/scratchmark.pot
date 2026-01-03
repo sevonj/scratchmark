@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-03 17:34+0200\n"
+"POT-Creation-Date: 2026-01-03 17:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,11 +55,9 @@ msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:19
 msgid ""
-"Scratchmark is designed and developed by a power user, but that doesn't mean "
-"you need to work on learning the app first. The editor is simple and "
-"intuitive, so anyone should be able to just pick it up and start writing. It "
-"can display simple writing statistics, and has features, such as focus mode "
-"and fullscreen support to reduce distractions."
+"The editor is simple and intuitive, so anyone should be able to just pick it "
+"up and start writing. It can display simple writing statistics, and has "
+"features, such as focus mode and fullscreen support to reduce distractions."
 msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:20
