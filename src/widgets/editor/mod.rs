@@ -1,5 +1,7 @@
+mod editor_text_view;
 mod formatting;
 mod markdown_buffer;
+mod minimap;
 mod regex;
 
 mod imp {
@@ -30,23 +32,23 @@ mod imp {
     use gtk::TemplateChild;
     use gtk::TextMark;
     use gtk::gio::SimpleAction;
-    use sourceview5::View;
 
     use super::DocumentStatsData;
+    use super::editor_text_view::EditorTextView;
     use super::formatting;
+    use super::minimap::Minimap;
     use crate::util;
     use crate::widgets::EditorDocStats;
-    use crate::widgets::EditorMinimap;
     use crate::widgets::EditorSearchBar;
 
     use super::NOT_CANCELLABLE;
 
     #[derive(Debug, Properties, CompositeTemplate, Default)]
     #[properties(wrapper_type = super::Editor)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor/editor.ui")]
     pub struct Editor {
         #[template_child]
-        pub(super) source_view: TemplateChild<View>,
+        pub(super) source_view: TemplateChild<EditorTextView>,
         pub(super) source_view_css_provider: CssProvider,
         #[template_child]
         pub(super) document_stats: TemplateChild<EditorDocStats>,
@@ -59,7 +61,7 @@ mod imp {
         #[template_child]
         pub(super) editor_split: TemplateChild<OverlaySplitView>,
         #[template_child]
-        pub(super) minimap: TemplateChild<EditorMinimap>,
+        pub(super) minimap: TemplateChild<Minimap>,
         #[property(get, set)]
         pub(super) show_minimap: Cell<bool>,
 
@@ -82,8 +84,9 @@ mod imp {
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
+            EditorTextView::ensure_type();
             EditorDocStats::ensure_type();
-            EditorMinimap::ensure_type();
+            Minimap::ensure_type();
 
             klass.bind_template();
         }

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <!-- Keep file paths in the same order as they'd appear in the ide: alphanumeric, folders first -->
   <gresource prefix="/org/scratchmark/Scratchmark">
+    <file preprocess="xml-stripblanks" compressed="true">ui/editor/editor.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/editor/minimap.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/about_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_doc_stats.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_format_bar.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/editor_minimap.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_placeholder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_search_bar.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/editor.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/item_create_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/item_rename_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_browser.ui</file>

@@ -32,7 +32,7 @@
                                                 <property name="maximum-size">768</property>
                                                 <property name="tightening-threshold">640</property>
                                                 <child>
-                                                    <object class="GtkSourceView" id="source_view">
+                                                    <object class="EditorTextView" id="source_view">
                                                         <property name="margin-start">32</property>
                                                         <property name="margin-end">32</property>
                                                         <property name="top-margin">96</property>
@@ -52,7 +52,7 @@
                                     </object>
                                 </child>
                                 <child>
-                                    <object class="EditorMinimap" id="minimap" />
+                                    <object class="Minimap" id="minimap" />
                                 </child>
                             </object>
                         </child>
