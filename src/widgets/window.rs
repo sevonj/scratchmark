@@ -759,10 +759,38 @@ mod imp {
                 editor_actions.add_action(&action);
             }
 
+            fn forward_heading_action_to_editor(
+                this: &Window,
+                name: &str,
+                level: i32,
+                editor_actions: &SimpleActionGroup,
+            ) {
+                let action = SimpleAction::new(name, None);
+                let name = format!("editor.{name}");
+                action.connect_activate(clone!(
+                    #[weak]
+                    this,
+                    move |_, _| {
+                        if let Some(editor) = this.editor.borrow().as_ref() {
+                            editor
+                                .activate_action("editor.format-heading", Some(&level.to_variant()))
+                                .expect(&name);
+                        }
+                    }
+                ));
+                editor_actions.add_action(&action);
+            }
+
             let pi32 = Some(VariantTy::INT32);
             forward_action_to_editor(self, "format-bold", None, &editor_actions);
             forward_action_to_editor(self, "format-italic", None, &editor_actions);
             forward_action_to_editor(self, "format-heading", pi32, &editor_actions);
+            forward_heading_action_to_editor(self, "format-h1", 1, &editor_actions);
+            forward_heading_action_to_editor(self, "format-h2", 2, &editor_actions);
+            forward_heading_action_to_editor(self, "format-h3", 3, &editor_actions);
+            forward_heading_action_to_editor(self, "format-h4", 4, &editor_actions);
+            forward_heading_action_to_editor(self, "format-h5", 5, &editor_actions);
+            forward_heading_action_to_editor(self, "format-h6", 6, &editor_actions);
             forward_action_to_editor(self, "format-code", None, &editor_actions);
             forward_action_to_editor(self, "show-search", None, &editor_actions);
             forward_action_to_editor(self, "show-search-replace", None, &editor_actions);
