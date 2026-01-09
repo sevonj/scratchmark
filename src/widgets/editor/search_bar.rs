@@ -25,7 +25,7 @@ mod imp {
     use sourceview5::SearchSettings;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor_search_bar.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor/search_bar.ui")]
     pub struct EditorSearchBar {
         actions: SimpleActionGroup,
 

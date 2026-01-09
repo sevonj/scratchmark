@@ -1,8 +1,10 @@
-mod editor_text_view;
+mod document_stats_view;
 mod formatting;
 mod markdown_buffer;
 mod minimap;
 mod regex;
+mod search_bar;
+mod text_view;
 
 mod imp {
     use std::cell::Cell;
@@ -32,13 +34,13 @@ mod imp {
     use gtk::TextMark;
     use gtk::gio::SimpleAction;
 
-    use super::editor_text_view::EditorTextView;
+    use super::document_stats_view::DocumentStatsView;
     use super::formatting;
     use super::minimap::Minimap;
+    use super::search_bar::EditorSearchBar;
+    use super::text_view::EditorTextView;
     use crate::data::DocumentStats;
     use crate::util;
-    use crate::widgets::EditorDocStats;
-    use crate::widgets::EditorSearchBar;
 
     use super::NOT_CANCELLABLE;
 
@@ -49,8 +51,8 @@ mod imp {
         #[template_child]
         pub(super) source_view: TemplateChild<EditorTextView>,
         #[template_child]
-        pub(super) document_stats: TemplateChild<EditorDocStats>,
-        pub(super) document_stats_data: Cell<DocumentStats>,
+        pub(super) stats_view: TemplateChild<DocumentStatsView>,
+        pub(super) stats: Cell<DocumentStats>,
 
         #[template_child]
         pub(super) search_bar: TemplateChild<EditorSearchBar>,
@@ -83,7 +85,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             EditorTextView::ensure_type();
-            EditorDocStats::ensure_type();
+            DocumentStatsView::ensure_type();
             Minimap::ensure_type();
 
             klass.bind_template();
@@ -481,14 +483,14 @@ impl Editor {
     }
 
     pub fn document_stats(&self) -> DocumentStats {
-        self.imp().document_stats_data.get()
+        self.imp().stats.get()
     }
 
     fn refresh_document_stats(&self, buffer: &MarkdownBuffer) {
         let imp = self.imp();
         let stats = buffer.stats();
-        imp.document_stats.set_stats(&stats);
-        imp.document_stats_data.replace(stats);
+        imp.stats_view.set_stats(&stats);
+        imp.stats.replace(stats);
         self.emit_by_name::<()>("stats-changed", &[]);
     }
 

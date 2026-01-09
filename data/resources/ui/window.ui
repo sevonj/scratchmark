@@ -96,7 +96,7 @@
                       </object>
                     </child>
                     <child type="top">
-                      <object class="EditorFormatBar" id="format_bar">
+                      <object class="MarkdownFormatBar" id="format_bar">
                         <property name="visible">False</property>
                       </object>
                     </child>
