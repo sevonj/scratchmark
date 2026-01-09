@@ -46,10 +46,10 @@ mod imp {
     use crate::util;
 
     use crate::widgets::Editor;
-    use crate::widgets::EditorFormatBar;
     use crate::widgets::EditorPlaceholder;
     use crate::widgets::ItemCreatePopover;
     use crate::widgets::LibraryBrowser;
+    use crate::widgets::MarkdownFormatBar;
     use crate::widgets::PreferencesDialog;
     use crate::widgets::WindowTitle;
 
@@ -94,7 +94,7 @@ mod imp {
         unfullscreen_button: TemplateChild<Button>,
 
         #[template_child]
-        format_bar: TemplateChild<EditorFormatBar>,
+        format_bar: TemplateChild<MarkdownFormatBar>,
         #[template_child]
         format_bar_toggle: TemplateChild<ToggleButton>,
         #[template_child]
@@ -121,7 +121,7 @@ mod imp {
         type ParentType = ApplicationWindow;
 
         fn class_init(klass: &mut Self::Class) {
-            EditorFormatBar::ensure_type();
+            MarkdownFormatBar::ensure_type();
             WindowTitle::ensure_type();
 
             klass.bind_template();
@@ -160,7 +160,7 @@ mod imp {
             settings
                 .bind("editor-show-sidebar", editor_sidebar_toggle, "active")
                 .build();
-            let format_bar: &EditorFormatBar = self.format_bar.as_ref();
+            let format_bar: &MarkdownFormatBar = self.format_bar.as_ref();
             settings
                 .bind("editor-show-formatbar", format_bar, "visible")
                 .build();

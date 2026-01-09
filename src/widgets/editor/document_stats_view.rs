@@ -6,8 +6,8 @@ mod imp {
     use gtk::Label;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor_doc_stats.ui")]
-    pub struct EditorDocStats {
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor/document_stats_view.ui")]
+    pub struct DocumentStatsView {
         #[template_child]
         pub(super) lab_num_chars: TemplateChild<Label>,
         #[template_child]
@@ -19,9 +19,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for EditorDocStats {
-        const NAME: &'static str = "EditorDocStats";
-        type Type = super::EditorDocStats;
+    impl ObjectSubclass for DocumentStatsView {
+        const NAME: &'static str = "DocumentStatsView";
+        type Type = super::DocumentStatsView;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -33,14 +33,14 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for EditorDocStats {
+    impl ObjectImpl for DocumentStatsView {
         fn constructed(&self) {
             self.parent_constructed();
         }
     }
 
-    impl WidgetImpl for EditorDocStats {}
-    impl BinImpl for EditorDocStats {}
+    impl WidgetImpl for DocumentStatsView {}
+    impl BinImpl for DocumentStatsView {}
 }
 
 use adw::subclass::prelude::ObjectSubclassIsExt;
@@ -50,18 +50,18 @@ use gtk::glib;
 use crate::data::DocumentStats;
 
 glib::wrapper! {
-    pub struct EditorDocStats(ObjectSubclass<imp::EditorDocStats>)
+    pub struct DocumentStatsView(ObjectSubclass<imp::DocumentStatsView>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl Default for EditorDocStats {
+impl Default for DocumentStatsView {
     fn default() -> Self {
         Object::builder().build()
     }
 }
 
-impl EditorDocStats {
+impl DocumentStatsView {
     pub fn set_stats(&self, data: &DocumentStats) {
         let imp = self.imp();
         imp.lab_num_chars.set_label(&format!("{}", data.num_chars));

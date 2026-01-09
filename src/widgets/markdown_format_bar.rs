@@ -14,16 +14,16 @@ mod imp {
     use crate::widgets::Editor;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor_format_bar.ui")]
-    pub struct EditorFormatBar {
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/markdown_format_bar.ui")]
+    pub struct MarkdownFormatBar {
         actions: SimpleActionGroup,
         pub(super) editor: RefCell<Option<Editor>>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for EditorFormatBar {
-        const NAME: &'static str = "EditorFormatBar";
-        type Type = super::EditorFormatBar;
+    impl ObjectSubclass for MarkdownFormatBar {
+        const NAME: &'static str = "MarkdownFormatBar";
+        type Type = super::MarkdownFormatBar;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -35,7 +35,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for EditorFormatBar {
+    impl ObjectImpl for MarkdownFormatBar {
         fn constructed(&self) {
             self.parent_constructed();
 
@@ -43,10 +43,10 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for EditorFormatBar {}
-    impl BinImpl for EditorFormatBar {}
+    impl WidgetImpl for MarkdownFormatBar {}
+    impl BinImpl for MarkdownFormatBar {}
 
-    impl EditorFormatBar {
+    impl MarkdownFormatBar {
         fn setup_actions(&self) {
             let obj = self.obj();
 
@@ -172,18 +172,18 @@ use gtk::glib;
 use crate::widgets::Editor;
 
 glib::wrapper! {
-    pub struct EditorFormatBar(ObjectSubclass<imp::EditorFormatBar>)
+    pub struct MarkdownFormatBar(ObjectSubclass<imp::MarkdownFormatBar>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl Default for EditorFormatBar {
+impl Default for MarkdownFormatBar {
     fn default() -> Self {
         Object::builder().build()
     }
 }
 
-impl EditorFormatBar {
+impl MarkdownFormatBar {
     pub fn bind_editor(&self, editor: Option<Editor>) {
         self.imp().editor.replace(editor);
         self.imp().update_enabled();
