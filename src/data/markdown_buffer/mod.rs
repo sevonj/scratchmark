@@ -1,3 +1,5 @@
+mod formatting;
+
 mod imp {
     use std::cell::Cell;
 
@@ -228,8 +230,37 @@ impl MarkdownBuffer {
         }
     }
 
+    /// Tell the buffer that a paste has been started
     pub fn open_paste(&self) {
         self.imp().paste_in_progress.replace(true);
+    }
+
+    pub fn format_bold(&self) {
+        formatting::format_bold(self);
+    }
+
+    pub fn format_italic(&self) {
+        formatting::format_italic(self);
+    }
+
+    pub fn format_strikethrough(&self) {
+        formatting::format_strikethrough(self);
+    }
+
+    pub fn format_highlight(&self) {
+        formatting::format_highlight(self);
+    }
+
+    pub fn format_heading(&self, heading_level: i32) {
+        formatting::format_heading(self, heading_level);
+    }
+
+    pub fn format_blockquote(&self) {
+        formatting::format_blockquote(self);
+    }
+
+    pub fn format_code(&self) {
+        formatting::format_code(self);
     }
 
     fn language_manager() -> LanguageManager {

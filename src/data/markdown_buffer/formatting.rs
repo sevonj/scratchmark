@@ -1,11 +1,10 @@
 use adw::prelude::*;
 
-use gtk::TextBuffer;
 use gtk::TextIter;
 
-use super::regex;
+use crate::data::regex;
 
-pub fn format_bold(buffer: &TextBuffer) {
+pub fn format_bold(buffer: &impl TextBufferExt) {
     if let Some((start, mut end)) = find_delim_range(buffer, "**") {
         // Already bold, remove it
         let start_off = start.offset();
@@ -40,7 +39,7 @@ pub fn format_bold(buffer: &TextBuffer) {
     buffer.end_user_action();
 }
 
-pub fn format_italic(buffer: &TextBuffer) {
+pub fn format_italic(buffer: &impl TextBufferExt) {
     let is_bold = find_delim_range(buffer, "**").is_some();
     let is_both = find_delim_range(buffer, "***").is_some();
 
@@ -80,7 +79,7 @@ pub fn format_italic(buffer: &TextBuffer) {
     buffer.end_user_action();
 }
 
-pub fn format_strikethrough(buffer: &TextBuffer) {
+pub fn format_strikethrough(buffer: &impl TextBufferExt) {
     if let Some((start, mut end)) = find_delim_range(buffer, "~~") {
         let start_off = start.offset();
         let end_off = end.offset();
@@ -114,7 +113,7 @@ pub fn format_strikethrough(buffer: &TextBuffer) {
     buffer.end_user_action();
 }
 
-pub fn format_highlight(buffer: &TextBuffer) {
+pub fn format_highlight(buffer: &impl TextBufferExt) {
     if let Some((start, mut end)) = find_delim_range(buffer, "==") {
         let start_off = start.offset();
         let end_off = end.offset();
@@ -148,7 +147,7 @@ pub fn format_highlight(buffer: &TextBuffer) {
     buffer.end_user_action();
 }
 
-pub fn format_heading(buffer: &TextBuffer, heading_level: i32) {
+pub fn format_heading(buffer: &impl TextBufferExt, heading_level: i32) {
     let insert = buffer.get_insert();
     let insert_iter = buffer.iter_at_mark(&insert);
     let current_line = insert_iter.line();
@@ -187,7 +186,7 @@ pub fn format_heading(buffer: &TextBuffer, heading_level: i32) {
     buffer.end_user_action();
 }
 
-pub fn format_blockquote(buffer: &TextBuffer) {
+pub fn format_blockquote(buffer: &impl TextBufferExt) {
     let (selection_start, selection_end) = buffer.selection_bounds().unwrap_or_else(|| {
         let iter = buffer.iter_at_mark(&buffer.get_insert());
         (iter, iter)
@@ -251,7 +250,7 @@ pub fn format_blockquote(buffer: &TextBuffer) {
     buffer.end_user_action();
 }
 
-pub fn format_code(buffer: &TextBuffer) {
+pub fn format_code(buffer: &impl TextBufferExt) {
     if let Some((start, mut end)) = find_delim_range(buffer, "`") {
         let start_off = start.offset();
         let end_off = end.offset();
@@ -285,7 +284,7 @@ pub fn format_code(buffer: &TextBuffer) {
     buffer.end_user_action();
 }
 
-fn range_around_cursor(buffer: &TextBuffer, distance: i32) -> Option<(TextIter, TextIter)> {
+fn range_around_cursor(buffer: &impl TextBufferExt, distance: i32) -> Option<(TextIter, TextIter)> {
     let cursor_pos = buffer.iter_at_mark(&buffer.get_insert());
     let start_off = cursor_pos.offset() - distance;
     let end_off = cursor_pos.offset() + distance;
@@ -297,7 +296,7 @@ fn range_around_cursor(buffer: &TextBuffer, distance: i32) -> Option<(TextIter, 
     Some((start_iter, end_iter))
 }
 
-fn word_around_cursor(buffer: &TextBuffer) -> Option<(TextIter, TextIter)> {
+fn word_around_cursor(buffer: &impl TextBufferExt) -> Option<(TextIter, TextIter)> {
     let cursor = buffer.iter_at_mark(&buffer.get_insert());
     let mut start = cursor;
     let mut end = cursor;
@@ -343,7 +342,7 @@ fn word_around_cursor(buffer: &TextBuffer) -> Option<(TextIter, TextIter)> {
 }
 
 /// Tries to find a range immediately around the cursor or selection starts and ends with delimiter
-fn find_delim_range(buffer: &TextBuffer, delimiter: &str) -> Option<(TextIter, TextIter)> {
+fn find_delim_range(buffer: &impl TextBufferExt, delimiter: &str) -> Option<(TextIter, TextIter)> {
     if let Some((mut start, mut end)) = buffer
         .selection_bounds()
         .or_else(|| word_around_cursor(buffer))
@@ -387,7 +386,7 @@ fn find_delim_range(buffer: &TextBuffer, delimiter: &str) -> Option<(TextIter, T
 }
 
 /// True if **every** line in selection matches.
-fn is_selection_blockquote(first_line: i32, last_line: i32, buffer: &TextBuffer) -> bool {
+fn is_selection_blockquote(first_line: i32, last_line: i32, buffer: &impl TextBufferExt) -> bool {
     for line in first_line..=last_line {
         let start_iter = buffer.iter_at_line(line).unwrap();
         let end_iter = buffer
@@ -408,7 +407,7 @@ mod tests {
     /// Create buffer with text
     macro_rules! buf {
         ( $t:expr ) => {{
-            let buffer = TextBuffer::default();
+            let buffer = gtk::TextBuffer::default();
             buffer.set_text($t);
             buffer
         }};

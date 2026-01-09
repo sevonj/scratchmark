@@ -1,13 +1,11 @@
 mod document_stats_view;
-mod formatting;
-mod markdown_buffer;
 mod minimap;
-mod regex;
 mod search_bar;
 mod text_view;
 
 mod imp {
     use std::cell::Cell;
+    use std::cell::OnceCell;
     use std::cell::RefCell;
     use std::path::PathBuf;
     use std::sync::OnceLock;
@@ -35,11 +33,11 @@ mod imp {
     use gtk::gio::SimpleAction;
 
     use super::document_stats_view::DocumentStatsView;
-    use super::formatting;
     use super::minimap::Minimap;
     use super::search_bar::EditorSearchBar;
     use super::text_view::EditorTextView;
     use crate::data::DocumentStats;
+    use crate::data::MarkdownBuffer;
     use crate::util;
 
     use super::NOT_CANCELLABLE;
@@ -50,6 +48,7 @@ mod imp {
     pub struct Editor {
         #[template_child]
         pub(super) source_view: TemplateChild<EditorTextView>,
+        pub(super) buffer: OnceCell<MarkdownBuffer>,
         #[template_child]
         pub(super) stats_view: TemplateChild<DocumentStatsView>,
         pub(super) stats: Cell<DocumentStats>,
@@ -266,7 +265,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting::format_bold(&this.source_view.buffer())
+                move |_, _| this.buffer.get().unwrap().format_bold()
             ));
             actions.add_action(&action);
 
@@ -274,7 +273,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting::format_italic(&this.source_view.buffer())
+                move |_, _| this.buffer.get().unwrap().format_italic()
             ));
             actions.add_action(&action);
 
@@ -282,7 +281,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting::format_strikethrough(&this.source_view.buffer())
+                move |_, _| this.buffer.get().unwrap().format_strikethrough()
             ));
             actions.add_action(&action);
 
@@ -290,7 +289,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting::format_highlight(&this.source_view.buffer())
+                move |_, _| this.buffer.get().unwrap().format_highlight()
             ));
             actions.add_action(&action);
 
@@ -299,8 +298,8 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_, param| {
-                    let heading_size: i32 = param.unwrap().get().unwrap();
-                    formatting::format_heading(&this.source_view.buffer(), heading_size);
+                    let heading_level: i32 = param.unwrap().get().unwrap();
+                    this.buffer.get().unwrap().format_heading(heading_level);
                     this.source_view.grab_focus();
                 }
             ));
@@ -310,7 +309,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting::format_blockquote(&this.source_view.buffer())
+                move |_, _| this.buffer.get().unwrap().format_blockquote()
             ));
             actions.add_action(&action);
 
@@ -318,7 +317,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting::format_code(&this.source_view.buffer())
+                move |_, _| this.buffer.get().unwrap().format_code()
             ));
             actions.add_action(&action);
         }
@@ -382,9 +381,9 @@ use sourceview5::StyleSchemeManager;
 
 use crate::config::PKGDATADIR;
 use crate::data::DocumentStats;
+use crate::data::MarkdownBuffer;
 use crate::error::ScratchmarkError;
 use crate::util;
-use markdown_buffer::MarkdownBuffer;
 
 const NOT_CANCELLABLE: Option<&Cancellable> = None;
 
@@ -407,6 +406,7 @@ impl Editor {
 
         let obj: Self = Object::builder().build();
         let imp = obj.imp();
+        imp.buffer.set(buffer.clone()).unwrap();
         Self::load_buffer_style_scheme(&buffer);
         imp.file.replace(Some(file));
         imp.path.replace(Some(path));
