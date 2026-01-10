@@ -1,6 +1,7 @@
 mod err_placeholder_item;
 mod file_button;
 mod folder_view;
+mod item_rename_popover;
 mod project_view;
 
 mod imp {

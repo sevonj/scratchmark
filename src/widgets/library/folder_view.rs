@@ -27,9 +27,9 @@ mod imp {
     use gtk::ToggleButton;
     use gtk::glib::Binding;
 
+    use super::super::item_rename_popover::ItemRenamePopover;
     use super::FileButton;
     use crate::data::FolderObject;
-    use crate::widgets::ItemRenamePopover;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library/folder_view.ui")]
@@ -445,7 +445,7 @@ impl FolderView {
         let this: Self = Object::builder().build();
         let imp = this.imp();
         imp.setup_rename_menu();
-        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library_folder_context_menu.ui");
+        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library/folder_context_menu.ui");
         imp.setup_drag();
         imp.setup_actions_common();
         imp.setup_actions_subfolder();
@@ -457,7 +457,7 @@ impl FolderView {
     pub fn new_project_root(data: &FolderObject) -> Self {
         let this: Self = Object::builder().build();
         let imp = this.imp();
-        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library_project_context_menu.ui");
+        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library/root_context_menu.ui");
         imp.is_project_root.replace(true);
         imp.folder_icon.set_icon_name(Some("project-symbolic"));
         imp.setup_actions_common();
@@ -470,7 +470,7 @@ impl FolderView {
     pub fn new_drafts_root(data: &FolderObject) -> Self {
         let this: Self = Object::builder().build();
         let imp = this.imp();
-        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library_drafts_context_menu.ui");
+        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library/drafts_context_menu.ui");
         imp.is_project_root.replace(true);
         imp.folder_icon.set_icon_name(Some("draft-table-symbolic"));
         imp.setup_actions_common();

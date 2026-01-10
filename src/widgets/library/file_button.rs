@@ -24,8 +24,8 @@ mod imp {
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Binding;
 
+    use super::super::item_rename_popover::ItemRenamePopover;
     use crate::data::DocumentObject;
-    use crate::widgets::ItemRenamePopover;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library/file_button.ui")]
@@ -153,7 +153,7 @@ mod imp {
             let obj = self.obj();
 
             let builder = Builder::from_resource(
-                "/org/scratchmark/Scratchmark/ui/library_document_context_menu.ui",
+                "/org/scratchmark/Scratchmark/ui/library/file_context_menu.ui",
             );
             let popover = builder.object::<MenuModel>("context-menu").unwrap();
             let menu = PopoverMenu::builder()
