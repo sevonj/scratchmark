@@ -24,12 +24,12 @@ mod imp {
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Binding;
 
+    use super::super::item_rename_popover::ItemRenamePopover;
     use crate::data::DocumentObject;
-    use crate::widgets::ItemRenamePopover;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_document.ui")]
-    pub struct LibraryDocument {
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/file_button.ui")]
+    pub struct FileButton {
         #[template_child]
         pub(super) button: TemplateChild<ToggleButton>,
         #[template_child]
@@ -48,9 +48,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LibraryDocument {
-        const NAME: &'static str = "LibraryDocument";
-        type Type = super::LibraryDocument;
+    impl ObjectSubclass for FileButton {
+        const NAME: &'static str = "FileButton";
+        type Type = super::FileButton;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -62,7 +62,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for LibraryDocument {
+    impl ObjectImpl for FileButton {
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
@@ -137,10 +137,10 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for LibraryDocument {}
-    impl BinImpl for LibraryDocument {}
+    impl WidgetImpl for FileButton {}
+    impl BinImpl for FileButton {}
 
-    impl LibraryDocument {
+    impl FileButton {
         pub(super) fn prompt_rename(&self) {
             self.rename_popover.borrow().as_ref().unwrap().popup();
         }
@@ -153,7 +153,7 @@ mod imp {
             let obj = self.obj();
 
             let builder = Builder::from_resource(
-                "/org/scratchmark/Scratchmark/ui/library_document_context_menu.ui",
+                "/org/scratchmark/Scratchmark/ui/library/file_context_menu.ui",
             );
             let popover = builder.object::<MenuModel>("context-menu").unwrap();
             let menu = PopoverMenu::builder()
@@ -240,12 +240,12 @@ use glib::Object;
 use crate::data::DocumentObject;
 
 glib::wrapper! {
-pub struct LibraryDocument(ObjectSubclass<imp::LibraryDocument>)
+pub struct FileButton(ObjectSubclass<imp::FileButton>)
     @extends adw::Bin, gtk::Widget,
     @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl LibraryDocument {
+impl FileButton {
     pub fn new(data: &DocumentObject) -> Self {
         let this: Self = Object::builder().build();
         this.bind(data);

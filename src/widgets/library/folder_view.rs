@@ -27,13 +27,13 @@ mod imp {
     use gtk::ToggleButton;
     use gtk::glib::Binding;
 
+    use super::super::item_rename_popover::ItemRenamePopover;
+    use super::FileButton;
     use crate::data::FolderObject;
-    use crate::widgets::ItemRenamePopover;
-    use crate::widgets::LibraryDocument;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_folder.ui")]
-    pub struct LibraryFolder {
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/folder_view.ui")]
+    pub struct FolderView {
         #[template_child]
         pub(super) expand_button_cont: TemplateChild<adw::Bin>,
         #[template_child]
@@ -57,8 +57,8 @@ mod imp {
         pub(super) folder_object: OnceLock<FolderObject>,
         pub(super) bindings: RefCell<Vec<Binding>>,
         pub(super) expanded: RefCell<bool>,
-        pub(super) subdirs: RefCell<Vec<super::LibraryFolder>>,
-        pub(super) documents: RefCell<Vec<LibraryDocument>>,
+        pub(super) subdirs: RefCell<Vec<super::FolderView>>,
+        pub(super) documents: RefCell<Vec<FileButton>>,
 
         pub(super) context_menu_popover: RefCell<Option<PopoverMenu>>,
         pub(super) rename_popover: RefCell<Option<ItemRenamePopover>>,
@@ -66,9 +66,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LibraryFolder {
-        const NAME: &'static str = "LibraryFolder";
-        type Type = super::LibraryFolder;
+    impl ObjectSubclass for FolderView {
+        const NAME: &'static str = "FolderView";
+        type Type = super::FolderView;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -80,7 +80,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for LibraryFolder {
+    impl ObjectImpl for FolderView {
         fn constructed(&self) {
             self.parent_constructed();
 
@@ -99,10 +99,10 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for LibraryFolder {}
-    impl BinImpl for LibraryFolder {}
+    impl WidgetImpl for FolderView {}
+    impl BinImpl for FolderView {}
 
-    impl LibraryFolder {
+    impl FolderView {
         pub(super) fn prompt_rename(&self) {
             self.rename_popover.borrow().as_ref().unwrap().popup();
         }
@@ -143,7 +143,7 @@ mod imp {
         fn sort_children(&self) {
             let mut documents = self.documents.borrow_mut();
             if !documents.is_empty() {
-                fn compare(a: &LibraryDocument, b: &LibraryDocument) -> std::cmp::Ordering {
+                fn compare(a: &FileButton, b: &FileButton) -> std::cmp::Ordering {
                     a.stem().to_lowercase().cmp(&b.stem().to_lowercase())
                 }
                 documents.sort_unstable_by(compare);
@@ -157,10 +157,7 @@ mod imp {
 
             let mut subdirs = self.subdirs.borrow_mut();
             if !subdirs.is_empty() {
-                fn compare(
-                    a: &super::LibraryFolder,
-                    b: &super::LibraryFolder,
-                ) -> std::cmp::Ordering {
+                fn compare(a: &super::FolderView, b: &super::FolderView) -> std::cmp::Ordering {
                     a.name().to_lowercase().cmp(&b.name().to_lowercase())
                 }
                 subdirs.sort_unstable_by(compare);
@@ -178,12 +175,12 @@ mod imp {
             self.set_expanded(expanded);
         }
 
-        pub(super) fn add_subfolder(&self, folder: super::LibraryFolder) {
+        pub(super) fn add_subfolder(&self, folder: super::FolderView) {
             self.subdirs_vbox.append(&folder);
             self.subdirs.borrow_mut().push(folder);
         }
 
-        pub(super) fn add_document(&self, doc: LibraryDocument) {
+        pub(super) fn add_document(&self, doc: FileButton) {
             self.documents_vbox.append(&doc);
             self.documents.borrow_mut().push(doc);
         }
@@ -194,7 +191,7 @@ mod imp {
             let builder = Builder::from_resource(resource_path);
             let popover = builder
                 .object::<MenuModel>("context-menu")
-                .expect("LibraryFolder context-menu model failed");
+                .expect("FolderView context-menu model failed");
             let menu = PopoverMenu::builder()
                 .menu_model(&popover)
                 .has_arrow(false)
@@ -270,17 +267,14 @@ mod imp {
             let obj = self.obj();
 
             let drop_target = DropTarget::new(glib::types::Type::INVALID, gdk::DragAction::COPY);
-            drop_target.set_types(&[
-                LibraryDocument::static_type(),
-                super::LibraryFolder::static_type(),
-            ]);
+            drop_target.set_types(&[FileButton::static_type(), super::FolderView::static_type()]);
             drop_target.connect_drop(clone!(
                 #[weak]
                 obj,
                 #[upgrade_or]
                 false,
                 move |_: &DropTarget, value: &glib::Value, _: f64, _: f64| {
-                    if let Ok(doc) = value.get::<LibraryDocument>() {
+                    if let Ok(doc) = value.get::<FileButton>() {
                         let old_path = doc.path();
                         let filename = old_path.file_name().unwrap();
                         let target_path = obj.path();
@@ -291,7 +285,7 @@ mod imp {
                         doc.rename(new_path);
                         obj.imp().set_expanded(true);
                         return true;
-                    } else if let Ok(folder) = value.get::<super::LibraryFolder>() {
+                    } else if let Ok(folder) = value.get::<super::FolderView>() {
                         // Under no circumstance accept the library root folder
                         if folder.is_root() {
                             return true;
@@ -436,22 +430,22 @@ use gtk::prelude::*;
 use glib::Object;
 use gtk::ToggleButton;
 
+use super::FileButton;
 use crate::data::FolderObject;
-use crate::widgets::LibraryDocument;
 
 glib::wrapper! {
-    pub struct LibraryFolder(ObjectSubclass<imp::LibraryFolder>)
+    pub struct FolderView(ObjectSubclass<imp::FolderView>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl LibraryFolder {
+impl FolderView {
     /// Normal folder
     pub fn new(data: &FolderObject) -> Self {
         let this: Self = Object::builder().build();
         let imp = this.imp();
         imp.setup_rename_menu();
-        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library_folder_context_menu.ui");
+        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library/folder_context_menu.ui");
         imp.setup_drag();
         imp.setup_actions_common();
         imp.setup_actions_subfolder();
@@ -463,7 +457,7 @@ impl LibraryFolder {
     pub fn new_project_root(data: &FolderObject) -> Self {
         let this: Self = Object::builder().build();
         let imp = this.imp();
-        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library_project_context_menu.ui");
+        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library/root_context_menu.ui");
         imp.is_project_root.replace(true);
         imp.folder_icon.set_icon_name(Some("project-symbolic"));
         imp.setup_actions_common();
@@ -476,7 +470,7 @@ impl LibraryFolder {
     pub fn new_drafts_root(data: &FolderObject) -> Self {
         let this: Self = Object::builder().build();
         let imp = this.imp();
-        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library_drafts_context_menu.ui");
+        imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library/drafts_context_menu.ui");
         imp.is_project_root.replace(true);
         imp.folder_icon.set_icon_name(Some("draft-table-symbolic"));
         imp.setup_actions_common();
@@ -512,19 +506,19 @@ impl LibraryFolder {
         self.imp().set_expanded(expanded);
     }
 
-    pub fn add_subfolder(&self, folder: LibraryFolder) {
+    pub fn add_subfolder(&self, folder: FolderView) {
         self.imp().add_subfolder(folder);
     }
 
-    pub fn add_document(&self, doc: LibraryDocument) {
+    pub fn add_document(&self, doc: FileButton) {
         self.imp().add_document(doc);
     }
 
-    pub fn remove_subfolder(&self, folder: &LibraryFolder) {
+    pub fn remove_subfolder(&self, folder: &FolderView) {
         self.imp().subdirs_vbox.remove(folder);
     }
 
-    pub fn remove_document(&self, doc: &LibraryDocument) {
+    pub fn remove_document(&self, doc: &FileButton) {
         self.imp().documents_vbox.remove(doc);
     }
 

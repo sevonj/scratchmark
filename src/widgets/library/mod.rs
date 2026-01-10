@@ -1,3 +1,9 @@
+mod err_placeholder_item;
+mod file_button;
+mod folder_view;
+mod item_rename_popover;
+mod project_view;
+
 mod imp {
     use std::cell::Cell;
     use std::cell::RefCell;
@@ -21,16 +27,16 @@ mod imp {
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Properties;
 
+    use super::FileButton;
+    use super::FolderView;
+    use super::ProjectView;
     use crate::data::DocumentObject;
     use crate::data::FolderObject;
-    use crate::widgets::LibraryDocument;
-    use crate::widgets::LibraryFolder;
-    use crate::widgets::library_project::LibraryProject;
 
     #[derive(CompositeTemplate, Default, Properties)]
-    #[properties(wrapper_type = super::LibraryBrowser)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_browser.ui")]
-    pub struct LibraryBrowser {
+    #[properties(wrapper_type = super::LibraryView)]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/library_view.ui")]
+    pub struct LibraryView {
         #[template_child]
         pub(super) projects_container: TemplateChild<gtk::Box>,
 
@@ -41,16 +47,16 @@ mod imp {
         /// Cleared when found.
         #[property(nullable, get, set)]
         selected_item_from_last_session: RefCell<Option<PathBuf>>,
-        pub(super) projects: RefCell<HashMap<PathBuf, LibraryProject>>,
+        pub(super) projects: RefCell<HashMap<PathBuf, ProjectView>>,
 
         #[property(get, set)]
         ignore_hidden_files: Cell<bool>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LibraryBrowser {
-        const NAME: &'static str = "LibraryBrowser";
-        type Type = super::LibraryBrowser;
+    impl ObjectSubclass for LibraryView {
+        const NAME: &'static str = "LibraryView";
+        type Type = super::LibraryView;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -63,7 +69,7 @@ mod imp {
     }
 
     #[glib::derived_properties]
-    impl ObjectImpl for LibraryBrowser {
+    impl ObjectImpl for LibraryView {
         fn constructed(&self) {
             let obj = self.obj();
             self.parent_constructed();
@@ -96,7 +102,7 @@ mod imp {
             ));
             actions.add_action(&action);
 
-            let drafts = LibraryProject::new_draft_table();
+            let drafts = ProjectView::new_draft_table();
             let drafts_path = drafts.root_path();
             self.load_project(drafts);
             self.select_item(drafts_path);
@@ -139,10 +145,10 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for LibraryBrowser {}
-    impl BinImpl for LibraryBrowser {}
+    impl WidgetImpl for LibraryView {}
+    impl BinImpl for LibraryView {}
 
-    impl LibraryBrowser {
+    impl LibraryView {
         pub(super) fn has_folder(&self, path: &Path) -> bool {
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.path()) {
@@ -161,7 +167,7 @@ mod imp {
             false
         }
 
-        pub(super) fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
+        pub(super) fn get_folder(&self, path: &Path) -> Option<FolderView> {
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.path()) {
                     return project.get_folder(path);
@@ -170,7 +176,7 @@ mod imp {
             None
         }
 
-        pub(super) fn get_document(&self, path: &Path) -> Option<LibraryDocument> {
+        pub(super) fn get_document(&self, path: &Path) -> Option<FileButton> {
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.path()) {
                     return project.get_document(path);
@@ -186,7 +192,7 @@ mod imp {
             self.refresh_selection();
         }
 
-        pub(super) fn load_project(&self, project: LibraryProject) {
+        pub(super) fn load_project(&self, project: ProjectView) {
             let obj = self.obj();
             self.connect_folder(project.root_folder().folder_object());
             project.connect_closure(
@@ -195,7 +201,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryProject, folder: FolderObject| {
+                    move |_: ProjectView, folder: FolderObject| {
                         this.connect_folder(&folder);
                     }
                 ),
@@ -206,7 +212,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryProject, document: LibraryDocument| {
+                    move |_: ProjectView, document: FileButton| {
                         this.connect_document(document.document_object());
                     }
                 ),
@@ -217,7 +223,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |project: LibraryProject| {
+                    move |project: ProjectView| {
                         obj.emit_by_name::<()>("close-project-requested", &[&project.path()]);
                     }
                 ),
@@ -480,24 +486,23 @@ use gtk::glib;
 use glib::Object;
 use gtk::prelude::BoxExt;
 
-use crate::widgets::LibraryDocument;
-use crate::widgets::LibraryProject;
-
-use super::LibraryFolder;
+use file_button::FileButton;
+use folder_view::FolderView;
+use project_view::ProjectView;
 
 glib::wrapper! {
-    pub struct LibraryBrowser(ObjectSubclass<imp::LibraryBrowser>)
+    pub struct LibraryView(ObjectSubclass<imp::LibraryView>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl Default for LibraryBrowser {
+impl Default for LibraryView {
     fn default() -> Self {
         Object::builder().build()
     }
 }
 
-impl LibraryBrowser {
+impl LibraryView {
     pub fn open_project_paths(&self) -> Vec<String> {
         let mut paths = vec![];
         for project in self.imp().projects.borrow().deref().values() {
@@ -525,11 +530,11 @@ impl LibraryBrowser {
         }
     }
 
-    pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
+    pub fn get_folder(&self, path: &Path) -> Option<FolderView> {
         self.imp().get_folder(path)
     }
 
-    pub fn get_document(&self, path: &Path) -> Option<LibraryDocument> {
+    pub fn get_document(&self, path: &Path) -> Option<FileButton> {
         self.imp().get_document(path)
     }
 
@@ -540,7 +545,7 @@ impl LibraryBrowser {
                 return;
             }
         }
-        let project = LibraryProject::new(path);
+        let project = ProjectView::new(path);
         self.imp().load_project(project.clone());
         project.refresh_content();
     }

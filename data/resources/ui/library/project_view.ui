@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <template class="LibraryProject" parent="AdwBin">
+    <template class="ProjectView" parent="AdwBin">
         <child>
             <object class="GtkBox" id="project_root_vbox">
                 <property name="orientation">1</property>

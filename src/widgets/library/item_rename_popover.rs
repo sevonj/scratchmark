@@ -27,7 +27,7 @@ mod imp {
     }
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/item_rename_popover.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/item_rename_popover.ui")]
     pub struct ItemRenamePopover {
         #[template_child]
         name_field: TemplateChild<Entry>,

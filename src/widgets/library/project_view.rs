@@ -22,11 +22,11 @@ mod imp {
     use gtk::CompositeTemplate;
     use gtk::glib::MainContext;
 
+    use super::super::err_placeholder_item::ErrPlaceholderItem;
+    use super::FileButton;
+    use super::FolderView;
     use crate::data::DocumentObject;
     use crate::data::FolderObject;
-    use crate::widgets::LibraryDocument;
-    use crate::widgets::LibraryFolder;
-    use crate::widgets::LibraryProjectErrPlaceholder;
 
     #[derive(Debug)]
     enum ProjectEntry {
@@ -35,15 +35,15 @@ mod imp {
     }
 
     #[derive(CompositeTemplate, Default, Properties)]
-    #[properties(wrapper_type = super::LibraryProject)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_project.ui")]
-    pub struct LibraryProject {
+    #[properties(wrapper_type = super::ProjectView)]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/project_view.ui")]
+    pub struct ProjectView {
         #[template_child]
         pub(super) project_root_vbox: TemplateChild<gtk::Box>,
 
-        pub(super) root_folder: RefCell<Option<LibraryFolder>>,
-        pub(super) subfolders: RefCell<HashMap<PathBuf, LibraryFolder>>,
-        pub(super) documents: RefCell<HashMap<PathBuf, LibraryDocument>>,
+        pub(super) root_folder: RefCell<Option<FolderView>>,
+        pub(super) subfolders: RefCell<HashMap<PathBuf, FolderView>>,
+        pub(super) documents: RefCell<HashMap<PathBuf, FileButton>>,
         /// Is this a builtin project (drafts)
         pub(super) is_builtin: Cell<bool>,
         /// Project folder is inaccessible or deleted
@@ -57,9 +57,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LibraryProject {
-        const NAME: &'static str = "LibraryProject";
-        type Type = super::LibraryProject;
+    impl ObjectSubclass for ProjectView {
+        const NAME: &'static str = "ProjectView";
+        type Type = super::ProjectView;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -72,7 +72,7 @@ mod imp {
     }
 
     #[glib::derived_properties]
-    impl ObjectImpl for LibraryProject {
+    impl ObjectImpl for ProjectView {
         fn constructed(&self) {
             let obj = self.obj();
             self.parent_constructed();
@@ -114,7 +114,7 @@ mod imp {
                         .param_types([FolderObject::static_type()])
                         .build(),
                     Signal::builder("document-added")
-                        .param_types([LibraryDocument::static_type()])
+                        .param_types([FileButton::static_type()])
                         .build(),
                     Signal::builder("document-selected")
                         .param_types([PathBuf::static_type()])
@@ -123,13 +123,13 @@ mod imp {
                         .param_types([FolderObject::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("document-rename-requested")
-                        .param_types([LibraryDocument::static_type(), PathBuf::static_type()])
+                        .param_types([FileButton::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
                         .param_types([FolderObject::static_type()])
                         .build(),
                     Signal::builder("document-delete-requested")
-                        .param_types([LibraryDocument::static_type()])
+                        .param_types([FileButton::static_type()])
                         .build(),
                     Signal::builder("folder-trash-requested")
                         .param_types([FolderObject::static_type()])
@@ -140,11 +140,11 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for LibraryProject {}
-    impl BinImpl for LibraryProject {}
+    impl WidgetImpl for ProjectView {}
+    impl BinImpl for ProjectView {}
 
-    impl LibraryProject {
-        pub(super) fn setup_root(&self, root_folder: LibraryFolder) {
+    impl ProjectView {
+        pub(super) fn setup_root(&self, root_folder: FolderView) {
             assert!(self.root_folder.borrow().is_none());
             let vbox = &self.project_root_vbox;
             vbox.append(&root_folder);
@@ -225,7 +225,7 @@ mod imp {
                 .as_ref()
                 .unwrap()
                 .set_visible(false);
-            let err_placeholder = LibraryProjectErrPlaceholder::new(&self.obj().root_path());
+            let err_placeholder = ErrPlaceholderItem::new(&self.obj().root_path());
             let obj = self.obj();
             err_placeholder.connect_closure(
                 "close-project-requested",
@@ -233,7 +233,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryProjectErrPlaceholder| {
+                    move |_: ErrPlaceholderItem| {
                         obj.emit_by_name::<()>("close-project-requested", &[]);
                     }
                 ),
@@ -245,7 +245,7 @@ mod imp {
             if self.subfolders.borrow().contains_key(&path) {
                 return;
             }
-            let folder = LibraryFolder::new(&FolderObject::new(path.clone(), depth));
+            let folder = FolderView::new(&FolderObject::new(path.clone(), depth));
 
             {
                 let mut subfolders = self.subfolders.borrow_mut();
@@ -279,7 +279,7 @@ mod imp {
                 return;
             }
 
-            let doc = LibraryDocument::new(&DocumentObject::new(path.clone(), depth));
+            let doc = FileButton::new(&DocumentObject::new(path.clone(), depth));
             self.documents
                 .borrow_mut()
                 .insert(path.clone(), doc.clone());
@@ -402,23 +402,23 @@ use sourceview5::prelude::*;
 
 use glib::Object;
 
+use super::FileButton;
+use super::FolderView;
 use crate::data::FolderObject;
 use crate::util::file_actions;
-use crate::widgets::LibraryDocument;
-use crate::widgets::LibraryFolder;
 
 glib::wrapper! {
-    pub struct LibraryProject(ObjectSubclass<imp::LibraryProject>)
+    pub struct ProjectView(ObjectSubclass<imp::ProjectView>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl LibraryProject {
+impl ProjectView {
     /// New standard project
     pub fn new(path: PathBuf) -> Self {
         let this: Self = Object::builder().build();
         this.imp().is_builtin.replace(false);
-        let root = LibraryFolder::new_project_root(&FolderObject::new(path.clone(), 0));
+        let root = FolderView::new_project_root(&FolderObject::new(path.clone(), 0));
         root.folder_object().connect_closure(
             "close-project-requested",
             false,
@@ -438,7 +438,7 @@ impl LibraryProject {
     pub fn new_draft_table() -> Self {
         let this: Self = Object::builder().build();
         this.imp().is_builtin.replace(true);
-        let root = LibraryFolder::new_drafts_root(&FolderObject::new(
+        let root = FolderView::new_drafts_root(&FolderObject::new(
             file_actions::path_builtin_library(),
             0,
         ));
@@ -454,7 +454,7 @@ impl LibraryProject {
         self.imp().root_folder.borrow().as_ref().unwrap().path()
     }
 
-    pub fn root_folder(&self) -> LibraryFolder {
+    pub fn root_folder(&self) -> FolderView {
         self.imp().root_folder.borrow().clone().unwrap()
     }
 
@@ -493,7 +493,7 @@ impl LibraryProject {
         self.imp().documents.borrow().contains_key(path)
     }
 
-    pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
+    pub fn get_folder(&self, path: &Path) -> Option<FolderView> {
         let sub = self.imp().subfolders.borrow().get(path).cloned();
         if sub.is_some() {
             return sub;
@@ -503,7 +503,7 @@ impl LibraryProject {
         None
     }
 
-    pub fn get_document(&self, path: &Path) -> Option<LibraryDocument> {
+    pub fn get_document(&self, path: &Path) -> Option<FileButton> {
         self.imp().documents.borrow().get(path).cloned()
     }
 

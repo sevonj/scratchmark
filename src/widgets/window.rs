@@ -48,7 +48,7 @@ mod imp {
     use crate::widgets::Editor;
     use crate::widgets::EditorPlaceholder;
     use crate::widgets::ItemCreatePopover;
-    use crate::widgets::LibraryBrowser;
+    use crate::widgets::LibraryView;
     use crate::widgets::MarkdownFormatBar;
     use crate::widgets::PreferencesDialog;
     use crate::widgets::WindowTitle;
@@ -100,7 +100,7 @@ mod imp {
         #[template_child]
         editor_sidebar_toggle: TemplateChild<ToggleButton>,
 
-        library_browser: LibraryBrowser,
+        library_browser: LibraryView,
         editor: RefCell<Option<Editor>>,
 
         motion_controller: EventControllerMotion,
@@ -171,7 +171,7 @@ mod imp {
             settings
                 .bind("focus-mode-enabled", window_title, "focus-mode")
                 .build();
-            let library_browser: &LibraryBrowser = self.library_browser.as_ref();
+            let library_browser: &LibraryView = self.library_browser.as_ref();
             settings
                 .bind(
                     "library-ignore-hidden-files",
@@ -245,7 +245,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryBrowser, path: PathBuf| {
+                    move |_: LibraryView, path: PathBuf| {
                         this.load_document(path);
                     }
                 ),
@@ -257,7 +257,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryBrowser, folder: FolderObject| {
+                    move |_: LibraryView, folder: FolderObject| {
                         obj.imp().trash_folder(&folder);
                     }
                 ),
@@ -269,7 +269,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryBrowser, doc: DocumentObject| {
+                    move |_: LibraryView, doc: DocumentObject| {
                         obj.imp().trash_document(&doc);
                     }
                 ),
@@ -281,7 +281,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryBrowser, folder: FolderObject| {
+                    move |_: LibraryView, folder: FolderObject| {
                         let heading = "Delete folder?";
                         let body = format!(
                             "Are you sure you want to permanently delete {}?",
@@ -320,7 +320,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_browser: LibraryBrowser, folder: FolderObject, new_path: PathBuf| {
+                    move |_browser: LibraryView, folder: FolderObject, new_path: PathBuf| {
                         assert!(!folder.is_root());
 
                         let original_path = folder.path();
@@ -379,7 +379,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_browser: LibraryBrowser, doc: DocumentObject, new_path: PathBuf| {
+                    move |_browser: LibraryView, doc: DocumentObject, new_path: PathBuf| {
                         let original_path = doc.path();
                         let new_path = file_actions::incremented_path(new_path);
 
@@ -422,7 +422,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryBrowser, doc: DocumentObject| {
+                    move |_: LibraryView, doc: DocumentObject| {
                         let heading = "Delete document?";
                         let body = format!(
                             "Are you sure you want to permanently delete {}?",
@@ -461,7 +461,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |browser: LibraryBrowser, project_path: PathBuf| {
+                    move |browser: LibraryView, project_path: PathBuf| {
                         let contains_edited_file = this
                             .editor
                             .borrow()
@@ -484,7 +484,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_browser: LibraryBrowser, msg: String| {
+                    move |_browser: LibraryView, msg: String| {
                         this.toast(&msg);
                     }
                 ),
