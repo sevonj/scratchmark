@@ -30,6 +30,7 @@ mod imp {
     use gtk::CompositeTemplate;
     use gtk::TemplateChild;
     use gtk::TextMark;
+    use gtk::gio::Cancellable;
     use gtk::gio::SimpleAction;
 
     use super::document_stats_view::DocumentStatsView;
@@ -39,8 +40,6 @@ mod imp {
     use crate::data::DocumentStats;
     use crate::data::MarkdownBuffer;
     use crate::util::file_actions;
-
-    use super::NOT_CANCELLABLE;
 
     #[derive(Debug, Properties, CompositeTemplate, Default)]
     #[properties(wrapper_type = super::Editor)]
@@ -347,7 +346,7 @@ mod imp {
                 panic!("Editor file uninitialized");
             };
             let filemon = file
-                .monitor(FileMonitorFlags::NONE, NOT_CANCELLABLE)
+                .monitor(FileMonitorFlags::NONE, None::<&Cancellable>)
                 .expect("Editor: Failed to create file monitor");
             filemon.connect_changed(clone!(
                 #[weak(rename_to = this)]
@@ -384,8 +383,6 @@ use crate::data::DocumentStats;
 use crate::data::MarkdownBuffer;
 use crate::error::ScratchmarkError;
 use crate::util::file_actions;
-
-const NOT_CANCELLABLE: Option<&Cancellable> = None;
 
 glib::wrapper! {
     pub struct Editor(ObjectSubclass<imp::Editor>)
@@ -450,11 +447,13 @@ impl Editor {
             };
 
             let output_stream = file
-                .replace(None, false, FileCreateFlags::NONE, NOT_CANCELLABLE)
+                .replace(None, false, FileCreateFlags::NONE, None::<&Cancellable>)
                 .unwrap();
 
-            output_stream.write_all(bytes, NOT_CANCELLABLE).unwrap();
-            output_stream.flush(NOT_CANCELLABLE).unwrap();
+            output_stream
+                .write_all(bytes, None::<&Cancellable>)
+                .unwrap();
+            output_stream.flush(None::<&Cancellable>).unwrap();
         }
         imp.setup_filemon();
         self.set_unsaved_changes(false);
