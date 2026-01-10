@@ -43,7 +43,7 @@ mod imp {
     use crate::data::DocumentObject;
     use crate::data::FolderObject;
     use crate::error::ScratchmarkError;
-    use crate::util;
+    use crate::util::file_actions;
 
     use crate::widgets::Editor;
     use crate::widgets::EditorPlaceholder;
@@ -324,7 +324,7 @@ mod imp {
                         assert!(!folder.is_root());
 
                         let original_path = folder.path();
-                        let new_path = util::incremented_path(new_path);
+                        let new_path = file_actions::incremented_path(new_path);
                         let selected_item_path = this.library_browser.selected_item_path();
 
                         let editor_opt = this.editor.borrow();
@@ -342,7 +342,7 @@ mod imp {
                         if old_folder
                             .move_(&new_folder, FileCopyFlags::NONE, None::<&Cancellable>, None)
                             .is_err()
-                            && let Err(e) = util::move_folder(&original_path, &new_path)
+                            && let Err(e) = file_actions::move_folder(&original_path, &new_path)
                         {
                             this.toast(&e.to_string());
                         }
@@ -381,7 +381,7 @@ mod imp {
                     self,
                     move |_browser: LibraryBrowser, doc: DocumentObject, new_path: PathBuf| {
                         let original_path = doc.path();
-                        let new_path = util::incremented_path(new_path);
+                        let new_path = file_actions::incremented_path(new_path);
 
                         let editor_opt = this.editor.borrow();
                         let open_doc_affected =
@@ -935,14 +935,14 @@ mod imp {
         }
 
         fn create_folder(&self, path: PathBuf) {
-            if let Err(e) = util::create_folder(&path) {
+            if let Err(e) = file_actions::create_folder(&path) {
                 self.toast(&e.to_string());
                 self.library_browser.refresh_content();
                 return;
             }
             self.library_browser.refresh_content();
             self.library_browser
-                .get_folder(&util::path_builtin_library())
+                .get_folder(&file_actions::path_builtin_library())
                 .unwrap()
                 .set_expanded(true);
         }
@@ -952,7 +952,7 @@ mod imp {
                 self.toast(&e.to_string());
                 return;
             }
-            if let Err(e) = util::create_document(&path) {
+            if let Err(e) = file_actions::create_document(&path) {
                 self.toast(&e.to_string());
                 self.library_browser.refresh_content();
                 return;
@@ -960,7 +960,7 @@ mod imp {
             self.library_browser.refresh_content();
             self.load_document(path);
             self.library_browser
-                .get_folder(&util::path_builtin_library())
+                .get_folder(&file_actions::path_builtin_library())
                 .unwrap()
                 .set_expanded(true);
         }

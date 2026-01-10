@@ -403,8 +403,7 @@ use sourceview5::prelude::*;
 use glib::Object;
 
 use crate::data::FolderObject;
-use crate::util::path_builtin_library;
-
+use crate::util::file_actions;
 use crate::widgets::LibraryDocument;
 use crate::widgets::LibraryFolder;
 
@@ -439,7 +438,10 @@ impl LibraryProject {
     pub fn new_draft_table() -> Self {
         let this: Self = Object::builder().build();
         this.imp().is_builtin.replace(true);
-        let root = LibraryFolder::new_drafts_root(&FolderObject::new(path_builtin_library(), 0));
+        let root = LibraryFolder::new_drafts_root(&FolderObject::new(
+            file_actions::path_builtin_library(),
+            0,
+        ));
         this.imp().setup_root(root);
         this
     }

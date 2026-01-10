@@ -7,12 +7,13 @@ mod widgets;
 use gtk::glib;
 use gtk::prelude::*;
 
+use util::file_actions;
 use widgets::Window;
 
 const APP_ID: &str = "org.scratchmark.Scratchmark";
 
 fn main() -> glib::ExitCode {
-    util::create_builtin_library();
+    file_actions::create_builtin_library();
 
     gettextrs::bindtextdomain(config::GETTEXT_PACKAGE, config::LOCALEDIR)
         .expect("Unable to bind the text domain");

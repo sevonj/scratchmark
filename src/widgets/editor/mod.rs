@@ -38,7 +38,7 @@ mod imp {
     use super::text_view::EditorTextView;
     use crate::data::DocumentStats;
     use crate::data::MarkdownBuffer;
-    use crate::util;
+    use crate::util::file_actions;
 
     use super::NOT_CANCELLABLE;
 
@@ -153,7 +153,7 @@ mod imp {
                                 obj,
                                 move |_: AlertDialog, response: String| {
                                     if response == "keep-both" {
-                                        let new_path = util::incremented_path(obj.path());
+                                        let new_path = file_actions::incremented_path(obj.path());
                                         obj.set_path(new_path);
                                         obj.imp().file_changed_on_disk.set(false);
                                         obj.imp().file_changed_on_disk_banner.set_revealed(false);
@@ -172,7 +172,7 @@ mod imp {
                                         obj.imp().file_changed_on_disk_banner.set_revealed(false);
                                     } else if response == "discard" {
                                         let file = gio::File::for_path(obj.path());
-                                        match util::read_file_to_string(&file) {
+                                        match file_actions::read_file_to_string(&file) {
                                             Ok(text) => {
                                                 obj.imp().source_view.buffer().set_text(&text);
                                                 obj.imp().file_changed_on_disk.set(false);
@@ -383,7 +383,7 @@ use crate::config::PKGDATADIR;
 use crate::data::DocumentStats;
 use crate::data::MarkdownBuffer;
 use crate::error::ScratchmarkError;
-use crate::util;
+use crate::util::file_actions;
 
 const NOT_CANCELLABLE: Option<&Cancellable> = None;
 
@@ -396,7 +396,7 @@ glib::wrapper! {
 impl Editor {
     pub fn new(path: PathBuf) -> Result<Self, ScratchmarkError> {
         let file = gtk::gio::File::for_path(&path);
-        let text = util::read_file_to_string(&file)?;
+        let text = file_actions::read_file_to_string(&file)?;
         let buffer = MarkdownBuffer::default();
         buffer.set_text(&text);
 

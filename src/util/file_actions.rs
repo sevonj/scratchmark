@@ -15,25 +15,25 @@ use crate::APP_ID;
 use crate::error::ScratchmarkError;
 
 #[derive(Debug)]
-pub enum FilenameStatus {
+pub enum FilenameState {
     Ok,
     IsEmpty,
     HasIllegalChars,
 }
 
-impl From<&str> for FilenameStatus {
+impl From<&str> for FilenameState {
     fn from(stem: &str) -> Self {
         if stem.is_empty() {
-            return FilenameStatus::IsEmpty;
+            return FilenameState::IsEmpty;
         }
         if stem.contains("/") {
-            return FilenameStatus::HasIllegalChars;
+            return FilenameState::HasIllegalChars;
         }
-        FilenameStatus::Ok
+        FilenameState::Ok
     }
 }
 
-impl FilenameStatus {
+impl FilenameState {
     pub fn is_ok(&self) -> bool {
         match self {
             Self::Ok => true,
@@ -44,9 +44,9 @@ impl FilenameStatus {
 
     pub fn complaint_message(&self) -> Option<&str> {
         match self {
-            FilenameStatus::Ok => None,
-            FilenameStatus::IsEmpty => None,
-            FilenameStatus::HasIllegalChars => Some("Invalid name"),
+            FilenameState::Ok => None,
+            FilenameState::IsEmpty => None,
+            FilenameState::HasIllegalChars => Some("Invalid name"),
         }
     }
 }

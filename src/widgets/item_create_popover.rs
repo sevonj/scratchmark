@@ -18,7 +18,7 @@ mod imp {
     use gtk::TemplateChild;
     use gtk::glib::Properties;
 
-    use crate::util::FilenameStatus;
+    use crate::util::file_actions::FilenameState;
 
     #[derive(Debug, Default, Clone, Copy)]
     pub(super) enum Kind {
@@ -124,14 +124,14 @@ mod imp {
             let new_path = self.filepath();
             let file_exists = new_path.exists();
 
-            let name_status = FilenameStatus::from(stem.as_str());
+            let name_status = FilenameState::from(stem.as_str());
             self.can_commit.replace(name_status.is_ok() && !file_exists);
             self.commit_button.set_sensitive(self.can_commit.get());
 
             let label = &self.name_error_label;
 
             match name_status {
-                FilenameStatus::Ok => {
+                FilenameState::Ok => {
                     if file_exists {
                         label.set_text("Already exists");
                         label.set_visible(true);
