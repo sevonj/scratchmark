@@ -32,8 +32,8 @@ mod imp {
     use crate::widgets::LibraryDocument;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_folder.ui")]
-    pub struct LibraryFolder {
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/folder_view.ui")]
+    pub struct FolderView {
         #[template_child]
         pub(super) expand_button_cont: TemplateChild<adw::Bin>,
         #[template_child]
@@ -57,7 +57,7 @@ mod imp {
         pub(super) folder_object: OnceLock<FolderObject>,
         pub(super) bindings: RefCell<Vec<Binding>>,
         pub(super) expanded: RefCell<bool>,
-        pub(super) subdirs: RefCell<Vec<super::LibraryFolder>>,
+        pub(super) subdirs: RefCell<Vec<super::FolderView>>,
         pub(super) documents: RefCell<Vec<LibraryDocument>>,
 
         pub(super) context_menu_popover: RefCell<Option<PopoverMenu>>,
@@ -66,9 +66,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LibraryFolder {
-        const NAME: &'static str = "LibraryFolder";
-        type Type = super::LibraryFolder;
+    impl ObjectSubclass for FolderView {
+        const NAME: &'static str = "FolderView";
+        type Type = super::FolderView;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -80,7 +80,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for LibraryFolder {
+    impl ObjectImpl for FolderView {
         fn constructed(&self) {
             self.parent_constructed();
 
@@ -99,10 +99,10 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for LibraryFolder {}
-    impl BinImpl for LibraryFolder {}
+    impl WidgetImpl for FolderView {}
+    impl BinImpl for FolderView {}
 
-    impl LibraryFolder {
+    impl FolderView {
         pub(super) fn prompt_rename(&self) {
             self.rename_popover.borrow().as_ref().unwrap().popup();
         }
@@ -157,10 +157,7 @@ mod imp {
 
             let mut subdirs = self.subdirs.borrow_mut();
             if !subdirs.is_empty() {
-                fn compare(
-                    a: &super::LibraryFolder,
-                    b: &super::LibraryFolder,
-                ) -> std::cmp::Ordering {
+                fn compare(a: &super::FolderView, b: &super::FolderView) -> std::cmp::Ordering {
                     a.name().to_lowercase().cmp(&b.name().to_lowercase())
                 }
                 subdirs.sort_unstable_by(compare);
@@ -178,7 +175,7 @@ mod imp {
             self.set_expanded(expanded);
         }
 
-        pub(super) fn add_subfolder(&self, folder: super::LibraryFolder) {
+        pub(super) fn add_subfolder(&self, folder: super::FolderView) {
             self.subdirs_vbox.append(&folder);
             self.subdirs.borrow_mut().push(folder);
         }
@@ -194,7 +191,7 @@ mod imp {
             let builder = Builder::from_resource(resource_path);
             let popover = builder
                 .object::<MenuModel>("context-menu")
-                .expect("LibraryFolder context-menu model failed");
+                .expect("FolderView context-menu model failed");
             let menu = PopoverMenu::builder()
                 .menu_model(&popover)
                 .has_arrow(false)
@@ -272,7 +269,7 @@ mod imp {
             let drop_target = DropTarget::new(glib::types::Type::INVALID, gdk::DragAction::COPY);
             drop_target.set_types(&[
                 LibraryDocument::static_type(),
-                super::LibraryFolder::static_type(),
+                super::FolderView::static_type(),
             ]);
             drop_target.connect_drop(clone!(
                 #[weak]
@@ -291,7 +288,7 @@ mod imp {
                         doc.rename(new_path);
                         obj.imp().set_expanded(true);
                         return true;
-                    } else if let Ok(folder) = value.get::<super::LibraryFolder>() {
+                    } else if let Ok(folder) = value.get::<super::FolderView>() {
                         // Under no circumstance accept the library root folder
                         if folder.is_root() {
                             return true;
@@ -440,12 +437,12 @@ use crate::data::FolderObject;
 use crate::widgets::LibraryDocument;
 
 glib::wrapper! {
-    pub struct LibraryFolder(ObjectSubclass<imp::LibraryFolder>)
+    pub struct FolderView(ObjectSubclass<imp::FolderView>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl LibraryFolder {
+impl FolderView {
     /// Normal folder
     pub fn new(data: &FolderObject) -> Self {
         let this: Self = Object::builder().build();
@@ -512,7 +509,7 @@ impl LibraryFolder {
         self.imp().set_expanded(expanded);
     }
 
-    pub fn add_subfolder(&self, folder: LibraryFolder) {
+    pub fn add_subfolder(&self, folder: FolderView) {
         self.imp().add_subfolder(folder);
     }
 
@@ -520,7 +517,7 @@ impl LibraryFolder {
         self.imp().add_document(doc);
     }
 
-    pub fn remove_subfolder(&self, folder: &LibraryFolder) {
+    pub fn remove_subfolder(&self, folder: &FolderView) {
         self.imp().subdirs_vbox.remove(folder);
     }
 

@@ -6,6 +6,7 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/editor.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/minimap.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/search_bar.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/folder_view.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/library_view.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/project_view.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/about_dialog.ui</file>
@@ -16,7 +17,6 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library_document.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_drafts_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_folder_context_menu.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_folder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_project_err_placeholder_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_project_err_placeholder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library_project_context_menu.ui</file>

@@ -22,10 +22,10 @@ mod imp {
     use gtk::CompositeTemplate;
     use gtk::glib::MainContext;
 
+    use super::FolderView;
     use crate::data::DocumentObject;
     use crate::data::FolderObject;
     use crate::widgets::LibraryDocument;
-    use crate::widgets::LibraryFolder;
     use crate::widgets::LibraryProjectErrPlaceholder;
 
     #[derive(Debug)]
@@ -41,8 +41,8 @@ mod imp {
         #[template_child]
         pub(super) project_root_vbox: TemplateChild<gtk::Box>,
 
-        pub(super) root_folder: RefCell<Option<LibraryFolder>>,
-        pub(super) subfolders: RefCell<HashMap<PathBuf, LibraryFolder>>,
+        pub(super) root_folder: RefCell<Option<FolderView>>,
+        pub(super) subfolders: RefCell<HashMap<PathBuf, FolderView>>,
         pub(super) documents: RefCell<HashMap<PathBuf, LibraryDocument>>,
         /// Is this a builtin project (drafts)
         pub(super) is_builtin: Cell<bool>,
@@ -144,7 +144,7 @@ mod imp {
     impl BinImpl for ProjectView {}
 
     impl ProjectView {
-        pub(super) fn setup_root(&self, root_folder: LibraryFolder) {
+        pub(super) fn setup_root(&self, root_folder: FolderView) {
             assert!(self.root_folder.borrow().is_none());
             let vbox = &self.project_root_vbox;
             vbox.append(&root_folder);
@@ -245,7 +245,7 @@ mod imp {
             if self.subfolders.borrow().contains_key(&path) {
                 return;
             }
-            let folder = LibraryFolder::new(&FolderObject::new(path.clone(), depth));
+            let folder = FolderView::new(&FolderObject::new(path.clone(), depth));
 
             {
                 let mut subfolders = self.subfolders.borrow_mut();
@@ -402,10 +402,10 @@ use sourceview5::prelude::*;
 
 use glib::Object;
 
+use super::FolderView;
 use crate::data::FolderObject;
 use crate::util::file_actions;
 use crate::widgets::LibraryDocument;
-use crate::widgets::LibraryFolder;
 
 glib::wrapper! {
     pub struct ProjectView(ObjectSubclass<imp::ProjectView>)
@@ -418,7 +418,7 @@ impl ProjectView {
     pub fn new(path: PathBuf) -> Self {
         let this: Self = Object::builder().build();
         this.imp().is_builtin.replace(false);
-        let root = LibraryFolder::new_project_root(&FolderObject::new(path.clone(), 0));
+        let root = FolderView::new_project_root(&FolderObject::new(path.clone(), 0));
         root.folder_object().connect_closure(
             "close-project-requested",
             false,
@@ -438,7 +438,7 @@ impl ProjectView {
     pub fn new_draft_table() -> Self {
         let this: Self = Object::builder().build();
         this.imp().is_builtin.replace(true);
-        let root = LibraryFolder::new_drafts_root(&FolderObject::new(
+        let root = FolderView::new_drafts_root(&FolderObject::new(
             file_actions::path_builtin_library(),
             0,
         ));
@@ -454,7 +454,7 @@ impl ProjectView {
         self.imp().root_folder.borrow().as_ref().unwrap().path()
     }
 
-    pub fn root_folder(&self) -> LibraryFolder {
+    pub fn root_folder(&self) -> FolderView {
         self.imp().root_folder.borrow().clone().unwrap()
     }
 
@@ -493,7 +493,7 @@ impl ProjectView {
         self.imp().documents.borrow().contains_key(path)
     }
 
-    pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
+    pub fn get_folder(&self, path: &Path) -> Option<FolderView> {
         let sub = self.imp().subfolders.borrow().get(path).cloned();
         if sub.is_some() {
             return sub;

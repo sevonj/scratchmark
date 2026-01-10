@@ -1,3 +1,4 @@
+mod folder_view;
 mod project_view;
 
 mod imp {
@@ -23,11 +24,11 @@ mod imp {
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Properties;
 
+    use super::FolderView;
     use super::ProjectView;
     use crate::data::DocumentObject;
     use crate::data::FolderObject;
     use crate::widgets::LibraryDocument;
-    use crate::widgets::LibraryFolder;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::LibraryView)]
@@ -163,7 +164,7 @@ mod imp {
             false
         }
 
-        pub(super) fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
+        pub(super) fn get_folder(&self, path: &Path) -> Option<FolderView> {
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.path()) {
                     return project.get_folder(path);
@@ -482,8 +483,8 @@ use gtk::glib;
 use glib::Object;
 use gtk::prelude::BoxExt;
 
-use super::LibraryFolder;
 use crate::widgets::LibraryDocument;
+use folder_view::FolderView;
 use project_view::ProjectView;
 
 glib::wrapper! {
@@ -526,7 +527,7 @@ impl LibraryView {
         }
     }
 
-    pub fn get_folder(&self, path: &Path) -> Option<LibraryFolder> {
+    pub fn get_folder(&self, path: &Path) -> Option<FolderView> {
         self.imp().get_folder(path)
     }
 
