@@ -22,11 +22,11 @@ mod imp {
     use gtk::CompositeTemplate;
     use gtk::glib::MainContext;
 
+    use super::super::err_placeholder_item::ErrPlaceholderItem;
     use super::FileButton;
     use super::FolderView;
     use crate::data::DocumentObject;
     use crate::data::FolderObject;
-    use crate::widgets::LibraryProjectErrPlaceholder;
 
     #[derive(Debug)]
     enum ProjectEntry {
@@ -225,7 +225,7 @@ mod imp {
                 .as_ref()
                 .unwrap()
                 .set_visible(false);
-            let err_placeholder = LibraryProjectErrPlaceholder::new(&self.obj().root_path());
+            let err_placeholder = ErrPlaceholderItem::new(&self.obj().root_path());
             let obj = self.obj();
             err_placeholder.connect_closure(
                 "close-project-requested",
@@ -233,7 +233,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryProjectErrPlaceholder| {
+                    move |_: ErrPlaceholderItem| {
                         obj.emit_by_name::<()>("close-project-requested", &[]);
                     }
                 ),

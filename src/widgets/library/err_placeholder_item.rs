@@ -20,8 +20,8 @@ mod imp {
     use gtk::glib::subclass::Signal;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_project_err_placeholder.ui")]
-    pub struct LibraryProjectErrPlaceholder {
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/err_placeholder_item.ui")]
+    pub struct ErrPlaceholderItem {
         #[template_child]
         pub(super) button: TemplateChild<Button>,
         #[template_child]
@@ -30,9 +30,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LibraryProjectErrPlaceholder {
-        const NAME: &'static str = "LibraryProjectErrPlaceholder";
-        type Type = super::LibraryProjectErrPlaceholder;
+    impl ObjectSubclass for ErrPlaceholderItem {
+        const NAME: &'static str = "ErrPlaceholderItem";
+        type Type = super::ErrPlaceholderItem;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -44,7 +44,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for LibraryProjectErrPlaceholder {
+    impl ObjectImpl for ErrPlaceholderItem {
         fn signals() -> &'static [Signal] {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| vec![Signal::builder("close-project-requested").build()])
@@ -71,19 +71,19 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for LibraryProjectErrPlaceholder {}
-    impl BinImpl for LibraryProjectErrPlaceholder {}
+    impl WidgetImpl for ErrPlaceholderItem {}
+    impl BinImpl for ErrPlaceholderItem {}
 
-    impl LibraryProjectErrPlaceholder {
+    impl ErrPlaceholderItem {
         fn setup_context_menu(&self) {
             let resource_path =
-                "/org/scratchmark/Scratchmark/ui/library_project_err_placeholder_context_menu.ui";
+                "/org/scratchmark/Scratchmark/ui/library/err_placeholder_item_context_menu.ui";
             let obj = self.obj();
 
             let builder = Builder::from_resource(resource_path);
             let popover = builder
                 .object::<MenuModel>("context-menu")
-                .expect("LibraryProjectErrPlaceholder context-menu model failed");
+                .expect("ErrPlaceholderItem context-menu model failed");
             let menu = PopoverMenu::builder()
                 .menu_model(&popover)
                 .has_arrow(false)
@@ -123,14 +123,14 @@ use glib::Object;
 use gtk::glib;
 
 glib::wrapper! {
-    pub struct LibraryProjectErrPlaceholder(ObjectSubclass<imp::LibraryProjectErrPlaceholder>)
+    pub struct ErrPlaceholderItem(ObjectSubclass<imp::ErrPlaceholderItem>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl LibraryProjectErrPlaceholder {
+impl ErrPlaceholderItem {
     pub fn new(path: &Path) -> Self {
-        let this: LibraryProjectErrPlaceholder = Object::builder().build();
+        let this: ErrPlaceholderItem = Object::builder().build();
         let name = path.file_name().unwrap().to_string_lossy().into_owned();
         this.imp().title.set_text(&name);
         this

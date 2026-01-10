@@ -1,3 +1,4 @@
+mod err_placeholder_item;
 mod file_button;
 mod folder_view;
 mod project_view;

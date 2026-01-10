@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <template class="LibraryProjectErrPlaceholder" parent="AdwBin">
+    <template class="ErrPlaceholderItem" parent="AdwBin">
         <child>
             <object class="GtkButton" id="button">
                 <style>
