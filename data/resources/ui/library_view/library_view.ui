@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <template class="LibraryBrowser" parent="AdwBin">
+    <template class="LibraryView" parent="AdwBin">
         <child>
             <object class="GtkScrolledWindow">
                 <property name="width-request">256</property>

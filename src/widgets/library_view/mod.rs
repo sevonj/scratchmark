@@ -28,9 +28,9 @@ mod imp {
     use crate::widgets::library_project::LibraryProject;
 
     #[derive(CompositeTemplate, Default, Properties)]
-    #[properties(wrapper_type = super::LibraryBrowser)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_browser.ui")]
-    pub struct LibraryBrowser {
+    #[properties(wrapper_type = super::LibraryView)]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_view/library_view.ui")]
+    pub struct LibraryView {
         #[template_child]
         pub(super) projects_container: TemplateChild<gtk::Box>,
 
@@ -48,9 +48,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LibraryBrowser {
-        const NAME: &'static str = "LibraryBrowser";
-        type Type = super::LibraryBrowser;
+    impl ObjectSubclass for LibraryView {
+        const NAME: &'static str = "LibraryView";
+        type Type = super::LibraryView;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -63,7 +63,7 @@ mod imp {
     }
 
     #[glib::derived_properties]
-    impl ObjectImpl for LibraryBrowser {
+    impl ObjectImpl for LibraryView {
         fn constructed(&self) {
             let obj = self.obj();
             self.parent_constructed();
@@ -139,10 +139,10 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for LibraryBrowser {}
-    impl BinImpl for LibraryBrowser {}
+    impl WidgetImpl for LibraryView {}
+    impl BinImpl for LibraryView {}
 
-    impl LibraryBrowser {
+    impl LibraryView {
         pub(super) fn has_folder(&self, path: &Path) -> bool {
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.path()) {
@@ -486,18 +486,18 @@ use crate::widgets::LibraryProject;
 use super::LibraryFolder;
 
 glib::wrapper! {
-    pub struct LibraryBrowser(ObjectSubclass<imp::LibraryBrowser>)
+    pub struct LibraryView(ObjectSubclass<imp::LibraryView>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl Default for LibraryBrowser {
+impl Default for LibraryView {
     fn default() -> Self {
         Object::builder().build()
     }
 }
 
-impl LibraryBrowser {
+impl LibraryView {
     pub fn open_project_paths(&self) -> Vec<String> {
         let mut paths = vec![];
         for project in self.imp().projects.borrow().deref().values() {
