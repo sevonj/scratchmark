@@ -27,9 +27,9 @@ mod imp {
     use gtk::ToggleButton;
     use gtk::glib::Binding;
 
+    use super::FileButton;
     use crate::data::FolderObject;
     use crate::widgets::ItemRenamePopover;
-    use crate::widgets::LibraryDocument;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library/folder_view.ui")]
@@ -58,7 +58,7 @@ mod imp {
         pub(super) bindings: RefCell<Vec<Binding>>,
         pub(super) expanded: RefCell<bool>,
         pub(super) subdirs: RefCell<Vec<super::FolderView>>,
-        pub(super) documents: RefCell<Vec<LibraryDocument>>,
+        pub(super) documents: RefCell<Vec<FileButton>>,
 
         pub(super) context_menu_popover: RefCell<Option<PopoverMenu>>,
         pub(super) rename_popover: RefCell<Option<ItemRenamePopover>>,
@@ -143,7 +143,7 @@ mod imp {
         fn sort_children(&self) {
             let mut documents = self.documents.borrow_mut();
             if !documents.is_empty() {
-                fn compare(a: &LibraryDocument, b: &LibraryDocument) -> std::cmp::Ordering {
+                fn compare(a: &FileButton, b: &FileButton) -> std::cmp::Ordering {
                     a.stem().to_lowercase().cmp(&b.stem().to_lowercase())
                 }
                 documents.sort_unstable_by(compare);
@@ -180,7 +180,7 @@ mod imp {
             self.subdirs.borrow_mut().push(folder);
         }
 
-        pub(super) fn add_document(&self, doc: LibraryDocument) {
+        pub(super) fn add_document(&self, doc: FileButton) {
             self.documents_vbox.append(&doc);
             self.documents.borrow_mut().push(doc);
         }
@@ -267,17 +267,14 @@ mod imp {
             let obj = self.obj();
 
             let drop_target = DropTarget::new(glib::types::Type::INVALID, gdk::DragAction::COPY);
-            drop_target.set_types(&[
-                LibraryDocument::static_type(),
-                super::FolderView::static_type(),
-            ]);
+            drop_target.set_types(&[FileButton::static_type(), super::FolderView::static_type()]);
             drop_target.connect_drop(clone!(
                 #[weak]
                 obj,
                 #[upgrade_or]
                 false,
                 move |_: &DropTarget, value: &glib::Value, _: f64, _: f64| {
-                    if let Ok(doc) = value.get::<LibraryDocument>() {
+                    if let Ok(doc) = value.get::<FileButton>() {
                         let old_path = doc.path();
                         let filename = old_path.file_name().unwrap();
                         let target_path = obj.path();
@@ -433,8 +430,8 @@ use gtk::prelude::*;
 use glib::Object;
 use gtk::ToggleButton;
 
+use super::FileButton;
 use crate::data::FolderObject;
-use crate::widgets::LibraryDocument;
 
 glib::wrapper! {
     pub struct FolderView(ObjectSubclass<imp::FolderView>)
@@ -513,7 +510,7 @@ impl FolderView {
         self.imp().add_subfolder(folder);
     }
 
-    pub fn add_document(&self, doc: LibraryDocument) {
+    pub fn add_document(&self, doc: FileButton) {
         self.imp().add_document(doc);
     }
 
@@ -521,7 +518,7 @@ impl FolderView {
         self.imp().subdirs_vbox.remove(folder);
     }
 
-    pub fn remove_document(&self, doc: &LibraryDocument) {
+    pub fn remove_document(&self, doc: &FileButton) {
         self.imp().documents_vbox.remove(doc);
     }
 

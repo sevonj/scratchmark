@@ -1,3 +1,4 @@
+mod file_button;
 mod folder_view;
 mod project_view;
 
@@ -24,11 +25,11 @@ mod imp {
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Properties;
 
+    use super::FileButton;
     use super::FolderView;
     use super::ProjectView;
     use crate::data::DocumentObject;
     use crate::data::FolderObject;
-    use crate::widgets::LibraryDocument;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::LibraryView)]
@@ -173,7 +174,7 @@ mod imp {
             None
         }
 
-        pub(super) fn get_document(&self, path: &Path) -> Option<LibraryDocument> {
+        pub(super) fn get_document(&self, path: &Path) -> Option<FileButton> {
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.path()) {
                     return project.get_document(path);
@@ -209,7 +210,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: ProjectView, document: LibraryDocument| {
+                    move |_: ProjectView, document: FileButton| {
                         this.connect_document(document.document_object());
                     }
                 ),
@@ -483,7 +484,7 @@ use gtk::glib;
 use glib::Object;
 use gtk::prelude::BoxExt;
 
-use crate::widgets::LibraryDocument;
+use file_button::FileButton;
 use folder_view::FolderView;
 use project_view::ProjectView;
 
@@ -531,7 +532,7 @@ impl LibraryView {
         self.imp().get_folder(path)
     }
 
-    pub fn get_document(&self, path: &Path) -> Option<LibraryDocument> {
+    pub fn get_document(&self, path: &Path) -> Option<FileButton> {
         self.imp().get_document(path)
     }
 

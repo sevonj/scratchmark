@@ -22,10 +22,10 @@ mod imp {
     use gtk::CompositeTemplate;
     use gtk::glib::MainContext;
 
+    use super::FileButton;
     use super::FolderView;
     use crate::data::DocumentObject;
     use crate::data::FolderObject;
-    use crate::widgets::LibraryDocument;
     use crate::widgets::LibraryProjectErrPlaceholder;
 
     #[derive(Debug)]
@@ -43,7 +43,7 @@ mod imp {
 
         pub(super) root_folder: RefCell<Option<FolderView>>,
         pub(super) subfolders: RefCell<HashMap<PathBuf, FolderView>>,
-        pub(super) documents: RefCell<HashMap<PathBuf, LibraryDocument>>,
+        pub(super) documents: RefCell<HashMap<PathBuf, FileButton>>,
         /// Is this a builtin project (drafts)
         pub(super) is_builtin: Cell<bool>,
         /// Project folder is inaccessible or deleted
@@ -114,7 +114,7 @@ mod imp {
                         .param_types([FolderObject::static_type()])
                         .build(),
                     Signal::builder("document-added")
-                        .param_types([LibraryDocument::static_type()])
+                        .param_types([FileButton::static_type()])
                         .build(),
                     Signal::builder("document-selected")
                         .param_types([PathBuf::static_type()])
@@ -123,13 +123,13 @@ mod imp {
                         .param_types([FolderObject::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("document-rename-requested")
-                        .param_types([LibraryDocument::static_type(), PathBuf::static_type()])
+                        .param_types([FileButton::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
                         .param_types([FolderObject::static_type()])
                         .build(),
                     Signal::builder("document-delete-requested")
-                        .param_types([LibraryDocument::static_type()])
+                        .param_types([FileButton::static_type()])
                         .build(),
                     Signal::builder("folder-trash-requested")
                         .param_types([FolderObject::static_type()])
@@ -279,7 +279,7 @@ mod imp {
                 return;
             }
 
-            let doc = LibraryDocument::new(&DocumentObject::new(path.clone(), depth));
+            let doc = FileButton::new(&DocumentObject::new(path.clone(), depth));
             self.documents
                 .borrow_mut()
                 .insert(path.clone(), doc.clone());
@@ -402,10 +402,10 @@ use sourceview5::prelude::*;
 
 use glib::Object;
 
+use super::FileButton;
 use super::FolderView;
 use crate::data::FolderObject;
 use crate::util::file_actions;
-use crate::widgets::LibraryDocument;
 
 glib::wrapper! {
     pub struct ProjectView(ObjectSubclass<imp::ProjectView>)
@@ -503,7 +503,7 @@ impl ProjectView {
         None
     }
 
-    pub fn get_document(&self, path: &Path) -> Option<LibraryDocument> {
+    pub fn get_document(&self, path: &Path) -> Option<FileButton> {
         self.imp().documents.borrow().get(path).cloned()
     }
 
