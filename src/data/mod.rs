@@ -2,7 +2,6 @@ mod document_data;
 mod document_stats;
 mod folder_data;
 mod markdown_buffer;
-pub mod regex;
 
 pub use document_data::DocumentObject;
 pub use document_stats::DocumentStats;

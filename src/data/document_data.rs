@@ -62,7 +62,7 @@ use gtk::glib::Object;
 use gtk::glib::object::ObjectExt;
 
 use crate::error::ScratchmarkError;
-use crate::util;
+use crate::util::file_actions;
 
 glib::wrapper! {
     pub struct DocumentObject(ObjectSubclass<imp::DocumentObject>);
@@ -87,7 +87,7 @@ impl DocumentObject {
 
         let self_path = self.path();
         let self_file = gtk::gio::File::for_path(&self_path);
-        let dupe_path = util::incremented_path(self_path);
+        let dupe_path = file_actions::incremented_path(self_path);
         let dupe_file = gtk::gio::File::for_path(&dupe_path);
         self_file
             .copy(&dupe_file, FileCopyFlags::NONE, None::<&Cancellable>, None)

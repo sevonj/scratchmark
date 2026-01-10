@@ -67,7 +67,7 @@ use glib::Object;
 use gtk::glib::object::ObjectExt;
 
 use crate::error::ScratchmarkError;
-use crate::util;
+use crate::util::file_actions;
 
 glib::wrapper! {
     pub struct FolderObject(ObjectSubclass<imp::FolderObject>);
@@ -127,15 +127,15 @@ impl FolderObject {
     }
 
     pub fn create_subfolder(&self) -> Result<(), ScratchmarkError> {
-        let path = util::untitled_folder_path(self.path());
-        util::create_folder(&path)?;
+        let path = file_actions::untitled_folder_path(self.path());
+        file_actions::create_folder(&path)?;
         self.emit_by_name::<()>("subfolder-created", &[&path]);
         Ok(())
     }
 
     pub fn create_document(&self) -> Result<(), ScratchmarkError> {
-        let path = util::untitled_document_path(self.path());
-        util::create_document(&path)?;
+        let path = file_actions::untitled_document_path(self.path());
+        file_actions::create_document(&path)?;
         self.emit_by_name::<()>("document-created", &[&path]);
         Ok(())
     }

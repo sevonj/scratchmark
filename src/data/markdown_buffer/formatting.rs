@@ -2,7 +2,7 @@ use adw::prelude::*;
 
 use gtk::TextIter;
 
-use crate::data::regex;
+use crate::util::regex;
 
 pub fn format_bold(buffer: &impl TextBufferExt) {
     if let Some((start, mut end)) = find_delim_range(buffer, "**") {
