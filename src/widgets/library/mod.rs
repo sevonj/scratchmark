@@ -1,3 +1,5 @@
+mod project_view;
+
 mod imp {
     use std::cell::Cell;
     use std::cell::RefCell;
@@ -21,15 +23,15 @@ mod imp {
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Properties;
 
+    use super::ProjectView;
     use crate::data::DocumentObject;
     use crate::data::FolderObject;
     use crate::widgets::LibraryDocument;
     use crate::widgets::LibraryFolder;
-    use crate::widgets::library_project::LibraryProject;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::LibraryView)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_view/library_view.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/library_view.ui")]
     pub struct LibraryView {
         #[template_child]
         pub(super) projects_container: TemplateChild<gtk::Box>,
@@ -41,7 +43,7 @@ mod imp {
         /// Cleared when found.
         #[property(nullable, get, set)]
         selected_item_from_last_session: RefCell<Option<PathBuf>>,
-        pub(super) projects: RefCell<HashMap<PathBuf, LibraryProject>>,
+        pub(super) projects: RefCell<HashMap<PathBuf, ProjectView>>,
 
         #[property(get, set)]
         ignore_hidden_files: Cell<bool>,
@@ -96,7 +98,7 @@ mod imp {
             ));
             actions.add_action(&action);
 
-            let drafts = LibraryProject::new_draft_table();
+            let drafts = ProjectView::new_draft_table();
             let drafts_path = drafts.root_path();
             self.load_project(drafts);
             self.select_item(drafts_path);
@@ -186,7 +188,7 @@ mod imp {
             self.refresh_selection();
         }
 
-        pub(super) fn load_project(&self, project: LibraryProject) {
+        pub(super) fn load_project(&self, project: ProjectView) {
             let obj = self.obj();
             self.connect_folder(project.root_folder().folder_object());
             project.connect_closure(
@@ -195,7 +197,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryProject, folder: FolderObject| {
+                    move |_: ProjectView, folder: FolderObject| {
                         this.connect_folder(&folder);
                     }
                 ),
@@ -206,7 +208,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: LibraryProject, document: LibraryDocument| {
+                    move |_: ProjectView, document: LibraryDocument| {
                         this.connect_document(document.document_object());
                     }
                 ),
@@ -217,7 +219,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |project: LibraryProject| {
+                    move |project: ProjectView| {
                         obj.emit_by_name::<()>("close-project-requested", &[&project.path()]);
                     }
                 ),
@@ -480,10 +482,9 @@ use gtk::glib;
 use glib::Object;
 use gtk::prelude::BoxExt;
 
-use crate::widgets::LibraryDocument;
-use crate::widgets::LibraryProject;
-
 use super::LibraryFolder;
+use crate::widgets::LibraryDocument;
+use project_view::ProjectView;
 
 glib::wrapper! {
     pub struct LibraryView(ObjectSubclass<imp::LibraryView>)
@@ -540,7 +541,7 @@ impl LibraryView {
                 return;
             }
         }
-        let project = LibraryProject::new(path);
+        let project = ProjectView::new(path);
         self.imp().load_project(project.clone());
         project.refresh_content();
     }

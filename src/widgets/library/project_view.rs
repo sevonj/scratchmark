@@ -35,9 +35,9 @@ mod imp {
     }
 
     #[derive(CompositeTemplate, Default, Properties)]
-    #[properties(wrapper_type = super::LibraryProject)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library_project.ui")]
-    pub struct LibraryProject {
+    #[properties(wrapper_type = super::ProjectView)]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/project_view.ui")]
+    pub struct ProjectView {
         #[template_child]
         pub(super) project_root_vbox: TemplateChild<gtk::Box>,
 
@@ -57,9 +57,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LibraryProject {
-        const NAME: &'static str = "LibraryProject";
-        type Type = super::LibraryProject;
+    impl ObjectSubclass for ProjectView {
+        const NAME: &'static str = "ProjectView";
+        type Type = super::ProjectView;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -72,7 +72,7 @@ mod imp {
     }
 
     #[glib::derived_properties]
-    impl ObjectImpl for LibraryProject {
+    impl ObjectImpl for ProjectView {
         fn constructed(&self) {
             let obj = self.obj();
             self.parent_constructed();
@@ -140,10 +140,10 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for LibraryProject {}
-    impl BinImpl for LibraryProject {}
+    impl WidgetImpl for ProjectView {}
+    impl BinImpl for ProjectView {}
 
-    impl LibraryProject {
+    impl ProjectView {
         pub(super) fn setup_root(&self, root_folder: LibraryFolder) {
             assert!(self.root_folder.borrow().is_none());
             let vbox = &self.project_root_vbox;
@@ -408,12 +408,12 @@ use crate::widgets::LibraryDocument;
 use crate::widgets::LibraryFolder;
 
 glib::wrapper! {
-    pub struct LibraryProject(ObjectSubclass<imp::LibraryProject>)
+    pub struct ProjectView(ObjectSubclass<imp::ProjectView>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl LibraryProject {
+impl ProjectView {
     /// New standard project
     pub fn new(path: PathBuf) -> Self {
         let this: Self = Object::builder().build();
