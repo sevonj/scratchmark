@@ -3,7 +3,7 @@
     <template class="ProjectView" parent="AdwBin">
         <child>
             <object class="GtkBox" id="project_root_vbox">
-                <property name="orientation">1</property>
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                 <property name="margin-start">6</property>
                 <property name="margin-end">6</property>
             </object>

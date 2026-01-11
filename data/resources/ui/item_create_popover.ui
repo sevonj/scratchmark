@@ -3,7 +3,7 @@
   <template class="ItemCreatePopover" parent="GtkPopover">
     <child>
       <object class="GtkBox">
-        <property name="orientation">vertical</property>
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkEntry" id="name_field">

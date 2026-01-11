@@ -3,7 +3,7 @@
     <template class="FolderView" parent="AdwBin">
         <child>
             <object class="GtkBox">
-                <property name="orientation">1</property>
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                 <child>
                     <object class="AdwBin" id="expand_button_cont">
                         <child>
@@ -13,7 +13,7 @@
                                 </style>
                                 <child>
                                     <object class="GtkBox" id="title_row">
-                                        <property name="orientation">0</property>
+                                        <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                                         <property name="spacing">4</property>
                                         <child>
                                             <object class="GtkImage" id="expand_icon">
@@ -52,17 +52,17 @@
                 </child>
                 <child>
                     <object class="GtkBox" id="content_vbox">
-                        <property name="orientation">1</property>
+                        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                         <property name="spacing">2</property>
                         <child>
                             <object class="GtkBox" id="subdirs_vbox">
-                                <property name="orientation">1</property>
+                                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                                 <property name="spacing">2</property>
                             </object>
                         </child>
                         <child>
                             <object class="GtkBox" id="documents_vbox">
-                                <property name="orientation">1</property>
+                                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                                 <property name="spacing">2</property>
                             </object>
                         </child>
