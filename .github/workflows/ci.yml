@@ -15,6 +15,13 @@ jobs:
       - name: Format check
         run: cargo fmt -v --check
 
+  potfiles:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Verify POTFILES.in
+        run: sh po/verify_POTFILES.sh
+
   cargo-deny:
     runs-on: ubuntu-latest
     steps:
