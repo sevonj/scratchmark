@@ -23,12 +23,15 @@
   <launchable type="desktop-id">org.scratchmark.Scratchmark.desktop</launchable>
   <screenshots>
     <screenshot type="default">
+      <caption>Editor interface</caption>
       <image>https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_a_light.png?raw=true</image>
     </screenshot>
     <screenshot>
+      <caption>Focus mode</caption>
       <image>https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_b_light.png?raw=true</image>
     </screenshot>
     <screenshot>
+      <caption>All panels open</caption>
       <image>https://github.com/sevonj/scratchmark/blob/master/data/screenshots/screenshot_c_dark.png?raw=true</image>
     </screenshot>
   </screenshots>
