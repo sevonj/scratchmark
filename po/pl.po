@@ -5,13 +5,14 @@
 # Łukasz Horodecki <dakilla@gmail.com>, 2025.
 # Anonymous <anonymous@noreply.codeberg.org>, 2025.
 # Eryk Michalak <gnu.ewm@protonmail.com>, 2025.
+# LukaszH77 <lukaszh77@noreply.codeberg.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 15:43+0200\n"
-"PO-Revision-Date: 2025-11-20 13:51+0000\n"
-"Last-Translator: Eryk Michalak <gnu.ewm@protonmail.com>\n"
+"POT-Creation-Date: 2026-01-17 00:02+0200\n"
+"PO-Revision-Date: 2026-01-06 08:21+0000\n"
+"Last-Translator: LukaszH77 <lukaszh77@noreply.codeberg.org>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
 "app/pl/>\n"
 "Language: pl\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.14\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Scratchmark"
 msgstr "Scratchmark"
@@ -31,41 +32,70 @@ msgstr "Edytor Markdown"
 msgid "Scratchmark Markdown editor"
 msgstr "Scratchmark edytor Markdown"
 
-msgid "Organized markdown editor"
-msgstr "Zorganizowany edytor Markdown"
+msgid "Markdown editor for writing"
+msgstr "Edytor tekstu Markdown"
 
-msgid "Write without distractions and keep your documents organized."
-msgstr "Pisz bez rozpraszania uwagi i utrzymuj porządek w swoich dokumentach."
-
-msgid "Editing features are designed to stay out of sight when not needed."
-msgstr ""
-"Funkcje edycji są zaprojektowane tak, by pozostawały niewidoczne, gdy są "
-"niepotrzebne."
+msgid "# Markdown Editor for Writing"
+msgstr "# Edytor tekstu Markdown"
 
 msgid ""
-"Documents are organized into folders, which may contain a writing project, "
-"personal notes, or maybe a recipe book."
+"**Scratchmark** is a pleasant text editor for writing. It tries to give you "
+"everything you need and otherwise stay out of your way so you can just focus "
+"on the text. The app can be used for writing essays and making quick notes "
+"alike. Its file management is built around a folder structure that can "
+"handle large projects with lots of files. You can add any folder on your "
+"computer to the library, and move files around by dragging and dropping."
 msgstr ""
-"Dokumenty są zorganizowane w katalogach, które mogą zawierać projekt "
-"pisarski, osobiste notatki lub książkę kucharską."
+"**Scratchmark** to przyjemny edytor tekstu. Stara się zapewnić ci wszystko, "
+"czego potrzebujesz i jednocześnie nie przeszkadzać, pozwalając na skupienie "
+"się na tekście. Aplikacja nadaje się zarówno do pisania esejów, jak i "
+"robienia szybkich notatek. Zarządzanie plikami opiera się na strukturze "
+"folderów, która może obsłużyć duże projekty z wieloma plikami. Możesz dodać "
+"do biblioteki dowolny folder z twojego komputera i przenosić pliki, "
+"przeciągając je i upuszczając."
 
-msgid "Statistics"
-msgstr "Statystyki"
+msgid ""
+"It uses Markdown, which means that ==all text formatting can be done by "
+"typing.=="
+msgstr ""
+"Używa składni Markdown, co oznacza, że ==całe formatowanie tekstu, może być "
+"wykonane przez pisanie.=="
 
-msgid "Characters"
-msgstr "Znaki"
+msgid ""
+"The editor is simple and intuitive, so anyone should be able to just pick it "
+"up and start writing. It can display simple writing statistics, and has "
+"features, such as focus mode and fullscreen support to reduce distractions."
+msgstr ""
+"Edytor jest prosty i intuicyjny, więc każdy powinien móc po prostu go "
+"uruchomić i zacząć pisać. Może wyświetlać proste statystyki tekstu i oferuje "
+"takie funkcje jak tryb skupienie i obsługa pełnego ekranu, by ograniczyć "
+"rozpraszanie uwagi."
 
-msgid "N/A"
-msgstr "N/A"
+msgid ""
+"Markdown is an open and widely used markup language. Documents created with "
+"Scratchmark are more or less compatible with other similar apps. If you "
+"already have a \"notebook\" or a project from another app, you can just add "
+"the folder to Scratchmark's library. This also goes the other way: if you've "
+"had enough of Scratchmark, it's easy to switch to something else."
+msgstr ""
+"Markdown jest otwartym i szeroko używanym językiem znaczników. Dokumenty "
+"utworzone w Scratchmark są w mniejszym lub większym stopniu kompatybilne z "
+"innymi podobnymi aplikacjami. Jeżeli masz już „notatnik” lub projekt z innej "
+"aplikacji, możesz po prostu katalog do biblioteki Scratchmark. To działa "
+"również w drugą stronę: jeżeli będziesz mieć dosyć Scratchmark, łatwo będzie "
+"przenieść się do czegoś innego."
 
-msgid "Excluding Spaces"
-msgstr "Z wyłączeniem spacji"
+msgid "Nothing Open"
+msgstr "Nic nie jest otwarte"
 
-msgid "Words"
-msgstr "Słowa"
+msgid "Create a new document or open an existing one from the sidebar"
+msgstr "Utwórz nowy dokument lub otwórz już istniejący w panelu bocznym"
 
-msgid "Lines"
-msgstr "Linie"
+msgid "Name..."
+msgstr "Nazwa..."
+
+msgid "Create"
+msgstr "Utwórz"
 
 msgid "Bold (Ctrl+B)"
 msgstr "Pogrubienie (Ctrl+B)"
@@ -79,104 +109,17 @@ msgstr "Przekreślenie"
 msgid "Highlight"
 msgstr "Wyróżnienie"
 
-msgid "Heading 1"
-msgstr "Nagłówek 1"
+msgid "Heading 1 (Ctrl+1)"
+msgstr "Nagłówek 1 (Ctrl+1)"
 
-msgid "Heading 2"
-msgstr "Nagłówek 2"
+msgid "Heading 2 (Ctrl+2)"
+msgstr "Nagłówek 2 (Ctrl+2)"
 
 msgid "Blockquote"
 msgstr "Cytat blokowy"
 
 msgid "Code"
 msgstr "Kod"
-
-msgid "Nothing Open"
-msgstr "Nic nie jest otwarte"
-
-msgid "Create a new document or open an existing one from the sidebar"
-msgstr "Utwórz nowy dokument lub otwórz już istniejący w panelu bocznym"
-
-msgid "Search"
-msgstr "Szukaj"
-
-msgid "Replace"
-msgstr "Zastąp"
-
-msgid "Match Case"
-msgstr "Dopasuj wielkość znaków"
-
-msgid "Whole Words"
-msgstr "Całe słowa"
-
-msgid "Use Regex"
-msgstr "Użyj wyrażeń regularnych"
-
-msgid "?"
-msgstr "?"
-
-msgid "Previous Match (Shift + Return)"
-msgstr "Poprzednie trafienie (Shift + Enter)"
-
-msgid "Next Match (Return)"
-msgstr "Następne trafienie (Enter)"
-
-msgid "Search and Replace (Ctrl+F)"
-msgstr "Szukaj i zastąp"
-
-msgid "Close Search"
-msgstr "Zamknij wyszukiwanie"
-
-msgid "Replace (Return)"
-msgstr "Zastąp (Enter)"
-
-msgid "Replace All"
-msgstr "Zastąp wszystkie"
-
-msgid "Replace All (Shift + Return)"
-msgstr "Zastąp wszystkie (Shift + Enter)"
-
-msgid "File changed on disk"
-msgstr "Plik został zmieniony na dysku"
-
-msgid "Resolve"
-msgstr "Rozwiąż"
-
-msgid "Name..."
-msgstr "Nazwa..."
-
-msgid "Create"
-msgstr "Utwórz"
-
-msgid "Rename"
-msgstr "Zmień nazwę"
-
-msgid "Library"
-msgstr "Biblioteka"
-
-msgid "Add Project"
-msgstr "Dodaj projekt"
-
-msgid "New Document"
-msgstr "Nowy dokument"
-
-msgid "Create Subfolder"
-msgstr "Utwórz podkatalog"
-
-msgid "Show in File Manager"
-msgstr "Pokaż w menedżerze plików"
-
-msgid "Move to Trash"
-msgstr "Przenieś do śmieci"
-
-msgid "Delete Permanently"
-msgstr "Usuń trwale"
-
-msgid "Close Project"
-msgstr "Zamknij projekt"
-
-msgid "Duplicate"
-msgstr "Duplikuj"
 
 msgid "General"
 msgstr "Ogólne"
@@ -204,6 +147,9 @@ msgstr "Pokaż minimapę"
 
 msgid "Show overview of the document on the right side"
 msgstr "Pokaż podgląd dokumentu po prawej stronie"
+
+msgid "Library"
+msgstr "Biblioteka"
 
 msgid "Ignore Hidden Files"
 msgstr "Ignoruj ukryte pliki"
@@ -249,8 +195,8 @@ msgid "Save Document"
 msgstr "Zapisz dokument"
 
 msgctxt "shortcut window"
-msgid "Rename Document"
-msgstr "Zmień nazwę dokumentu"
+msgid "Rename"
+msgstr "Zmień nazwę"
 
 msgctxt "shortcut window"
 msgid "Close Document"
@@ -269,12 +215,54 @@ msgid "Search and Replace Text"
 msgstr "Szukaj i zastąp tekst"
 
 msgctxt "shortcut window"
+msgid "Formatting"
+msgstr "Formatowanie"
+
+msgctxt "shortcut window"
+msgid "Bold"
+msgstr "Pogrubienie"
+
+msgctxt "shortcut window"
+msgid "Italic"
+msgstr "Kursywa"
+
+msgctxt "shortcut window"
+msgid "Heading 1"
+msgstr "Nagłówek 1"
+
+msgctxt "shortcut window"
+msgid "Heading 2"
+msgstr "Nagłówek 2"
+
+msgctxt "shortcut window"
+msgid "Heading 3"
+msgstr "Nagłówek 3"
+
+msgctxt "shortcut window"
+msgid "Heading 4"
+msgstr "Nagłówek 4"
+
+msgctxt "shortcut window"
+msgid "Heading 5"
+msgstr "Nagłówek 5"
+
+msgctxt "shortcut window"
+msgid "Heading 6"
+msgstr "Nagłówek 6"
+
+msgctxt "shortcut window"
 msgid "Library"
 msgstr "Biblioteka"
 
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Ręczne odświeżenie"
+
+msgid "Create Subfolder (Shift+Ctrl+N)"
+msgstr ""
+
+msgid "Menu"
+msgstr "Menu"
 
 msgid "Toggle Sidebar (F9)"
 msgstr "Przełącz panel boczny (F9)"
@@ -285,17 +273,20 @@ msgstr "Nowy dokument (Ctrl+N)"
 msgid "Exit Fullscreen"
 msgstr "Opuść pełny ekran"
 
-msgid "Menu"
-msgstr "Menu"
-
 msgid "Document Info"
 msgstr "Informacje o dokumencie"
 
 msgid "Formatting Toolbar"
 msgstr "Pasek formatowania"
 
-msgid "New"
-msgstr "Nowy"
+msgid "New Document"
+msgstr "Nowy dokument"
+
+msgid "Create Subfolder"
+msgstr "Utwórz podkatalog"
+
+msgid "Add Project"
+msgstr "Dodaj projekt"
 
 msgid "Save"
 msgstr "Zapisz"
@@ -323,6 +314,122 @@ msgstr "Skróty klawiszowe"
 
 msgid "About Scratchmark"
 msgstr "O programie"
+
+msgid "Statistics"
+msgstr "Statystyki"
+
+msgid "Characters"
+msgstr "Znaki"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "Excluding Spaces"
+msgstr "Z wyłączeniem spacji"
+
+msgid "Words"
+msgstr "Słowa"
+
+msgid "Lines"
+msgstr "Linie"
+
+msgid "File changed on disk"
+msgstr "Plik został zmieniony na dysku"
+
+msgid "Resolve"
+msgstr "Rozwiąż"
+
+msgid "Search"
+msgstr "Szukaj"
+
+msgid "Replace"
+msgstr "Zastąp"
+
+msgid "Match Case"
+msgstr "Dopasuj wielkość znaków"
+
+msgid "Whole Words"
+msgstr "Całe słowa"
+
+msgid "Use Regex"
+msgstr "Użyj wyrażeń regularnych"
+
+msgid "?"
+msgstr "?"
+
+msgid "Previous Match (Shift + Return)"
+msgstr "Poprzednie trafienie (Shift + Enter)"
+
+msgid "Next Match (Return)"
+msgstr "Następne trafienie (Enter)"
+
+msgid "Search and Replace (Ctrl+F)"
+msgstr "Szukaj i zastąp"
+
+msgid "Close Search"
+msgstr "Zamknij wyszukiwanie"
+
+msgid "Replace (Return)"
+msgstr "Zastąp (Enter)"
+
+msgid "Replace All"
+msgstr "Zastąp wszystkie"
+
+msgid "Replace All (Shift + Return)"
+msgstr "Zastąp wszystkie (Shift + Enter)"
+
+msgid "Show in File Manager"
+msgstr "Pokaż w menedżerze plików"
+
+msgid "Close Project"
+msgstr "Zamknij projekt"
+
+msgid "Project may have been moved or deleted."
+msgstr ""
+
+msgid "Rename"
+msgstr "Zmień nazwę"
+
+msgid "Duplicate"
+msgstr "Duplikuj"
+
+msgid "Move to Trash"
+msgstr "Przenieś do śmieci"
+
+msgid "Delete Permanently"
+msgstr "Usuń trwale"
+
+#~ msgid "New"
+#~ msgstr "Nowy"
+
+#~ msgid "Heading 1"
+#~ msgstr "Nagłówek 1"
+
+#~ msgid "Heading 2"
+#~ msgstr "Nagłówek 2"
+
+#~ msgid "Organized markdown editor"
+#~ msgstr "Zorganizowany edytor Markdown"
+
+#~ msgid "Write without distractions and keep your documents organized."
+#~ msgstr ""
+#~ "Pisz bez rozpraszania uwagi i utrzymuj porządek w swoich dokumentach."
+
+#~ msgid "Editing features are designed to stay out of sight when not needed."
+#~ msgstr ""
+#~ "Funkcje edycji są zaprojektowane tak, by pozostawały niewidoczne, gdy są "
+#~ "niepotrzebne."
+
+#~ msgid ""
+#~ "Documents are organized into folders, which may contain a writing "
+#~ "project, personal notes, or maybe a recipe book."
+#~ msgstr ""
+#~ "Dokumenty są zorganizowane w katalogach, które mogą zawierać projekt "
+#~ "pisarski, osobiste notatki lub książkę kucharską."
+
+#~ msgctxt "shortcut window"
+#~ msgid "Rename Document"
+#~ msgstr "Zmień nazwę dokumentu"
 
 #~ msgid "Sevonj"
 #~ msgstr "Sevonj"
