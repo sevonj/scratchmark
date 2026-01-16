@@ -20,12 +20,19 @@
             <property name="child">
               <object class="AdwToolbarView" id="sidebar_toolbar_view">
                 <child type="top">
-                  <object class="AdwHeaderBar" id="sidebar_header_bar">
-                    <property name="show-title">False</property>
+                  <object class="AdwHeaderBar">
                     <child type="start">
                       <object class="GtkMenuButton" id="new_folder_button">
                         <property name="icon-name">folder-new-symbolic</property>
-                        <property name="tooltip-text" translatable="yes">Create Subfolder</property>
+                        <property name="tooltip-text" translatable="yes">Create Subfolder (Shift+Ctrl+N)</property>
+                      </object>
+                    </child>
+                    <child type="end">
+                      <object class="GtkMenuButton">
+                        <property name="primary">True</property>
+                        <property name="icon-name">open-menu-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Menu</property>
+                        <property name="menu-model">primary_menu</property>
                       </object>
                     </child>
                   </object>
@@ -72,14 +79,6 @@
                               </object>
                             </child>
                             <child type="end">
-                              <object class="GtkMenuButton">
-                                <property name="primary">True</property>
-                                <property name="icon-name">open-menu-symbolic</property>
-                                <property name="tooltip-text" translatable="yes">Menu</property>
-                                <property name="menu-model">primary_menu</property>
-                              </object>
-                            </child>
-                            <child type="end">
                               <object class="GtkToggleButton" id="editor_sidebar_toggle">
                                 <property name="icon-name">info-outline-symbolic</property>
                                 <property name="tooltip-text" translatable="yes">Document Info</property>
@@ -112,8 +111,12 @@
   <menu id="primary_menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">New</attribute>
+        <attribute name="label" translatable="yes">New Document</attribute>
         <attribute name="action">win.file-new</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Create Subfolder</attribute>
+        <attribute name="action">win.folder-new</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Add Project</attribute>
