@@ -63,8 +63,6 @@ mod imp {
         #[template_child]
         sidebar_page: TemplateChild<NavigationPage>,
         #[template_child]
-        sidebar_header_bar: TemplateChild<HeaderBar>,
-        #[template_child]
         sidebar_toolbar_view: TemplateChild<ToolbarView>,
         #[template_child]
         sidebar_toggle: TemplateChild<ToggleButton>,
@@ -647,6 +645,16 @@ mod imp {
                 self,
                 move |_, _| {
                     this.new_document_button.popup();
+                }
+            ));
+            obj.add_action(&action);
+
+            let action = SimpleAction::new("folder-new", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, _| {
+                    this.new_folder_button.popup();
                 }
             ));
             obj.add_action(&action);
