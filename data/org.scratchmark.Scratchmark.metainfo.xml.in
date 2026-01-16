@@ -48,6 +48,22 @@
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <url type="translate">https://translate.codeberg.org/projects/scratchmark/app/</url>
   <releases>
+    <release version="v1.7.0" date="2026-01-17">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.7.0</url>
+      <description translate="no">
+        <p>Many small convenience features for inline formatting</p>
+        <ul>
+          <li>Feature: Auto-close typed inline formatting</li>
+          <li>Feature: Inline formatting actions detect whole words</li>
+          <li>Feature: Copy and Cut take the current line, if nothing is selected</li>
+          <li>Feature: Added keyboard shortcuts for some formatting actions</li>
+          <li>Feature: Added keyboard shortcut create subfolder action</li>
+          <li>Fix: Heading formatting action now preserves cursor position</li>
+          <li>Misc: Improved and Commonmark-compliant syntax detection for headers</li>
+          <li>Design: Minor library ui redesign</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.6.0" date="2025-12-30">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.6.0</url>
       <description translate="no">
