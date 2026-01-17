@@ -30,8 +30,8 @@ mod imp {
     use super::FileButton;
     use super::FolderView;
     use super::ProjectView;
-    use crate::data::DocumentObject;
-    use crate::data::FolderObject;
+    use crate::data::Document;
+    use crate::data::Folder;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::LibraryView)]
@@ -116,22 +116,22 @@ mod imp {
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-rename-requested")
-                        .param_types([FolderObject::static_type(), PathBuf::static_type()])
+                        .param_types([Folder::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("document-rename-requested")
-                        .param_types([DocumentObject::static_type(), PathBuf::static_type()])
+                        .param_types([Document::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
-                        .param_types([FolderObject::static_type()])
+                        .param_types([Folder::static_type()])
                         .build(),
                     Signal::builder("document-delete-requested")
-                        .param_types([DocumentObject::static_type()])
+                        .param_types([Document::static_type()])
                         .build(),
                     Signal::builder("folder-trash-requested")
-                        .param_types([FolderObject::static_type()])
+                        .param_types([Folder::static_type()])
                         .build(),
                     Signal::builder("document-trash-requested")
-                        .param_types([DocumentObject::static_type()])
+                        .param_types([Document::static_type()])
                         .build(),
                     Signal::builder("close-project-requested")
                         .param_types([PathBuf::static_type()])
@@ -194,14 +194,14 @@ mod imp {
 
         pub(super) fn load_project(&self, project: ProjectView) {
             let obj = self.obj();
-            self.connect_folder(project.root_folder().folder_object());
+            self.connect_folder(project.root_folder().folder());
             project.connect_closure(
                 "folder-added",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: ProjectView, folder: FolderObject| {
+                    move |_: ProjectView, folder: Folder| {
                         this.connect_folder(&folder);
                     }
                 ),
@@ -212,8 +212,8 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: ProjectView, document: FileButton| {
-                        this.connect_document(document.document_object());
+                    move |_: ProjectView, document_button: FileButton| {
+                        this.connect_document(document_button.document());
                     }
                 ),
             );
@@ -243,21 +243,21 @@ mod imp {
             let obj = self.obj();
 
             if let Some(old_selection) = self.get_folder(&obj.selected_item_path()) {
-                old_selection.folder_object().set_is_selected(false);
+                old_selection.folder().set_is_selected(false);
             } else if let Some(old_selection) = self.get_document(&obj.selected_item_path()) {
-                old_selection.document_object().set_is_selected(false);
+                old_selection.document().set_is_selected(false);
             }
 
             if let Some(new_selection) = self.get_folder(&path) {
-                new_selection.folder_object().set_is_selected(true);
+                new_selection.folder().set_is_selected(true);
             } else if let Some(new_selection) = self.get_document(&path) {
-                new_selection.document_object().set_is_selected(true);
+                new_selection.document().set_is_selected(true);
             }
 
             obj.set_selected_item_path(path.clone());
         }
 
-        fn connect_folder(&self, folder: &FolderObject) {
+        fn connect_folder(&self, folder: &Folder) {
             let obj = self.obj();
             let path = folder.path();
 
@@ -272,7 +272,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |folder: FolderObject| {
+                    move |folder: Folder| {
                         this.select_item(folder.path());
                     }
                 ),
@@ -284,7 +284,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |folder: FolderObject, new_path: PathBuf| {
+                    move |folder: Folder, new_path: PathBuf| {
                         obj.emit_by_name::<()>("folder-rename-requested", &[&folder, &new_path]);
                     }
                 ),
@@ -296,7 +296,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: FolderObject, path: PathBuf| {
+                    move |_: Folder, path: PathBuf| {
                         obj.emit_by_name::<()>("document-selected", &[&path]);
                     }
                 ),
@@ -308,7 +308,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: FolderObject, _path: PathBuf| {
+                    move |_: Folder, _path: PathBuf| {
                         this.refresh_content();
                     }
                 ),
@@ -320,7 +320,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: FolderObject, _path: PathBuf| {
+                    move |_: Folder, _path: PathBuf| {
                         this.refresh_content();
                     }
                 ),
@@ -332,7 +332,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |folder: FolderObject| {
+                    move |folder: Folder| {
                         obj.emit_by_name::<()>("folder-trash-requested", &[&folder]);
                     }
                 ),
@@ -344,7 +344,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |folder: FolderObject| {
+                    move |folder: Folder| {
                         obj.emit_by_name::<()>("folder-delete-requested", &[&folder]);
                     }
                 ),
@@ -356,14 +356,14 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: FolderObject, msg: String| {
+                    move |_: Folder, msg: String| {
                         obj.emit_by_name::<()>("notify-err", &[&msg]);
                     }
                 ),
             );
         }
 
-        fn connect_document(&self, doc: &DocumentObject) {
+        fn connect_document(&self, doc: &Document) {
             let obj = self.obj();
 
             let path = doc.path();
@@ -384,7 +384,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |doc: DocumentObject| {
+                    move |doc: Document| {
                         this.select_item(doc.path());
                         let path = doc.path();
                         this.obj().emit_by_name::<()>("document-selected", &[&path]);
@@ -398,7 +398,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_doc: DocumentObject| {
+                    move |_doc: Document| {
                         obj.refresh_content();
                     }
                 ),
@@ -410,7 +410,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |doc: DocumentObject, new_path: PathBuf| {
+                    move |doc: Document, new_path: PathBuf| {
                         obj.emit_by_name::<()>("document-rename-requested", &[&doc, &new_path]);
                     }
                 ),
@@ -422,7 +422,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |doc: DocumentObject| {
+                    move |doc: Document| {
                         obj.emit_by_name::<()>("document-trash-requested", &[&doc]);
                     }
                 ),
@@ -434,7 +434,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |doc: DocumentObject| {
+                    move |doc: Document| {
                         obj.emit_by_name::<()>("document-delete-requested", &[&doc]);
                     }
                 ),
@@ -570,10 +570,10 @@ impl LibraryView {
             .open_document_path()
             .and_then(|path| self.get_document(&path))
         {
-            old.document_object().set_is_open_in_editor(false);
+            old.document().set_is_open_in_editor(false);
         }
         if let Some(new) = path.as_ref().and_then(|path| self.get_document(path)) {
-            new.document_object().set_is_open_in_editor(true);
+            new.document().set_is_open_in_editor(true);
         }
         self.imp().open_document.replace(path);
     }

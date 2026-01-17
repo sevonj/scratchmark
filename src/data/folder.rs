@@ -12,8 +12,8 @@ mod imp {
     use glib::Properties;
 
     #[derive(Properties, Default)]
-    #[properties(wrapper_type = super::FolderObject)]
-    pub struct FolderObject {
+    #[properties(wrapper_type = super::Folder)]
+    pub struct Folder {
         #[property(get, set)]
         pub(super) path: RefCell<PathBuf>,
         #[property(get, set)]
@@ -25,13 +25,13 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for FolderObject {
-        const NAME: &'static str = "FolderObject";
-        type Type = super::FolderObject;
+    impl ObjectSubclass for Folder {
+        const NAME: &'static str = "Folder";
+        type Type = super::Folder;
     }
 
     #[glib::derived_properties]
-    impl ObjectImpl for FolderObject {
+    impl ObjectImpl for Folder {
         fn signals() -> &'static [Signal] {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
@@ -70,10 +70,10 @@ use crate::error::ScratchmarkError;
 use crate::util::file_actions;
 
 glib::wrapper! {
-    pub struct FolderObject(ObjectSubclass<imp::FolderObject>);
+    pub struct Folder(ObjectSubclass<imp::Folder>);
 }
 
-impl FolderObject {
+impl Folder {
     pub fn new(path: PathBuf, depth: u32) -> Self {
         let name = path.file_name().unwrap().to_string_lossy().into_owned();
         Object::builder()
@@ -160,7 +160,7 @@ mod tests {
     #[test]
     fn test_move_valid_path() {
         std::fs::create_dir_all(PathBuf::from(PROJECT_ROOT).join("test")).unwrap();
-        let folder = FolderObject::new("path/to/".into(), NOT_ROOT);
+        let folder = Folder::new("path/to/".into(), NOT_ROOT);
         assert!(
             folder
                 .rename(PathBuf::from(PROJECT_ROOT).join("test").join("new_folder"))
@@ -170,11 +170,11 @@ mod tests {
 
     #[test]
     fn test_move_invalid_path_noparent() {
-        let folder = FolderObject::new("path/to/".into(), NOT_ROOT);
+        let folder = Folder::new("path/to/".into(), NOT_ROOT);
         folder.connect_closure(
             "rename-requested",
             false,
-            closure_local!(move |_folder: FolderObject, _path: PathBuf| {
+            closure_local!(move |_folder: Folder, _path: PathBuf| {
                 assert!(false, "Signal emitted");
             }),
         );
@@ -186,11 +186,11 @@ mod tests {
 
     #[test]
     fn test_cant_move_if_root() {
-        let folder = FolderObject::new("path/to/".into(), ROOT);
+        let folder = Folder::new("path/to/".into(), ROOT);
         folder.connect_closure(
             "rename-requested",
             false,
-            closure_local!(move |_folder: FolderObject, _path: PathBuf| {
+            closure_local!(move |_folder: Folder, _path: PathBuf| {
                 assert!(false, "Signal emitted");
             }),
         );
@@ -202,11 +202,11 @@ mod tests {
 
     #[test]
     fn test_cant_trash_if_root() {
-        let folder = FolderObject::new("path/to/".into(), ROOT);
+        let folder = Folder::new("path/to/".into(), ROOT);
         folder.connect_closure(
             "trash-requested",
             false,
-            closure_local!(move |_folder: FolderObject| {
+            closure_local!(move |_folder: Folder| {
                 assert!(false, "Signal emitted");
             }),
         );
@@ -215,11 +215,11 @@ mod tests {
 
     #[test]
     fn test_cant_delete_if_root() {
-        let folder = FolderObject::new("path/to/".into(), ROOT);
+        let folder = Folder::new("path/to/".into(), ROOT);
         folder.connect_closure(
             "delete-requested",
             false,
-            closure_local!(move |_folder: FolderObject| {
+            closure_local!(move |_folder: Folder| {
                 assert!(false, "Signal emitted");
             }),
         );

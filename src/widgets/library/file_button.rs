@@ -25,7 +25,7 @@ mod imp {
     use gtk::glib::Binding;
 
     use super::super::item_rename_popover::ItemRenamePopover;
-    use crate::data::DocumentObject;
+    use crate::data::Document;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library/file_button.ui")]
@@ -39,7 +39,7 @@ mod imp {
         #[template_child]
         pub(super) title_row: TemplateChild<gtk::Box>,
 
-        pub(super) document_object: OnceLock<DocumentObject>,
+        pub(super) document: OnceLock<Document>,
         pub(super) bindings: RefCell<Vec<Binding>>,
 
         context_menu_popover: RefCell<Option<PopoverMenu>>,
@@ -75,7 +75,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_| {
-                    this.document_object().select();
+                    this.document().select();
                 }
             ));
 
@@ -110,7 +110,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    this.document_object().duplicate();
+                    this.document().duplicate();
                 }
             ));
             actions.add_action(&action);
@@ -120,7 +120,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    this.document_object().trash();
+                    this.document().trash();
                 }
             ));
             actions.add_action(&action);
@@ -130,7 +130,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    this.document_object().delete();
+                    this.document().delete();
                 }
             ));
             actions.add_action(&action);
@@ -145,8 +145,8 @@ mod imp {
             self.rename_popover.borrow().as_ref().unwrap().popup();
         }
 
-        pub(super) fn document_object(&self) -> &DocumentObject {
-            self.document_object.get().unwrap()
+        pub(super) fn document(&self) -> &Document {
+            self.document.get().unwrap()
         }
 
         fn setup_context_menu(&self) {
@@ -198,8 +198,8 @@ mod imp {
                     #[weak(rename_to = this)]
                     self,
                     move |_popover: ItemRenamePopover, path: PathBuf| {
-                        if let Err(e) = this.document_object().rename(path) {
-                            this.document_object().notify(&e.to_string())
+                        if let Err(e) = this.document().rename(path) {
+                            this.document().notify(&e.to_string())
                         }
                     }
                 ),
@@ -237,7 +237,7 @@ use gtk::prelude::*;
 
 use glib::Object;
 
-use crate::data::DocumentObject;
+use crate::data::Document;
 
 glib::wrapper! {
 pub struct FileButton(ObjectSubclass<imp::FileButton>)
@@ -246,22 +246,22 @@ pub struct FileButton(ObjectSubclass<imp::FileButton>)
 }
 
 impl FileButton {
-    pub fn new(data: &DocumentObject) -> Self {
+    pub fn new(data: &Document) -> Self {
         let this: Self = Object::builder().build();
         this.bind(data);
         this
     }
 
-    pub fn document_object(&self) -> &DocumentObject {
-        self.imp().document_object()
+    pub fn document(&self) -> &Document {
+        self.imp().document()
     }
 
     pub fn path(&self) -> PathBuf {
-        self.document_object().path()
+        self.document().path()
     }
 
     pub fn stem(&self) -> String {
-        self.document_object().stem()
+        self.document().stem()
     }
 
     pub fn prompt_rename(&self) {
@@ -269,14 +269,14 @@ impl FileButton {
     }
 
     pub fn rename(&self, path: PathBuf) {
-        if let Err(e) = self.document_object().rename(path) {
-            self.document_object().notify(&e.to_string())
+        if let Err(e) = self.document().rename(path) {
+            self.document().notify(&e.to_string())
         }
     }
 
-    fn bind(&self, data: &DocumentObject) {
+    fn bind(&self, data: &Document) {
         let imp = self.imp();
-        imp.document_object.get_or_init(|| data.clone());
+        imp.document.get_or_init(|| data.clone());
         let path = data.path();
 
         let button: &ToggleButton = imp.button.as_ref();

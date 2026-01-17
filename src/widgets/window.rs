@@ -40,8 +40,8 @@ mod imp {
 
     use crate::APP_ID;
     use crate::config;
-    use crate::data::DocumentObject;
-    use crate::data::FolderObject;
+    use crate::data::Document;
+    use crate::data::Folder;
     use crate::error::ScratchmarkError;
     use crate::util::file_actions;
 
@@ -255,7 +255,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryView, folder: FolderObject| {
+                    move |_: LibraryView, folder: Folder| {
                         obj.imp().trash_folder(&folder);
                     }
                 ),
@@ -267,7 +267,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryView, doc: DocumentObject| {
+                    move |_: LibraryView, doc: Document| {
                         obj.imp().trash_document(&doc);
                     }
                 ),
@@ -279,7 +279,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryView, folder: FolderObject| {
+                    move |_: LibraryView, folder: Folder| {
                         let heading = "Delete folder?";
                         let body = format!(
                             "Are you sure you want to permanently delete {}?",
@@ -318,7 +318,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_browser: LibraryView, folder: FolderObject, new_path: PathBuf| {
+                    move |_browser: LibraryView, folder: Folder, new_path: PathBuf| {
                         assert!(!folder.is_root());
 
                         let original_path = folder.path();
@@ -377,7 +377,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_browser: LibraryView, doc: DocumentObject, new_path: PathBuf| {
+                    move |_browser: LibraryView, doc: Document, new_path: PathBuf| {
                         let original_path = doc.path();
                         let new_path = file_actions::incremented_path(new_path);
 
@@ -420,7 +420,7 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |_: LibraryView, doc: DocumentObject| {
+                    move |_: LibraryView, doc: Document| {
                         let heading = "Delete document?";
                         let body = format!(
                             "Are you sure you want to permanently delete {}?",
@@ -1057,7 +1057,7 @@ mod imp {
             self.update_toolbar_style();
         }
 
-        fn trash_folder(&self, folder: &FolderObject) {
+        fn trash_folder(&self, folder: &Folder) {
             assert!(!folder.is_root());
 
             let path = folder.path();
@@ -1079,7 +1079,7 @@ mod imp {
             self.library_browser.refresh_content();
         }
 
-        fn trash_document(&self, doc: &DocumentObject) {
+        fn trash_document(&self, doc: &Document) {
             let path = doc.path();
             let currently_open = self
                 .editor
@@ -1099,7 +1099,7 @@ mod imp {
             self.library_browser.refresh_content();
         }
 
-        fn delete_folder(&self, folder: &FolderObject) {
+        fn delete_folder(&self, folder: &Folder) {
             assert!(!folder.is_root());
 
             let path = folder.path();
@@ -1119,7 +1119,7 @@ mod imp {
             self.library_browser.refresh_content();
         }
 
-        fn delete_document(&self, doc: &DocumentObject) {
+        fn delete_document(&self, doc: &Document) {
             let path = doc.path();
             let currently_open = self
                 .editor

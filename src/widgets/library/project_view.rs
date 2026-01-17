@@ -25,8 +25,8 @@ mod imp {
     use super::super::err_placeholder_item::ErrPlaceholderItem;
     use super::FileButton;
     use super::FolderView;
-    use crate::data::DocumentObject;
-    use crate::data::FolderObject;
+    use crate::data::Document;
+    use crate::data::Folder;
 
     #[derive(Debug)]
     enum ProjectEntry {
@@ -111,7 +111,7 @@ mod imp {
             SIGNALS.get_or_init(|| {
                 vec![
                     Signal::builder("folder-added")
-                        .param_types([FolderObject::static_type()])
+                        .param_types([Folder::static_type()])
                         .build(),
                     Signal::builder("document-added")
                         .param_types([FileButton::static_type()])
@@ -120,19 +120,19 @@ mod imp {
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-rename-requested")
-                        .param_types([FolderObject::static_type(), PathBuf::static_type()])
+                        .param_types([Folder::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("document-rename-requested")
                         .param_types([FileButton::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
-                        .param_types([FolderObject::static_type()])
+                        .param_types([Folder::static_type()])
                         .build(),
                     Signal::builder("document-delete-requested")
                         .param_types([FileButton::static_type()])
                         .build(),
                     Signal::builder("folder-trash-requested")
-                        .param_types([FolderObject::static_type()])
+                        .param_types([Folder::static_type()])
                         .build(),
                     Signal::builder("close-project-requested").build(),
                 ]
@@ -148,7 +148,7 @@ mod imp {
             assert!(self.root_folder.borrow().is_none());
             let vbox = &self.project_root_vbox;
             vbox.append(&root_folder);
-            self.connect_folder(root_folder.folder_object());
+            self.connect_folder(root_folder.folder());
             self.root_folder.replace(Some(root_folder));
         }
 
@@ -245,21 +245,21 @@ mod imp {
             if self.subfolders.borrow().contains_key(&path) {
                 return;
             }
-            let folder = FolderView::new(&FolderObject::new(path.clone(), depth));
+            let folder_view = FolderView::new(&Folder::new(path.clone(), depth));
 
             {
                 let mut subfolders = self.subfolders.borrow_mut();
-                subfolders.insert(path.clone(), folder.clone());
+                subfolders.insert(path.clone(), folder_view.clone());
 
                 let parent_path = path.parent().unwrap();
                 if let Some(parent) = subfolders.get(parent_path) {
-                    parent.add_subfolder(folder.clone());
+                    parent.add_subfolder(folder_view.clone());
                 } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
                     self.root_folder
                         .borrow()
                         .as_ref()
                         .unwrap()
-                        .add_subfolder(folder.clone());
+                        .add_subfolder(folder_view.clone());
                 } else {
                     panic!(
                         "Tried to add a folder, but couldn't find its parent: '{path:?}' '{parent_path:?}'"
@@ -268,10 +268,10 @@ mod imp {
             }
 
             if self.expanded_folders.borrow().contains(&path) {
-                folder.set_expanded(true);
+                folder_view.set_expanded(true);
             }
 
-            self.connect_folder(folder.folder_object());
+            self.connect_folder(folder_view.folder());
         }
 
         fn add_document(&self, path: PathBuf, depth: u32) {
@@ -279,7 +279,7 @@ mod imp {
                 return;
             }
 
-            let doc = FileButton::new(&DocumentObject::new(path.clone(), depth));
+            let doc = FileButton::new(&Document::new(path.clone(), depth));
             self.documents
                 .borrow_mut()
                 .insert(path.clone(), doc.clone());
@@ -362,7 +362,7 @@ mod imp {
             }
         }
 
-        fn connect_folder(&self, folder: &FolderObject) {
+        fn connect_folder(&self, folder: &Folder) {
             self.obj().emit_by_name::<()>("folder-added", &[&folder]);
 
             folder.connect_closure(
@@ -371,7 +371,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: FolderObject, _path: PathBuf| {
+                    move |_: Folder, _path: PathBuf| {
                         this.refresh_content();
                     }
                 ),
@@ -383,7 +383,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: FolderObject, _path: PathBuf| {
+                    move |_: Folder, _path: PathBuf| {
                         this.refresh_content();
                     }
                 ),
@@ -404,7 +404,7 @@ use glib::Object;
 
 use super::FileButton;
 use super::FolderView;
-use crate::data::FolderObject;
+use crate::data::Folder;
 use crate::util::file_actions;
 
 glib::wrapper! {
@@ -418,14 +418,14 @@ impl ProjectView {
     pub fn new(path: PathBuf) -> Self {
         let this: Self = Object::builder().build();
         this.imp().is_builtin.replace(false);
-        let root = FolderView::new_project_root(&FolderObject::new(path.clone(), 0));
-        root.folder_object().connect_closure(
+        let root = FolderView::new_project_root(&Folder::new(path.clone(), 0));
+        root.folder().connect_closure(
             "close-project-requested",
             false,
             closure_local!(
                 #[weak]
                 this,
-                move |_: FolderObject| {
+                move |_: Folder| {
                     this.emit_by_name::<()>("close-project-requested", &[]);
                 }
             ),
@@ -438,10 +438,8 @@ impl ProjectView {
     pub fn new_draft_table() -> Self {
         let this: Self = Object::builder().build();
         this.imp().is_builtin.replace(true);
-        let root = FolderView::new_drafts_root(&FolderObject::new(
-            file_actions::path_builtin_library(),
-            0,
-        ));
+        let root =
+            FolderView::new_drafts_root(&Folder::new(file_actions::path_builtin_library(), 0));
         this.imp().setup_root(root);
         this
     }

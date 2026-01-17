@@ -12,8 +12,8 @@ mod imp {
     use gtk::glib::Properties;
 
     #[derive(Properties, Default)]
-    #[properties(wrapper_type = super::DocumentObject)]
-    pub struct DocumentObject {
+    #[properties(wrapper_type = super::Document)]
+    pub struct Document {
         #[property(get, set)]
         pub(super) path: RefCell<PathBuf>,
         #[property(get, set)]
@@ -27,13 +27,13 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for DocumentObject {
-        const NAME: &'static str = "DocumentObject";
-        type Type = super::DocumentObject;
+    impl ObjectSubclass for Document {
+        const NAME: &'static str = "Document";
+        type Type = super::Document;
     }
 
     #[glib::derived_properties]
-    impl ObjectImpl for DocumentObject {
+    impl ObjectImpl for Document {
         fn signals() -> &'static [Signal] {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
@@ -65,10 +65,10 @@ use crate::error::ScratchmarkError;
 use crate::util::file_actions;
 
 glib::wrapper! {
-    pub struct DocumentObject(ObjectSubclass<imp::DocumentObject>);
+    pub struct Document(ObjectSubclass<imp::Document>);
 }
 
-impl DocumentObject {
+impl Document {
     pub fn new(path: PathBuf, depth: u32) -> Self {
         let stem = path.file_stem().unwrap().to_string_lossy().into_owned();
         Object::builder()
@@ -124,7 +124,7 @@ mod tests {
     #[test]
     fn test_move_valid_path() {
         std::fs::create_dir_all(PathBuf::from(PROJECT_ROOT).join("test")).unwrap();
-        let doc = DocumentObject::new("path/to/".into(), 1);
+        let doc = Document::new("path/to/".into(), 1);
         assert!(
             doc.rename(PathBuf::from(PROJECT_ROOT).join("test").join("new_file.md"))
                 .is_ok()
@@ -133,11 +133,11 @@ mod tests {
 
     #[test]
     fn test_move_invalid_path_noparent() {
-        let doc = DocumentObject::new("path/to/".into(), 1);
+        let doc = Document::new("path/to/".into(), 1);
         doc.connect_closure(
             "rename-requested",
             false,
-            closure_local!(move |_doc: DocumentObject, _path: PathBuf| {
+            closure_local!(move |_doc: Document, _path: PathBuf| {
                 assert!(false, "Signal emitted");
             }),
         );

@@ -29,7 +29,7 @@ mod imp {
 
     use super::super::item_rename_popover::ItemRenamePopover;
     use super::FileButton;
-    use crate::data::FolderObject;
+    use crate::data::Folder;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library/folder_view.ui")]
@@ -54,7 +54,7 @@ mod imp {
         pub(super) title_row: TemplateChild<gtk::Box>,
 
         pub(super) is_project_root: Cell<bool>,
-        pub(super) folder_object: OnceLock<FolderObject>,
+        pub(super) folder: OnceLock<Folder>,
         pub(super) bindings: RefCell<Vec<Binding>>,
         pub(super) expanded: RefCell<bool>,
         pub(super) subdirs: RefCell<Vec<super::FolderView>>,
@@ -91,7 +91,7 @@ mod imp {
                 self,
                 move |_| {
                     this.toggle_expand();
-                    this.folder_object().select();
+                    this.folder().select();
                 }
             ));
 
@@ -107,18 +107,18 @@ mod imp {
             self.rename_popover.borrow().as_ref().unwrap().popup();
         }
 
-        pub(super) fn folder_object(&self) -> &FolderObject {
-            self.folder_object.get().unwrap()
+        pub(super) fn folder(&self) -> &Folder {
+            self.folder.get().unwrap()
         }
 
         /// Filepath
         pub(super) fn path(&self) -> PathBuf {
-            self.folder_object().path()
+            self.folder().path()
         }
 
         /// Display name
         pub(super) fn name(&self) -> String {
-            self.folder_object().name()
+            self.folder().name()
         }
 
         pub(super) fn set_expanded(&self, expanded: bool) {
@@ -236,8 +236,8 @@ mod imp {
                     #[weak(rename_to = this)]
                     self,
                     move |_popover: ItemRenamePopover, path: PathBuf| {
-                        if let Err(e) = this.folder_object().rename(path) {
-                            this.folder_object().notify(&e.to_string())
+                        if let Err(e) = this.folder().rename(path) {
+                            this.folder().notify(&e.to_string())
                         }
                     }
                 ),
@@ -321,8 +321,8 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    if let Err(e) = this.folder_object().create_document() {
-                        this.folder_object().notify(&e.to_string())
+                    if let Err(e) = this.folder().create_document() {
+                        this.folder().notify(&e.to_string())
                     }
                     this.sort_children();
                     this.set_expanded(true);
@@ -335,8 +335,8 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    if let Err(e) = this.folder_object().create_subfolder() {
-                        this.folder_object().notify(&e.to_string())
+                    if let Err(e) = this.folder().create_subfolder() {
+                        this.folder().notify(&e.to_string())
                     }
                     this.sort_children();
                     this.set_expanded(true);
@@ -381,8 +381,8 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    if let Err(e) = this.folder_object().trash() {
-                        this.folder_object().notify(&e.to_string())
+                    if let Err(e) = this.folder().trash() {
+                        this.folder().notify(&e.to_string())
                     }
                 }
             ));
@@ -393,8 +393,8 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    if let Err(e) = this.folder_object().delete() {
-                        this.folder_object().notify(&e.to_string())
+                    if let Err(e) = this.folder().delete() {
+                        this.folder().notify(&e.to_string())
                     }
                 }
             ));
@@ -411,8 +411,8 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_action, _parameter| {
-                    if let Err(e) = this.folder_object().close_project() {
-                        this.folder_object().notify(&e.to_string())
+                    if let Err(e) = this.folder().close_project() {
+                        this.folder().notify(&e.to_string())
                     }
                 }
             ));
@@ -431,7 +431,7 @@ use glib::Object;
 use gtk::ToggleButton;
 
 use super::FileButton;
-use crate::data::FolderObject;
+use crate::data::Folder;
 
 glib::wrapper! {
     pub struct FolderView(ObjectSubclass<imp::FolderView>)
@@ -441,7 +441,7 @@ glib::wrapper! {
 
 impl FolderView {
     /// Normal folder
-    pub fn new(data: &FolderObject) -> Self {
+    pub fn new(data: &Folder) -> Self {
         let this: Self = Object::builder().build();
         let imp = this.imp();
         imp.setup_rename_menu();
@@ -454,7 +454,7 @@ impl FolderView {
     }
 
     /// Project root folder
-    pub fn new_project_root(data: &FolderObject) -> Self {
+    pub fn new_project_root(data: &Folder) -> Self {
         let this: Self = Object::builder().build();
         let imp = this.imp();
         imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library/root_context_menu.ui");
@@ -467,7 +467,7 @@ impl FolderView {
     }
 
     /// Special root folder for builtin drafts project
-    pub fn new_drafts_root(data: &FolderObject) -> Self {
+    pub fn new_drafts_root(data: &Folder) -> Self {
         let this: Self = Object::builder().build();
         let imp = this.imp();
         imp.setup_context_menu("/org/scratchmark/Scratchmark/ui/library/drafts_context_menu.ui");
@@ -479,8 +479,8 @@ impl FolderView {
         this
     }
 
-    pub fn folder_object(&self) -> &FolderObject {
-        self.imp().folder_object()
+    pub fn folder(&self) -> &Folder {
+        self.imp().folder()
     }
 
     /// Is root folder of library
@@ -527,14 +527,14 @@ impl FolderView {
     }
 
     pub fn rename(&self, path: PathBuf) {
-        if let Err(e) = self.folder_object().rename(path) {
-            self.folder_object().notify(&e.to_string())
+        if let Err(e) = self.folder().rename(path) {
+            self.folder().notify(&e.to_string())
         }
     }
 
-    fn bind(&self, data: &FolderObject) {
+    fn bind(&self, data: &Folder) {
         let imp = self.imp();
-        imp.folder_object.get_or_init(|| data.clone());
+        imp.folder.get_or_init(|| data.clone());
         let path = data.path();
 
         let expand_button: &ToggleButton = imp.expand_button.as_ref();
