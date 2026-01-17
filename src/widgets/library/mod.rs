@@ -32,6 +32,7 @@ mod imp {
     use super::ProjectView;
     use crate::data::Document;
     use crate::data::Folder;
+    use crate::data::Project;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::LibraryView)]
@@ -102,8 +103,8 @@ mod imp {
             ));
             actions.add_action(&action);
 
-            let drafts = ProjectView::new_draft_table();
-            let drafts_path = drafts.root_path();
+            let drafts = ProjectView::new(&Project::new_draft_table());
+            let drafts_path = drafts.project().root_path();
             self.load_project(drafts);
             self.select_item(drafts_path);
         }
@@ -151,8 +152,8 @@ mod imp {
     impl LibraryView {
         pub(super) fn has_folder(&self, path: &Path) -> bool {
             for project in self.projects.borrow().deref().values() {
-                if path.starts_with(project.path()) {
-                    return project.has_folder(path);
+                if path.starts_with(project.project().path()) {
+                    return project.project().has_folder(path);
                 }
             }
             false
@@ -160,8 +161,8 @@ mod imp {
 
         pub(super) fn has_document(&self, path: &Path) -> bool {
             for project in self.projects.borrow().deref().values() {
-                if path.starts_with(project.path()) {
-                    return project.has_document(path);
+                if path.starts_with(project.project().path()) {
+                    return project.project().has_document(path);
                 }
             }
             false
@@ -169,8 +170,8 @@ mod imp {
 
         pub(super) fn get_folder(&self, path: &Path) -> Option<FolderView> {
             for project in self.projects.borrow().deref().values() {
-                if path.starts_with(project.path()) {
-                    return project.get_folder(path);
+                if path.starts_with(project.project().path()) {
+                    return project.project().get_folder(path);
                 }
             }
             None
@@ -178,8 +179,8 @@ mod imp {
 
         pub(super) fn get_document(&self, path: &Path) -> Option<FileButton> {
             for project in self.projects.borrow().deref().values() {
-                if path.starts_with(project.path()) {
-                    return project.get_document(path);
+                if path.starts_with(project.project().path()) {
+                    return project.project().get_document(path);
                 }
             }
             None
@@ -187,13 +188,14 @@ mod imp {
 
         pub(super) fn refresh_content(&self) {
             for project in self.projects.borrow().deref().values() {
-                project.refresh_content();
+                project.project().refresh_content();
             }
             self.refresh_selection();
         }
 
-        pub(super) fn load_project(&self, project: ProjectView) {
+        pub(super) fn load_project(&self, project_view: ProjectView) {
             let obj = self.obj();
+            let project = project_view.project();
             self.connect_folder(project.root_folder().folder());
             project.connect_closure(
                 "folder-added",
@@ -201,7 +203,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: ProjectView, folder: Folder| {
+                    move |_: Project, folder: Folder| {
                         this.connect_folder(&folder);
                     }
                 ),
@@ -212,7 +214,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_: ProjectView, document_button: FileButton| {
+                    move |_: Project, document_button: FileButton| {
                         this.connect_document(document_button.document());
                     }
                 ),
@@ -223,18 +225,18 @@ mod imp {
                 closure_local!(
                     #[weak]
                     obj,
-                    move |project: ProjectView| {
+                    move |project: Project| {
                         obj.emit_by_name::<()>("close-project-requested", &[&project.path()]);
                     }
                 ),
             );
 
-            self.projects_container.append(&project);
+            self.projects_container.append(&project_view);
             self.projects
                 .borrow_mut()
-                .insert(project.path(), project.clone());
+                .insert(project.path(), project_view.clone());
 
-            obj.bind_property("ignore_hidden_files", &project, "ignore_hidden_files")
+            obj.bind_property("ignore_hidden_files", project, "ignore_hidden_files")
                 .sync_create()
                 .build();
         }
@@ -458,12 +460,12 @@ mod imp {
 
         fn find_existing_ancestor(&self, item_path: &Path) -> Option<PathBuf> {
             for project in self.projects.borrow().deref().values() {
-                let project_path = project.path();
+                let project_path = project.project().path();
                 if item_path.starts_with(&project_path) {
                     let mut working_path = item_path.to_path_buf();
                     while working_path != project_path {
                         let parent = working_path.parent()?;
-                        if project.has_folder(parent) {
+                        if project.project().has_folder(parent) {
                             return Some(parent.to_path_buf());
                         }
                         working_path = parent.to_path_buf();
@@ -486,9 +488,11 @@ use gtk::glib;
 use glib::Object;
 use gtk::prelude::BoxExt;
 
-use file_button::FileButton;
-use folder_view::FolderView;
+pub use file_button::FileButton;
+pub use folder_view::FolderView;
 use project_view::ProjectView;
+
+use crate::data::Project;
 
 glib::wrapper! {
     pub struct LibraryView(ObjectSubclass<imp::LibraryView>)
@@ -506,8 +510,8 @@ impl LibraryView {
     pub fn open_project_paths(&self) -> Vec<String> {
         let mut paths = vec![];
         for project in self.imp().projects.borrow().deref().values() {
-            if !project.is_builtin() {
-                paths.push(project.path().to_str().unwrap().to_owned());
+            if !project.project().is_builtin() {
+                paths.push(project.project().path().to_str().unwrap().to_owned());
             }
         }
         paths
@@ -516,15 +520,15 @@ impl LibraryView {
     pub fn expanded_folder_paths(&self) -> Vec<String> {
         let mut paths = vec![];
         for project in self.imp().projects.borrow().deref().values() {
-            paths.append(&mut project.expanded_folder_paths());
+            paths.append(&mut project.project().expanded_folder_paths());
         }
         paths
     }
 
     pub fn expand_folder(&self, path: PathBuf) {
         for project in self.imp().projects.borrow().deref().values() {
-            if path.starts_with(project.path()) {
-                project.expand_folder(path);
+            if path.starts_with(project.project().path()) {
+                project.project().expand_folder(path);
                 return;
             }
         }
@@ -540,14 +544,14 @@ impl LibraryView {
 
     pub fn add_project(&self, path: PathBuf) {
         for project in self.imp().projects.borrow().deref().values() {
-            let compare = project.path();
+            let compare = project.project().path();
             if path.starts_with(&compare) || compare.starts_with(&path) {
                 return;
             }
         }
-        let project = ProjectView::new(path);
+        let project = ProjectView::new(&Project::new(path));
         self.imp().load_project(project.clone());
-        project.refresh_content();
+        project.project().refresh_content();
     }
 
     pub fn remove_project(&self, path: &Path) {
