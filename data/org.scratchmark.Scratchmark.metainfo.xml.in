@@ -48,6 +48,14 @@
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <url type="translate">https://translate.codeberg.org/projects/scratchmark/app/</url>
   <releases>
+    <release version="v1.7.1" date="2026-01-18">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.7.1</url>
+      <description translate="no">
+        <ul>
+          <li>Fix: Application crashes</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.7.0" date="2026-01-17">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.7.0</url>
       <description translate="no">
