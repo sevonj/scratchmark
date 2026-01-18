@@ -6,6 +6,7 @@ mod imp {
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use gtk::glib;
+    use sourceview5::prelude::*;
     use sourceview5::subclass::prelude::*;
 
     use glib::Properties;
@@ -28,6 +29,8 @@ mod imp {
     #[glib::derived_properties]
     impl ObjectImpl for MarkdownBuffer {
         fn constructed(&self) {
+            let obj = self.obj();
+            obj.set_highlight_matching_brackets(false);
             self.parent_constructed();
         }
     }
