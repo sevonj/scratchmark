@@ -29,7 +29,6 @@ mod imp {
     use gtk::ToggleButton;
     use gtk::gio::Cancellable;
     use gtk::gio::File;
-    use gtk::gio::FileCopyFlags;
     use gtk::gio::Settings;
     use gtk::gio::SettingsBindFlags;
     use gtk::gio::SimpleAction;
@@ -98,7 +97,7 @@ mod imp {
         #[template_child]
         editor_sidebar_toggle: TemplateChild<ToggleButton>,
 
-        library_browser: LibraryView,
+        library_view: LibraryView,
         editor: RefCell<Option<Editor>>,
 
         motion_controller: EventControllerMotion,
@@ -169,25 +168,15 @@ mod imp {
             settings
                 .bind("focus-mode-enabled", window_title, "focus-mode")
                 .build();
-            let library_browser: &LibraryView = self.library_browser.as_ref();
+            let library_view: &LibraryView = self.library_view.as_ref();
             settings
                 .bind(
                     "library-ignore-hidden-files",
-                    library_browser,
+                    library_view,
                     "ignore-hidden-files",
                 )
                 .flags(SettingsBindFlags::GET)
                 .build();
-            settings.connect_changed(
-                Some("library-ignore-hidden-files"),
-                clone!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |_, _| {
-                        this.library_browser.refresh_content();
-                    }
-                ),
-            );
 
             obj.connect_notify(Some("focus-mode-enabled"), move |obj, _| {
                 let focus_mode_enabled = obj.focus_mode_enabled();
@@ -237,8 +226,8 @@ mod imp {
 
             let top_split = self.top_split.get();
 
-            self.library_browser.connect_closure(
-                "document-selected",
+            self.library_view.connect_closure(
+                "open-document",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
@@ -249,7 +238,7 @@ mod imp {
                 ),
             );
 
-            self.library_browser.connect_closure(
+            self.library_view.connect_closure(
                 "folder-trash-requested",
                 false,
                 closure_local!(
@@ -261,7 +250,7 @@ mod imp {
                 ),
             );
 
-            self.library_browser.connect_closure(
+            self.library_view.connect_closure(
                 "document-trash-requested",
                 false,
                 closure_local!(
@@ -273,7 +262,7 @@ mod imp {
                 ),
             );
 
-            self.library_browser.connect_closure(
+            self.library_view.connect_closure(
                 "folder-delete-requested",
                 false,
                 closure_local!(
@@ -312,109 +301,91 @@ mod imp {
                 ),
             );
 
-            self.library_browser.connect_closure(
+            self.library_view.connect_closure(
                 "folder-rename-requested",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
-                    move |_browser: LibraryView, folder: Folder, new_path: PathBuf| {
+                    move |_: LibraryView, folder: Folder, new_path: PathBuf| {
                         assert!(!folder.is_root());
 
-                        let original_path = folder.path();
+                        let old_path = folder.path();
                         let new_path = file_actions::incremented_path(new_path);
-                        let selected_item_path = this.library_browser.selected_item_path();
-
-                        let editor_opt = this.editor.borrow();
-                        let open_document_affected = editor_opt
+                        let open_document_affected = imp
+                            .editor
+                            .borrow()
                             .as_ref()
-                            .is_some_and(|e| e.path().starts_with(&original_path));
-                        let selected_item_affected = selected_item_path.starts_with(&original_path);
+                            .is_some_and(|e| e.path().starts_with(&old_path));
 
                         if open_document_affected {
-                            editor_opt.as_ref().unwrap().cancel_filemon();
+                            imp.editor.borrow().as_ref().unwrap().cancel_filemon();
                         }
 
-                        let new_folder = File::for_path(&new_path);
-                        let old_folder = File::for_path(&original_path);
-                        if old_folder
-                            .move_(&new_folder, FileCopyFlags::NONE, None::<&Cancellable>, None)
-                            .is_err()
-                            && let Err(e) = file_actions::move_folder(&original_path, &new_path)
-                        {
-                            this.toast(&e.to_string());
+                        if let Err(e) = imp.library_view.move_item(old_path, new_path.clone()) {
+                            imp.toast(&e.to_string());
                         }
 
                         if open_document_affected {
-                            let open_document_path = editor_opt.as_ref().unwrap().path();
+                            let open_document_path = imp.editor.borrow().as_ref().unwrap().path();
                             let relative = open_document_path.strip_prefix(folder.path()).unwrap();
                             let doc_path = new_path.join(relative);
-                            this.library_browser
+                            imp.library_view
                                 .set_open_document_path(Some(doc_path.clone()));
-                            editor_opt.as_ref().unwrap().set_path(doc_path);
-                        }
-                        if selected_item_affected {
-                            let relative = selected_item_path.strip_prefix(folder.path()).unwrap();
-                            let new_selected_path = new_path.join(relative);
-                            this.library_browser
-                                .set_selected_item_path(new_selected_path);
+                            imp.editor.borrow().as_ref().unwrap().set_path(doc_path);
                         }
 
                         assert_eq!(
-                            this.library_browser.open_document_path(),
-                            this.editor.borrow().as_ref().map(|e| e.path())
+                            imp.library_view.open_document_path(),
+                            imp.editor.borrow().as_ref().map(|e| e.path())
                         );
 
-                        this.library_browser.refresh_content();
-                        this.update_window_title();
+                        imp.update_window_title();
                     }
                 ),
             );
 
-            self.library_browser.connect_closure(
+            self.library_view.connect_closure(
                 "document-rename-requested",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
-                    move |_browser: LibraryView, doc: Document, new_path: PathBuf| {
-                        let original_path = doc.path();
+                    move |_: LibraryView, doc: Document, new_path: PathBuf| {
+                        let old_path = doc.path();
                         let new_path = file_actions::incremented_path(new_path);
+                        let is_open_in_editor = imp
+                            .editor
+                            .borrow()
+                            .as_ref()
+                            .is_some_and(|e| e.path() == doc.path());
 
-                        let editor_opt = this.editor.borrow();
-                        let open_doc_affected =
-                            editor_opt.as_ref().is_some_and(|e| e.path() == doc.path());
-                        if open_doc_affected {
-                            editor_opt.as_ref().unwrap().cancel_filemon();
+                        if is_open_in_editor {
+                            imp.editor.borrow().as_ref().unwrap().cancel_filemon();
                         }
-                        let new_file = File::for_path(&new_path);
-                        if let Err(e) = File::for_path(&original_path).move_(
-                            &new_file,
-                            FileCopyFlags::NONE,
-                            None::<&Cancellable>,
-                            None,
-                        ) {
+
+                        if let Err(e) = imp.library_view.move_item(old_path, new_path.clone()) {
                             println!("{e}");
-                            this.toast("Couldn't move file.");
+                            imp.toast("Couldn't move file.");
                         }
-                        if open_doc_affected {
-                            this.library_browser
+
+                        if is_open_in_editor {
+                            imp.library_view
                                 .set_open_document_path(Some(new_path.clone()));
-                            editor_opt.as_ref().unwrap().set_path(new_path);
+                            imp.editor.borrow().as_ref().unwrap().set_path(new_path);
                         }
 
                         assert_eq!(
-                            this.library_browser.open_document_path(),
-                            this.editor.borrow().as_ref().map(|e| e.path())
+                            imp.library_view.open_document_path(),
+                            imp.editor.borrow().as_ref().map(|e| e.path())
                         );
 
-                        this.library_browser.refresh_content();
-                        this.update_window_title();
+                        imp.update_window_title();
                     }
                 ),
             );
 
-            self.library_browser.connect_closure(
+            self.library_view.connect_closure(
                 "document-delete-requested",
                 false,
                 closure_local!(
@@ -453,13 +424,13 @@ mod imp {
                 ),
             );
 
-            self.library_browser.connect_closure(
+            self.library_view.connect_closure(
                 "close-project-requested",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |browser: LibraryView, project_path: PathBuf| {
+                    move |library_view: LibraryView, project_path: PathBuf| {
                         let contains_edited_file = this
                             .editor
                             .borrow()
@@ -471,18 +442,18 @@ mod imp {
                             return;
                         }
 
-                        browser.remove_project(&project_path);
+                        library_view.remove_project(&project_path);
                     }
                 ),
             );
 
-            self.library_browser.connect_closure(
+            self.library_view.connect_closure(
                 "notify-err",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
-                    move |_browser: LibraryView, msg: String| {
+                    move |_: LibraryView, msg: String| {
                         this.toast(&msg);
                     }
                 ),
@@ -495,12 +466,17 @@ mod imp {
                 "committed",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
-                    move |_popover: ItemCreatePopover, path: PathBuf| this.create_folder(path)
+                    move |_: ItemCreatePopover, path: PathBuf| {
+                        if let Err(e) = imp.library_view.create_document(path) {
+                            imp.toast(&e.to_string());
+                            return;
+                        }
+                    }
                 ),
             );
-            self.library_browser
+            self.library_view
                 .bind_property(
                     "selected-item-path",
                     &new_folder_popover,
@@ -515,12 +491,17 @@ mod imp {
                 "committed",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
-                    move |_popover: ItemCreatePopover, path: PathBuf| this.create_document(path)
+                    move |_: ItemCreatePopover, path: PathBuf| {
+                        if let Err(e) = imp.library_view.create_document(path) {
+                            imp.toast(&e.to_string());
+                            return;
+                        }
+                    }
                 ),
             );
-            self.library_browser
+            self.library_view
                 .bind_property(
                     "selected-item-path",
                     &new_document_popover,
@@ -596,7 +577,7 @@ mod imp {
             self.main_toolbar_view
                 .set_content(Some(&EditorPlaceholder::default()));
             self.sidebar_toolbar_view
-                .set_content(Some(&self.library_browser));
+                .set_content(Some(&self.library_view));
             self.update_window_title();
 
             obj.connect_close_request(clone!(
@@ -664,7 +645,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_, _| {
-                    this.library_browser
+                    this.library_view
                         .activate_action("library.project-add", None)
                         .unwrap();
                 }
@@ -698,7 +679,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_, _| {
-                    this.library_browser.prompt_rename_selected();
+                    this.library_view.prompt_rename_selected();
                 }
             ));
             obj.add_action(&action);
@@ -708,7 +689,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_, _| {
-                    this.library_browser.refresh_content();
+                    this.library_view.refresh_content();
                 }
             ));
             obj.add_action(&action);
@@ -897,6 +878,24 @@ mod imp {
         fn load_state(&self) {
             let settings = self.settings();
 
+            let selected_item_path = settings.string("selected-item-path");
+            if !selected_item_path.is_empty() {
+                self.library_view
+                    .set_selected_item_path(Some(PathBuf::from(selected_item_path)));
+            } else {
+                self.library_view.set_selected_item_path(None::<PathBuf>);
+            }
+
+            let open_projects = settings.strv("library-project-paths");
+            for path in open_projects {
+                self.library_view.add_project(PathBuf::from(path));
+            }
+
+            let library_expanded_folders = settings.strv("library-expanded-folders");
+            for path in library_expanded_folders {
+                self.library_view.make_visible(&PathBuf::from(path));
+            }
+
             let open_document_path = settings.string("open-document-path");
             if !open_document_path.is_empty() {
                 let open_document_path = PathBuf::from(open_document_path);
@@ -905,23 +904,27 @@ mod imp {
                 }
                 self.load_document(open_document_path);
             }
-            self.library_browser
-                .set_selected_item_from_last_session(Some(PathBuf::from(
-                    settings.string("selected-folder-path"),
-                )));
-            self.library_browser.refresh_content();
-            let open_projects = settings.strv("library-project-paths");
-            for path in open_projects {
-                self.library_browser.add_project(PathBuf::from(path));
-            }
-            let library_expanded_folders = settings.strv("library-expanded-folders");
-            for path in library_expanded_folders {
-                self.library_browser.expand_folder(PathBuf::from(path));
-            }
+
+            self.library_view.refresh_content();
         }
 
         fn save_state(&self) -> Result<(), glib::BoolError> {
             let settings = self.settings();
+
+            settings.set_string(
+                "selected-item-path",
+                self.library_view
+                    .selected_item_path()
+                    .unwrap_or_default()
+                    .to_str()
+                    .unwrap(),
+            )?;
+
+            let open_projects = self.library_view.open_projects();
+            settings.set_strv("library-project-paths", open_projects)?;
+
+            let expanded_folders = self.library_view.expanded_folders();
+            settings.set_strv("library-expanded-folders", expanded_folders)?;
 
             let open_document_path = self
                 .editor
@@ -930,50 +933,13 @@ mod imp {
                 .map(|e| e.path())
                 .unwrap_or_default();
             settings.set_string("open-document-path", open_document_path.to_str().unwrap())?;
-            settings.set_string(
-                "selected-folder-path",
-                self.library_browser.selected_item_path().to_str().unwrap(),
-            )?;
-            let expanded_folders = self.library_browser.expanded_folder_paths();
-            settings.set_strv("library-expanded-folders", expanded_folders)?;
-            let open_projects = self.library_browser.open_project_paths();
-            settings.set_strv("library-project-paths", open_projects)?;
 
             Ok(())
         }
 
-        fn create_folder(&self, path: PathBuf) {
-            if let Err(e) = file_actions::create_folder(&path) {
-                self.toast(&e.to_string());
-                self.library_browser.refresh_content();
-                return;
-            }
-            self.library_browser.refresh_content();
-            self.library_browser
-                .get_folder(&file_actions::path_builtin_library())
-                .unwrap()
-                .set_expanded(true);
-        }
-
-        fn create_document(&self, path: PathBuf) {
-            if let Err(e) = self.close_editor() {
-                self.toast(&e.to_string());
-                return;
-            }
-            if let Err(e) = file_actions::create_document(&path) {
-                self.toast(&e.to_string());
-                self.library_browser.refresh_content();
-                return;
-            }
-            self.library_browser.refresh_content();
-            self.load_document(path);
-            self.library_browser
-                .get_folder(&file_actions::path_builtin_library())
-                .unwrap()
-                .set_expanded(true);
-        }
-
         fn load_document(&self, path: PathBuf) {
+            self.library_view.set_selected_item_path(Some(path.clone()));
+
             if let Err(e) = self.close_editor() {
                 self.toast(&e.to_string());
                 return;
@@ -1018,8 +984,8 @@ mod imp {
                     #[weak(rename_to = this)]
                     self,
                     move |editor: Editor| {
-                        this.library_browser.refresh_content();
-                        this.library_browser
+                        this.library_view.refresh_content();
+                        this.library_view
                             .set_open_document_path(Some(editor.path()));
                         this.update_window_title();
                     }
@@ -1051,7 +1017,7 @@ mod imp {
             self.main_toolbar_view.set_content(Some(&editor));
             self.format_bar.bind_editor(Some(editor.clone()));
             self.editor.replace(Some(editor));
-            self.library_browser.set_open_document_path(Some(path));
+            self.library_view.set_open_document_path(Some(path));
             self.editor_actions_set_enabled(true);
             self.update_window_title();
             self.update_toolbar_style();
@@ -1076,7 +1042,7 @@ mod imp {
                 return;
             }
             self.toast("Moved to trash");
-            self.library_browser.refresh_content();
+            self.library_view.refresh_content();
         }
 
         fn trash_document(&self, doc: &Document) {
@@ -1096,7 +1062,7 @@ mod imp {
                 return;
             }
             self.toast("Moved to trash");
-            self.library_browser.refresh_content();
+            self.library_view.refresh_content();
         }
 
         fn delete_folder(&self, folder: &Folder) {
@@ -1116,7 +1082,7 @@ mod imp {
                 println!("{e}");
                 self.toast("Couldn't delete folder.");
             }
-            self.library_browser.refresh_content();
+            self.library_view.refresh_content();
         }
 
         fn delete_document(&self, doc: &Document) {
@@ -1134,7 +1100,7 @@ mod imp {
                 println!("{e}");
                 self.toast("Couldn't delete file.");
             }
-            self.library_browser.refresh_content();
+            self.library_view.refresh_content();
         }
 
         fn save_document(&self) {
@@ -1158,7 +1124,7 @@ mod imp {
             self.main_toolbar_view
                 .set_content(Some(&EditorPlaceholder::default()));
             self.update_window_title();
-            self.library_browser.set_open_document_path(None);
+            self.library_view.set_open_document_path(None::<PathBuf>);
             self.format_bar.bind_editor(None);
             self.editor_sidebar_toggle.set_sensitive(false);
             self.editor_actions_set_enabled(false);

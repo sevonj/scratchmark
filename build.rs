@@ -1,6 +1,8 @@
 use std::process::Command;
 
 fn main() {
+    println!("cargo:rerun-if-changed=data/org.scratchmark.Scratchmark.gschema.xml");
+
     glib_build_tools::compile_resources(
         &["data/resources"],
         "data/resources/gresources.xml",

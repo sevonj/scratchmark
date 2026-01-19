@@ -1,8 +1,9 @@
-mod err_placeholder_item;
-mod file_button;
-mod folder_view;
+mod document_row;
+mod err_placeholder_row;
+mod folder_row;
 mod item_rename_popover;
 mod project_view;
+mod sort;
 
 mod imp {
     use std::cell::Cell;
@@ -27,8 +28,8 @@ mod imp {
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Properties;
 
-    use super::FileButton;
-    use super::FolderView;
+    use super::DocumentRow;
+    use super::FolderRow;
     use super::ProjectView;
     use crate::data::Document;
     use crate::data::Folder;
@@ -41,13 +42,11 @@ mod imp {
         #[template_child]
         pub(super) projects_container: TemplateChild<gtk::Box>,
 
-        pub(super) open_document: RefCell<Option<PathBuf>>,
-        #[property(get, set)]
-        selected_item_path: RefCell<PathBuf>,
-
-        /// Cleared when found.
         #[property(nullable, get, set)]
-        selected_item_from_last_session: RefCell<Option<PathBuf>>,
+        open_document_path: RefCell<Option<PathBuf>>,
+        #[property(nullable, get, set)]
+        selected_item_path: RefCell<Option<PathBuf>>,
+
         pub(super) projects: RefCell<HashMap<PathBuf, ProjectView>>,
 
         #[property(get, set)]
@@ -104,16 +103,16 @@ mod imp {
             actions.add_action(&action);
 
             let drafts = ProjectView::new(&Project::new_draft_table());
-            let drafts_path = drafts.project().root_path();
+            let drafts_path = drafts.project().path();
             self.load_project(drafts);
-            self.select_item(drafts_path);
+            obj.set_selected_item_path(Some(drafts_path));
         }
 
         fn signals() -> &'static [Signal] {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
-                    Signal::builder("document-selected")
+                    Signal::builder("open-document")
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-rename-requested")
@@ -150,37 +149,19 @@ mod imp {
     impl BinImpl for LibraryView {}
 
     impl LibraryView {
-        pub(super) fn has_folder(&self, path: &Path) -> bool {
+        pub(super) fn folder_item(&self, path: &Path) -> Option<FolderRow> {
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.project().path()) {
-                    return project.project().has_folder(path);
-                }
-            }
-            false
-        }
-
-        pub(super) fn has_document(&self, path: &Path) -> bool {
-            for project in self.projects.borrow().deref().values() {
-                if path.starts_with(project.project().path()) {
-                    return project.project().has_document(path);
-                }
-            }
-            false
-        }
-
-        pub(super) fn get_folder(&self, path: &Path) -> Option<FolderView> {
-            for project in self.projects.borrow().deref().values() {
-                if path.starts_with(project.project().path()) {
-                    return project.project().get_folder(path);
+                    return project.folder_item(path);
                 }
             }
             None
         }
 
-        pub(super) fn get_document(&self, path: &Path) -> Option<FileButton> {
+        pub(super) fn document_item(&self, path: &Path) -> Option<DocumentRow> {
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.project().path()) {
-                    return project.project().get_document(path);
+                    return project.document_item(path);
                 }
             }
             None
@@ -188,37 +169,25 @@ mod imp {
 
         pub(super) fn refresh_content(&self) {
             for project in self.projects.borrow().deref().values() {
-                project.project().refresh_content();
+                project.refresh_content();
             }
-            self.refresh_selection();
+            // self.refresh_selection();
         }
 
-        pub(super) fn load_project(&self, project_view: ProjectView) {
+        pub(super) fn add_project(&self, path: PathBuf) {
+            for project in self.projects.borrow().deref().values() {
+                let compare = project.project().path();
+                if path.starts_with(&compare) || compare.starts_with(&path) {
+                    return;
+                }
+            }
+            self.load_project(ProjectView::new(&Project::new(path)).clone());
+        }
+
+        fn load_project(&self, project_view: ProjectView) {
             let obj = self.obj();
             let project = project_view.project();
-            self.connect_folder(project.root_folder().folder());
-            project.connect_closure(
-                "folder-added",
-                false,
-                closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |_: Project, folder: Folder| {
-                        this.connect_folder(&folder);
-                    }
-                ),
-            );
-            project.connect_closure(
-                "document-added",
-                false,
-                closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |_: Project, document_button: FileButton| {
-                        this.connect_document(document_button.document());
-                    }
-                ),
-            );
+
             project.connect_closure(
                 "close-project-requested",
                 false,
@@ -231,6 +200,32 @@ mod imp {
                 ),
             );
 
+            project.connect_closure(
+                "document-added",
+                false,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: Project, document: Document| {
+                        imp.connect_document(&document);
+                    }
+                ),
+            );
+
+            project.connect_closure(
+                "folder-added",
+                false,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: Project, folder: Folder| {
+                        imp.connect_folder(&folder);
+                    }
+                ),
+            );
+            // root is created before we have a chance to connect the signal
+            self.connect_folder(&project.get_folder(&project.path()).unwrap());
+
             self.projects_container.append(&project_view);
             self.projects
                 .borrow_mut()
@@ -239,46 +234,21 @@ mod imp {
             obj.bind_property("ignore_hidden_files", project, "ignore_hidden_files")
                 .sync_create()
                 .build();
-        }
 
-        pub(super) fn select_item(&self, path: PathBuf) {
-            let obj = self.obj();
+            obj.bind_property("open_document_path", &project_view, "open_document_path")
+                .sync_create()
+                .build();
+            obj.bind_property("selected_item_path", &project_view, "selected_item_path")
+                .sync_create()
+                .bidirectional()
+                .build();
 
-            if let Some(old_selection) = self.get_folder(&obj.selected_item_path()) {
-                old_selection.folder().set_is_selected(false);
-            } else if let Some(old_selection) = self.get_document(&obj.selected_item_path()) {
-                old_selection.document().set_is_selected(false);
-            }
-
-            if let Some(new_selection) = self.get_folder(&path) {
-                new_selection.folder().set_is_selected(true);
-            } else if let Some(new_selection) = self.get_document(&path) {
-                new_selection.document().set_is_selected(true);
-            }
-
-            obj.set_selected_item_path(path.clone());
+            project.refresh_content();
+            obj.set_selected_item_path(Some(project.path()));
         }
 
         fn connect_folder(&self, folder: &Folder) {
             let obj = self.obj();
-            let path = folder.path();
-
-            if obj.selected_item_from_last_session().as_ref() == Some(&path) {
-                self.select_item(path);
-                obj.set_selected_item_from_last_session(None::<PathBuf>);
-            }
-
-            folder.connect_closure(
-                "selected",
-                false,
-                closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |folder: Folder| {
-                        this.select_item(folder.path());
-                    }
-                ),
-            );
 
             folder.connect_closure(
                 "rename-requested",
@@ -299,7 +269,8 @@ mod imp {
                     #[weak]
                     obj,
                     move |_: Folder, path: PathBuf| {
-                        obj.emit_by_name::<()>("document-selected", &[&path]);
+                        obj.emit_by_name::<()>("open-document", &[&path]);
+                        obj.set_selected_item_path(Some(path));
                     }
                 ),
             );
@@ -308,22 +279,10 @@ mod imp {
                 "subfolder-created",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |_: Folder, _path: PathBuf| {
-                        this.refresh_content();
-                    }
-                ),
-            );
-
-            folder.connect_closure(
-                "document-created",
-                false,
-                closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |_: Folder, _path: PathBuf| {
-                        this.refresh_content();
+                    #[weak]
+                    obj,
+                    move |_: Folder, path: PathBuf| {
+                        obj.set_selected_item_path(Some(path));
                     }
                 ),
             );
@@ -369,27 +328,22 @@ mod imp {
             let obj = self.obj();
 
             let path = doc.path();
-            let is_open = Some(&path) == obj.imp().open_document.borrow().as_ref();
-
-            if is_open || obj.selected_item_from_last_session().as_ref() == Some(&path) {
-                self.select_item(path);
-                obj.set_selected_item_from_last_session(None::<PathBuf>);
-            }
+            let is_open = Some(&path) == obj.imp().open_document_path.borrow().as_ref();
 
             if is_open {
                 doc.set_is_open_in_editor(true);
             }
 
             doc.connect_closure(
-                "selected",
+                "open",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
+                    #[weak]
+                    obj,
                     move |doc: Document| {
-                        this.select_item(doc.path());
                         let path = doc.path();
-                        this.obj().emit_by_name::<()>("document-selected", &[&path]);
+                        obj.emit_by_name::<()>("open-document", &[&path]);
+                        obj.set_selected_item_path(Some(path));
                     }
                 ),
             );
@@ -442,39 +396,6 @@ mod imp {
                 ),
             );
         }
-
-        /// Attempts to select a valid item if current selection path is bad
-        pub(super) fn refresh_selection(&self) {
-            let obj = self.obj();
-            let selected_path = obj.selected_item_path();
-            let selection_is_gone =
-                !self.has_document(&selected_path) && !self.has_folder(&selected_path);
-            if selection_is_gone {
-                if let Some(ancestor) = self.find_existing_ancestor(&selected_path) {
-                    self.select_item(ancestor);
-                } else if let Some(first_project_root) = self.projects.borrow().keys().next() {
-                    self.select_item(first_project_root.to_path_buf());
-                }
-            }
-        }
-
-        fn find_existing_ancestor(&self, item_path: &Path) -> Option<PathBuf> {
-            for project in self.projects.borrow().deref().values() {
-                let project_path = project.project().path();
-                if item_path.starts_with(&project_path) {
-                    let mut working_path = item_path.to_path_buf();
-                    while working_path != project_path {
-                        let parent = working_path.parent()?;
-                        if project.project().has_folder(parent) {
-                            return Some(parent.to_path_buf());
-                        }
-                        working_path = parent.to_path_buf();
-                    }
-                    break;
-                }
-            }
-            None
-        }
     }
 }
 
@@ -484,15 +405,19 @@ use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use gtk::glib;
+use gtk::prelude::*;
 
 use glib::Object;
-use gtk::prelude::BoxExt;
+use gtk::gio::Cancellable;
+use gtk::gio::File;
+use gtk::gio::FileCopyFlags;
 
-pub use file_button::FileButton;
-pub use folder_view::FolderView;
+use document_row::DocumentRow;
+use folder_row::FolderRow;
 use project_view::ProjectView;
 
-use crate::data::Project;
+use crate::error::ScratchmarkError;
+use crate::util::file_actions;
 
 glib::wrapper! {
     pub struct LibraryView(ObjectSubclass<imp::LibraryView>)
@@ -507,86 +432,110 @@ impl Default for LibraryView {
 }
 
 impl LibraryView {
-    pub fn open_project_paths(&self) -> Vec<String> {
+    pub fn open_projects(&self) -> Vec<String> {
         let mut paths = vec![];
         for project in self.imp().projects.borrow().deref().values() {
-            if !project.project().is_builtin() {
+            if !project.project().is_drafts() {
                 paths.push(project.project().path().to_str().unwrap().to_owned());
             }
         }
         paths
     }
 
-    pub fn expanded_folder_paths(&self) -> Vec<String> {
+    pub fn expanded_folders(&self) -> Vec<String> {
         let mut paths = vec![];
         for project in self.imp().projects.borrow().deref().values() {
-            paths.append(&mut project.project().expanded_folder_paths());
+            paths.append(&mut project.expanded_folder_paths());
         }
         paths
     }
 
-    pub fn expand_folder(&self, path: PathBuf) {
-        for project in self.imp().projects.borrow().deref().values() {
-            if path.starts_with(project.project().path()) {
-                project.project().expand_folder(path);
+    pub fn make_visible(&self, path: &Path) {
+        for project_view in self.imp().projects.borrow().deref().values() {
+            if path.starts_with(project_view.project().path()) {
+                project_view.make_visible(path);
                 return;
             }
         }
-    }
-
-    pub fn get_folder(&self, path: &Path) -> Option<FolderView> {
-        self.imp().get_folder(path)
-    }
-
-    pub fn get_document(&self, path: &Path) -> Option<FileButton> {
-        self.imp().get_document(path)
     }
 
     pub fn add_project(&self, path: PathBuf) {
-        for project in self.imp().projects.borrow().deref().values() {
-            let compare = project.project().path();
-            if path.starts_with(&compare) || compare.starts_with(&path) {
-                return;
-            }
-        }
-        let project = ProjectView::new(&Project::new(path));
-        self.imp().load_project(project.clone());
-        project.project().refresh_content();
+        self.imp().add_project(path);
+    }
+
+    pub fn create_folder(&self, path: PathBuf) -> Result<(), ScratchmarkError> {
+        let Some(parent) = path.parent().and_then(|path| self.imp().folder_item(path)) else {
+            return Err(ScratchmarkError::FileCreateFail);
+        };
+        let Some(filename) = path.file_name() else {
+            return Err(ScratchmarkError::FileCreateFail);
+        };
+        parent.folder().create_subfolder(filename)?;
+        Ok(())
+    }
+
+    pub fn create_document(&self, path: PathBuf) -> Result<(), ScratchmarkError> {
+        let Some(parent) = path.parent().and_then(|path| self.imp().folder_item(path)) else {
+            return Err(ScratchmarkError::FileCreateFail);
+        };
+        let Some(filename) = path.file_name() else {
+            return Err(ScratchmarkError::FileCreateFail);
+        };
+        parent.folder().create_document(filename)?;
+        Ok(())
     }
 
     pub fn remove_project(&self, path: &Path) {
         let imp = self.imp();
         let project = imp.projects.borrow_mut().remove(path).unwrap();
         imp.projects_container.remove(&project);
-        imp.refresh_selection();
     }
 
     pub fn refresh_content(&self) {
         self.imp().refresh_content();
     }
 
-    pub fn open_document_path(&self) -> Option<PathBuf> {
-        self.imp().open_document.borrow().clone()
-    }
-
-    pub fn set_open_document_path(&self, path: Option<PathBuf>) {
-        if let Some(old) = self
-            .open_document_path()
-            .and_then(|path| self.get_document(&path))
-        {
-            old.document().set_is_open_in_editor(false);
-        }
-        if let Some(new) = path.as_ref().and_then(|path| self.get_document(path)) {
-            new.document().set_is_open_in_editor(true);
-        }
-        self.imp().open_document.replace(path);
-    }
-
     pub fn prompt_rename_selected(&self) {
-        if let Some(dir) = self.get_folder(&self.selected_item_path()) {
-            dir.prompt_rename();
-        } else if let Some(doc) = self.get_document(&self.selected_item_path()) {
+        let Some(path) = self.selected_item_path() else {
+            return;
+        };
+
+        if let Some(folder) = self.imp().folder_item(&path) {
+            folder.prompt_rename();
+        } else if let Some(doc) = self.imp().document_item(&path) {
             doc.prompt_rename();
         }
+    }
+
+    pub fn move_item(&self, old_path: PathBuf, new_path: PathBuf) -> Result<(), ScratchmarkError> {
+        let new_file = File::for_path(&new_path);
+        if let Err(e) = File::for_path(&old_path).move_(
+            &new_file,
+            FileCopyFlags::NONE,
+            None::<&Cancellable>,
+            None,
+        ) {
+            println!("{e}");
+            if old_path.is_dir() {
+                file_actions::move_folder(&old_path, &new_path)?;
+            } else {
+                return Err(ScratchmarkError::ItemMoveFail);
+            }
+        }
+
+        if let Some(selected_item_path) = self.selected_item_path() {
+            if selected_item_path == old_path {
+                self.set_selected_item_path(Some(new_path));
+            } else if selected_item_path.starts_with(&old_path) {
+                let relative = selected_item_path.strip_prefix(old_path).unwrap();
+                let new_selected_path = new_path.join(relative);
+                self.set_selected_item_path(Some(new_selected_path));
+            }
+        }
+
+        //
+
+        self.refresh_content();
+        Ok(())
     }
 }

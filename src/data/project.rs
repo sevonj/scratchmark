@@ -2,8 +2,8 @@ mod imp {
     use std::cell::Cell;
     use std::cell::RefCell;
     use std::collections::HashMap;
-    use std::collections::HashSet;
     use std::collections::VecDeque;
+    use std::path::Path;
     use std::path::PathBuf;
     use std::sync::OnceLock;
     use std::time::Duration;
@@ -21,30 +21,27 @@ mod imp {
 
     use gtk::glib::MainContext;
 
-    use super::FileButton;
-    use super::FolderView;
     use crate::data::Document;
     use crate::data::Folder;
 
     #[derive(Debug)]
-    enum ProjectEntry {
-        Dir { path: PathBuf, depth: u32 },
-        File { path: PathBuf, depth: u32 },
+    enum CrawlMsg {
+        FoundDir { path: PathBuf, depth: u32 },
+        FoundFile { path: PathBuf, depth: u32 },
+        Done,
     }
 
     #[derive(Default, Properties)]
     #[properties(wrapper_type = super::Project)]
     pub struct Project {
-        pub(super) root_folder: RefCell<Option<FolderView>>,
-        pub(super) subfolders: RefCell<HashMap<PathBuf, FolderView>>,
-        pub(super) documents: RefCell<HashMap<PathBuf, FileButton>>,
-        /// Is this a builtin project (drafts)
-        pub(super) is_builtin: Cell<bool>,
+        pub(super) path: OnceLock<PathBuf>,
         /// Project folder is inaccessible or deleted
         is_invalid: Cell<bool>,
-        crawler_rx: RefCell<Option<Receiver<ProjectEntry>>>,
-        crawler_tx: RefCell<Option<Sender<ProjectEntry>>>,
-        pub(super) expanded_folders: RefCell<HashSet<PathBuf>>,
+        crawler_rx: RefCell<Option<Receiver<CrawlMsg>>>,
+        crawler_tx: RefCell<Option<Sender<CrawlMsg>>>,
+
+        pub(super) folders: RefCell<HashMap<PathBuf, super::Folder>>,
+        pub(super) documents: RefCell<HashMap<PathBuf, Document>>,
 
         #[property(get, set)]
         ignore_hidden_files: Cell<bool>,
@@ -60,7 +57,10 @@ mod imp {
     impl ObjectImpl for Project {
         fn constructed(&self) {
             let obj = self.obj();
-            self.parent_constructed();
+
+            obj.connect_ignore_hidden_files_notify(move |obj| {
+                obj.refresh_content();
+            });
 
             let (sender, receiver) = async_channel::unbounded();
             self.crawler_tx.replace(Some(sender));
@@ -77,11 +77,14 @@ mod imp {
                         let receiver = bind.as_mut().unwrap();
                         while let Ok(entry) = receiver.try_recv() {
                             match entry {
-                                ProjectEntry::Dir { path, depth } => {
-                                    imp.add_subfolder(path, depth);
+                                CrawlMsg::FoundDir { path, depth } => {
+                                    imp.add_folder(Folder::new_subfolder(path, depth));
                                 }
-                                ProjectEntry::File { path, depth } => {
-                                    imp.add_document(path, depth);
+                                CrawlMsg::FoundFile { path, depth } => {
+                                    imp.add_document(Document::new(path, depth));
+                                }
+                                CrawlMsg::Done => {
+                                    imp.prune();
                                 }
                             }
                         }
@@ -89,6 +92,7 @@ mod imp {
                     }
                 ),
             );
+            self.parent_constructed();
         }
 
         fn signals() -> &'static [Signal] {
@@ -99,22 +103,22 @@ mod imp {
                         .param_types([Folder::static_type()])
                         .build(),
                     Signal::builder("document-added")
-                        .param_types([FileButton::static_type()])
+                        .param_types([Document::static_type()])
                         .build(),
-                    Signal::builder("document-selected")
+                    Signal::builder("item-removed")
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-rename-requested")
                         .param_types([Folder::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("document-rename-requested")
-                        .param_types([FileButton::static_type(), PathBuf::static_type()])
+                        .param_types([Document::static_type(), PathBuf::static_type()])
                         .build(),
                     Signal::builder("folder-delete-requested")
                         .param_types([Folder::static_type()])
                         .build(),
                     Signal::builder("document-delete-requested")
-                        .param_types([FileButton::static_type()])
+                        .param_types([Document::static_type()])
                         .build(),
                     Signal::builder("folder-trash-requested")
                         .param_types([Folder::static_type()])
@@ -130,26 +134,18 @@ mod imp {
     impl BinImpl for Project {}
 
     impl Project {
-        pub(super) fn setup_root(&self, root_folder: FolderView) {
-            assert!(self.root_folder.borrow().is_none());
-            // let vbox = &self.project_root_vbox;
-            // vbox.append(&root_folder);
-            self.connect_folder(root_folder.folder());
-            self.root_folder.replace(Some(root_folder));
-        }
-
         pub(super) fn refresh_content(&self) {
             if self.is_invalid.get() {
                 return;
             }
-            let root_path = self.obj().root_path();
-            if !root_path.exists() {
+            if !self.path().is_dir() {
                 self.mark_invalid();
                 return;
             }
 
             let ignore_hidden = self.ignore_hidden_files.get();
             let sender = self.crawler_tx.borrow().as_ref().unwrap().clone();
+            let root_path = self.path().to_path_buf();
 
             MainContext::default().spawn_local(async move {
                 let mut search_stack: VecDeque<(PathBuf, u32)> = VecDeque::from([(root_path, 1)]);
@@ -180,9 +176,9 @@ mod imp {
                             search_stack.push_back((path.clone(), depth + 1));
                             found_folders.push((path.clone(), depth + 1));
                             sender
-                                .send(ProjectEntry::Dir { path, depth })
+                                .send(CrawlMsg::FoundDir { path, depth })
                                 .await
-                                .expect("Crawler failed to send dir path!");
+                                .unwrap();
                         } else {
                             if !path
                                 .extension()
@@ -193,108 +189,77 @@ mod imp {
 
                             found_files.push((path.clone(), depth + 1));
                             sender
-                                .send(ProjectEntry::File { path, depth })
+                                .send(CrawlMsg::FoundFile { path, depth })
                                 .await
-                                .expect("Crawler failed to send file path!");
+                                .unwrap();
                         }
                     }
                 }
+                sender.send(CrawlMsg::Done).await.unwrap();
             });
+        }
 
-            self.prune();
+        pub(super) fn path(&self) -> &Path {
+            self.path.get().unwrap()
         }
 
         fn mark_invalid(&self) {
             self.is_invalid.replace(true);
-            self.root_folder
-                .borrow()
-                .as_ref()
-                .unwrap()
-                .set_visible(false);
             self.obj().emit_by_name::<()>("became-invalid", &[]);
-
-            // let err_placeholder = ErrPlaceholderItem::new(&self.obj().root_path());
-            // let obj = self.obj();
-            // err_placeholder.connect_closure(
-            //     "close-project-requested",
-            //     false,
-            //     closure_local!(
-            //         #[weak]
-            //         obj,
-            //         move |_: ErrPlaceholderItem| {
-            //             obj.emit_by_name::<()>("close-project-requested", &[]);
-            //         }
-            //     ),
-            // );
-            // self.project_root_vbox.append(&err_placeholder);
         }
 
-        fn add_subfolder(&self, path: PathBuf, depth: u32) {
-            if self.subfolders.borrow().contains_key(&path) {
-                return;
-            }
-            let folder_view = FolderView::new(&Folder::new(path.clone(), depth));
-
-            {
-                let mut subfolders = self.subfolders.borrow_mut();
-                subfolders.insert(path.clone(), folder_view.clone());
-
-                let parent_path = path.parent().unwrap();
-                if let Some(parent) = subfolders.get(parent_path) {
-                    parent.add_subfolder(folder_view.clone());
-                } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
-                    self.root_folder
-                        .borrow()
-                        .as_ref()
-                        .unwrap()
-                        .add_subfolder(folder_view.clone());
-                } else {
-                    panic!(
-                        "Tried to add a folder, but couldn't find its parent: '{path:?}' '{parent_path:?}'"
-                    );
-                }
-            }
-
-            if self.expanded_folders.borrow().contains(&path) {
-                folder_view.set_expanded(true);
-            }
-
-            self.connect_folder(folder_view.folder());
-        }
-
-        fn add_document(&self, path: PathBuf, depth: u32) {
-            if self.documents.borrow().contains_key(&path) {
+        fn add_document(&self, doc: Document) {
+            let mut documents = self.documents.borrow_mut();
+            let path = doc.path();
+            if documents.contains_key(&path) {
                 return;
             }
 
-            let doc = FileButton::new(&Document::new(path.clone(), depth));
-            self.documents
-                .borrow_mut()
-                .insert(path.clone(), doc.clone());
+            documents.insert(path.clone(), doc.clone());
 
-            let parent_path = path.parent().unwrap();
-            if let Some(parent) = self.subfolders.borrow().get(parent_path) {
-                parent.add_document(doc.clone());
-            } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
-                self.root_folder
-                    .borrow()
-                    .as_ref()
-                    .unwrap()
-                    .add_document(doc.clone());
-            } else {
-                panic!("Tried to add a document, but couldn't find its parent.");
-            }
+            let folders = self.folders.borrow();
+            let parent = folders
+                .get(path.parent().unwrap())
+                .expect("Tried to add a document, but couldn't find its parent.");
+            parent.add_document(doc.clone());
 
             self.obj().emit_by_name::<()>("document-added", &[&doc]);
         }
 
+        pub(super) fn add_folder(&self, folder: Folder) {
+            let mut folders = self.folders.borrow_mut();
+            let path = folder.path();
+            if folders.contains_key(&path) {
+                return;
+            }
+
+            folders.insert(path.clone(), folder.clone());
+            self.connect_folder(&folder);
+
+            if !folder.is_root() {
+                let parent = folders
+                    .get(path.parent().unwrap())
+                    .expect("Tried to add a folder, but couldn't find its parent.");
+                parent.add_subfolder(folder.clone());
+            }
+
+            self.obj().emit_by_name::<()>("folder-added", &[&folder]);
+
+            /*
+            if self.expanded_folders.borrow().contains(&path) {
+                folder_view.set_expanded(true);
+            }
+
+            */
+        }
+
         /// Remove widgets for entries that don't exist in the library anymore
         fn prune(&self) {
-            let mut subfolders = self.subfolders.borrow_mut();
+            let mut folders = self.folders.borrow_mut();
             let mut documents = self.documents.borrow_mut();
             let mut dead_folders = vec![];
             let mut dead_documents = vec![];
-            for (path, folder) in subfolders.iter() {
+            for path in folders.keys() {
                 let is_hidden = path
                     .file_name()
                     .is_some_and(|s| s.as_encoded_bytes()[0] == b'.');
@@ -304,19 +269,12 @@ mod imp {
                     dead_folders.push(path.clone());
 
                     let parent_path = path.parent().unwrap();
-
-                    if let Some(parent) = subfolders.get(parent_path) {
-                        parent.remove_subfolder(folder);
-                    } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
-                        self.root_folder
-                            .borrow()
-                            .as_ref()
-                            .unwrap()
-                            .remove_subfolder(folder);
+                    if let Some(parent) = folders.get(parent_path) {
+                        parent.remove_subfolder(path);
                     }
                 }
             }
-            for (path, doc) in documents.iter() {
+            for path in documents.keys() {
                 let is_hidden = path
                     .file_name()
                     .is_some_and(|s| s.as_encoded_bytes()[0] == b'.');
@@ -326,41 +284,47 @@ mod imp {
                     dead_documents.push(path.clone());
 
                     let parent_path = path.parent().unwrap();
-
-                    if let Some(parent) = subfolders.get(parent_path) {
-                        parent.remove_document(doc);
-                    } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
-                        self.root_folder
-                            .borrow()
-                            .as_ref()
-                            .unwrap()
-                            .remove_document(doc);
+                    if let Some(parent) = folders.get(parent_path) {
+                        parent.remove_document(path);
                     }
                 }
             }
-            for path in dead_folders {
-                subfolders
-                    .remove(&path)
-                    .expect("dead folder entry disappeared?");
+
+            for path in &dead_documents {
+                if let Some(parent) = folders.get(path.parent().unwrap()) {
+                    parent.remove_document(path);
+                }
             }
-            for path in dead_documents {
-                documents
-                    .remove(&path)
-                    .expect("dead doc entry disappeared?");
+            for path in &dead_folders {
+                if let Some(parent) = folders.get(path.parent().unwrap()) {
+                    parent.remove_subfolder(path);
+                }
+            }
+
+            for path in &dead_documents {
+                documents.remove(path).unwrap();
+            }
+            for path in &dead_folders {
+                folders.remove(path).unwrap();
+            }
+
+            for path in &dead_documents {
+                self.obj().emit_by_name::<()>("item-removed", &[path]);
+            }
+            for path in &dead_folders {
+                self.obj().emit_by_name::<()>("item-removed", &[path]);
             }
         }
 
         fn connect_folder(&self, folder: &Folder) {
-            self.obj().emit_by_name::<()>("folder-added", &[&folder]);
-
             folder.connect_closure(
                 "subfolder-created",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |_: Folder, _path: PathBuf| {
-                        this.refresh_content();
+                        imp.refresh_content();
                     }
                 ),
             );
@@ -369,10 +333,10 @@ mod imp {
                 "document-created",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |_: Folder, _path: PathBuf| {
-                        this.refresh_content();
+                        imp.refresh_content();
                     }
                 ),
             );
@@ -380,6 +344,8 @@ mod imp {
     }
 }
 
+use std::cell::Ref;
+use std::collections::HashMap;
 use std::path::Path;
 use std::path::PathBuf;
 
@@ -390,10 +356,10 @@ use sourceview5::prelude::*;
 
 use glib::Object;
 
+use crate::data::Document;
 use crate::data::Folder;
+use crate::data::FolderType;
 use crate::util::file_actions;
-use crate::widgets::library::FileButton;
-use crate::widgets::library::FolderView;
 
 glib::wrapper! {
     pub struct Project(ObjectSubclass<imp::Project>)
@@ -405,9 +371,10 @@ impl Project {
     /// New standard project
     pub fn new(path: PathBuf) -> Self {
         let obj: Self = Object::builder().build();
-        obj.imp().is_builtin.replace(false);
-        let root = FolderView::new_project_root(&Folder::new(path.clone(), 0));
-        root.folder().connect_closure(
+        let imp = obj.imp();
+        imp.path.set(path.clone()).unwrap();
+        let root = Folder::new_project_root(path);
+        root.connect_closure(
             "close-project-requested",
             false,
             closure_local!(
@@ -418,79 +385,56 @@ impl Project {
                 }
             ),
         );
-        obj.imp().setup_root(root);
+        imp.add_folder(root);
         obj
     }
 
     /// Builtin drafts project
     pub fn new_draft_table() -> Self {
-        let this: Self = Object::builder().build();
-        this.imp().is_builtin.replace(true);
-        let root =
-            FolderView::new_drafts_root(&Folder::new(file_actions::path_builtin_library(), 0));
-        this.imp().setup_root(root);
-        this
+        let path = file_actions::path_builtin_library();
+
+        let obj: Self = Object::builder().build();
+        let imp = obj.imp();
+        imp.path.set(path.clone()).unwrap();
+        let root = Folder::new_drafts_root(file_actions::path_builtin_library());
+        imp.add_folder(root);
+        obj
     }
 
     pub fn path(&self) -> PathBuf {
-        self.root_folder().path()
+        self.imp().path().to_path_buf()
     }
 
-    pub fn root_path(&self) -> PathBuf {
-        self.imp().root_folder.borrow().as_ref().unwrap().path()
+    pub fn is_drafts(&self) -> bool {
+        self.folders().get(&self.path()).unwrap().kind() == FolderType::DraftsRoot
     }
 
-    pub fn root_folder(&self) -> FolderView {
-        self.imp().root_folder.borrow().clone().unwrap()
-    }
-
-    pub fn is_builtin(&self) -> bool {
-        self.imp().is_builtin.get()
-    }
-
-    pub fn expanded_folder_paths(&self) -> Vec<String> {
-        let mut paths = vec![];
-        if self.root_folder().is_expanded() {
-            paths.push(self.root_path().to_str().unwrap().to_owned());
-        }
-        for (path, folder) in self.imp().subfolders.borrow().iter() {
-            if folder.is_expanded() {
-                paths.push(path.to_str().unwrap().to_owned());
-            }
-        }
-        paths
-    }
-
-    pub fn expand_folder(&self, path: PathBuf) {
-        let imp = self.imp();
-        if let Some(folder) = imp.subfolders.borrow().get(&path) {
-            folder.set_expanded(true);
-        } else if path == self.root_path() {
-            self.root_folder().set_expanded(true);
-        }
-        imp.expanded_folders.borrow_mut().insert(path);
-    }
-
-    pub fn has_folder(&self, path: &Path) -> bool {
-        self.imp().subfolders.borrow().contains_key(path) || *path == self.root_path()
+    pub fn has_item(&self, path: &Path) -> bool {
+        self.has_document(path) || self.has_folder(path)
     }
 
     pub fn has_document(&self, path: &Path) -> bool {
-        self.imp().documents.borrow().contains_key(path)
+        self.documents().contains_key(path)
     }
 
-    pub fn get_folder(&self, path: &Path) -> Option<FolderView> {
-        let sub = self.imp().subfolders.borrow().get(path).cloned();
-        if sub.is_some() {
-            return sub;
-        } else if *path == self.root_path() {
-            return Some(self.root_folder());
-        }
-        None
+    pub fn has_folder(&self, path: &Path) -> bool {
+        self.folders().contains_key(path)
     }
 
-    pub fn get_document(&self, path: &Path) -> Option<FileButton> {
-        self.imp().documents.borrow().get(path).cloned()
+    pub fn documents(&self) -> Ref<'_, HashMap<PathBuf, Document>> {
+        self.imp().documents.borrow()
+    }
+
+    pub fn folders(&self) -> Ref<'_, HashMap<PathBuf, Folder>> {
+        self.imp().folders.borrow()
+    }
+
+    pub fn get_folder(&self, path: &Path) -> Option<Folder> {
+        self.folders().get(path).cloned()
+    }
+
+    pub fn get_document(&self, path: &Path) -> Option<Document> {
+        self.documents().get(path).cloned()
     }
 
     pub fn refresh_content(&self) {

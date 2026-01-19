@@ -4,7 +4,7 @@
     <key name="open-document-path" type="s">
       <default>""</default>
     </key>
-    <key name="selected-folder-path" type="s">
+    <key name="selected-item-path" type="s">
       <default>""</default>
     </key>
     <key name="library-ignore-hidden-files" type="b">
