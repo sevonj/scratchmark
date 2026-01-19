@@ -69,20 +69,6 @@ pub fn create_builtin_library() {
     std::fs::create_dir_all(&path).expect("Couldn't create dir for builtin_library");
 }
 
-/// Returns an unused filepath with a placeholder name
-pub fn untitled_folder_path(dir: PathBuf) -> PathBuf {
-    assert!(dir.is_dir());
-    let path = dir.join("New folder");
-    incremented_path(path)
-}
-
-/// Returns an unused filepath with a placeholder name
-pub fn untitled_document_path(dir: PathBuf) -> PathBuf {
-    assert!(dir.is_dir());
-    let path = dir.join("Untitled.md");
-    incremented_path(path)
-}
-
 /// Increments filename until if finds an unused path.
 /// "filename.md" becomes:
 /// "filename.md",
@@ -155,11 +141,11 @@ pub fn move_folder(original_path: &Path, new_path: &Path) -> Result<(), Scratchm
     }
     if let Err(e) = copy_folder_recurse(original_path, new_path) {
         println!("{e}");
-        return Err(ScratchmarkError::FolderMoveFail);
+        return Err(ScratchmarkError::ItemMoveFail);
     };
     if let Err(e) = std::fs::remove_dir_all(original_path) {
         println!("{e}");
-        return Err(ScratchmarkError::FolderMoveFail);
+        return Err(ScratchmarkError::ItemMoveFail);
     };
     Ok(())
 }

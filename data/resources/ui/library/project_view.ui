@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
     <template class="ProjectView" parent="AdwBin">
-        <child>
+        <!--child>
             <object class="GtkBox" id="project_root_vbox">
                 <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                 <property name="margin-start">6</property>
                 <property name="margin-end">6</property>
+            </object>
+        </child-->
+        <child>
+            <object class="GtkListBox" id="project_vbox">
+                <style>
+                    <class name="navigation-sidebar" />
+                </style>
             </object>
         </child>
     </template>

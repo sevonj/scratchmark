@@ -6,6 +6,6 @@ mod project;
 
 pub use document::Document;
 pub use document_stats::DocumentStats;
-pub use folder::Folder;
+pub use folder::{Folder, FolderType};
 pub use markdown_buffer::MarkdownBuffer;
 pub use project::Project;

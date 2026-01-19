@@ -1,7 +1,7 @@
 mod editor;
 mod editor_placeholder;
 mod item_create_popover;
-pub mod library;
+mod library;
 mod markdown_format_bar;
 mod preferences_dialog;
 mod window;

@@ -38,7 +38,7 @@ mod imp {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
-                    Signal::builder("selected").build(),
+                    Signal::builder("open").build(),
                     Signal::builder("duplicated").build(),
                     Signal::builder("rename-requested")
                         .param_types([PathBuf::static_type()])
@@ -78,8 +78,8 @@ impl Document {
             .build()
     }
 
-    pub fn select(&self) {
-        self.emit_by_name::<()>("selected", &[]);
+    pub fn open(&self) {
+        self.emit_by_name::<()>("open", &[]);
     }
 
     pub fn duplicate(&self) {

@@ -18,6 +18,7 @@ mod imp {
     use gtk::TemplateChild;
     use gtk::glib::Properties;
 
+    use crate::util::file_actions;
     use crate::util::file_actions::FilenameState;
 
     #[derive(Debug, Default, Clone, Copy)]
@@ -40,9 +41,8 @@ mod imp {
 
         pub(super) kind: Cell<Kind>,
 
-        /// Selection in library - can be file or dir
-        #[property(get, set)]
-        selected_item_path: RefCell<PathBuf>,
+        #[property(nullable, get, set)]
+        selected_item_path: RefCell<Option<PathBuf>>,
 
         can_commit: Cell<bool>,
     }
@@ -165,17 +165,14 @@ mod imp {
                 Kind::Document => self.name_field.text().to_string() + ".md",
             };
 
-            let selected_path = self.obj().selected_item_path();
-            let parent_path = if selected_path.is_dir() {
-                // Is dir -- don't change path
-                selected_path
-            } else if selected_path.is_file() {
-                // Is file -- use parent path
-                selected_path.parent().unwrap().to_path_buf()
-            } else {
-                PathBuf::default()
-            };
-            parent_path.join(&filename)
+            if let Some(selected_path) = self.obj().selected_item_path() {
+                if selected_path.is_dir() {
+                    return selected_path.join(&filename);
+                } else if selected_path.is_file() {
+                    return selected_path.parent().unwrap().join(&filename);
+                }
+            }
+            file_actions::path_builtin_library().join(&filename)
         }
     }
 }
