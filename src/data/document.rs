@@ -70,7 +70,7 @@ glib::wrapper! {
 
 impl Document {
     pub fn new(path: PathBuf, depth: u32) -> Self {
-        let stem = path.file_stem().unwrap().to_string_lossy().into_owned();
+        let stem = path.file_name().unwrap().to_string_lossy().into_owned();
         Object::builder()
             .property("path", path)
             .property("depth", depth)

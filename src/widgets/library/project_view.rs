@@ -198,10 +198,9 @@ mod imp {
                                 .await
                                 .expect("Crawler failed to send dir path!");
                         } else {
-                            if !path
-                                .extension()
-                                .is_some_and(|ext| ext.eq_ignore_ascii_case("md"))
-                            {
+                            if !path.extension().is_some_and(|ext| {
+                                ext.eq_ignore_ascii_case("md") || ext.eq_ignore_ascii_case("mdx")
+                            }) {
                                 continue;
                             }
 
