@@ -39,7 +39,7 @@ Scratchmark is intended to become a spiritual successor to [ThiefMD](https://git
 
 <div align="center">
 
-<p style="font-size: 3em; font-variant-caps: small-caps;">i want <b>you</b></p>
+<p style="font-size: 3em; font-variant-caps: small-caps;">I want <b>you</b></p>
 <p style="font-size: 3em;">🫵</p>
 <p style="font-size: 2em; font-variant-caps: small-caps;">to contribute</p>
 <p>Enlist now!</p>
@@ -47,9 +47,11 @@ Scratchmark is intended to become a spiritual successor to [ThiefMD](https://git
 </div>
 
 [➜ Translation](https://translate.codeberg.org/projects/scratchmark/app/)  
-[➜ Project Backlog](https://github.com/users/sevonj/projects/20)
+[➜ Project Backlog](https://github.com/users/sevonj/projects/20)  
+[➜ Website Repository](https://github.com/sevonj/scratchmark.org)  
 
-If you find an issue that's important to you, give it a thumbs up.
+If you find an issue that's important to you, give it a thumbs up.  
+You're also welcome to improve the website, which is currently rather barebones.  
 
 ## Developers
 
