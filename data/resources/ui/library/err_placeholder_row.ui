@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="ErrPlaceholderRow" parent="AdwBin">
+        <child>
+            <object class="GtkBox" id="title_row">
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <property name="spacing">4</property>
+                <property name="margin-start">20</property>
+                <child>
+                    <object class="GtkImage" id="folder_icon">
+                        <style>
+                            <class name="error" />
+                        </style>
+                        <property name="icon-name">minus-circle-filled-symbolic</property>
+                        <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="title">
+                        <property name="label" translatable="no">dir-name-here</property>
+                        <property name="xalign">0</property>
+                        <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
+                        <property name="tooltip-text" translatable="yes">Project may have been moved or deleted.</property>
+                        <attributes>
+                            <attribute name="weight" value="PANGO_WEIGHT_NORMAL" />
+                        </attributes>
+                        <style>
+                            <class name="error" />
+                        </style>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>

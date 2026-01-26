@@ -6,6 +6,7 @@ mod imp {
     use adw::subclass::prelude::*;
     use glib::clone;
     use glib::closure_local;
+    use gtk::ListBoxRow;
     use gtk::gdk;
     use gtk::gio;
     use gtk::glib;
@@ -18,7 +19,6 @@ mod imp {
     use gtk::Label;
     use gtk::PopoverMenu;
     use gtk::TemplateChild;
-    use gtk::ToggleButton;
     use gtk::gdk::Rectangle;
     use gtk::gio::MenuModel;
     use gtk::gio::SimpleActionGroup;
@@ -28,10 +28,8 @@ mod imp {
     use crate::data::Document;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/file_button.ui")]
-    pub struct FileButton {
-        #[template_child]
-        pub(super) button: TemplateChild<ToggleButton>,
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/document_row.ui")]
+    pub struct DocumentRow {
         #[template_child]
         pub(super) open_in_editor_indicator: TemplateChild<Label>,
         #[template_child]
@@ -48,10 +46,10 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for FileButton {
-        const NAME: &'static str = "FileButton";
-        type Type = super::FileButton;
-        type ParentType = adw::Bin;
+    impl ObjectSubclass for DocumentRow {
+        const NAME: &'static str = "DocumentRow";
+        type Type = super::DocumentRow;
+        type ParentType = ListBoxRow;
 
         fn class_init(klass: &mut Self::Class) {
             klass.bind_template();
@@ -62,22 +60,13 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for FileButton {
+    impl ObjectImpl for DocumentRow {
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
 
             self.setup_context_menu();
-            self.setup_rename_menu();
             self.setup_drag();
-
-            self.button.connect_clicked(clone!(
-                #[weak(rename_to = this)]
-                self,
-                move |_| {
-                    this.document().select();
-                }
-            ));
 
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("document", Some(&actions));
@@ -137,10 +126,10 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for FileButton {}
-    impl BinImpl for FileButton {}
+    impl WidgetImpl for DocumentRow {}
+    impl ListBoxRowImpl for DocumentRow {}
 
-    impl FileButton {
+    impl DocumentRow {
         pub(super) fn prompt_rename(&self) {
             self.rename_popover.borrow().as_ref().unwrap().popup();
         }
@@ -153,7 +142,7 @@ mod imp {
             let obj = self.obj();
 
             let builder = Builder::from_resource(
-                "/org/scratchmark/Scratchmark/ui/library/file_context_menu.ui",
+                "/org/scratchmark/Scratchmark/ui/library/document_context_menu.ui",
             );
             let popover = builder.object::<MenuModel>("context-menu").unwrap();
             let menu = PopoverMenu::builder()
@@ -188,10 +177,11 @@ mod imp {
         fn setup_rename_menu(&self) {
             let obj = self.obj();
 
-            let menu = ItemRenamePopover::for_document();
-            menu.set_parent(&*obj);
+            let rename_popover = ItemRenamePopover::for_document();
+            rename_popover.set_parent(&*obj);
+            rename_popover.set_path(self.document.get().unwrap().path());
 
-            menu.connect_closure(
+            rename_popover.connect_closure(
                 "committed",
                 false,
                 closure_local!(
@@ -205,7 +195,7 @@ mod imp {
                 ),
             );
 
-            let _ = self.rename_popover.replace(Some(menu));
+            let _ = self.rename_popover.replace(Some(rename_popover));
 
             obj.connect_destroy(move |obj| {
                 if let Some(popover) = obj.imp().rename_popover.take() {
@@ -224,14 +214,36 @@ mod imp {
             obj.add_controller(drag_source.clone());
             let _ = self.drag_source.replace(Some(drag_source));
         }
+
+        pub(super) fn bind(&self, document: &Document) {
+            self.document.get_or_init(|| document.clone());
+
+            let open_in_editor_indicator: &Label = self.open_in_editor_indicator.as_ref();
+            document
+                .bind_property("is_open_in_editor", open_in_editor_indicator, "visible")
+                .sync_create()
+                .build();
+
+            self.setup_rename_menu();
+
+            self.title_row
+                .set_margin_start(12 * document.depth() as i32);
+            let title_label = self.document_name_label.get();
+            let mut bindings = self.bindings.borrow_mut();
+
+            let title_binding = document
+                .bind_property("stem", &title_label, "label")
+                .sync_create()
+                .build();
+            bindings.push(title_binding);
+        }
     }
 }
 
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
-use gtk::Label;
-use gtk::ToggleButton;
+use gtk::ListBoxRow;
 use gtk::glib;
 use gtk::prelude::*;
 
@@ -240,16 +252,16 @@ use glib::Object;
 use crate::data::Document;
 
 glib::wrapper! {
-pub struct FileButton(ObjectSubclass<imp::FileButton>)
-    @extends adw::Bin, gtk::Widget,
-    @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+pub struct DocumentRow(ObjectSubclass<imp::DocumentRow>)
+    @extends ListBoxRow, gtk::Widget,
+    @implements gtk::Accessible, gtk::Actionable, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl FileButton {
+impl DocumentRow {
     pub fn new(data: &Document) -> Self {
-        let this: Self = Object::builder().build();
-        this.bind(data);
-        this
+        let obj: Self = Object::builder().build();
+        obj.imp().bind(data);
+        obj
     }
 
     pub fn document(&self) -> &Document {
@@ -264,6 +276,10 @@ impl FileButton {
         self.document().stem()
     }
 
+    pub fn on_click(&self) {
+        self.document().open();
+    }
+
     pub fn prompt_rename(&self) {
         self.imp().prompt_rename();
     }
@@ -272,32 +288,5 @@ impl FileButton {
         if let Err(e) = self.document().rename(path) {
             self.document().notify(&e.to_string())
         }
-    }
-
-    fn bind(&self, data: &Document) {
-        let imp = self.imp();
-        imp.document.get_or_init(|| data.clone());
-        let path = data.path();
-
-        let button: &ToggleButton = imp.button.as_ref();
-        data.bind_property("is_selected", button, "active")
-            .bidirectional()
-            .build();
-
-        let open_in_editor_indicator: &Label = imp.open_in_editor_indicator.as_ref();
-        data.bind_property("is_open_in_editor", open_in_editor_indicator, "visible")
-            .build();
-
-        imp.rename_popover.borrow().as_ref().unwrap().set_path(path);
-
-        imp.title_row.set_margin_start(12 * data.depth() as i32);
-        let title_label = imp.document_name_label.get();
-        let mut bindings = imp.bindings.borrow_mut();
-
-        let title_binding = data
-            .bind_property("stem", &title_label, "label")
-            .sync_create()
-            .build();
-        bindings.push(title_binding);
     }
 }

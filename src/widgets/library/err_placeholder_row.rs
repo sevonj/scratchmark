@@ -9,7 +9,6 @@ mod imp {
     use gtk::prelude::*;
 
     use gtk::Builder;
-    use gtk::Button;
     use gtk::CompositeTemplate;
     use gtk::Label;
     use gtk::PopoverMenu;
@@ -20,19 +19,17 @@ mod imp {
     use gtk::glib::subclass::Signal;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/err_placeholder_item.ui")]
-    pub struct ErrPlaceholderItem {
-        #[template_child]
-        pub(super) button: TemplateChild<Button>,
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/err_placeholder_row.ui")]
+    pub struct ErrPlaceholderRow {
         #[template_child]
         pub(super) title: TemplateChild<Label>,
         context_menu_popover: RefCell<Option<PopoverMenu>>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for ErrPlaceholderItem {
-        const NAME: &'static str = "ErrPlaceholderItem";
-        type Type = super::ErrPlaceholderItem;
+    impl ObjectSubclass for ErrPlaceholderRow {
+        const NAME: &'static str = "ErrPlaceholderRow";
+        type Type = super::ErrPlaceholderRow;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -44,7 +41,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for ErrPlaceholderItem {
+    impl ObjectImpl for ErrPlaceholderRow {
         fn signals() -> &'static [Signal] {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| vec![Signal::builder("close-project-requested").build()])
@@ -71,13 +68,13 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for ErrPlaceholderItem {}
-    impl BinImpl for ErrPlaceholderItem {}
+    impl WidgetImpl for ErrPlaceholderRow {}
+    impl BinImpl for ErrPlaceholderRow {}
 
-    impl ErrPlaceholderItem {
+    impl ErrPlaceholderRow {
         fn setup_context_menu(&self) {
             let resource_path =
-                "/org/scratchmark/Scratchmark/ui/library/err_placeholder_item_context_menu.ui";
+                "/org/scratchmark/Scratchmark/ui/library/err_placeholder_row_context_menu.ui";
             let obj = self.obj();
 
             let builder = Builder::from_resource(resource_path);
@@ -88,8 +85,7 @@ mod imp {
                 .menu_model(&popover)
                 .has_arrow(false)
                 .build();
-            let button: &Button = self.button.as_ref();
-            menu.set_parent(button);
+            menu.set_parent(obj.as_ref());
             let _ = self.context_menu_popover.replace(Some(menu));
 
             let gesture = gtk::GestureClick::new();
@@ -105,7 +101,7 @@ mod imp {
                     };
                 }
             ));
-            self.button.add_controller(gesture);
+            obj.add_controller(gesture);
 
             obj.connect_destroy(move |obj| {
                 if let Some(popover) = obj.imp().context_menu_popover.take() {
@@ -123,14 +119,14 @@ use glib::Object;
 use gtk::glib;
 
 glib::wrapper! {
-    pub struct ErrPlaceholderItem(ObjectSubclass<imp::ErrPlaceholderItem>)
+    pub struct ErrPlaceholderRow(ObjectSubclass<imp::ErrPlaceholderRow>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl ErrPlaceholderItem {
+impl ErrPlaceholderRow {
     pub fn new(path: &Path) -> Self {
-        let this: ErrPlaceholderItem = Object::builder().build();
+        let this: ErrPlaceholderRow = Object::builder().build();
         let name = path.file_name().unwrap().to_string_lossy().into_owned();
         this.imp().title.set_text(&name);
         this
