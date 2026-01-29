@@ -1,59 +1,46 @@
 mod imp {
-    use std::cell::Cell;
     use std::cell::RefCell;
     use std::collections::HashMap;
     use std::collections::HashSet;
-    use std::collections::VecDeque;
+    use std::path::Path;
     use std::path::PathBuf;
     use std::sync::OnceLock;
-    use std::time::Duration;
 
     use adw::subclass::prelude::*;
-    use async_channel::Receiver;
-    use async_channel::Sender;
-    use glib::closure_local;
-    use glib::subclass::*;
     use gtk::glib;
     use gtk::glib::Properties;
     use gtk::glib::clone;
-    use gtk::glib::timeout_add_local;
+    use gtk::glib::closure_local;
+    use gtk::glib::subclass::*;
     use gtk::prelude::*;
 
     use gtk::CompositeTemplate;
-    use gtk::glib::MainContext;
+    use gtk::ListBox;
+    use gtk::ListBoxRow;
 
-    use super::super::err_placeholder_item::ErrPlaceholderItem;
-    use super::FileButton;
-    use super::FolderView;
     use crate::data::Document;
     use crate::data::Folder;
-
-    #[derive(Debug)]
-    enum ProjectEntry {
-        Dir { path: PathBuf, depth: u32 },
-        File { path: PathBuf, depth: u32 },
-    }
+    use crate::data::Project;
+    use crate::widgets::library::DocumentRow;
+    use crate::widgets::library::FolderRow;
+    use crate::widgets::library::err_placeholder_row::ErrPlaceholderRow;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::ProjectView)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library/project_view.ui")]
     pub struct ProjectView {
         #[template_child]
-        pub(super) project_root_vbox: TemplateChild<gtk::Box>,
+        pub(super) project_vbox: TemplateChild<ListBox>,
+        pub(super) project_items: RefCell<HashMap<PathBuf, ListBoxRow>>,
+        pub(super) project: OnceLock<Project>,
 
-        pub(super) root_folder: RefCell<Option<FolderView>>,
-        pub(super) subfolders: RefCell<HashMap<PathBuf, FolderView>>,
-        pub(super) documents: RefCell<HashMap<PathBuf, FileButton>>,
-        /// Is this a builtin project (drafts)
-        pub(super) is_builtin: Cell<bool>,
-        /// Project folder is inaccessible or deleted
-        is_invalid: Cell<bool>,
-        crawler_rx: RefCell<Option<Receiver<ProjectEntry>>>,
-        crawler_tx: RefCell<Option<Sender<ProjectEntry>>>,
-        pub(super) expanded_folders: RefCell<HashSet<PathBuf>>,
+        #[property(nullable, get, set)]
+        open_document_path: RefCell<Option<PathBuf>>,
+        #[property(nullable, get, set)]
+        selected_item_path: RefCell<Option<PathBuf>>,
+        previous_open_document: RefCell<Option<Document>>,
 
-        #[property(get, set)]
-        ignore_hidden_files: Cell<bool>,
+        expanded_folders_queue: RefCell<HashSet<PathBuf>>,
     }
 
     #[glib::object_subclass]
@@ -75,68 +62,53 @@ mod imp {
     impl ObjectImpl for ProjectView {
         fn constructed(&self) {
             let obj = self.obj();
+
+            self.project_vbox.set_focusable(false);
+            self.project_vbox
+                .set_sort_func(crate::widgets::library::sort::sort_alphanumeric);
+            self.project_vbox.connect_row_activated(clone!(
+                #[weak]
+                obj,
+                move |_vbox, row| {
+                    if let Ok(folder_item) = row.clone().downcast::<FolderRow>() {
+                        folder_item.on_click();
+                        obj.set_selected_item_path(Some(folder_item.folder().path()));
+                    } else if let Ok(document_item) = row.clone().downcast::<DocumentRow>() {
+                        document_item.on_click();
+                        obj.set_selected_item_path(Some(document_item.document().path()));
+                    };
+                }
+            ));
+
+            obj.connect_open_document_path_notify(move |obj| {
+                let imp = obj.imp();
+                if let Some(prev) = imp.previous_open_document.borrow().as_ref() {
+                    prev.set_is_open_in_editor(false);
+                }
+                let new = obj
+                    .open_document_path()
+                    .and_then(|path| imp.document_item(&path));
+                if let Some(row) = &new {
+                    row.document().set_is_open_in_editor(true);
+                    obj.imp().project_vbox.select_row(Some(row));
+                }
+                imp.previous_open_document
+                    .replace(new.map(|row| row.document().clone()));
+            });
+
+            obj.connect_selected_item_path_notify(move |obj| {
+                obj.imp().refresh_selection();
+            });
+
+            self.project_vbox.connect_selected_rows_changed(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_| {
+                    imp.refresh_selection();
+                }
+            ));
+
             self.parent_constructed();
-
-            let (sender, receiver) = async_channel::unbounded();
-            self.crawler_tx.replace(Some(sender));
-            self.crawler_rx.replace(Some(receiver));
-
-            timeout_add_local(
-                Duration::from_millis(100),
-                clone!(
-                    #[strong]
-                    obj,
-                    move || {
-                        let imp = obj.imp();
-                        let mut bind = imp.crawler_rx.borrow_mut();
-                        let receiver = bind.as_mut().unwrap();
-                        while let Ok(entry) = receiver.try_recv() {
-                            match entry {
-                                ProjectEntry::Dir { path, depth } => {
-                                    imp.add_subfolder(path, depth);
-                                }
-                                ProjectEntry::File { path, depth } => {
-                                    imp.add_document(path, depth);
-                                }
-                            }
-                        }
-                        glib::ControlFlow::Continue
-                    }
-                ),
-            );
-        }
-
-        fn signals() -> &'static [Signal] {
-            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
-            SIGNALS.get_or_init(|| {
-                vec![
-                    Signal::builder("folder-added")
-                        .param_types([Folder::static_type()])
-                        .build(),
-                    Signal::builder("document-added")
-                        .param_types([FileButton::static_type()])
-                        .build(),
-                    Signal::builder("document-selected")
-                        .param_types([PathBuf::static_type()])
-                        .build(),
-                    Signal::builder("folder-rename-requested")
-                        .param_types([Folder::static_type(), PathBuf::static_type()])
-                        .build(),
-                    Signal::builder("document-rename-requested")
-                        .param_types([FileButton::static_type(), PathBuf::static_type()])
-                        .build(),
-                    Signal::builder("folder-delete-requested")
-                        .param_types([Folder::static_type()])
-                        .build(),
-                    Signal::builder("document-delete-requested")
-                        .param_types([FileButton::static_type()])
-                        .build(),
-                    Signal::builder("folder-trash-requested")
-                        .param_types([Folder::static_type()])
-                        .build(),
-                    Signal::builder("close-project-requested").build(),
-                ]
-            })
         }
     }
 
@@ -144,268 +116,274 @@ mod imp {
     impl BinImpl for ProjectView {}
 
     impl ProjectView {
-        pub(super) fn setup_root(&self, root_folder: FolderView) {
-            assert!(self.root_folder.borrow().is_none());
-            let vbox = &self.project_root_vbox;
-            vbox.append(&root_folder);
-            self.connect_folder(root_folder.folder());
-            self.root_folder.replace(Some(root_folder));
+        pub(super) fn project(&self) -> &Project {
+            self.project.get().unwrap()
         }
 
-        pub(super) fn refresh_content(&self) {
-            if self.is_invalid.get() {
+        pub(super) fn project_item(&self, path: &Path) -> Option<ListBoxRow> {
+            self.project_items.borrow().get(path).cloned()
+        }
+
+        pub(super) fn document_item(&self, path: &Path) -> Option<DocumentRow> {
+            self.project_item(path).and_downcast()
+        }
+
+        pub(super) fn folder_item(&self, path: &Path) -> Option<FolderRow> {
+            self.project_item(path).and_downcast()
+        }
+
+        fn refresh_selection(&self) {
+            let obj = self.obj();
+            let Some(path) = obj.selected_item_path() else {
+                self.project_vbox.unselect_all();
+                return;
+            };
+            let Some(row) = self.project_item(&path) else {
+                self.project_vbox.unselect_all();
+                return;
+            };
+            if !row.is_selected() {
+                self.project_vbox.select_row(Some(&row));
+            }
+        }
+
+        fn add_document(&self, doc: &Document) {
+            let obj = self.obj();
+            let path = doc.path();
+            if self.has_item(&path) || !self.is_item_visible(&path) {
                 return;
             }
-            let root_path = self.obj().root_path();
-            if !root_path.exists() {
-                self.mark_invalid();
+            let doc_item = DocumentRow::new(doc);
+            self.project_vbox.insert(&doc_item, -1);
+            self.project_vbox.invalidate_sort();
+            self.project_items
+                .borrow_mut()
+                .insert(doc.path(), doc_item.clone().upcast());
+
+            if obj.open_document_path().is_some_and(|open| open == path) {
+                self.previous_open_document.replace(Some(doc.clone()));
+            }
+            if obj.selected_item_path().is_some_and(|sel| sel == path) {
+                self.project_vbox.select_row(Some(&doc_item));
+            }
+        }
+
+        fn add_folder(&self, folder: &Folder) {
+            let obj = self.obj();
+            let path = folder.path();
+            if self.has_item(&path) || !self.is_item_visible(&path) {
                 return;
             }
+            let folder_item = FolderRow::new(folder);
+            self.project_vbox.insert(&folder_item, -1);
+            self.project_vbox.invalidate_sort();
+            self.project_items
+                .borrow_mut()
+                .insert(path.clone(), folder_item.clone().upcast());
 
-            let ignore_hidden = self.ignore_hidden_files.get();
-            let sender = self.crawler_tx.borrow().as_ref().unwrap().clone();
-
-            MainContext::default().spawn_local(async move {
-                let mut search_stack: VecDeque<(PathBuf, u32)> = VecDeque::from([(root_path, 1)]);
-                let mut found_folders: Vec<(PathBuf, u32)> = vec![];
-                let mut found_files: Vec<(PathBuf, u32)> = vec![];
-
-                loop {
-                    let Some((folder, depth)) = search_stack.pop_front() else {
-                        break;
-                    };
-                    let Ok(entries) = folder.read_dir() else {
-                        continue;
-                    };
-                    for entry in entries {
-                        let Ok(entry) = entry else {
-                            continue;
-                        };
-                        let Ok(metadata) = entry.metadata() else {
-                            continue;
-                        };
-                        if ignore_hidden
-                            && entry.file_name().as_os_str().as_encoded_bytes()[0] == b'.'
-                        {
-                            continue;
+            folder_item.connect_is_expanded_notify(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |folder| {
+                    if folder.is_expanded() {
+                        for subfolder in folder.folder().subfolders().values() {
+                            imp.add_folder(subfolder);
                         }
-                        let path = entry.path();
-                        if metadata.is_dir() {
-                            search_stack.push_back((path.clone(), depth + 1));
-                            found_folders.push((path.clone(), depth + 1));
-                            sender
-                                .send(ProjectEntry::Dir { path, depth })
-                                .await
-                                .expect("Crawler failed to send dir path!");
-                        } else {
-                            if !path
-                                .extension()
-                                .is_some_and(|ext| ext.eq_ignore_ascii_case("md"))
-                            {
-                                continue;
-                            }
-
-                            found_files.push((path.clone(), depth + 1));
-                            sender
-                                .send(ProjectEntry::File { path, depth })
-                                .await
-                                .expect("Crawler failed to send file path!");
+                        for document in folder.folder().documents().values() {
+                            imp.add_document(document);
+                        }
+                    } else {
+                        for path in folder.folder().subfolders().keys() {
+                            imp.remove_item(path);
+                        }
+                        for path in folder.folder().documents().keys() {
+                            imp.remove_item(path);
                         }
                     }
                 }
-            });
+            ));
 
-            self.prune();
+            folder.connect_closure(
+                "document-created",
+                true,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |_: Folder, path: PathBuf| {
+                        obj.make_visible(&path);
+                    }
+                ),
+            );
+
+            let expand_queued = self.expanded_folders_queue.borrow().contains(&path);
+            let contains_open_document = obj.open_document_path().is_some_and(|open| open == path);
+            let is_selected = obj.selected_item_path().is_some_and(|sel| sel == path);
+
+            if contains_open_document || expand_queued || is_selected {
+                self.expand_folder(&path);
+            }
+            if is_selected {
+                self.project_vbox.select_row(Some(&folder_item));
+            }
+        }
+
+        fn remove_item(&self, path: &Path) {
+            let Some(item) = self.project_items.borrow_mut().remove(path) else {
+                return;
+            };
+            self.project_vbox.remove(&item);
+
+            if let Ok(folder) = item.downcast::<FolderRow>() {
+                for path in folder.folder().subfolders().keys() {
+                    self.remove_item(path);
+                }
+                for path in folder.folder().documents().keys() {
+                    self.remove_item(path);
+                }
+            }
+        }
+
+        /// Expand all parents
+        pub(super) fn make_visible(&self, path: &Path) {
+            if !path.starts_with(self.project().path()) {
+                return;
+            }
+
+            if !self.has_item(path) {
+                if let Some(folder) = self.project().get_folder(path) {
+                    self.add_folder(&folder);
+                } else if let Some(document) = self.project().get_document(path) {
+                    self.add_document(&document);
+                }
+            }
+            self.expand_folder(path);
+            if let Some(parent_path) = path.parent() {
+                self.make_visible(parent_path);
+            }
+        }
+
+        pub(super) fn expand_folder(&self, path: &Path) {
+            if let Some(folder) = self.project_item(path).and_downcast::<FolderRow>() {
+                folder.set_is_expanded(true);
+                self.expanded_folders_queue.borrow_mut().remove(path);
+            } else {
+                self.expanded_folders_queue
+                    .borrow_mut()
+                    .insert(path.to_path_buf());
+            }
+        }
+
+        fn has_item(&self, path: &Path) -> bool {
+            self.project_items.borrow().contains_key(path)
+        }
+
+        fn is_item_visible(&self, path: &Path) -> bool {
+            let components = path.parent().unwrap().components();
+            let mut check_path = PathBuf::new();
+            for component in components {
+                check_path.push(component);
+
+                if let Some(l) = self.project_items.borrow().get(&check_path)
+                    && let Ok(f) = l.clone().downcast::<FolderRow>()
+                    && !f.is_expanded()
+                {
+                    return false;
+                }
+            }
+            true
+        }
+
+        pub(super) fn refresh_content(&self) {
+            self.project().refresh_content();
+            self.project_vbox.invalidate_sort();
         }
 
         fn mark_invalid(&self) {
-            self.is_invalid.replace(true);
-            self.root_folder
-                .borrow()
-                .as_ref()
-                .unwrap()
-                .set_visible(false);
-            let err_placeholder = ErrPlaceholderItem::new(&self.obj().root_path());
-            let obj = self.obj();
+            let err_placeholder: ErrPlaceholderRow = ErrPlaceholderRow::new(&self.project().path());
             err_placeholder.connect_closure(
                 "close-project-requested",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
-                    move |_: ErrPlaceholderItem| {
-                        obj.emit_by_name::<()>("close-project-requested", &[]);
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: ErrPlaceholderRow| {
+                        imp.project.get().unwrap().close();
                     }
                 ),
             );
-            self.project_root_vbox.append(&err_placeholder);
+            self.project_items.borrow_mut().clear();
+            self.project_vbox.remove_all();
+            self.project_vbox.append(&err_placeholder);
         }
 
-        fn add_subfolder(&self, path: PathBuf, depth: u32) {
-            if self.subfolders.borrow().contains_key(&path) {
-                return;
-            }
-            let folder_view = FolderView::new(&Folder::new(path.clone(), depth));
-
-            {
-                let mut subfolders = self.subfolders.borrow_mut();
-                subfolders.insert(path.clone(), folder_view.clone());
-
-                let parent_path = path.parent().unwrap();
-                if let Some(parent) = subfolders.get(parent_path) {
-                    parent.add_subfolder(folder_view.clone());
-                } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
-                    self.root_folder
-                        .borrow()
-                        .as_ref()
-                        .unwrap()
-                        .add_subfolder(folder_view.clone());
-                } else {
-                    panic!(
-                        "Tried to add a folder, but couldn't find its parent: '{path:?}' '{parent_path:?}'"
-                    );
-                }
-            }
-
-            if self.expanded_folders.borrow().contains(&path) {
-                folder_view.set_expanded(true);
-            }
-
-            self.connect_folder(folder_view.folder());
-        }
-
-        fn add_document(&self, path: PathBuf, depth: u32) {
-            if self.documents.borrow().contains_key(&path) {
-                return;
-            }
-
-            let doc = FileButton::new(&Document::new(path.clone(), depth));
-            self.documents
-                .borrow_mut()
-                .insert(path.clone(), doc.clone());
-
-            let parent_path = path.parent().unwrap();
-            if let Some(parent) = self.subfolders.borrow().get(parent_path) {
-                parent.add_document(doc.clone());
-            } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
-                self.root_folder
-                    .borrow()
-                    .as_ref()
-                    .unwrap()
-                    .add_document(doc.clone());
-            } else {
-                panic!("Tried to add a document, but couldn't find its parent.");
-            }
-
-            self.obj().emit_by_name::<()>("document-added", &[&doc]);
-        }
-
-        /// Remove widgets for entries that don't exist in the library anymore
-        fn prune(&self) {
-            let mut subfolders = self.subfolders.borrow_mut();
-            let mut documents = self.documents.borrow_mut();
-            let mut dead_folders = vec![];
-            let mut dead_documents = vec![];
-            for (path, folder) in subfolders.iter() {
-                let is_hidden = path
-                    .file_name()
-                    .is_some_and(|s| s.as_encoded_bytes()[0] == b'.');
-                let prune_hidden = self.ignore_hidden_files.get() && is_hidden;
-
-                if !path.exists() || prune_hidden {
-                    dead_folders.push(path.clone());
-
-                    let parent_path = path.parent().unwrap();
-
-                    if let Some(parent) = subfolders.get(parent_path) {
-                        parent.remove_subfolder(folder);
-                    } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
-                        self.root_folder
-                            .borrow()
-                            .as_ref()
-                            .unwrap()
-                            .remove_subfolder(folder);
-                    }
-                }
-            }
-            for (path, doc) in documents.iter() {
-                let is_hidden = path
-                    .file_name()
-                    .is_some_and(|s| s.as_encoded_bytes()[0] == b'.');
-                let prune_hidden = self.ignore_hidden_files.get() && is_hidden;
-
-                if !path.exists() || prune_hidden {
-                    dead_documents.push(path.clone());
-
-                    let parent_path = path.parent().unwrap();
-
-                    if let Some(parent) = subfolders.get(parent_path) {
-                        parent.remove_document(doc);
-                    } else if *parent_path == self.root_folder.borrow().as_ref().unwrap().path() {
-                        self.root_folder
-                            .borrow()
-                            .as_ref()
-                            .unwrap()
-                            .remove_document(doc);
-                    }
-                }
-            }
-            for path in dead_folders {
-                subfolders
-                    .remove(&path)
-                    .expect("dead folder entry disappeared?");
-            }
-            for path in dead_documents {
-                documents
-                    .remove(&path)
-                    .expect("dead doc entry disappeared?");
-            }
-        }
-
-        fn connect_folder(&self, folder: &Folder) {
-            self.obj().emit_by_name::<()>("folder-added", &[&folder]);
-
-            folder.connect_closure(
-                "subfolder-created",
+        pub(super) fn bind(&self, project: &Project) {
+            self.project.get_or_init(|| project.clone());
+            project.connect_closure(
+                "became-invalid",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
-                    move |_: Folder, _path: PathBuf| {
-                        this.refresh_content();
+                    move |_: Project| {
+                        imp.mark_invalid();
+                    }
+                ),
+            );
+            project.connect_closure(
+                "folder-added",
+                false,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: Project, folder: Folder| {
+                        imp.add_folder(&folder);
+                    }
+                ),
+            );
+            project.connect_closure(
+                "document-added",
+                false,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: Project, doc: Document| {
+                        imp.add_document(&doc);
+                    }
+                ),
+            );
+            project.connect_closure(
+                "item-removed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: Project, path: PathBuf| {
+                        imp.remove_item(&path);
                     }
                 ),
             );
 
-            folder.connect_closure(
-                "document-created",
-                false,
-                closure_local!(
-                    #[weak(rename_to = this)]
-                    self,
-                    move |_: Folder, _path: PathBuf| {
-                        this.refresh_content();
-                    }
-                ),
-            );
+            for folder in project.folders().values() {
+                self.add_folder(folder);
+            }
+            for doc in project.documents().values() {
+                self.add_document(doc);
+            }
         }
     }
 }
 
 use std::path::Path;
-use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use gtk::glib;
-use gtk::glib::closure_local;
-use sourceview5::prelude::*;
+use gtk::prelude::*;
 
 use glib::Object;
 
-use super::FileButton;
-use super::FolderView;
-use crate::data::Folder;
-use crate::util::file_actions;
+use crate::data::Project;
+use crate::widgets::library::DocumentRow;
+use crate::widgets::library::FolderRow;
 
 glib::wrapper! {
     pub struct ProjectView(ObjectSubclass<imp::ProjectView>)
@@ -414,98 +392,47 @@ glib::wrapper! {
 }
 
 impl ProjectView {
-    /// New standard project
-    pub fn new(path: PathBuf) -> Self {
-        let this: Self = Object::builder().build();
-        this.imp().is_builtin.replace(false);
-        let root = FolderView::new_project_root(&Folder::new(path.clone(), 0));
-        root.folder().connect_closure(
-            "close-project-requested",
-            false,
-            closure_local!(
-                #[weak]
-                this,
-                move |_: Folder| {
-                    this.emit_by_name::<()>("close-project-requested", &[]);
-                }
-            ),
-        );
-        this.imp().setup_root(root);
-        this
+    pub fn new(project: &Project) -> Self {
+        let obj: Self = Object::builder().build();
+        let imp = obj.imp();
+        imp.bind(project);
+        obj
     }
 
-    /// Builtin drafts project
-    pub fn new_draft_table() -> Self {
-        let this: Self = Object::builder().build();
-        this.imp().is_builtin.replace(true);
-        let root =
-            FolderView::new_drafts_root(&Folder::new(file_actions::path_builtin_library(), 0));
-        this.imp().setup_root(root);
-        this
+    pub fn project(&self) -> &Project {
+        self.imp().project()
     }
 
-    pub fn path(&self) -> PathBuf {
-        self.root_folder().path()
+    pub fn document_item(&self, path: &Path) -> Option<DocumentRow> {
+        self.imp().document_item(path)
     }
 
-    pub fn root_path(&self) -> PathBuf {
-        self.imp().root_folder.borrow().as_ref().unwrap().path()
+    pub fn folder_item(&self, path: &Path) -> Option<FolderRow> {
+        self.imp().folder_item(path)
     }
 
-    pub fn root_folder(&self) -> FolderView {
-        self.imp().root_folder.borrow().clone().unwrap()
-    }
-
-    pub fn is_builtin(&self) -> bool {
-        self.imp().is_builtin.get()
+    pub fn refresh_content(&self) {
+        self.imp().refresh_content();
     }
 
     pub fn expanded_folder_paths(&self) -> Vec<String> {
         let mut paths = vec![];
-        if self.root_folder().is_expanded() {
-            paths.push(self.root_path().to_str().unwrap().to_owned());
-        }
-        for (path, folder) in self.imp().subfolders.borrow().iter() {
-            if folder.is_expanded() {
+        for (path, row) in self.imp().project_items.borrow().iter() {
+            if !self.project().has_item(path) {
+                continue;
+            }
+            if row
+                .clone()
+                .downcast::<FolderRow>()
+                .is_ok_and(|folder_row| folder_row.is_expanded())
+            {
                 paths.push(path.to_str().unwrap().to_owned());
             }
         }
         paths
     }
 
-    pub fn expand_folder(&self, path: PathBuf) {
-        let imp = self.imp();
-        if let Some(folder) = imp.subfolders.borrow().get(&path) {
-            folder.set_expanded(true);
-        } else if path == self.root_path() {
-            self.root_folder().set_expanded(true);
-        }
-        imp.expanded_folders.borrow_mut().insert(path);
-    }
-
-    pub fn has_folder(&self, path: &Path) -> bool {
-        self.imp().subfolders.borrow().contains_key(path) || *path == self.root_path()
-    }
-
-    pub fn has_document(&self, path: &Path) -> bool {
-        self.imp().documents.borrow().contains_key(path)
-    }
-
-    pub fn get_folder(&self, path: &Path) -> Option<FolderView> {
-        let sub = self.imp().subfolders.borrow().get(path).cloned();
-        if sub.is_some() {
-            return sub;
-        } else if *path == self.root_path() {
-            return Some(self.root_folder());
-        }
-        None
-    }
-
-    pub fn get_document(&self, path: &Path) -> Option<FileButton> {
-        self.imp().documents.borrow().get(path).cloned()
-    }
-
-    pub fn refresh_content(&self) {
-        self.imp().refresh_content();
+    pub fn make_visible(&self, path: &Path) {
+        self.imp().make_visible(path);
     }
 }
