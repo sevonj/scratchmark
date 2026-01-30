@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="ItemCreateRow" parent="GtkListBoxRow">
+        <property name="selectable">False</property>
+        <child>
+            <object class="GtkBox" id="title_row">
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <property name="spacing">4</property>
+                <child>
+                    <object class="GtkImage" id="item_icon">
+                        <style>
+                            <class name="dim-label" />
+                        </style>
+                        <property name="icon-name">text-x-generic-symbolic</property>
+                        <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkEntry" id="name_entry">
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>
