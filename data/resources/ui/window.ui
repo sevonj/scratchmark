@@ -21,12 +21,6 @@
               <object class="AdwToolbarView" id="sidebar_toolbar_view">
                 <child type="top">
                   <object class="AdwHeaderBar">
-                    <child type="start">
-                      <object class="GtkMenuButton" id="new_folder_button">
-                        <property name="icon-name">folder-new-symbolic</property>
-                        <property name="tooltip-text" translatable="yes">Create Subfolder (Shift+Ctrl+N)</property>
-                      </object>
-                    </child>
                     <child type="end">
                       <object class="GtkMenuButton">
                         <property name="primary">True</property>
@@ -65,9 +59,10 @@
                               </object>
                             </child>
                             <child type="start">
-                              <object class="GtkMenuButton" id="new_document_button">
+                              <object class="GtkButton">
                                 <property name="icon-name">document-new-symbolic</property>
                                 <property name="tooltip-text" translatable="yes">New Document (Ctrl+N)</property>
+                                <property name="action-name">win.file-new</property>
                               </object>
                             </child>
                             <child type="end">

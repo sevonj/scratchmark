@@ -24,6 +24,7 @@ mod imp {
     use crate::widgets::library::DocumentRow;
     use crate::widgets::library::FolderRow;
     use crate::widgets::library::err_placeholder_row::ErrPlaceholderRow;
+    use crate::widgets::library::item_create_row::ItemCreateRow;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::ProjectView)]
@@ -174,14 +175,14 @@ mod imp {
             if self.has_item(&path) || !self.is_item_visible(&path) {
                 return;
             }
-            let folder_item = FolderRow::new(folder);
-            self.project_vbox.insert(&folder_item, -1);
+            let folder_row = FolderRow::new(folder);
+            self.project_vbox.insert(&folder_row, -1);
             self.project_vbox.invalidate_sort();
             self.project_items
                 .borrow_mut()
-                .insert(path.clone(), folder_item.clone().upcast());
+                .insert(path.clone(), folder_row.clone().upcast());
 
-            folder_item.connect_is_expanded_notify(clone!(
+            folder_row.connect_is_expanded_notify(clone!(
                 #[weak(rename_to = imp)]
                 self,
                 move |folder| {
@@ -215,6 +216,30 @@ mod imp {
                 ),
             );
 
+            folder_row.connect_closure(
+                "prompt-create-subfolder",
+                true,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |folder_row: FolderRow| {
+                        obj.prompt_create_subfolder(folder_row.folder().path());
+                    }
+                ),
+            );
+
+            folder_row.connect_closure(
+                "prompt-create-document",
+                true,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |folder_row: FolderRow| {
+                        obj.prompt_create_document(folder_row.folder().path());
+                    }
+                ),
+            );
+
             let expand_queued = self.expanded_folders_queue.borrow().contains(&path);
             let contains_open_document = obj.open_document_path().is_some_and(|open| open == path);
             let is_selected = obj.selected_item_path().is_some_and(|sel| sel == path);
@@ -223,7 +248,7 @@ mod imp {
                 self.expand_folder(&path);
             }
             if is_selected {
-                self.project_vbox.select_row(Some(&folder_item));
+                self.project_vbox.select_row(Some(&folder_row));
             }
         }
 
@@ -370,10 +395,123 @@ mod imp {
                 self.add_document(doc);
             }
         }
+
+        pub(super) fn prompt_create_document(&self, parent_path: PathBuf) {
+            let Some(parent) = self.project().get_folder(&parent_path) else {
+                return;
+            };
+            let Some(parent_row) = self.folder_item(&parent_path) else {
+                return;
+            };
+            parent_row.set_is_expanded(true);
+            let item_create_row = ItemCreateRow::for_document(&parent);
+
+            self.project_vbox.append(&item_create_row);
+            self.project_vbox.invalidate_sort();
+
+            item_create_row.connect_closure(
+                "cancelled",
+                true,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |item_create_row: ItemCreateRow| {
+                        glib::idle_add_local_once(clone!(
+                            #[weak]
+                            imp,
+                            move || {
+                                imp.project_vbox.remove(&item_create_row);
+                            }
+                        ));
+                    }
+                ),
+            );
+
+            item_create_row.connect_closure(
+                "committed",
+                true,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    #[weak]
+                    parent_row,
+                    move |item_create_row: ItemCreateRow, name: PathBuf| {
+                        let parent_folder = parent_row.folder();
+                        if let Err(e) = parent_folder.create_document(name) {
+                            parent_folder.notify_err(&e.to_string());
+                        }
+                        glib::idle_add_local_once(clone!(
+                            #[weak]
+                            imp,
+                            move || {
+                                imp.project_vbox.remove(&item_create_row);
+                            }
+                        ));
+                    }
+                ),
+            );
+        }
+
+        pub(super) fn prompt_create_subfolder(&self, parent_path: PathBuf) {
+            let Some(parent) = self.project().get_folder(&parent_path) else {
+                return;
+            };
+            let Some(parent_row) = self.folder_item(&parent_path) else {
+                return;
+            };
+            parent_row.set_is_expanded(true);
+            let item_create_row = ItemCreateRow::for_folder(&parent);
+
+            self.project_vbox.append(&item_create_row);
+            self.project_vbox.invalidate_sort();
+
+            item_create_row.connect_closure(
+                "cancelled",
+                true,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |item_create_row: ItemCreateRow| {
+                        glib::idle_add_local_once(clone!(
+                            #[weak]
+                            imp,
+                            move || {
+                                imp.project_vbox.remove(&item_create_row);
+                            }
+                        ));
+                    }
+                ),
+            );
+
+            item_create_row.connect_closure(
+                "committed",
+                true,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    #[weak]
+                    parent_row,
+                    move |item_create_row: ItemCreateRow, name: PathBuf| {
+                        let parent_folder = parent_row.folder();
+                        if let Err(e) = parent_folder.create_subfolder(name) {
+                            parent_folder.notify_err(&e.to_string());
+                        }
+                        glib::idle_add_local_once(clone!(
+                            #[weak]
+                            imp,
+                            move || {
+                                imp.project_vbox.remove(&item_create_row);
+                            }
+                        ));
+                    }
+                ),
+            );
+        }
     }
 }
 
 use std::path::Path;
+use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use gtk::glib;
@@ -434,5 +572,13 @@ impl ProjectView {
 
     pub fn make_visible(&self, path: &Path) {
         self.imp().make_visible(path);
+    }
+
+    pub fn prompt_create_document(&self, parent_path: PathBuf) {
+        self.imp().prompt_create_document(parent_path);
+    }
+
+    pub fn prompt_create_subfolder(&self, parent_path: PathBuf) {
+        self.imp().prompt_create_subfolder(parent_path);
     }
 }

@@ -24,7 +24,6 @@ mod imp {
     use gtk::Button;
     use gtk::CompositeTemplate;
     use gtk::EventControllerMotion;
-    use gtk::MenuButton;
     use gtk::Revealer;
     use gtk::ToggleButton;
     use gtk::gio::Cancellable;
@@ -46,7 +45,6 @@ mod imp {
 
     use crate::widgets::Editor;
     use crate::widgets::EditorPlaceholder;
-    use crate::widgets::ItemCreatePopover;
     use crate::widgets::LibraryView;
     use crate::widgets::MarkdownFormatBar;
     use crate::widgets::PreferencesDialog;
@@ -83,10 +81,6 @@ mod imp {
 
         #[template_child]
         toast_overlay: TemplateChild<ToastOverlay>,
-        #[template_child]
-        new_folder_button: TemplateChild<MenuButton>,
-        #[template_child]
-        new_document_button: TemplateChild<MenuButton>,
         #[template_child]
         unfullscreen_button: TemplateChild<Button>,
 
@@ -459,56 +453,6 @@ mod imp {
                 ),
             );
 
-            let new_folder_popover = ItemCreatePopover::for_folder();
-            self.new_folder_button
-                .set_popover(Some(&new_folder_popover));
-            new_folder_popover.connect_closure(
-                "committed",
-                false,
-                closure_local!(
-                    #[weak(rename_to = imp)]
-                    self,
-                    move |_: ItemCreatePopover, path: PathBuf| {
-                        if let Err(e) = imp.library_view.create_document(path) {
-                            imp.toast(&e.to_string());
-                            return;
-                        }
-                    }
-                ),
-            );
-            self.library_view
-                .bind_property(
-                    "selected-item-path",
-                    &new_folder_popover,
-                    "selected-item-path",
-                )
-                .build();
-
-            let new_document_popover = ItemCreatePopover::for_document();
-            self.new_document_button
-                .set_popover(Some(&new_document_popover));
-            new_document_popover.connect_closure(
-                "committed",
-                false,
-                closure_local!(
-                    #[weak(rename_to = imp)]
-                    self,
-                    move |_: ItemCreatePopover, path: PathBuf| {
-                        if let Err(e) = imp.library_view.create_document(path) {
-                            imp.toast(&e.to_string());
-                            return;
-                        }
-                    }
-                ),
-            );
-            self.library_view
-                .bind_property(
-                    "selected-item-path",
-                    &new_document_popover,
-                    "selected-item-path",
-                )
-                .build();
-
             if !self.top_split.is_collapsed() {
                 // Get initial state from setting.
                 self.top_split.set_show_sidebar(obj.sidebar_open());
@@ -625,7 +569,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_, _| {
-                    this.new_document_button.popup();
+                    this.library_view.prompt_create_document();
                 }
             ));
             obj.add_action(&action);
@@ -635,7 +579,7 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_, _| {
-                    this.new_folder_button.popup();
+                    this.library_view.prompt_create_subfolder();
                 }
             ));
             obj.add_action(&action);
