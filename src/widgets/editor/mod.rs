@@ -28,6 +28,7 @@ mod imp {
     use glib::VariantTy;
     use glib::subclass::Signal;
     use gtk::CompositeTemplate;
+    use gtk::ScrolledWindow;
     use gtk::TemplateChild;
     use gtk::TextMark;
     use gtk::gio::Cancellable;
@@ -62,6 +63,8 @@ mod imp {
         pub(super) minimap: TemplateChild<Minimap>,
         #[property(get, set)]
         pub(super) show_minimap: Cell<bool>,
+        #[template_child]
+        pub(super) scrolled_window: TemplateChild<ScrolledWindow>,
 
         pub(super) file: RefCell<Option<File>>,
         pub(super) filemon: RefCell<Option<FileMonitor>>,
@@ -236,6 +239,18 @@ mod imp {
             ));
             actions.add_action(&action);
 
+            let action = gio::SimpleAction::new("show-search-with-text", Some(VariantTy::STRING));
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, text| {
+                    this.search_bar
+                        .activate_action("search.search-with-text", text)
+                        .unwrap();
+                }
+            ));
+            actions.add_action(&action);
+
             let action = gio::SimpleAction::new("show-search-replace", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
@@ -383,6 +398,7 @@ use crate::data::DocumentStats;
 use crate::data::MarkdownBuffer;
 use crate::error::ScratchmarkError;
 use crate::util::file_actions;
+use crate::widgets::editor::text_view::EditorTextView;
 
 glib::wrapper! {
     pub struct Editor(ObjectSubclass<imp::Editor>)
@@ -483,6 +499,22 @@ impl Editor {
 
     pub fn document_stats(&self) -> DocumentStats {
         self.imp().stats.get()
+    }
+
+    pub fn scroll_to_line(&self, line: i32) {
+        let source_view: &EditorTextView = self.imp().source_view.as_ref();
+        let Some(mut iter) = source_view.buffer().iter_at_line(line) else {
+            return;
+        };
+        source_view.scroll_to_iter(&mut iter, 0., false, 0., 0.);
+    }
+
+    pub fn scroll_to_top(&self) {
+        let vadjustment = self.imp().scrolled_window.vadjustment();
+        vadjustment.set_value(vadjustment.lower());
+        self.imp()
+            .scrolled_window
+            .set_vadjustment(Some(&vadjustment));
     }
 
     fn refresh_document_stats(&self, buffer: &MarkdownBuffer) {

@@ -66,7 +66,7 @@ mod imp {
         /// Bound to setting. Does not directly map to sidebar visibility, because even when this
         /// is true, the sidebar can be hidden by focus mode or too narrow window.
         #[property(get, set)]
-        sidebar_open: Cell<bool>,
+        show_sidebar: Cell<bool>,
 
         #[template_child]
         main_page: TemplateChild<NavigationPage>,
@@ -135,42 +135,127 @@ mod imp {
             }
 
             let settings = Settings::new(APP_ID);
-            settings
-                .bind("win-width", obj.as_ref(), "default-width")
-                .build();
-            settings
-                .bind("win-height", obj.as_ref(), "default-height")
-                .build();
-            settings
-                .bind("win-is-maximized", obj.as_ref(), "maximized")
-                .build();
-            settings
-                .bind("library-show-sidebar", obj.as_ref(), "sidebar-open")
-                .build();
-            let editor_sidebar_toggle: &ToggleButton = self.editor_sidebar_toggle.as_ref();
-            settings
-                .bind("editor-show-sidebar", editor_sidebar_toggle, "active")
-                .build();
-            let format_bar: &MarkdownFormatBar = self.format_bar.as_ref();
-            settings
-                .bind("editor-show-formatbar", format_bar, "visible")
-                .build();
-            settings
-                .bind("focus-mode-enabled", obj.as_ref(), "focus-mode-enabled")
-                .build();
-            let window_title: &WindowTitle = self.window_title.as_ref();
-            settings
-                .bind("focus-mode-enabled", window_title, "focus-mode")
-                .build();
-            let library_view: &LibraryView = self.library_view.as_ref();
-            settings
-                .bind(
-                    "library-ignore-hidden-files",
-                    library_view,
-                    "ignore-hidden-files",
-                )
-                .flags(SettingsBindFlags::GET)
-                .build();
+            #[cfg(not(feature = "generatescreenshots"))]
+            {
+                settings
+                    .bind("win-width", obj.as_ref(), "default-width")
+                    .build();
+                settings
+                    .bind("win-height", obj.as_ref(), "default-height")
+                    .build();
+                settings
+                    .bind("win-is-maximized", obj.as_ref(), "maximized")
+                    .build();
+                settings
+                    .bind("library-show-sidebar", obj.as_ref(), "show-sidebar")
+                    .build();
+                let editor_sidebar_toggle: &ToggleButton = self.editor_sidebar_toggle.as_ref();
+                settings
+                    .bind("editor-show-sidebar", editor_sidebar_toggle, "active")
+                    .build();
+                let format_bar: &MarkdownFormatBar = self.format_bar.as_ref();
+                settings
+                    .bind("editor-show-formatbar", format_bar, "visible")
+                    .build();
+                settings
+                    .bind("focus-mode-enabled", obj.as_ref(), "focus-mode-enabled")
+                    .build();
+                let window_title: &WindowTitle = self.window_title.as_ref();
+                settings
+                    .bind("focus-mode-enabled", window_title, "focus-mode")
+                    .build();
+                let library_view: &LibraryView = self.library_view.as_ref();
+                settings
+                    .bind(
+                        "library-ignore-hidden-files",
+                        library_view,
+                        "ignore-hidden-files",
+                    )
+                    .flags(SettingsBindFlags::GET)
+                    .build();
+            }
+            #[cfg(feature = "generatescreenshots")]
+            {
+                use gtk::EventControllerKey;
+                use gtk::gdk::Key;
+
+                obj.set_size_request(
+                    settings.default_value("win-width").unwrap().get().unwrap(),
+                    settings.default_value("win-height").unwrap().get().unwrap(),
+                );
+                obj.set_resizable(false);
+
+                let key_controller = EventControllerKey::new();
+                key_controller.set_propagation_phase(gtk::PropagationPhase::Capture);
+                key_controller.connect_key_pressed(clone!(
+                    #[weak]
+                    obj,
+                    #[upgrade_or]
+                    glib::Propagation::Proceed,
+                    move |_, key, _, _| {
+                        let imp = obj.imp();
+                        let sidebar_toggle: &ToggleButton = imp.sidebar_toggle.as_ref();
+                        let editor_sidebar_toggle: &ToggleButton =
+                            imp.editor_sidebar_toggle.as_ref();
+                        let format_bar: &MarkdownFormatBar = imp.format_bar.as_ref();
+                        match key {
+                            Key::KP_1 => {
+                                sidebar_toggle.set_active(true);
+                                obj.set_show_sidebar(true);
+                                obj.set_focus_mode_active(false);
+                                obj.set_focus_mode_enabled(false);
+                                editor_sidebar_toggle.set_active(false);
+                                format_bar.set_visible(false);
+                                if let Some(editor) = imp.editor.borrow().as_ref() {
+                                    editor.activate_action("editor.hide-search", None).unwrap();
+                                    editor.scroll_to_top();
+                                }
+                                glib::Propagation::Stop
+                            }
+                            Key::KP_2 => {
+                                sidebar_toggle.set_active(false);
+                                obj.set_show_sidebar(false);
+                                obj.set_focus_mode_active(true);
+                                obj.set_focus_mode_enabled(true);
+                                editor_sidebar_toggle.set_active(false);
+                                format_bar.set_visible(false);
+                                if let Some(editor) = imp.editor.borrow().as_ref() {
+                                    editor.activate_action("editor.hide-search", None).unwrap();
+                                    editor.scroll_to_top();
+                                    editor.scroll_to_line(20);
+                                }
+                                glib::Propagation::Stop
+                            }
+                            Key::KP_3 => {
+                                sidebar_toggle.set_active(true);
+                                obj.set_focus_mode_active(false);
+                                obj.set_show_sidebar(true);
+                                obj.set_focus_mode_enabled(false);
+                                editor_sidebar_toggle.set_active(true);
+                                format_bar.set_visible(true);
+                                if let Some(editor) = imp.editor.borrow().as_ref() {
+                                    editor
+                                        .activate_action(
+                                            "editor.show-search-with-text",
+                                            Some(&"turn".to_variant()),
+                                        )
+                                        .unwrap();
+                                    editor
+                                        .activate_action("editor.show-search-replace", None)
+                                        .unwrap();
+                                    editor.scroll_to_top();
+                                    editor
+                                        .activate_action("editor.show-search-replace", None)
+                                        .unwrap();
+                                }
+                                glib::Propagation::Stop
+                            }
+                            _ => glib::Propagation::Proceed,
+                        }
+                    }
+                ));
+                obj.add_controller(key_controller);
+            }
 
             obj.connect_notify(Some("focus-mode-enabled"), move |obj, _| {
                 let focus_mode_enabled = obj.focus_mode_enabled();
@@ -455,7 +540,7 @@ mod imp {
 
             if !self.top_split.is_collapsed() {
                 // Get initial state from setting.
-                self.top_split.set_show_sidebar(obj.sidebar_open());
+                self.top_split.set_show_sidebar(obj.show_sidebar());
             }
 
             self.sidebar_toggle.connect_active_notify(clone!(
@@ -470,7 +555,7 @@ mod imp {
                     if obj.focus_mode_active() {
                         return;
                     }
-                    obj.set_sidebar_open(sidebar_toggle.is_active())
+                    obj.set_show_sidebar(sidebar_toggle.is_active())
                 }
             ));
 
@@ -480,7 +565,7 @@ mod imp {
                 move |top_split| {
                     if !top_split.is_collapsed() {
                         // Sidebar was uncollapsed, get uncollapsed state from setting again.
-                        top_split.set_show_sidebar(obj.sidebar_open());
+                        top_split.set_show_sidebar(obj.show_sidebar());
                     }
                 }
             ));
@@ -787,7 +872,7 @@ mod imp {
             }
             obj.set_focus_mode_active(active);
             self.top_split
-                .set_show_sidebar(obj.sidebar_open() && !active);
+                .set_show_sidebar(obj.show_sidebar() && !active);
             self.update_toolbar_visibility();
             self.update_toolbar_style();
         }
@@ -820,64 +905,85 @@ mod imp {
         }
 
         fn load_state(&self) {
-            let settings = self.settings();
+            #[cfg(not(feature = "generatescreenshots"))]
+            {
+                let settings = self.settings();
 
-            let selected_item_path = settings.string("selected-item-path");
-            if !selected_item_path.is_empty() {
-                self.library_view
-                    .set_selected_item_path(Some(PathBuf::from(selected_item_path)));
-            } else {
-                self.library_view.set_selected_item_path(None::<PathBuf>);
-            }
-
-            let open_projects = settings.strv("library-project-paths");
-            for path in open_projects {
-                self.library_view.add_project(PathBuf::from(path));
-            }
-
-            let library_expanded_folders = settings.strv("library-expanded-folders");
-            for path in library_expanded_folders {
-                self.library_view.make_visible(&PathBuf::from(path));
-            }
-
-            let open_document_path = settings.string("open-document-path");
-            if !open_document_path.is_empty() {
-                let open_document_path = PathBuf::from(open_document_path);
-                if !open_document_path.exists() {
-                    self.toast("Opened document has been moved or deleted.");
+                let selected_item_path = settings.string("selected-item-path");
+                if !selected_item_path.is_empty() {
+                    self.library_view
+                        .set_selected_item_path(Some(PathBuf::from(selected_item_path)));
+                } else {
+                    self.library_view.set_selected_item_path(None::<PathBuf>);
                 }
-                self.load_document(open_document_path);
-            }
 
+                let open_projects = settings.strv("library-project-paths");
+                for path in open_projects {
+                    self.library_view.add_project(PathBuf::from(path));
+                }
+
+                let library_expanded_folders = settings.strv("library-expanded-folders");
+                for path in library_expanded_folders {
+                    self.library_view.make_visible(&PathBuf::from(path));
+                }
+
+                let open_document_path = settings.string("open-document-path");
+                if !open_document_path.is_empty() {
+                    let open_document_path = PathBuf::from(open_document_path);
+                    if !open_document_path.exists() {
+                        self.toast("Opened document has been moved or deleted.");
+                    }
+                    self.load_document(open_document_path);
+                }
+            }
+            #[cfg(feature = "generatescreenshots")]
+            {
+                const PROJECT_ROOT: &str = env!("CARGO_MANIFEST_DIR");
+                let project_root = PathBuf::from(PROJECT_ROOT);
+                self.library_view
+                    .add_project(project_root.join("data/demo/Demo Project"));
+
+                self.library_view
+                    .make_visible(&project_root.join("data/demo/drafts/Notes"));
+                self.library_view.make_visible(
+                    &project_root.join("data/demo/Demo Project/Projects/Scratchmark"),
+                );
+
+                self.load_document(
+                    project_root.join("data/demo/Demo Project/Down the Rabbit Hole.md"),
+                );
+            }
             self.library_view.refresh_content();
         }
 
         fn save_state(&self) -> Result<(), glib::BoolError> {
-            let settings = self.settings();
+            #[cfg(not(feature = "generatescreenshots"))]
+            {
+                let settings = self.settings();
 
-            settings.set_string(
-                "selected-item-path",
-                self.library_view
-                    .selected_item_path()
-                    .unwrap_or_default()
-                    .to_str()
-                    .unwrap(),
-            )?;
+                settings.set_string(
+                    "selected-item-path",
+                    self.library_view
+                        .selected_item_path()
+                        .unwrap_or_default()
+                        .to_str()
+                        .unwrap(),
+                )?;
 
-            let open_projects = self.library_view.open_projects();
-            settings.set_strv("library-project-paths", open_projects)?;
+                let open_projects = self.library_view.open_projects();
+                settings.set_strv("library-project-paths", open_projects)?;
 
-            let expanded_folders = self.library_view.expanded_folders();
-            settings.set_strv("library-expanded-folders", expanded_folders)?;
+                let expanded_folders = self.library_view.expanded_folders();
+                settings.set_strv("library-expanded-folders", expanded_folders)?;
 
-            let open_document_path = self
-                .editor
-                .borrow()
-                .as_ref()
-                .map(|e| e.path())
-                .unwrap_or_default();
-            settings.set_string("open-document-path", open_document_path.to_str().unwrap())?;
-
+                let open_document_path = self
+                    .editor
+                    .borrow()
+                    .as_ref()
+                    .map(|e| e.path())
+                    .unwrap_or_default();
+                settings.set_string("open-document-path", open_document_path.to_str().unwrap())?;
+            }
             Ok(())
         }
 

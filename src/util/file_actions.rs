@@ -60,7 +60,15 @@ pub fn path_userdata() -> PathBuf {
 
 /// Library directory inside userdata
 pub fn path_builtin_library() -> PathBuf {
-    path_userdata().join("library")
+    #[cfg(not(feature = "generatescreenshots"))]
+    {
+        path_userdata().join("library")
+    }
+    #[cfg(feature = "generatescreenshots")]
+    {
+        const PROJECT_ROOT: &str = env!("CARGO_MANIFEST_DIR");
+        PathBuf::from(PROJECT_ROOT).join("data/demo/drafts")
+    }
 }
 
 /// Create if doesn't exist

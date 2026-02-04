@@ -25,7 +25,7 @@
                             <object class="GtkBox">
                                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                                 <child>
-                                    <object class="GtkScrolledWindow">
+                                    <object class="GtkScrolledWindow" id="scrolled_window">
                                         <property name="hexpand">true</property>
                                         <child>
                                             <object class="AdwClampScrollable">

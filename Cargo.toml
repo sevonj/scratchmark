@@ -15,6 +15,9 @@ regex = "1.12.2"
 [features]
 # Search for data files in install locations instead of source tree.
 installed = []
+# For generating screenshots for packaging. Uses default window size and loads demo library. 
+# Don't build a flatpak with this.
+generatescreenshots = []
 
 [build-dependencies]
 glib-build-tools = "0.21.0"
