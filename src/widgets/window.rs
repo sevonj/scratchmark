@@ -915,7 +915,6 @@ mod imp {
                     move |_: Editor| {
                         if let Err(e) = this.close_editor() {
                             this.toast(&e.to_string());
-                            return;
                         }
                     }
                 ),
