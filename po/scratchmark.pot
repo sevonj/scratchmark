@@ -118,6 +118,10 @@ msgstr ""
 msgid "Code"
 msgstr ""
 
+#: data/resources/ui/library_project_err_placeholder.ui:28
+msgid "Project may have been moved or deleted."
+msgstr ""
+
 #: data/resources/ui/preferences_dialog.ui:6
 msgid "General"
 msgstr ""
