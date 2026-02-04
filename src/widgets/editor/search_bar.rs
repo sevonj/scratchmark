@@ -19,6 +19,7 @@ mod imp {
     use gtk::gio::Cancellable;
     use gtk::gio::SimpleAction;
     use gtk::gio::SimpleActionGroup;
+    use gtk::glib::VariantTy;
     use gtk::glib::clone;
     use gtk::glib::subclass::Signal;
     use sourceview5::SearchContext;
@@ -86,14 +87,10 @@ mod imp {
             self.setup_actions();
 
             self.search_entry.connect_changed(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
-                move |search_entry: &Entry| {
-                    this.search_settings
-                        .borrow()
-                        .as_ref()
-                        .unwrap()
-                        .set_search_text(Some(&search_entry.text()));
+                move |_| {
+                    imp.refresh();
                 }
             ));
             self.search_entry.connect_activate(clone!(
@@ -140,6 +137,14 @@ mod imp {
     impl BinImpl for EditorSearchBar {}
 
     impl EditorSearchBar {
+        fn refresh(&self) {
+            self.search_settings
+                .borrow()
+                .as_ref()
+                .unwrap()
+                .set_search_text(Some(&self.search_entry.text()));
+        }
+
         fn setup_actions(&self) {
             let obj = self.obj();
 
@@ -158,6 +163,19 @@ mod imp {
                         .unwrap()
                         .set_highlight(true);
                     this.search_replace_buttons_container.set_visible(false);
+                }
+            ));
+            self.actions.add_action(&action);
+
+            let action = SimpleAction::new("search-with-text", Some(VariantTy::STRING));
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, text| {
+                    imp.obj().activate_action("search.search", None).unwrap();
+                    let text: String = text.unwrap().get().unwrap();
+                    imp.search_entry.set_text(&text);
+                    imp.refresh();
                 }
             ));
             self.actions.add_action(&action);

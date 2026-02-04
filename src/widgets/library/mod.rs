@@ -568,8 +568,6 @@ impl LibraryView {
             }
         }
 
-        //
-
         self.refresh_content();
         Ok(())
     }
