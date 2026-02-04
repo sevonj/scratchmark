@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the scratchmark package.
 # Anonymous <anonymous@noreply.codeberg.org>, 2025.
+# Outbreak2096 <outbreak2096@noreply.codeberg.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 15:43+0200\n"
-"PO-Revision-Date: 2025-11-20 13:51+0000\n"
-"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"POT-Creation-Date: 2026-01-17 00:02+0200\n"
+"PO-Revision-Date: 2026-01-13 05:21+0000\n"
+"Last-Translator: Outbreak2096 <outbreak2096@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.codeberg.org/projects/scratchmark/app/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -16,49 +17,72 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
 msgid "Markdown editor"
-msgstr "Markdown 编辑"
+msgstr "Markdown 编辑器"
 
 msgid "Scratchmark Markdown editor"
 msgstr "Scratchmark Markdown 编辑器"
 
-msgid "Organized markdown editor"
-msgstr "结构化标记语言编辑器"
+msgid "Markdown editor for writing"
+msgstr "用于写作的 Markdown 编辑器"
 
-msgid "Write without distractions and keep your documents organized."
-msgstr "专注写作，远离干扰，保持文档井然有序。"
-
-msgid "Editing features are designed to stay out of sight when not needed."
-msgstr "编辑功能在不需要时保持不可见状态。"
+msgid "# Markdown Editor for Writing"
+msgstr "# 用于写作的 Markdown 编辑器"
 
 msgid ""
-"Documents are organized into folders, which may contain a writing project, "
-"personal notes, or maybe a recipe book."
+"**Scratchmark** is a pleasant text editor for writing. It tries to give you "
+"everything you need and otherwise stay out of your way so you can just focus "
+"on the text. The app can be used for writing essays and making quick notes "
+"alike. Its file management is built around a folder structure that can "
+"handle large projects with lots of files. You can add any folder on your "
+"computer to the library, and move files around by dragging and dropping."
 msgstr ""
-"文件被整理到文件夹中，这些文件夹可能包含写作项目、个人笔记，或是食谱集。"
+"**Scratchmark** 是一款简洁易用的文本编辑器，专为写作而设计。它力求提供您所需"
+"的一切，同时保持简洁不打扰，让您能专注于文字本身。无论是撰写文章还是快速记录"
+"笔记，这款应用都能胜任。其文件管理围绕文件夹结构构建，能够处理包含大量文件的"
+"大型项目。您可以将计算机上的任何文件夹添加到库中，并通过拖放操作移动文件。"
 
-msgid "Statistics"
-msgstr "统计数据"
+msgid ""
+"It uses Markdown, which means that ==all text formatting can be done by "
+"typing.=="
+msgstr "它使用 Markdown，这意味着 ==所有文本格式都可以通过输入完成。=="
 
-msgid "Characters"
-msgstr "字符"
+msgid ""
+"The editor is simple and intuitive, so anyone should be able to just pick it "
+"up and start writing. It can display simple writing statistics, and has "
+"features, such as focus mode and fullscreen support to reduce distractions."
+msgstr ""
+"这款编辑器简单直观，任何人都能轻松上手，立即开始写作。它可以显示简单的写作统"
+"计数据，并具备专注模式和全屏支持等功能，以减少干扰。"
 
-msgid "N/A"
-msgstr "N/A"
+msgid ""
+"Markdown is an open and widely used markup language. Documents created with "
+"Scratchmark are more or less compatible with other similar apps. If you "
+"already have a \"notebook\" or a project from another app, you can just add "
+"the folder to Scratchmark's library. This also goes the other way: if you've "
+"had enough of Scratchmark, it's easy to switch to something else."
+msgstr ""
+"Markdown 是一种开放且广泛使用的标记语言。使用 Scratchmark 创建的文档与其他类"
+"似应用基本兼容。如果您已有来自其他应用的“笔记本”或项目，只需将文件夹添加到 "
+"Scratchmark 的库中即可。反之亦然：如果您不想再使用 Scratchmark，也可以轻松切"
+"换到其他软件。"
 
-msgid "Excluding Spaces"
-msgstr "不包含空格"
+msgid "Nothing Open"
+msgstr "无打开"
 
-msgid "Words"
-msgstr "单词"
+msgid "Create a new document or open an existing one from the sidebar"
+msgstr "创建新文档或从侧边栏打开现有文档"
 
-msgid "Lines"
-msgstr "行"
+msgid "Name..."
+msgstr "名称…"
+
+msgid "Create"
+msgstr "创建"
 
 msgid "Bold (Ctrl+B)"
 msgstr "粗体 (Ctrl+B)"
@@ -70,28 +94,239 @@ msgid "Strikethrough"
 msgstr "删除线"
 
 msgid "Highlight"
-msgstr ""
+msgstr "高亮"
 
-msgid "Heading 1"
-msgstr "标题 "
+msgid "Heading 1 (Ctrl+1)"
+msgstr "标题 1 (Ctrl+1)"
 
-msgid "Heading 2"
-msgstr "标题 "
+msgid "Heading 2 (Ctrl+2)"
+msgstr "标题 2 (Ctrl+2)"
 
 msgid "Blockquote"
-msgstr ""
+msgstr "块引用"
 
 msgid "Code"
 msgstr "代码"
 
-msgid "Nothing Open"
-msgstr "无打开"
+msgid "General"
+msgstr "常规"
 
-msgid "Create a new document or open an existing one from the sidebar"
-msgstr "创建新文档或从侧边栏打开现有文档"
+msgid "Font"
+msgstr "字体"
+
+msgid "Change Font"
+msgstr "更改字体"
+
+msgid "Customize font size and typeface"
+msgstr "自定义字体大小和类型"
+
+msgid "Reset to Default"
+msgstr "重置为默认"
+
+msgid "Use default font"
+msgstr "使用默认字体"
+
+msgid "Editor"
+msgstr "编辑器"
+
+msgid "Show Minimap"
+msgstr "显示缩略图"
+
+msgid "Show overview of the document on the right side"
+msgstr "在右侧显示文档概览"
+
+msgid "Library"
+msgstr "库"
+
+msgid "Ignore Hidden Files"
+msgstr "忽略隐藏文件"
+
+msgid "Files and folders with a preceding \".\" won't show up in the library"
+msgstr "名称以“.”开头的文件及文件夹将不会显示在库中"
+
+msgctxt "shortcut window"
+msgid "General"
+msgstr "常规"
+
+msgctxt "shortcut window"
+msgid "Toggle Fullscreen"
+msgstr "切换全屏模式"
+
+msgctxt "shortcut window"
+msgid "Toggle Focus Mode"
+msgstr "切换专注模式"
+
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "首选项"
+
+msgctxt "shortcut window"
+msgid "Show Shortcuts"
+msgstr "显示快捷键"
+
+msgctxt "shortcut window"
+msgid "Document"
+msgstr "文档"
+
+msgctxt "shortcut window"
+msgid "New Document"
+msgstr "新文档"
+
+msgctxt "shortcut window"
+msgid "Add Project"
+msgstr "添加项目"
+
+msgctxt "shortcut window"
+msgid "Save Document"
+msgstr "保存文档"
+
+msgctxt "shortcut window"
+msgid "Rename"
+msgstr "重命名"
+
+msgctxt "shortcut window"
+msgid "Close Document"
+msgstr "关闭文档"
+
+msgctxt "shortcut window"
+msgid "Editor"
+msgstr "编辑器"
+
+msgctxt "shortcut window"
+msgid "Search Text"
+msgstr "查找文本"
+
+msgctxt "shortcut window"
+msgid "Search and Replace Text"
+msgstr "查找并替换文本"
+
+msgctxt "shortcut window"
+msgid "Formatting"
+msgstr "格式设置"
+
+msgctxt "shortcut window"
+msgid "Bold"
+msgstr "粗体"
+
+msgctxt "shortcut window"
+msgid "Italic"
+msgstr "斜体"
+
+msgctxt "shortcut window"
+msgid "Heading 1"
+msgstr "标题 1"
+
+msgctxt "shortcut window"
+msgid "Heading 2"
+msgstr "标题 2"
+
+msgctxt "shortcut window"
+msgid "Heading 3"
+msgstr "标题 3"
+
+msgctxt "shortcut window"
+msgid "Heading 4"
+msgstr "标题 4"
+
+msgctxt "shortcut window"
+msgid "Heading 5"
+msgstr "标题 5"
+
+msgctxt "shortcut window"
+msgid "Heading 6"
+msgstr "标题 6"
+
+msgctxt "shortcut window"
+msgid "Library"
+msgstr "库"
+
+msgctxt "shortcut window"
+msgid "Manual Refresh"
+msgstr "手动刷新"
+
+msgid "Create Subfolder (Shift+Ctrl+N)"
+msgstr ""
+
+msgid "Menu"
+msgstr "菜单"
+
+msgid "Toggle Sidebar (F9)"
+msgstr "切换侧边栏 (F9)"
+
+msgid "New Document (Ctrl+N)"
+msgstr "新文档 (Ctrl+N)"
+
+msgid "Exit Fullscreen"
+msgstr "退出全屏"
+
+msgid "Document Info"
+msgstr "文档信息"
+
+msgid "Formatting Toolbar"
+msgstr "格式化工具栏"
+
+msgid "New Document"
+msgstr "新文档"
+
+msgid "Create Subfolder"
+msgstr "创建子文件夹"
+
+msgid "Add Project"
+msgstr "添加项目"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Search Text"
+msgstr "查找文本"
+
+msgid "Search and Replace"
+msgstr "查找与替换"
+
+msgid "Toggle Fullscreen"
+msgstr "切换全屏模式"
+
+msgid "Toggle Focus Mode"
+msgstr "切换专注模式"
+
+msgid "Preferences"
+msgstr "首选项"
+
+msgid "Keyboard Shortcuts"
+msgstr "键盘快捷键"
+
+msgid "About Scratchmark"
+msgstr "关于 Scratchmark"
+
+msgid "Statistics"
+msgstr "统计数据"
+
+msgid "Characters"
+msgstr "字符"
+
+msgid "N/A"
+msgstr "不适用"
+
+msgid "Excluding Spaces"
+msgstr "不包含空格"
+
+msgid "Words"
+msgstr "单词"
+
+msgid "Lines"
+msgstr "行"
+
+msgid "File changed on disk"
+msgstr "磁盘上的文件已更改"
+
+msgid "Resolve"
+msgstr "解析"
 
 msgid "Search"
-msgstr "搜索"
+msgstr "查找"
 
 msgid "Replace"
 msgstr "替换"
@@ -112,7 +347,7 @@ msgid "Previous Match (Shift + Return)"
 msgstr "上一个匹配 (Shift + Return)"
 
 msgid "Next Match (Return)"
-msgstr "新匹配 (Return)"
+msgstr "下一个匹配 (Return)"
 
 msgid "Search and Replace (Ctrl+F)"
 msgstr "查找与替换 (Ctrl+F)"
@@ -129,195 +364,54 @@ msgstr "替换全部"
 msgid "Replace All (Shift + Return)"
 msgstr "替换全部 (Shift + Return)"
 
-msgid "File changed on disk"
-msgstr "磁盘上的文件已更改"
+msgid "Show in File Manager"
+msgstr "在文件管理器中显示"
 
-msgid "Resolve"
-msgstr "解析"
+msgid "Close Project"
+msgstr "关闭项目"
 
-msgid "Name..."
-msgstr "文件名..."
-
-msgid "Create"
-msgstr "创建"
+msgid "Project may have been moved or deleted."
+msgstr ""
 
 msgid "Rename"
 msgstr "重命名"
 
-msgid "Library"
-msgstr "库"
-
-msgid "Add Project"
-msgstr "添加计划"
-
-msgid "New Document"
-msgstr "新文档"
-
-msgid "Create Subfolder"
-msgstr "创建子文件夹"
-
-msgid "Show in File Manager"
-msgstr "在文件管理器中显示"
+msgid "Duplicate"
+msgstr "复制"
 
 msgid "Move to Trash"
-msgstr "移动到回收站"
+msgstr "移至回收站"
 
 msgid "Delete Permanently"
 msgstr "永久删除"
 
-msgid "Close Project"
-msgstr "关闭计划"
+#~ msgid "New"
+#~ msgstr "新建"
 
-msgid "Duplicate"
-msgstr "复制"
+#~ msgid "Heading 1"
+#~ msgstr "标题 "
 
-#, fuzzy
-msgid "General"
-msgstr "通用"
+#~ msgid "Heading 2"
+#~ msgstr "标题 "
 
-msgid "Font"
-msgstr ""
+#~ msgid "Organized markdown editor"
+#~ msgstr "结构化标记语言编辑器"
 
-msgid "Change Font"
-msgstr ""
+#~ msgid "Write without distractions and keep your documents organized."
+#~ msgstr "专注写作，远离干扰，保持文档井然有序。"
 
-msgid "Customize font size and typeface"
-msgstr ""
+#~ msgid "Editing features are designed to stay out of sight when not needed."
+#~ msgstr "编辑功能在不需要时保持不可见状态。"
 
-msgid "Reset to Default"
-msgstr ""
+#~ msgid ""
+#~ "Documents are organized into folders, which may contain a writing "
+#~ "project, personal notes, or maybe a recipe book."
+#~ msgstr ""
+#~ "文件被整理到文件夹中，这些文件夹可能包含写作项目、个人笔记，或是食谱集。"
 
-msgid "Use default font"
-msgstr ""
-
-#, fuzzy
-msgid "Editor"
-msgstr "编辑"
-
-msgid "Show Minimap"
-msgstr ""
-
-msgid "Show overview of the document on the right side"
-msgstr ""
-
-msgid "Ignore Hidden Files"
-msgstr ""
-
-msgid "Files and folders with a preceding \".\" won't show up in the library"
-msgstr ""
-
-msgctxt "shortcut window"
-msgid "General"
-msgstr "通用"
-
-msgctxt "shortcut window"
-msgid "Toggle Fullscreen"
-msgstr "全屏"
-
-msgctxt "shortcut window"
-msgid "Toggle Focus Mode"
-msgstr ""
-
-msgctxt "shortcut window"
-msgid "Preferences"
-msgstr "设置"
-
-msgctxt "shortcut window"
-msgid "Show Shortcuts"
-msgstr "显示快捷键"
-
-msgctxt "shortcut window"
-msgid "Document"
-msgstr "文档"
-
-msgctxt "shortcut window"
-msgid "New Document"
-msgstr "新文档"
-
-msgctxt "shortcut window"
-msgid "Add Project"
-msgstr "添加计划"
-
-msgctxt "shortcut window"
-msgid "Save Document"
-msgstr "保存文档"
-
-msgctxt "shortcut window"
-msgid "Rename Document"
-msgstr "重命名文档"
-
-msgctxt "shortcut window"
-msgid "Close Document"
-msgstr "关闭文档"
-
-msgctxt "shortcut window"
-msgid "Editor"
-msgstr "编辑"
-
-msgctxt "shortcut window"
-msgid "Search Text"
-msgstr "查找文本"
-
-msgctxt "shortcut window"
-msgid "Search and Replace Text"
-msgstr "查找并替换文本"
-
-msgctxt "shortcut window"
-msgid "Library"
-msgstr "库"
-
-msgctxt "shortcut window"
-msgid "Manual Refresh"
-msgstr "手动刷新"
-
-msgid "Toggle Sidebar (F9)"
-msgstr "切换侧边栏 (F9)"
-
-msgid "New Document (Ctrl+N)"
-msgstr "新文档 (Ctrl+N)"
-
-msgid "Exit Fullscreen"
-msgstr "退出全屏"
-
-msgid "Menu"
-msgstr "菜单"
-
-msgid "Document Info"
-msgstr "文档信息"
-
-msgid "Formatting Toolbar"
-msgstr "格式化工具栏"
-
-msgid "New"
-msgstr "新建"
-
-msgid "Save"
-msgstr "保存"
-
-msgid "Close"
-msgstr "关闭"
-
-msgid "Search Text"
-msgstr "查找文本"
-
-msgid "Search and Replace"
-msgstr "查找与替换"
-
-#, fuzzy
-msgid "Toggle Fullscreen"
-msgstr "全屏"
-
-msgid "Toggle Focus Mode"
-msgstr ""
-
-msgid "Preferences"
-msgstr "设置"
-
-msgid "Keyboard Shortcuts"
-msgstr "键盘快捷键"
-
-msgid "About Scratchmark"
-msgstr "关于 Scratchmark"
+#~ msgctxt "shortcut window"
+#~ msgid "Rename Document"
+#~ msgstr "重命名文档"
 
 #~ msgid "Sevonj"
 #~ msgstr "Sevonj"

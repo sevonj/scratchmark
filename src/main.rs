@@ -7,12 +7,13 @@ mod widgets;
 use gtk::glib;
 use gtk::prelude::*;
 
+use util::file_actions;
 use widgets::Window;
 
 const APP_ID: &str = "org.scratchmark.Scratchmark";
 
 fn main() -> glib::ExitCode {
-    util::create_builtin_library();
+    file_actions::create_builtin_library();
 
     gettextrs::bindtextdomain(config::GETTEXT_PACKAGE, config::LOCALEDIR)
         .expect("Unable to bind the text domain");
@@ -49,6 +50,7 @@ fn main() -> glib::ExitCode {
 
 fn setup_accels(app: &adw::Application) {
     app.set_accels_for_action("win.file-new", &["<Ctrl>N"]);
+    app.set_accels_for_action("win.folder-new", &["<Shift><Ctrl>N"]);
     app.set_accels_for_action("win.project-add", &["<Ctrl><Shift>O"]);
     app.set_accels_for_action("win.file-save", &["<Ctrl>S"]);
     app.set_accels_for_action("win.file-rename-selected", &["F2"]);

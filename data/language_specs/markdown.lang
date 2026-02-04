@@ -97,7 +97,7 @@
       <match>(?&lt;!\`)\`\`\`(?!\`).*(?&lt;!\`)\`\`\`(?!\`)</match>
     </context>
     <context id="horizontal-rule" style-ref="horizontal-rule">
-      <match>^(-{3,}|_{3,}|\*{3,})$</match>
+      <match>(?m)^ {0,3}((-( |\t)*){3,}|(_( |\t)*){3,}|(\*( |\t)*){3,})$</match>
     </context>
     <context id="escape" style-ref="escape">
       <match>\\(?=[\\\`\*\_\{\}\[\]\&lt;\&gt;\(\)\#\+\-\.\!\|])</match>

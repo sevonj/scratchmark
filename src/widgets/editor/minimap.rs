@@ -41,7 +41,7 @@ use adw::subclass::prelude::*;
 use gtk::glib;
 use sourceview5::prelude::*;
 
-use super::editor_text_view::EditorTextView;
+use super::text_view::EditorTextView;
 use glib::Object;
 
 glib::wrapper! {

@@ -1,11 +1,11 @@
-mod editor_text_view;
-mod formatting;
-mod markdown_buffer;
+mod document_stats_view;
 mod minimap;
-mod regex;
+mod search_bar;
+mod text_view;
 
 mod imp {
     use std::cell::Cell;
+    use std::cell::OnceCell;
     use std::cell::RefCell;
     use std::path::PathBuf;
     use std::sync::OnceLock;
@@ -28,19 +28,19 @@ mod imp {
     use glib::VariantTy;
     use glib::subclass::Signal;
     use gtk::CompositeTemplate;
+    use gtk::ScrolledWindow;
     use gtk::TemplateChild;
     use gtk::TextMark;
+    use gtk::gio::Cancellable;
     use gtk::gio::SimpleAction;
 
-    use super::editor_text_view::EditorTextView;
-    use super::formatting;
+    use super::document_stats_view::DocumentStatsView;
     use super::minimap::Minimap;
+    use super::search_bar::EditorSearchBar;
+    use super::text_view::EditorTextView;
     use crate::data::DocumentStats;
-    use crate::util;
-    use crate::widgets::EditorDocStats;
-    use crate::widgets::EditorSearchBar;
-
-    use super::NOT_CANCELLABLE;
+    use crate::data::MarkdownBuffer;
+    use crate::util::file_actions;
 
     #[derive(Debug, Properties, CompositeTemplate, Default)]
     #[properties(wrapper_type = super::Editor)]
@@ -48,9 +48,10 @@ mod imp {
     pub struct Editor {
         #[template_child]
         pub(super) source_view: TemplateChild<EditorTextView>,
+        pub(super) buffer: OnceCell<MarkdownBuffer>,
         #[template_child]
-        pub(super) document_stats: TemplateChild<EditorDocStats>,
-        pub(super) document_stats_data: Cell<DocumentStats>,
+        pub(super) stats_view: TemplateChild<DocumentStatsView>,
+        pub(super) stats: Cell<DocumentStats>,
 
         #[template_child]
         pub(super) search_bar: TemplateChild<EditorSearchBar>,
@@ -62,6 +63,8 @@ mod imp {
         pub(super) minimap: TemplateChild<Minimap>,
         #[property(get, set)]
         pub(super) show_minimap: Cell<bool>,
+        #[template_child]
+        pub(super) scrolled_window: TemplateChild<ScrolledWindow>,
 
         pub(super) file: RefCell<Option<File>>,
         pub(super) filemon: RefCell<Option<FileMonitor>>,
@@ -83,7 +86,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             EditorTextView::ensure_type();
-            EditorDocStats::ensure_type();
+            DocumentStatsView::ensure_type();
             Minimap::ensure_type();
 
             klass.bind_template();
@@ -152,7 +155,7 @@ mod imp {
                                 obj,
                                 move |_: AlertDialog, response: String| {
                                     if response == "keep-both" {
-                                        let new_path = util::incremented_path(obj.path());
+                                        let new_path = file_actions::incremented_path(obj.path());
                                         obj.set_path(new_path);
                                         obj.imp().file_changed_on_disk.set(false);
                                         obj.imp().file_changed_on_disk_banner.set_revealed(false);
@@ -171,7 +174,7 @@ mod imp {
                                         obj.imp().file_changed_on_disk_banner.set_revealed(false);
                                     } else if response == "discard" {
                                         let file = gio::File::for_path(obj.path());
-                                        match util::read_file_to_string(&file) {
+                                        match file_actions::read_file_to_string(&file) {
                                             Ok(text) => {
                                                 obj.imp().source_view.buffer().set_text(&text);
                                                 obj.imp().file_changed_on_disk.set(false);
@@ -236,6 +239,18 @@ mod imp {
             ));
             actions.add_action(&action);
 
+            let action = gio::SimpleAction::new("show-search-with-text", Some(VariantTy::STRING));
+            action.connect_activate(clone!(
+                #[weak(rename_to = this)]
+                self,
+                move |_, text| {
+                    this.search_bar
+                        .activate_action("search.search-with-text", text)
+                        .unwrap();
+                }
+            ));
+            actions.add_action(&action);
+
             let action = gio::SimpleAction::new("show-search-replace", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
@@ -264,7 +279,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting::format_bold(&this.source_view.buffer())
+                move |_, _| this.buffer.get().unwrap().format_bold()
             ));
             actions.add_action(&action);
 
@@ -272,7 +287,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting::format_italic(&this.source_view.buffer())
+                move |_, _| this.buffer.get().unwrap().format_italic()
             ));
             actions.add_action(&action);
 
@@ -280,7 +295,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting::format_strikethrough(&this.source_view.buffer())
+                move |_, _| this.buffer.get().unwrap().format_strikethrough()
             ));
             actions.add_action(&action);
 
@@ -288,7 +303,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting::format_highlight(&this.source_view.buffer())
+                move |_, _| this.buffer.get().unwrap().format_highlight()
             ));
             actions.add_action(&action);
 
@@ -297,8 +312,8 @@ mod imp {
                 #[weak(rename_to = this)]
                 self,
                 move |_, param| {
-                    let heading_size: i32 = param.unwrap().get().unwrap();
-                    formatting::format_heading(&this.source_view.buffer(), heading_size);
+                    let heading_level: i32 = param.unwrap().get().unwrap();
+                    this.buffer.get().unwrap().format_heading(heading_level);
                     this.source_view.grab_focus();
                 }
             ));
@@ -308,7 +323,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting::format_blockquote(&this.source_view.buffer())
+                move |_, _| this.buffer.get().unwrap().format_blockquote()
             ));
             actions.add_action(&action);
 
@@ -316,7 +331,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = this)]
                 self,
-                move |_, _| formatting::format_code(&this.source_view.buffer())
+                move |_, _| this.buffer.get().unwrap().format_code()
             ));
             actions.add_action(&action);
         }
@@ -346,7 +361,7 @@ mod imp {
                 panic!("Editor file uninitialized");
             };
             let filemon = file
-                .monitor(FileMonitorFlags::NONE, NOT_CANCELLABLE)
+                .monitor(FileMonitorFlags::NONE, None::<&Cancellable>)
                 .expect("Editor: Failed to create file monitor");
             filemon.connect_changed(clone!(
                 #[weak(rename_to = this)]
@@ -380,11 +395,10 @@ use sourceview5::StyleSchemeManager;
 
 use crate::config::PKGDATADIR;
 use crate::data::DocumentStats;
+use crate::data::MarkdownBuffer;
 use crate::error::ScratchmarkError;
-use crate::util;
-use markdown_buffer::MarkdownBuffer;
-
-const NOT_CANCELLABLE: Option<&Cancellable> = None;
+use crate::util::file_actions;
+use crate::widgets::editor::text_view::EditorTextView;
 
 glib::wrapper! {
     pub struct Editor(ObjectSubclass<imp::Editor>)
@@ -395,7 +409,7 @@ glib::wrapper! {
 impl Editor {
     pub fn new(path: PathBuf) -> Result<Self, ScratchmarkError> {
         let file = gtk::gio::File::for_path(&path);
-        let text = util::read_file_to_string(&file)?;
+        let text = file_actions::read_file_to_string(&file)?;
         let buffer = MarkdownBuffer::default();
         buffer.set_text(&text);
 
@@ -405,6 +419,7 @@ impl Editor {
 
         let obj: Self = Object::builder().build();
         let imp = obj.imp();
+        imp.buffer.set(buffer.clone()).unwrap();
         Self::load_buffer_style_scheme(&buffer);
         imp.file.replace(Some(file));
         imp.path.replace(Some(path));
@@ -448,11 +463,13 @@ impl Editor {
             };
 
             let output_stream = file
-                .replace(None, false, FileCreateFlags::NONE, NOT_CANCELLABLE)
+                .replace(None, false, FileCreateFlags::NONE, None::<&Cancellable>)
                 .unwrap();
 
-            output_stream.write_all(bytes, NOT_CANCELLABLE).unwrap();
-            output_stream.flush(NOT_CANCELLABLE).unwrap();
+            output_stream
+                .write_all(bytes, None::<&Cancellable>)
+                .unwrap();
+            output_stream.flush(None::<&Cancellable>).unwrap();
         }
         imp.setup_filemon();
         self.set_unsaved_changes(false);
@@ -481,14 +498,30 @@ impl Editor {
     }
 
     pub fn document_stats(&self) -> DocumentStats {
-        self.imp().document_stats_data.get()
+        self.imp().stats.get()
+    }
+
+    pub fn scroll_to_line(&self, line: i32) {
+        let source_view: &EditorTextView = self.imp().source_view.as_ref();
+        let Some(mut iter) = source_view.buffer().iter_at_line(line) else {
+            return;
+        };
+        source_view.scroll_to_iter(&mut iter, 0., false, 0., 0.);
+    }
+
+    pub fn scroll_to_top(&self) {
+        let vadjustment = self.imp().scrolled_window.vadjustment();
+        vadjustment.set_value(vadjustment.lower());
+        self.imp()
+            .scrolled_window
+            .set_vadjustment(Some(&vadjustment));
     }
 
     fn refresh_document_stats(&self, buffer: &MarkdownBuffer) {
         let imp = self.imp();
         let stats = buffer.stats();
-        imp.document_stats.set_stats(&stats);
-        imp.document_stats_data.replace(stats);
+        imp.stats_view.set_stats(&stats);
+        imp.stats.replace(stats);
         self.emit_by_name::<()>("stats-changed", &[]);
     }
 

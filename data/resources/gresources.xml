@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <!-- Keep file paths in the same order as they'd appear in the ide: alphanumeric, folders first -->
+  <!-- Keep file paths in the same order as they'd appear in the IDE: alphanumeric, folders first -->
   <gresource prefix="/org/scratchmark/Scratchmark">
+    <file preprocess="xml-stripblanks" compressed="true">ui/editor/document_stats_view.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/editor.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/minimap.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/editor/search_bar.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/document_context_menu.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/document_row.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/drafts_context_menu.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/err_placeholder_row_context_menu.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/err_placeholder_row.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/folder_context_menu.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/folder_row.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/item_create_row.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/item_rename_popover.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/library_view.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/project_view.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/root_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/about_dialog.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/editor_doc_stats.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/editor_format_bar.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_placeholder.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/editor_search_bar.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/item_create_popover.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/item_rename_popover.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_browser.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_document_context_menu.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_document.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_drafts_context_menu.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_folder_context_menu.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_folder.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_project_err_placeholder_context_menu.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_project_err_placeholder.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_project.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library_project_context_menu.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/markdown_format_bar.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/preferences_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/shortcuts.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window_title.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>
   </gresource>
   <gresource prefix="/org/scratchmark/Scratchmark">
     <file preprocess="xml-stripblanks">icons/scalable/actions/dock-left-symbolic.svg</file>

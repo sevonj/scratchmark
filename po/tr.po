@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 15:43+0200\n"
-"PO-Revision-Date: 2025-11-23 22:10+0000\n"
+"POT-Creation-Date: 2026-01-17 00:02+0200\n"
+"PO-Revision-Date: 2025-12-31 13:16+0000\n"
 "Last-Translator: yakushabb <yakushabb@gmail.com>\n"
 "Language-Team: Turkish <https://translate.codeberg.org/projects/scratchmark/"
 "app/tr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Scratchmark"
 msgstr "Scratchmark"
@@ -29,41 +29,51 @@ msgstr "Markdown düzenleyici"
 msgid "Scratchmark Markdown editor"
 msgstr "Scratchmark Markdown düzenleyici"
 
-msgid "Organized markdown editor"
-msgstr "Düzenlenmiş markdown düzenleyici"
-
-msgid "Write without distractions and keep your documents organized."
-msgstr "Dikkatiniz dağılmadan yazın ve belgelerinizi düzenli tutun."
-
-msgid "Editing features are designed to stay out of sight when not needed."
+msgid "Markdown editor for writing"
 msgstr ""
-"Düzenleme özellikleri, ihtiyaç duyulmadığında gözden uzak kalacak şekilde "
-"tasarlanmıştır."
+
+msgid "# Markdown Editor for Writing"
+msgstr ""
 
 msgid ""
-"Documents are organized into folders, which may contain a writing project, "
-"personal notes, or maybe a recipe book."
+"**Scratchmark** is a pleasant text editor for writing. It tries to give you "
+"everything you need and otherwise stay out of your way so you can just focus "
+"on the text. The app can be used for writing essays and making quick notes "
+"alike. Its file management is built around a folder structure that can "
+"handle large projects with lots of files. You can add any folder on your "
+"computer to the library, and move files around by dragging and dropping."
 msgstr ""
-"Belgeler, yazı projesi, kişisel notlar ya da belki bir yemek tarifi kitabı "
-"içerebilen klasörler halinde düzenlenir."
 
-msgid "Statistics"
-msgstr "İstatistikler"
+msgid ""
+"It uses Markdown, which means that ==all text formatting can be done by "
+"typing.=="
+msgstr ""
 
-msgid "Characters"
-msgstr "Karakterler"
+msgid ""
+"The editor is simple and intuitive, so anyone should be able to just pick it "
+"up and start writing. It can display simple writing statistics, and has "
+"features, such as focus mode and fullscreen support to reduce distractions."
+msgstr ""
 
-msgid "N/A"
-msgstr "Yok"
+msgid ""
+"Markdown is an open and widely used markup language. Documents created with "
+"Scratchmark are more or less compatible with other similar apps. If you "
+"already have a \"notebook\" or a project from another app, you can just add "
+"the folder to Scratchmark's library. This also goes the other way: if you've "
+"had enough of Scratchmark, it's easy to switch to something else."
+msgstr ""
 
-msgid "Excluding Spaces"
-msgstr "Boşluklar Hariç"
+msgid "Nothing Open"
+msgstr "Hiçbir Şey Açık Değil"
 
-msgid "Words"
-msgstr "Sözcük"
+msgid "Create a new document or open an existing one from the sidebar"
+msgstr "Kenar çubuğundan yeni belge oluşturun ya da var olan belgeyi açın"
 
-msgid "Lines"
-msgstr "Satır"
+msgid "Name..."
+msgstr "Ad..."
+
+msgid "Create"
+msgstr "Oluştur"
 
 msgid "Bold (Ctrl+B)"
 msgstr "Kalın (Ctrl+B)"
@@ -77,104 +87,17 @@ msgstr "Üstü Çizili"
 msgid "Highlight"
 msgstr "Vurgula"
 
-msgid "Heading 1"
-msgstr "Başlık 1"
+msgid "Heading 1 (Ctrl+1)"
+msgstr ""
 
-msgid "Heading 2"
-msgstr "Başlık 2"
+msgid "Heading 2 (Ctrl+2)"
+msgstr ""
 
 msgid "Blockquote"
 msgstr "Blok Alıntı"
 
 msgid "Code"
 msgstr "Kod"
-
-msgid "Nothing Open"
-msgstr "Hiçbir Şey Açık Değil"
-
-msgid "Create a new document or open an existing one from the sidebar"
-msgstr "Kenar çubuğundan yeni belge oluşturun ya da var olan belgeyi açın"
-
-msgid "Search"
-msgstr "Ara"
-
-msgid "Replace"
-msgstr "Değiştir"
-
-msgid "Match Case"
-msgstr "Büyük Küçük Harf Eşleştir"
-
-msgid "Whole Words"
-msgstr "Tam Sözcükler"
-
-msgid "Use Regex"
-msgstr "Kurallı İfade Kullan"
-
-msgid "?"
-msgstr "?"
-
-msgid "Previous Match (Shift + Return)"
-msgstr "Önceki Eşleşme (Shift + Return)"
-
-msgid "Next Match (Return)"
-msgstr "Sonraki Eşleşme (Enter)"
-
-msgid "Search and Replace (Ctrl+F)"
-msgstr "Ara ve Değiştir (Ctrl+F)"
-
-msgid "Close Search"
-msgstr "Aramayı Kapat"
-
-msgid "Replace (Return)"
-msgstr "Değiştir (Enter)"
-
-msgid "Replace All"
-msgstr "Tümünü Değiştir"
-
-msgid "Replace All (Shift + Return)"
-msgstr "Tümünü Değiştir (Shift + Enter)"
-
-msgid "File changed on disk"
-msgstr "Dosya disk üzerinde değiştirildi"
-
-msgid "Resolve"
-msgstr "Çözümle"
-
-msgid "Name..."
-msgstr "Ad..."
-
-msgid "Create"
-msgstr "Oluştur"
-
-msgid "Rename"
-msgstr "Yeniden Adlandır"
-
-msgid "Library"
-msgstr "Kitaplık"
-
-msgid "Add Project"
-msgstr "Proje Ekle"
-
-msgid "New Document"
-msgstr "Yeni Belge"
-
-msgid "Create Subfolder"
-msgstr "Alt Klasör Oluştur"
-
-msgid "Show in File Manager"
-msgstr "Dosya Yöneticisinde Göster"
-
-msgid "Move to Trash"
-msgstr "Çöpe Taşı"
-
-msgid "Delete Permanently"
-msgstr "Kalıcı Olarak Sil"
-
-msgid "Close Project"
-msgstr "Projeyi Kapat"
-
-msgid "Duplicate"
-msgstr "Çoğalt"
 
 msgid "General"
 msgstr "Genel"
@@ -202,6 +125,9 @@ msgstr "Küçük Haritayı Göster"
 
 msgid "Show overview of the document on the right side"
 msgstr "Belgenin genel görünümünü sağ kenarda göster"
+
+msgid "Library"
+msgstr "Kitaplık"
 
 msgid "Ignore Hidden Files"
 msgstr "Gizli Dosyaları Görmezden Gel"
@@ -246,8 +172,8 @@ msgid "Save Document"
 msgstr "Belgeyi Kaydet"
 
 msgctxt "shortcut window"
-msgid "Rename Document"
-msgstr "belgeyi Yeniden Adlandır"
+msgid "Rename"
+msgstr ""
 
 msgctxt "shortcut window"
 msgid "Close Document"
@@ -266,12 +192,54 @@ msgid "Search and Replace Text"
 msgstr "Metin Ara ve Değiştir"
 
 msgctxt "shortcut window"
+msgid "Formatting"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Bold"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Italic"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Heading 1"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Heading 2"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Heading 3"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Heading 4"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Heading 5"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Heading 6"
+msgstr ""
+
+msgctxt "shortcut window"
 msgid "Library"
 msgstr "Kitaplık"
 
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Elle Yenile"
+
+msgid "Create Subfolder (Shift+Ctrl+N)"
+msgstr ""
+
+msgid "Menu"
+msgstr "Menü"
 
 msgid "Toggle Sidebar (F9)"
 msgstr "Kenar Çubuğunu Aç/Kapat (F9)"
@@ -282,17 +250,20 @@ msgstr "Yeni Belge (Ctrl+N)"
 msgid "Exit Fullscreen"
 msgstr "Tam Ekrandan Çık"
 
-msgid "Menu"
-msgstr "Menü"
-
 msgid "Document Info"
 msgstr "Belge Bilgisi"
 
 msgid "Formatting Toolbar"
 msgstr "Biçimlendirme Araç Çubuğu"
 
-msgid "New"
-msgstr "Yeni"
+msgid "New Document"
+msgstr "Yeni Belge"
+
+msgid "Create Subfolder"
+msgstr "Alt Klasör Oluştur"
+
+msgid "Add Project"
+msgstr "Proje Ekle"
 
 msgid "Save"
 msgstr "Kaydet"
@@ -320,6 +291,121 @@ msgstr "Klavye Kısayolları"
 
 msgid "About Scratchmark"
 msgstr "Scratchmark Hakkında"
+
+msgid "Statistics"
+msgstr "İstatistikler"
+
+msgid "Characters"
+msgstr "Karakterler"
+
+msgid "N/A"
+msgstr "Yok"
+
+msgid "Excluding Spaces"
+msgstr "Boşluklar Hariç"
+
+msgid "Words"
+msgstr "Sözcük"
+
+msgid "Lines"
+msgstr "Satır"
+
+msgid "File changed on disk"
+msgstr "Dosya disk üzerinde değiştirildi"
+
+msgid "Resolve"
+msgstr "Çözümle"
+
+msgid "Search"
+msgstr "Ara"
+
+msgid "Replace"
+msgstr "Değiştir"
+
+msgid "Match Case"
+msgstr "Büyük Küçük Harf Eşleştir"
+
+msgid "Whole Words"
+msgstr "Tam Sözcükler"
+
+msgid "Use Regex"
+msgstr "Kurallı İfade Kullan"
+
+msgid "?"
+msgstr "?"
+
+msgid "Previous Match (Shift + Return)"
+msgstr "Önceki Eşleşme (Shift + Return)"
+
+msgid "Next Match (Return)"
+msgstr "Sonraki Eşleşme (Enter)"
+
+msgid "Search and Replace (Ctrl+F)"
+msgstr "Ara ve Değiştir (Ctrl+F)"
+
+msgid "Close Search"
+msgstr "Aramayı Kapat"
+
+msgid "Replace (Return)"
+msgstr "Değiştir (Enter)"
+
+msgid "Replace All"
+msgstr "Tümünü Değiştir"
+
+msgid "Replace All (Shift + Return)"
+msgstr "Tümünü Değiştir (Shift + Enter)"
+
+msgid "Show in File Manager"
+msgstr "Dosya Yöneticisinde Göster"
+
+msgid "Close Project"
+msgstr "Projeyi Kapat"
+
+msgid "Project may have been moved or deleted."
+msgstr ""
+
+msgid "Rename"
+msgstr "Yeniden Adlandır"
+
+msgid "Duplicate"
+msgstr "Çoğalt"
+
+msgid "Move to Trash"
+msgstr "Çöpe Taşı"
+
+msgid "Delete Permanently"
+msgstr "Kalıcı Olarak Sil"
+
+#~ msgid "New"
+#~ msgstr "Yeni"
+
+#~ msgid "Heading 1"
+#~ msgstr "Başlık 1"
+
+#~ msgid "Heading 2"
+#~ msgstr "Başlık 2"
+
+#~ msgid "Organized markdown editor"
+#~ msgstr "Düzenlenmiş markdown düzenleyici"
+
+#~ msgid "Write without distractions and keep your documents organized."
+#~ msgstr "Dikkatiniz dağılmadan yazın ve belgelerinizi düzenli tutun."
+
+#~ msgid "Editing features are designed to stay out of sight when not needed."
+#~ msgstr ""
+#~ "Düzenleme özellikleri, ihtiyaç duyulmadığında gözden uzak kalacak şekilde "
+#~ "tasarlanmıştır."
+
+#~ msgid ""
+#~ "Documents are organized into folders, which may contain a writing "
+#~ "project, personal notes, or maybe a recipe book."
+#~ msgstr ""
+#~ "Belgeler, yazı projesi, kişisel notlar ya da belki bir yemek tarifi "
+#~ "kitabı içerebilen klasörler halinde düzenlenir."
+
+#~ msgctxt "shortcut window"
+#~ msgid "Rename Document"
+#~ msgstr "belgeyi Yeniden Adlandır"
 
 #~ msgid "Sevonj"
 #~ msgstr "Sevonj"

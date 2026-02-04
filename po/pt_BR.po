@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 15:43+0200\n"
-"PO-Revision-Date: 2025-11-20 13:51+0000\n"
+"POT-Creation-Date: 2026-01-17 00:02+0200\n"
+"PO-Revision-Date: 2025-12-31 13:16+0000\n"
 "Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
 "scratchmark/app/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.14\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Scratchmark"
 msgstr "Scratchmark"
@@ -28,41 +28,51 @@ msgstr "Editor Markdown"
 msgid "Scratchmark Markdown editor"
 msgstr "Editor Markdown Scratchmark"
 
-msgid "Organized markdown editor"
-msgstr "Editor Markdown organizado"
-
-msgid "Write without distractions and keep your documents organized."
-msgstr "Escreva sem distrações e mantenha seus documentos organizados."
-
-msgid "Editing features are designed to stay out of sight when not needed."
+msgid "Markdown editor for writing"
 msgstr ""
-"Os recursos de edição são planejados para se manterem fora de vista quando "
-"não necessários."
+
+msgid "# Markdown Editor for Writing"
+msgstr ""
 
 msgid ""
-"Documents are organized into folders, which may contain a writing project, "
-"personal notes, or maybe a recipe book."
+"**Scratchmark** is a pleasant text editor for writing. It tries to give you "
+"everything you need and otherwise stay out of your way so you can just focus "
+"on the text. The app can be used for writing essays and making quick notes "
+"alike. Its file management is built around a folder structure that can "
+"handle large projects with lots of files. You can add any folder on your "
+"computer to the library, and move files around by dragging and dropping."
 msgstr ""
-"Os documentos são organizados em pastas, as quais podem conter um projeto de "
-"escrita, notas pessoais, ou talvez um livro de receitas."
 
-msgid "Statistics"
-msgstr "Estatísticas"
+msgid ""
+"It uses Markdown, which means that ==all text formatting can be done by "
+"typing.=="
+msgstr ""
 
-msgid "Characters"
-msgstr "Caracteres"
+msgid ""
+"The editor is simple and intuitive, so anyone should be able to just pick it "
+"up and start writing. It can display simple writing statistics, and has "
+"features, such as focus mode and fullscreen support to reduce distractions."
+msgstr ""
 
-msgid "N/A"
-msgstr "Nenhum"
+msgid ""
+"Markdown is an open and widely used markup language. Documents created with "
+"Scratchmark are more or less compatible with other similar apps. If you "
+"already have a \"notebook\" or a project from another app, you can just add "
+"the folder to Scratchmark's library. This also goes the other way: if you've "
+"had enough of Scratchmark, it's easy to switch to something else."
+msgstr ""
 
-msgid "Excluding Spaces"
-msgstr "Desconsiderando espaços"
+msgid "Nothing Open"
+msgstr "Nada aberto"
 
-msgid "Words"
-msgstr "Palavras"
+msgid "Create a new document or open an existing one from the sidebar"
+msgstr "Crie um novo documento ou abra um existente a partir da barra lateral"
 
-msgid "Lines"
-msgstr "Linhas"
+msgid "Name..."
+msgstr "Nome..."
+
+msgid "Create"
+msgstr "Criar"
 
 msgid "Bold (Ctrl+B)"
 msgstr "Negrito (Ctrl+B)"
@@ -76,104 +86,17 @@ msgstr "Tachado"
 msgid "Highlight"
 msgstr "Destaque"
 
-msgid "Heading 1"
-msgstr "Cabeçalho 1"
+msgid "Heading 1 (Ctrl+1)"
+msgstr ""
 
-msgid "Heading 2"
-msgstr "Cabeçalho 2"
+msgid "Heading 2 (Ctrl+2)"
+msgstr ""
 
 msgid "Blockquote"
 msgstr "Citação"
 
 msgid "Code"
 msgstr "Código"
-
-msgid "Nothing Open"
-msgstr "Nada aberto"
-
-msgid "Create a new document or open an existing one from the sidebar"
-msgstr "Crie um novo documento ou abra um existente a partir da barra lateral"
-
-msgid "Search"
-msgstr "Pesquisar"
-
-msgid "Replace"
-msgstr "Substituir"
-
-msgid "Match Case"
-msgstr "Diferenciar maiúsculas e minúsculas"
-
-msgid "Whole Words"
-msgstr "Palavras inteiras"
-
-msgid "Use Regex"
-msgstr "Usar expressão regular"
-
-msgid "?"
-msgstr "?"
-
-msgid "Previous Match (Shift + Return)"
-msgstr "Correspondência anterior (Shift + Enter)"
-
-msgid "Next Match (Return)"
-msgstr "Próxima correspondência (Enter)"
-
-msgid "Search and Replace (Ctrl+F)"
-msgstr "Pesquisar e substituir (Ctrl + F)"
-
-msgid "Close Search"
-msgstr "Fechar pesquisa"
-
-msgid "Replace (Return)"
-msgstr "Substituir (Enter)"
-
-msgid "Replace All"
-msgstr "Substituir tudo"
-
-msgid "Replace All (Shift + Return)"
-msgstr "Substituir tudo (Shift + Enter)"
-
-msgid "File changed on disk"
-msgstr "Arquivo alterado no disco"
-
-msgid "Resolve"
-msgstr "Resolver"
-
-msgid "Name..."
-msgstr "Nome..."
-
-msgid "Create"
-msgstr "Criar"
-
-msgid "Rename"
-msgstr "Renomear"
-
-msgid "Library"
-msgstr "Biblioteca"
-
-msgid "Add Project"
-msgstr "Adicionar projeto"
-
-msgid "New Document"
-msgstr "Novo documento"
-
-msgid "Create Subfolder"
-msgstr "Criar subpasta"
-
-msgid "Show in File Manager"
-msgstr "Mostrar no gerenciador de arquivos"
-
-msgid "Move to Trash"
-msgstr "Mover para a Lixeira"
-
-msgid "Delete Permanently"
-msgstr "Excluir permanentemente"
-
-msgid "Close Project"
-msgstr "Fechar projeto"
-
-msgid "Duplicate"
-msgstr "Duplicar"
 
 msgid "General"
 msgstr "Geral"
@@ -201,6 +124,9 @@ msgstr "Mostrar minimapa"
 
 msgid "Show overview of the document on the right side"
 msgstr "Mostrar visão geral do documento no lado direito"
+
+msgid "Library"
+msgstr "Biblioteca"
 
 msgid "Ignore Hidden Files"
 msgstr "Ignorar arquivos ocultos"
@@ -245,8 +171,8 @@ msgid "Save Document"
 msgstr "Salvar documento"
 
 msgctxt "shortcut window"
-msgid "Rename Document"
-msgstr "Renomear documento"
+msgid "Rename"
+msgstr ""
 
 msgctxt "shortcut window"
 msgid "Close Document"
@@ -265,12 +191,54 @@ msgid "Search and Replace Text"
 msgstr "Pesquisar e substituir texto"
 
 msgctxt "shortcut window"
+msgid "Formatting"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Bold"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Italic"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Heading 1"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Heading 2"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Heading 3"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Heading 4"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Heading 5"
+msgstr ""
+
+msgctxt "shortcut window"
+msgid "Heading 6"
+msgstr ""
+
+msgctxt "shortcut window"
 msgid "Library"
 msgstr "Biblioteca"
 
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Atualização manual"
+
+msgid "Create Subfolder (Shift+Ctrl+N)"
+msgstr ""
+
+msgid "Menu"
+msgstr "Menu"
 
 msgid "Toggle Sidebar (F9)"
 msgstr "Ativar/Desativar barra lateral"
@@ -281,17 +249,20 @@ msgstr "Nova documento (Ctrl + N)"
 msgid "Exit Fullscreen"
 msgstr "Sair da tela cheia"
 
-msgid "Menu"
-msgstr "Menu"
-
 msgid "Document Info"
 msgstr "Informações do documento"
 
 msgid "Formatting Toolbar"
 msgstr "Barra de formatação"
 
-msgid "New"
-msgstr "Novo"
+msgid "New Document"
+msgstr "Novo documento"
+
+msgid "Create Subfolder"
+msgstr "Criar subpasta"
+
+msgid "Add Project"
+msgstr "Adicionar projeto"
 
 msgid "Save"
 msgstr "Salvar"
@@ -319,6 +290,121 @@ msgstr "Atalhos de teclado"
 
 msgid "About Scratchmark"
 msgstr "Sobre o Scratchmark"
+
+msgid "Statistics"
+msgstr "Estatísticas"
+
+msgid "Characters"
+msgstr "Caracteres"
+
+msgid "N/A"
+msgstr "Nenhum"
+
+msgid "Excluding Spaces"
+msgstr "Desconsiderando espaços"
+
+msgid "Words"
+msgstr "Palavras"
+
+msgid "Lines"
+msgstr "Linhas"
+
+msgid "File changed on disk"
+msgstr "Arquivo alterado no disco"
+
+msgid "Resolve"
+msgstr "Resolver"
+
+msgid "Search"
+msgstr "Pesquisar"
+
+msgid "Replace"
+msgstr "Substituir"
+
+msgid "Match Case"
+msgstr "Diferenciar maiúsculas e minúsculas"
+
+msgid "Whole Words"
+msgstr "Palavras inteiras"
+
+msgid "Use Regex"
+msgstr "Usar expressão regular"
+
+msgid "?"
+msgstr "?"
+
+msgid "Previous Match (Shift + Return)"
+msgstr "Correspondência anterior (Shift + Enter)"
+
+msgid "Next Match (Return)"
+msgstr "Próxima correspondência (Enter)"
+
+msgid "Search and Replace (Ctrl+F)"
+msgstr "Pesquisar e substituir (Ctrl + F)"
+
+msgid "Close Search"
+msgstr "Fechar pesquisa"
+
+msgid "Replace (Return)"
+msgstr "Substituir (Enter)"
+
+msgid "Replace All"
+msgstr "Substituir tudo"
+
+msgid "Replace All (Shift + Return)"
+msgstr "Substituir tudo (Shift + Enter)"
+
+msgid "Show in File Manager"
+msgstr "Mostrar no gerenciador de arquivos"
+
+msgid "Close Project"
+msgstr "Fechar projeto"
+
+msgid "Project may have been moved or deleted."
+msgstr ""
+
+msgid "Rename"
+msgstr "Renomear"
+
+msgid "Duplicate"
+msgstr "Duplicar"
+
+msgid "Move to Trash"
+msgstr "Mover para a Lixeira"
+
+msgid "Delete Permanently"
+msgstr "Excluir permanentemente"
+
+#~ msgid "New"
+#~ msgstr "Novo"
+
+#~ msgid "Heading 1"
+#~ msgstr "Cabeçalho 1"
+
+#~ msgid "Heading 2"
+#~ msgstr "Cabeçalho 2"
+
+#~ msgid "Organized markdown editor"
+#~ msgstr "Editor Markdown organizado"
+
+#~ msgid "Write without distractions and keep your documents organized."
+#~ msgstr "Escreva sem distrações e mantenha seus documentos organizados."
+
+#~ msgid "Editing features are designed to stay out of sight when not needed."
+#~ msgstr ""
+#~ "Os recursos de edição são planejados para se manterem fora de vista "
+#~ "quando não necessários."
+
+#~ msgid ""
+#~ "Documents are organized into folders, which may contain a writing "
+#~ "project, personal notes, or maybe a recipe book."
+#~ msgstr ""
+#~ "Os documentos são organizados em pastas, as quais podem conter um projeto "
+#~ "de escrita, notas pessoais, ou talvez um livro de receitas."
+
+#~ msgctxt "shortcut window"
+#~ msgid "Rename Document"
+#~ msgstr "Renomear documento"
 
 #~ msgid "Sevonj"
 #~ msgstr "Sevonj"

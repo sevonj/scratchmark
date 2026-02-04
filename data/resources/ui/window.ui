@@ -20,12 +20,13 @@
             <property name="child">
               <object class="AdwToolbarView" id="sidebar_toolbar_view">
                 <child type="top">
-                  <object class="AdwHeaderBar" id="sidebar_header_bar">
-                    <property name="show-title">False</property>
-                    <child type="start">
-                      <object class="GtkMenuButton" id="new_folder_button">
-                        <property name="icon-name">folder-new-symbolic</property>
-                        <property name="tooltip-text" translatable="yes">Create Subfolder</property>
+                  <object class="AdwHeaderBar">
+                    <child type="end">
+                      <object class="GtkMenuButton">
+                        <property name="primary">True</property>
+                        <property name="icon-name">open-menu-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Menu</property>
+                        <property name="menu-model">primary_menu</property>
                       </object>
                     </child>
                   </object>
@@ -58,9 +59,10 @@
                               </object>
                             </child>
                             <child type="start">
-                              <object class="GtkMenuButton" id="new_document_button">
+                              <object class="GtkButton">
                                 <property name="icon-name">document-new-symbolic</property>
                                 <property name="tooltip-text" translatable="yes">New Document (Ctrl+N)</property>
+                                <property name="action-name">win.file-new</property>
                               </object>
                             </child>
                             <child type="end">
@@ -69,14 +71,6 @@
                                 <property name="tooltip-text" translatable="yes">Exit Fullscreen</property>
                                 <property name="action-name">win.unfullscreen</property>
                                 <property name="visible">False</property>
-                              </object>
-                            </child>
-                            <child type="end">
-                              <object class="GtkMenuButton">
-                                <property name="primary">True</property>
-                                <property name="icon-name">open-menu-symbolic</property>
-                                <property name="tooltip-text" translatable="yes">Menu</property>
-                                <property name="menu-model">primary_menu</property>
                               </object>
                             </child>
                             <child type="end">
@@ -96,7 +90,7 @@
                       </object>
                     </child>
                     <child type="top">
-                      <object class="EditorFormatBar" id="format_bar">
+                      <object class="MarkdownFormatBar" id="format_bar">
                         <property name="visible">False</property>
                       </object>
                     </child>
@@ -112,8 +106,12 @@
   <menu id="primary_menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">New</attribute>
+        <attribute name="label" translatable="yes">New Document</attribute>
         <attribute name="action">win.file-new</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Create Subfolder</attribute>
+        <attribute name="action">win.folder-new</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Add Project</attribute>

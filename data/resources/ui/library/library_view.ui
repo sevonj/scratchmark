@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="LibraryView" parent="AdwBin">
+        <child>
+            <object class="GtkScrolledWindow">
+                <property name="width-request">256</property>
+                <child>
+                    <object class="GtkBox">
+                        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                        <property name="margin-bottom">6</property>
+                        <!--child>
+                            <object class="GtkSeparator">
+                                <property name="margin-top">8</property>
+                                <property name="margin-bottom">4</property>
+                                <property name="margin-start">6</property>
+                                <property name="margin-end">6</property>
+                            </object>
+                        </child-->
+                        <child>
+                            <object class="GtkBox" id="projects_container">
+                                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                                <property name="spacing">2</property>
+                            </object>
+                        </child>
+                        <child> <!-- End spacer -->
+                            <object class="GtkBox">
+                                <property name="vexpand">True</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>

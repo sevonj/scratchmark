@@ -5,13 +5,14 @@
 # Sevonj <>, 2025.
 #
 # Anonymous <anonymous@noreply.codeberg.org>, 2025.
+# sevon <sevon@noreply.codeberg.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 15:43+0200\n"
-"PO-Revision-Date: 2025-11-20 13:51+0000\n"
-"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"POT-Creation-Date: 2026-01-17 00:02+0200\n"
+"PO-Revision-Date: 2026-01-16 22:35+0000\n"
+"Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/scratchmark/"
 "app/fi/>\n"
 "Language: fi\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Scratchmark"
 msgstr "Scratchmark"
@@ -30,37 +31,70 @@ msgstr "Markdown-editori"
 msgid "Scratchmark Markdown editor"
 msgstr "Scratchmark Markdown-editori"
 
-msgid "Organized markdown editor"
-msgstr ""
+msgid "Markdown editor for writing"
+msgstr "Markdown-editori kirjoittamiseen"
 
-msgid "Write without distractions and keep your documents organized."
-msgstr ""
-
-msgid "Editing features are designed to stay out of sight when not needed."
-msgstr ""
+msgid "# Markdown Editor for Writing"
+msgstr "# Markdown-editori kirjoittamiseen"
 
 msgid ""
-"Documents are organized into folders, which may contain a writing project, "
-"personal notes, or maybe a recipe book."
+"**Scratchmark** is a pleasant text editor for writing. It tries to give you "
+"everything you need and otherwise stay out of your way so you can just focus "
+"on the text. The app can be used for writing essays and making quick notes "
+"alike. Its file management is built around a folder structure that can "
+"handle large projects with lots of files. You can add any folder on your "
+"computer to the library, and move files around by dragging and dropping."
 msgstr ""
+"**Scratchmark** on tekstieditori kirjoittamista varten. Se pyrkii tarjoamaan "
+"kaikki tarvitsemasi ominaisuudet ja pysymään muuten poissa tieltä, jotta "
+"voit keskittyä itse tekstiin. Sovellusta voi käyttää sekä esseiden "
+"kirjoittamiseen että pikamuistiinpanojen tekemiseen. Tiedostojen hallinta "
+"perustuu kansiorakenteeseen, jolla voi käsitellä suuriakin projekteja. Voit "
+"lisätä minkä tahansa tietokoneellasi olevan kansion kirjastoon ja siirrellä "
+"tiedostoja raahaamalla."
 
-msgid "Statistics"
-msgstr "Tilastot"
+msgid ""
+"It uses Markdown, which means that ==all text formatting can be done by "
+"typing.=="
+msgstr ""
+"Editori käyttää Markdownia, mikä tarkoittaa sitä, että ==kaiken muotoilun "
+"voi tehdä kirjoittamalla.=="
 
-msgid "Characters"
-msgstr "Merkkejä"
+msgid ""
+"The editor is simple and intuitive, so anyone should be able to just pick it "
+"up and start writing. It can display simple writing statistics, and has "
+"features, such as focus mode and fullscreen support to reduce distractions."
+msgstr ""
+"Editori on yksinkertainen ja intuitiivinen, joten kuka tahansa voi ottaa sen "
+"käyttöön ja aloittaa kirjoittamisen heti. Se voi näyttää yksinkertaisia "
+"kirjoitustilastoja ja vähentää häiriötekijöitä keskittymistilalla tai koko "
+"näytön tilalla."
 
-msgid "N/A"
-msgstr "N/A"
+msgid ""
+"Markdown is an open and widely used markup language. Documents created with "
+"Scratchmark are more or less compatible with other similar apps. If you "
+"already have a \"notebook\" or a project from another app, you can just add "
+"the folder to Scratchmark's library. This also goes the other way: if you've "
+"had enough of Scratchmark, it's easy to switch to something else."
+msgstr ""
+"Markdown on avoin ja laajasti käytetty merkintäkieli. Scratchmarkilla luodut "
+"asiakirjat ovat enemmän tai vähemmän yhteensopivia muiden vastaavien "
+"ohjelmien kanssa. Jos sinulla on jo muistikirja tai projekti toisesta "
+"sovelluksesta, voit lisätä sen kansion Scratchmarkin kirjastoon. Tämä pätee "
+"myös toisinpäin: jos olet kyllästynyt Scratchmarkiin, voit helposti siirtyä "
+"johonkin muuhun sovellukseen."
 
-msgid "Excluding Spaces"
-msgstr "Poislukien välilyönnit"
+msgid "Nothing Open"
+msgstr "Ei avattua tiedostoa"
 
-msgid "Words"
-msgstr "Sanoja"
+msgid "Create a new document or open an existing one from the sidebar"
+msgstr "Luo uusi tiedosto tai avaa olemassaoleva sivupalkista"
 
-msgid "Lines"
-msgstr "Rivejä"
+msgid "Name..."
+msgstr "Nimi..."
+
+msgid "Create"
+msgstr "Luo"
 
 msgid "Bold (Ctrl+B)"
 msgstr "Lihavointi (Ctrl+B)"
@@ -74,104 +108,17 @@ msgstr "Yliviivaus"
 msgid "Highlight"
 msgstr "Korostus"
 
-msgid "Heading 1"
-msgstr "Otsikko 1"
+msgid "Heading 1 (Ctrl+1)"
+msgstr "Otsikko 1 (Ctrl+1)"
 
-msgid "Heading 2"
-msgstr "Otsikko 2"
+msgid "Heading 2 (Ctrl+2)"
+msgstr "Otsikko 2 (Ctrl+2)"
 
 msgid "Blockquote"
 msgstr "Lainaus"
 
 msgid "Code"
 msgstr "Koodi"
-
-msgid "Nothing Open"
-msgstr "Ei avattua tiedostoa"
-
-msgid "Create a new document or open an existing one from the sidebar"
-msgstr "Luo uusi tiedosto tai avaa olemassaoleva sivupalkista"
-
-msgid "Search"
-msgstr "Etsi"
-
-msgid "Replace"
-msgstr "Korvaa"
-
-msgid "Match Case"
-msgstr "Huomioi kirjainkoko"
-
-msgid "Whole Words"
-msgstr "Kokonaiset sanat"
-
-msgid "Use Regex"
-msgstr "Säännölliset lausekkeet (Regex)"
-
-msgid "?"
-msgstr "?"
-
-msgid "Previous Match (Shift + Return)"
-msgstr "Edellinen osuma (Shift + Enter)"
-
-msgid "Next Match (Return)"
-msgstr "Seuraava osuma (Enter)"
-
-msgid "Search and Replace (Ctrl+F)"
-msgstr "Etsi ja korvaa (Ctrl+F)"
-
-msgid "Close Search"
-msgstr "Sulje"
-
-msgid "Replace (Return)"
-msgstr "Korvaa (Enter)"
-
-msgid "Replace All"
-msgstr "Korvaa kaikki"
-
-msgid "Replace All (Shift + Return)"
-msgstr "Replace All (Shift + Return)"
-
-msgid "File changed on disk"
-msgstr "Tiedosto on muuttunut levyllä"
-
-msgid "Resolve"
-msgstr "Ratkaise"
-
-msgid "Name..."
-msgstr "Nimi..."
-
-msgid "Create"
-msgstr "Luo"
-
-msgid "Rename"
-msgstr "Nimeä uudelleen"
-
-msgid "Library"
-msgstr "Kirjasto"
-
-msgid "Add Project"
-msgstr "Lisää projekti"
-
-msgid "New Document"
-msgstr "Uusi tiedosto"
-
-msgid "Create Subfolder"
-msgstr "Luo alikansio"
-
-msgid "Show in File Manager"
-msgstr "Näytä tiedostoselaimessa"
-
-msgid "Move to Trash"
-msgstr "Siirrä roskakoriin"
-
-msgid "Delete Permanently"
-msgstr "Poista pysyvästi"
-
-msgid "Close Project"
-msgstr "Sulje projekti"
-
-msgid "Duplicate"
-msgstr "Luo kopio"
 
 msgid "General"
 msgstr "Yleiset"
@@ -199,6 +146,9 @@ msgstr "Näytä minikartta"
 
 msgid "Show overview of the document on the right side"
 msgstr "Näytä yleiskatsaus tiedostosta oikealla puolella"
+
+msgid "Library"
+msgstr "Kirjasto"
 
 msgid "Ignore Hidden Files"
 msgstr "Ohita piilotetut tiedostot"
@@ -241,15 +191,15 @@ msgstr "Lisää projekti"
 
 msgctxt "shortcut window"
 msgid "Save Document"
-msgstr "Tallenna"
+msgstr "Tallenna tiedosto"
 
 msgctxt "shortcut window"
-msgid "Rename Document"
+msgid "Rename"
 msgstr "Nimeä uudelleen"
 
 msgctxt "shortcut window"
 msgid "Close Document"
-msgstr "Sulje"
+msgstr "Sulje tiedosto"
 
 msgctxt "shortcut window"
 msgid "Editor"
@@ -264,12 +214,54 @@ msgid "Search and Replace Text"
 msgstr "Etsi ja korvaa tesktiä"
 
 msgctxt "shortcut window"
+msgid "Formatting"
+msgstr "Muotoilu"
+
+msgctxt "shortcut window"
+msgid "Bold"
+msgstr "Lihavoi"
+
+msgctxt "shortcut window"
+msgid "Italic"
+msgstr "Kursivoi"
+
+msgctxt "shortcut window"
+msgid "Heading 1"
+msgstr "Otsikko 1"
+
+msgctxt "shortcut window"
+msgid "Heading 2"
+msgstr "Otsikko 2"
+
+msgctxt "shortcut window"
+msgid "Heading 3"
+msgstr "Otsikko 3"
+
+msgctxt "shortcut window"
+msgid "Heading 4"
+msgstr "Otsikko 4"
+
+msgctxt "shortcut window"
+msgid "Heading 5"
+msgstr "Otsikko 5"
+
+msgctxt "shortcut window"
+msgid "Heading 6"
+msgstr "Otsikko 6"
+
+msgctxt "shortcut window"
 msgid "Library"
 msgstr "Kirjasto"
 
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Päivitä kirjasto"
+
+msgid "Create Subfolder (Shift+Ctrl+N)"
+msgstr "Luo alikansio (Shift+Ctrl+N)"
+
+msgid "Menu"
+msgstr "Valikko"
 
 msgid "Toggle Sidebar (F9)"
 msgstr "Avaa/sulje sivupalkki (F9)"
@@ -280,17 +272,20 @@ msgstr "Uusi tiedosto (Ctrl+N)"
 msgid "Exit Fullscreen"
 msgstr "Poistu koko näytön tilasta"
 
-msgid "Menu"
-msgstr "Valikko"
-
 msgid "Document Info"
 msgstr "Tiedoston tiedot"
 
 msgid "Formatting Toolbar"
 msgstr "Muotoilupalkki"
 
-msgid "New"
-msgstr "Uusi"
+msgid "New Document"
+msgstr "Uusi tiedosto"
+
+msgid "Create Subfolder"
+msgstr "Luo alikansio"
+
+msgid "Add Project"
+msgstr "Lisää projekti"
 
 msgid "Save"
 msgstr "Tallenna"
@@ -318,6 +313,103 @@ msgstr "Pikanäppäimet"
 
 msgid "About Scratchmark"
 msgstr "Tietoja - Scratchmark"
+
+msgid "Statistics"
+msgstr "Tilastot"
+
+msgid "Characters"
+msgstr "Merkkejä"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "Excluding Spaces"
+msgstr "Poislukien välilyönnit"
+
+msgid "Words"
+msgstr "Sanoja"
+
+msgid "Lines"
+msgstr "Rivejä"
+
+msgid "File changed on disk"
+msgstr "Tiedosto on muuttunut levyllä"
+
+msgid "Resolve"
+msgstr "Ratkaise"
+
+msgid "Search"
+msgstr "Etsi"
+
+msgid "Replace"
+msgstr "Korvaa"
+
+msgid "Match Case"
+msgstr "Huomioi kirjainkoko"
+
+msgid "Whole Words"
+msgstr "Kokonaiset sanat"
+
+msgid "Use Regex"
+msgstr "Säännölliset lausekkeet (Regex)"
+
+msgid "?"
+msgstr "?"
+
+msgid "Previous Match (Shift + Return)"
+msgstr "Edellinen osuma (Shift + Enter)"
+
+msgid "Next Match (Return)"
+msgstr "Seuraava osuma (Enter)"
+
+msgid "Search and Replace (Ctrl+F)"
+msgstr "Etsi ja korvaa (Ctrl+F)"
+
+msgid "Close Search"
+msgstr "Sulje haku"
+
+msgid "Replace (Return)"
+msgstr "Korvaa (Enter)"
+
+msgid "Replace All"
+msgstr "Korvaa kaikki"
+
+msgid "Replace All (Shift + Return)"
+msgstr "Korvaa kaikki (Shift + Enter)"
+
+msgid "Show in File Manager"
+msgstr "Näytä tiedostoselaimessa"
+
+msgid "Close Project"
+msgstr "Sulje projekti"
+
+msgid "Project may have been moved or deleted."
+msgstr "Projekti voi olla siirretty tai poistettu."
+
+msgid "Rename"
+msgstr "Nimeä uudelleen"
+
+msgid "Duplicate"
+msgstr "Luo kopio"
+
+msgid "Move to Trash"
+msgstr "Siirrä roskakoriin"
+
+msgid "Delete Permanently"
+msgstr "Poista pysyvästi"
+
+#~ msgid "New"
+#~ msgstr "Uusi"
+
+#~ msgid "Heading 1"
+#~ msgstr "Otsikko 1"
+
+#~ msgid "Heading 2"
+#~ msgstr "Otsikko 2"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Rename Document"
+#~ msgstr "Nimeä uudelleen"
 
 #~ msgid "Sevonj"
 #~ msgstr "Sevonj"
