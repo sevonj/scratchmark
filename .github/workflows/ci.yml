@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Verify POTFILES.in
-        run: sh po/verify_POTFILES.sh
+        run: python3 po/verify_potfiles.py
 
   cargo-deny:
     runs-on: ubuntu-latest

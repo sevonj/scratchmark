@@ -1,1 +1,3 @@
 *.zip
+*.temp
+__pycache__
