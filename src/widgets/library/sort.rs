@@ -9,6 +9,7 @@ use gtk::glib::CollationKey;
 
 use crate::widgets::library::DocumentRow;
 use crate::widgets::library::FolderRow;
+use crate::widgets::library::item_create_row::ItemCreateRow;
 
 #[derive(PartialEq, Eq)]
 pub struct SortComponent<'a> {
@@ -90,10 +91,12 @@ pub fn sort_alphanumeric(a: &ListBoxRow, b: &ListBoxRow) -> gtk::Ordering {
 }
 
 fn row_to_path(row: &ListBoxRow) -> Option<(PathBuf, bool)> {
-    if let Ok(button) = row.clone().downcast::<DocumentRow>() {
-        Some((button.document().path(), false))
-    } else if let Ok(button) = row.clone().downcast::<FolderRow>() {
-        Some((button.folder().path(), true))
+    if let Ok(row) = row.clone().downcast::<DocumentRow>() {
+        Some((row.document().path(), false))
+    } else if let Ok(row) = row.clone().downcast::<FolderRow>() {
+        Some((row.folder().path(), true))
+    } else if let Ok(row) = row.clone().downcast::<ItemCreateRow>() {
+        Some((row.parent_path().join("~"), row.is_dir())) // tilde should sort this as last semi reliably. TODO: refactor is_dir to handle it instead
     } else {
         None
     }

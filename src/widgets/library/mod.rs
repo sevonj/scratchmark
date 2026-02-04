@@ -1,6 +1,7 @@
 mod document_row;
 mod err_placeholder_row;
 mod folder_row;
+mod item_create_row;
 mod item_rename_popover;
 mod project_view;
 mod sort;
@@ -399,6 +400,8 @@ mod imp {
     }
 }
 
+use std::cell::Ref;
+use std::collections::HashMap;
 use std::ops::Deref;
 use std::path::Path;
 use std::path::PathBuf;
@@ -507,6 +510,38 @@ impl LibraryView {
         }
     }
 
+    pub fn prompt_create_document(&self) {
+        let Some(selected) = self.selected_item_path() else {
+            return;
+        };
+        for project_view in self.projects().deref().values() {
+            if selected.starts_with(project_view.project().path()) {
+                if project_view.document_item(&selected).is_some() {
+                    project_view.prompt_create_document(selected.parent().unwrap().to_path_buf());
+                } else {
+                    project_view.prompt_create_document(selected);
+                }
+                return;
+            }
+        }
+    }
+
+    pub fn prompt_create_subfolder(&self) {
+        let Some(selected) = self.selected_item_path() else {
+            return;
+        };
+        for project_view in self.projects().deref().values() {
+            if selected.starts_with(project_view.project().path()) {
+                if project_view.document_item(&selected).is_some() {
+                    project_view.prompt_create_subfolder(selected.parent().unwrap().to_path_buf());
+                } else {
+                    project_view.prompt_create_subfolder(selected);
+                }
+                return;
+            }
+        }
+    }
+
     pub fn move_item(&self, old_path: PathBuf, new_path: PathBuf) -> Result<(), ScratchmarkError> {
         let new_file = File::for_path(&new_path);
         if let Err(e) = File::for_path(&old_path).move_(
@@ -537,5 +572,9 @@ impl LibraryView {
 
         self.refresh_content();
         Ok(())
+    }
+
+    fn projects(&self) -> Ref<'_, HashMap<PathBuf, ProjectView>> {
+        self.imp().projects.borrow()
     }
 }

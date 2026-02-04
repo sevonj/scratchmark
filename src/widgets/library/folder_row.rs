@@ -12,8 +12,6 @@ mod imp {
     use gtk::glib::closure_local;
     use gtk::prelude::*;
 
-    use gio::MenuModel;
-    use gio::SimpleActionGroup;
     use gtk::Builder;
     use gtk::CompositeTemplate;
     use gtk::DragSource;
@@ -24,8 +22,11 @@ mod imp {
     use gtk::ListBoxRow;
     use gtk::PopoverMenu;
     use gtk::TemplateChild;
+    use gtk::gio::MenuModel;
+    use gtk::gio::SimpleActionGroup;
     use gtk::glib::Binding;
     use gtk::glib::Properties;
+    use gtk::glib::subclass::Signal;
 
     use super::DocumentRow;
     use crate::data::Folder;
@@ -79,6 +80,16 @@ mod imp {
             });
 
             self.parent_constructed();
+        }
+
+        fn signals() -> &'static [Signal] {
+            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
+            SIGNALS.get_or_init(|| {
+                vec![
+                    Signal::builder("prompt-create-document").build(),
+                    Signal::builder("prompt-create-subfolder").build(),
+                ]
+            })
         }
     }
 
@@ -246,25 +257,17 @@ mod imp {
 
             let action = gio::SimpleAction::new("create-document", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = imp)]
-                self,
-                move |_action, _parameter| {
-                    if let Err(e) = imp.folder().create_document_untitled() {
-                        imp.folder().notify(&e.to_string())
-                    }
-                }
+                #[weak]
+                obj,
+                move |_action, _parameter| obj.emit_by_name("prompt-create-document", &[])
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("create-subfolder", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = imp)]
-                self,
-                move |_action, _parameter| {
-                    if let Err(e) = imp.folder().create_subfolder_unnamed() {
-                        imp.folder().notify(&e.to_string())
-                    }
-                }
+                #[weak]
+                obj,
+                move |_action, _parameter| obj.emit_by_name("prompt-create-subfolder", &[])
             ));
             actions.add_action(&action);
 
