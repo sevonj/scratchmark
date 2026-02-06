@@ -21,6 +21,13 @@
               <object class="AdwToolbarView" id="sidebar_toolbar_view">
                 <child type="top">
                   <object class="AdwHeaderBar">
+                    <child type="start">
+                      <object class="GtkMenuButton">
+                        <property name="icon-name">open-menu-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Sort</property>
+                        <property name="menu-model">sort_menu</property>
+                      </object>
+                    </child>
                     <child type="end">
                       <object class="GtkMenuButton">
                         <property name="primary">True</property>
@@ -160,6 +167,32 @@
       <item>
         <attribute name="label" translatable="yes">About Scratchmark</attribute>
         <attribute name="action">win.show-about</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="sort_menu">
+    <section>
+      <attribute name="label" translatable="yes">Sort</attribute>
+      <!-- see SortMethod enum-->
+      <item>
+        <attribute name="label" translatable="yes">A-Z</attribute>
+        <attribute name="action">library.sort-type</attribute>
+        <attribute name="target">AlphanumericAsc</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Z-A</attribute>
+        <attribute name="action">library.sort-type</attribute>
+        <attribute name="target">AlphanumericDesc</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Last Modified</attribute>
+        <attribute name="action">library.sort-type</attribute>
+        <attribute name="target">ModifiedDesc</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">First Modified</attribute>
+        <attribute name="action">library.sort-type</attribute>
+        <attribute name="target">ModifiedAsc</attribute>
       </item>
     </section>
   </menu>

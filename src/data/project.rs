@@ -7,6 +7,7 @@ mod imp {
     use std::path::PathBuf;
     use std::sync::OnceLock;
     use std::time::Duration;
+    use std::time::SystemTime;
 
     use adw::subclass::prelude::*;
     use async_channel::Receiver;
@@ -26,8 +27,16 @@ mod imp {
 
     #[derive(Debug)]
     enum CrawlMsg {
-        FoundDir { path: PathBuf, depth: u32 },
-        FoundFile { path: PathBuf, depth: u32 },
+        FoundDir {
+            path: PathBuf,
+            depth: u32,
+            modified: SystemTime,
+        },
+        FoundFile {
+            path: PathBuf,
+            depth: u32,
+            modified: SystemTime,
+        },
         Done,
     }
 
@@ -77,11 +86,19 @@ mod imp {
                         let receiver = bind.as_mut().unwrap();
                         while let Ok(entry) = receiver.try_recv() {
                             match entry {
-                                CrawlMsg::FoundDir { path, depth } => {
-                                    imp.add_folder(Folder::new_subfolder(path, depth));
+                                CrawlMsg::FoundDir {
+                                    path,
+                                    depth,
+                                    modified,
+                                } => {
+                                    imp.add_folder(Folder::new_subfolder(path, depth, modified));
                                 }
-                                CrawlMsg::FoundFile { path, depth } => {
-                                    imp.add_document(Document::new(path, depth));
+                                CrawlMsg::FoundFile {
+                                    path,
+                                    depth,
+                                    modified,
+                                } => {
+                                    imp.add_document(Document::new(path, depth, modified));
                                 }
                                 CrawlMsg::Done => {
                                     imp.prune();
@@ -149,8 +166,6 @@ mod imp {
 
             MainContext::default().spawn_local(async move {
                 let mut search_stack: VecDeque<(PathBuf, u32)> = VecDeque::from([(root_path, 1)]);
-                let mut found_folders: Vec<(PathBuf, u32)> = vec![];
-                let mut found_files: Vec<(PathBuf, u32)> = vec![];
 
                 loop {
                     let Some((folder, depth)) = search_stack.pop_front() else {
@@ -172,11 +187,16 @@ mod imp {
                             continue;
                         }
                         let path = entry.path();
+                        let modified = metadata.modified().unwrap_or(SystemTime::UNIX_EPOCH);
+
                         if metadata.is_dir() {
                             search_stack.push_back((path.clone(), depth + 1));
-                            found_folders.push((path.clone(), depth + 1));
                             sender
-                                .send(CrawlMsg::FoundDir { path, depth })
+                                .send(CrawlMsg::FoundDir {
+                                    path,
+                                    depth,
+                                    modified,
+                                })
                                 .await
                                 .unwrap();
                         } else {
@@ -187,9 +207,12 @@ mod imp {
                                 continue;
                             }
 
-                            found_files.push((path.clone(), depth + 1));
                             sender
-                                .send(CrawlMsg::FoundFile { path, depth })
+                                .send(CrawlMsg::FoundFile {
+                                    path,
+                                    depth,
+                                    modified,
+                                })
                                 .await
                                 .unwrap();
                         }
@@ -211,7 +234,8 @@ mod imp {
         fn add_document(&self, doc: Document) {
             let mut documents = self.documents.borrow_mut();
             let path = doc.path();
-            if documents.contains_key(&path) {
+            if let Some(already_existing) = documents.get(&path) {
+                already_existing.set_modified(doc.modified());
                 return;
             }
 

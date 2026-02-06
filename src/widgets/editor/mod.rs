@@ -341,6 +341,7 @@ mod imp {
             SIGNALS.get_or_init(|| {
                 vec![
                     Signal::builder("close-requested").build(),
+                    Signal::builder("saved").build(),
                     Signal::builder("saved-as").build(),
                     Signal::builder("stats-changed").build(),
                     Signal::builder("buffer-changed").build(),
@@ -473,6 +474,7 @@ impl Editor {
         }
         imp.setup_filemon();
         self.set_unsaved_changes(false);
+        self.emit_by_name::<()>("saved", &[]);
         Ok(())
     }
 
