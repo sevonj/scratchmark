@@ -406,7 +406,7 @@ use gtk::ListBoxRow;
 
 use crate::data::Folder;
 use crate::data::FolderType;
-use crate::widgets::library::DocumentRow;
+use crate::widgets::library::document_row::DocumentRow;
 
 glib::wrapper! {
     pub struct FolderRow(ObjectSubclass<imp::FolderRow>)
