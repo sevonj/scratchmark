@@ -40,6 +40,7 @@ mod imp {
     use crate::config;
     use crate::data::Document;
     use crate::data::Folder;
+    use crate::data::SortMethod;
     use crate::error::ScratchmarkError;
     use crate::util::file_actions;
 
@@ -754,6 +755,25 @@ mod imp {
             ));
             obj.add_action(&action);
 
+            let library_actions = SimpleActionGroup::new();
+            obj.insert_action_group("library", Some(&library_actions));
+            let action = SimpleAction::new_stateful(
+                "sort-type",
+                Some(VariantTy::STRING),
+                &SortMethod::default().to_string().to_variant(),
+            );
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |action, param| {
+                    let param = param.unwrap();
+                    action.set_state(param);
+                    imp.library_view
+                        .set_sort_method(param.get::<String>().unwrap());
+                }
+            ));
+            library_actions.add_action(&action);
+
             let editor_actions = SimpleActionGroup::new();
             obj.insert_action_group("editor", Some(&editor_actions));
 
@@ -1027,13 +1047,24 @@ mod imp {
             );
 
             editor.connect_closure(
+                "saved",
+                false,
+                closure_local!(
+                    #[weak(rename_to = this)]
+                    self,
+                    move |_: Editor| {
+                        this.library_view.refresh_content();
+                    }
+                ),
+            );
+
+            editor.connect_closure(
                 "saved-as",
                 false,
                 closure_local!(
                     #[weak(rename_to = this)]
                     self,
                     move |editor: Editor| {
-                        this.library_view.refresh_content();
                         this.library_view
                             .set_open_document_path(Some(editor.path()));
                         this.update_window_title();

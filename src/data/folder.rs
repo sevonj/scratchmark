@@ -4,13 +4,15 @@ mod imp {
     use std::collections::HashMap;
     use std::path::PathBuf;
     use std::sync::OnceLock;
+    use std::time::SystemTime;
 
     use gtk::glib;
     use gtk::glib::subclass::*;
     use gtk::prelude::*;
     use gtk::subclass::prelude::*;
 
-    use glib::Properties;
+    use gtk::glib::CollationKey;
+    use gtk::glib::Properties;
 
     use super::FolderType;
     use crate::data::Document;
@@ -18,8 +20,6 @@ mod imp {
     #[derive(Properties, Default)]
     #[properties(wrapper_type = super::Folder)]
     pub struct Folder {
-        pub(super) kind: OnceLock<FolderType>,
-
         #[property(get, set)]
         pub(super) path: RefCell<PathBuf>,
         #[property(get, set)]
@@ -31,6 +31,10 @@ mod imp {
 
         pub(super) subfolders: RefCell<HashMap<PathBuf, super::Folder>>,
         pub(super) documents: RefCell<HashMap<PathBuf, Document>>,
+
+        pub(super) kind: OnceLock<FolderType>,
+        pub(super) modified: RefCell<Option<SystemTime>>,
+        pub(super) collation_key: OnceLock<CollationKey>,
     }
 
     #[glib::object_subclass]
@@ -62,6 +66,7 @@ mod imp {
                     Signal::builder("notify-err")
                         .param_types([String::static_type()])
                         .build(),
+                    Signal::builder("metadata-changed").build(),
                 ]
             })
         }
@@ -70,12 +75,16 @@ mod imp {
 
 use std::cell::Ref;
 use std::collections::HashMap;
-use std::path::{Path, PathBuf};
+use std::path::Path;
+use std::path::PathBuf;
+use std::time::SystemTime;
 
 use adw::subclass::prelude::ObjectSubclassIsExt;
 use gtk::glib;
+use gtk::glib::closure_local;
 
-use glib::Object;
+use gtk::glib::CollationKey;
+use gtk::glib::Object;
 use gtk::glib::object::ObjectExt;
 
 use crate::error::ScratchmarkError;
@@ -95,39 +104,66 @@ glib::wrapper! {
 }
 
 impl Folder {
-    pub fn new_subfolder(path: PathBuf, depth: u32) -> Self {
+    pub fn modified(&self) -> SystemTime {
+        self.imp().modified.borrow().unwrap()
+    }
+
+    pub fn collation_key(&self) -> &CollationKey {
+        self.imp().collation_key.get().unwrap()
+    }
+
+    pub fn new_subfolder(path: PathBuf, depth: u32, modified: SystemTime) -> Self {
         let name = path.file_name().unwrap().to_string_lossy().into_owned();
+        let collation_key = CollationKey::from(&name);
+
         let obj: Self = Object::builder()
             .property("path", path)
             .property("depth", depth)
             .property("name", name)
             .build();
+
         let imp = obj.imp();
         imp.kind.set(FolderType::Subfolder).unwrap();
+        imp.modified.replace(Some(modified));
+        imp.collation_key.set(collation_key).unwrap();
+
         obj
     }
 
     pub fn new_project_root(path: PathBuf) -> Self {
         let name = path.file_name().unwrap().to_string_lossy().into_owned();
+        let collation_key = CollationKey::from(&name);
+
         let obj: Self = Object::builder()
             .property("path", path)
             .property("depth", 0_u32)
             .property("name", name)
             .build();
+
         let imp = obj.imp();
         imp.kind.set(FolderType::ProjectRoot).unwrap();
+        imp.modified.replace(Some(SystemTime::now()));
+        imp.collation_key.set(collation_key).unwrap();
+
         obj
     }
 
     /// Special root folder for builtin drafts project
     pub fn new_drafts_root(path: PathBuf) -> Self {
+        let name = path.file_name().unwrap().to_string_lossy().into_owned();
+        let collation_key = CollationKey::from(&name);
+
         let obj: Self = Object::builder()
             .property("path", path)
             .property("depth", 0_u32)
             .property("name", "Drafts")
             .build();
+
         let imp = obj.imp();
         imp.kind.set(FolderType::DraftsRoot).unwrap();
+        imp.modified.replace(Some(SystemTime::now()));
+        imp.collation_key.set(collation_key).unwrap();
+
         obj
     }
 
@@ -151,10 +187,34 @@ impl Folder {
     }
 
     pub fn add_document(&self, doc: Document) {
+        self.on_child_modified_changed(doc.modified());
+        doc.connect_closure(
+            "metadata-changed",
+            true,
+            closure_local!(
+                #[weak(rename_to = obj)]
+                self,
+                move |doc: Document| {
+                    obj.on_child_modified_changed(doc.modified());
+                }
+            ),
+        );
         self.imp().documents.borrow_mut().insert(doc.path(), doc);
     }
 
     pub fn add_subfolder(&self, folder: Folder) {
+        self.on_child_modified_changed(folder.modified());
+        folder.connect_closure(
+            "metadata-changed",
+            true,
+            closure_local!(
+                #[weak(rename_to = obj)]
+                self,
+                move |folder: Folder| {
+                    obj.on_child_modified_changed(folder.modified());
+                }
+            ),
+        );
         self.imp()
             .subfolders
             .borrow_mut()
@@ -233,6 +293,13 @@ impl Folder {
     pub fn notify_err(&self, msg: &str) {
         self.emit_by_name::<()>("notify-err", &[&msg]);
     }
+
+    fn on_child_modified_changed(&self, child_modified: SystemTime) {
+        if child_modified > self.modified() {
+            self.imp().modified.borrow_mut().replace(child_modified);
+            self.emit_by_name::<()>("metadata-changed", &[]);
+        }
+    }
 }
 
 #[cfg(test)]
@@ -247,7 +314,7 @@ mod tests {
     #[test]
     fn test_move_valid_path() {
         std::fs::create_dir_all(PathBuf::from(PROJECT_ROOT).join("test")).unwrap();
-        let folder = Folder::new_subfolder("path/to/".into(), 1);
+        let folder = Folder::new_subfolder("path/to/".into(), 1, SystemTime::now());
         assert!(
             folder
                 .rename(PathBuf::from(PROJECT_ROOT).join("test").join("new_folder"))
@@ -257,7 +324,7 @@ mod tests {
 
     #[test]
     fn test_move_invalid_path_noparent() {
-        let folder = Folder::new_subfolder("path/to/".into(), 1);
+        let folder = Folder::new_subfolder("path/to/".into(), 1, SystemTime::now());
         folder.connect_closure(
             "rename-requested",
             false,

@@ -3,8 +3,10 @@ mod imp {
     use std::cell::RefCell;
     use std::path::PathBuf;
     use std::sync::OnceLock;
+    use std::time::SystemTime;
 
     use gtk::glib;
+    use gtk::glib::CollationKey;
     use gtk::glib::subclass::*;
     use gtk::prelude::*;
     use gtk::subclass::prelude::*;
@@ -24,6 +26,8 @@ mod imp {
         pub(super) is_selected: Cell<bool>,
         #[property(get, set)]
         pub(super) is_open_in_editor: Cell<bool>,
+        pub(super) modified: RefCell<Option<SystemTime>>,
+        pub(super) collation_key: OnceLock<CollationKey>,
     }
 
     #[glib::object_subclass]
@@ -45,6 +49,7 @@ mod imp {
                         .build(),
                     Signal::builder("trash-requested").build(),
                     Signal::builder("delete-requested").build(),
+                    Signal::builder("metadata-changed").build(),
                 ]
             })
         }
@@ -52,9 +57,12 @@ mod imp {
 }
 
 use std::path::PathBuf;
+use std::time::SystemTime;
 
 use gtk::glib;
+use gtk::glib::CollationKey;
 use gtk::prelude::*;
+use gtk::subclass::prelude::*;
 
 use gtk::gio::Cancellable;
 use gtk::gio::FileCopyFlags;
@@ -69,13 +77,30 @@ glib::wrapper! {
 }
 
 impl Document {
-    pub fn new(path: PathBuf, depth: u32) -> Self {
+    pub fn modified(&self) -> SystemTime {
+        self.imp().modified.borrow().unwrap()
+    }
+
+    pub fn collation_key(&self) -> &CollationKey {
+        self.imp().collation_key.get().unwrap()
+    }
+
+    pub fn new(path: PathBuf, depth: u32, modified: SystemTime) -> Self {
         let stem = path.file_stem().unwrap().to_string_lossy().into_owned();
-        Object::builder()
+        let name = path.file_name().unwrap().to_string_lossy();
+        let collation_key = CollationKey::from(name);
+
+        let obj: Document = Object::builder()
             .property("path", path)
             .property("depth", depth)
             .property("stem", stem)
-            .build()
+            .build();
+
+        let imp = obj.imp();
+        imp.modified.replace(Some(modified));
+        imp.collation_key.set(collation_key).unwrap();
+
+        obj
     }
 
     pub fn open(&self) {
@@ -110,6 +135,11 @@ impl Document {
     pub fn delete(&self) {
         self.emit_by_name::<()>("delete-requested", &[]);
     }
+
+    pub fn set_modified(&self, modified: SystemTime) {
+        self.imp().modified.borrow_mut().replace(modified);
+        self.emit_by_name::<()>("metadata-changed", &[]);
+    }
 }
 
 #[cfg(test)]
@@ -124,7 +154,7 @@ mod tests {
     #[test]
     fn test_move_valid_path() {
         std::fs::create_dir_all(PathBuf::from(PROJECT_ROOT).join("test")).unwrap();
-        let doc = Document::new("path/to/".into(), 1);
+        let doc = Document::new("path/to/".into(), 1, SystemTime::now());
         assert!(
             doc.rename(PathBuf::from(PROJECT_ROOT).join("test").join("new_file.md"))
                 .is_ok()
@@ -133,7 +163,7 @@ mod tests {
 
     #[test]
     fn test_move_invalid_path_noparent() {
-        let doc = Document::new("path/to/".into(), 1);
+        let doc = Document::new("path/to/".into(), 1, SystemTime::now());
         doc.connect_closure(
             "rename-requested",
             false,

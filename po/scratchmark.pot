@@ -8,24 +8,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 00:02+0200\n"
+"POT-Creation-Date: 2026-02-11 19:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:2
+#: data/org.scratchmark.Scratchmark.desktop.in:3
 msgid "Scratchmark"
 msgstr ""
 
-#: data/org.scratchmark.Scratchmark.desktop.in:3
+#: data/org.scratchmark.Scratchmark.desktop.in:4
 msgid "Markdown editor"
 msgstr ""
 
-#: data/org.scratchmark.Scratchmark.desktop.in:9
+#: data/org.scratchmark.Scratchmark.desktop.in:10
 msgid "Scratchmark Markdown editor"
 msgstr ""
 
@@ -69,6 +69,106 @@ msgid ""
 "had enough of Scratchmark, it's easy to switch to something else."
 msgstr ""
 
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:26
+msgid "Editor interface"
+msgstr ""
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:30
+msgid "Focus mode"
+msgstr ""
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:34
+msgid "All panels open"
+msgstr ""
+
+#: data/resources/ui/editor/document_stats_view.ui:18
+msgid "Statistics"
+msgstr ""
+
+#: data/resources/ui/editor/document_stats_view.ui:32
+msgid "Characters"
+msgstr ""
+
+#: data/resources/ui/editor/document_stats_view.ui:45
+#: data/resources/ui/editor/document_stats_view.ui:73
+#: data/resources/ui/editor/document_stats_view.ui:101
+#: data/resources/ui/editor/document_stats_view.ui:129
+msgid "N/A"
+msgstr ""
+
+#: data/resources/ui/editor/document_stats_view.ui:60
+msgid "Excluding Spaces"
+msgstr ""
+
+#: data/resources/ui/editor/document_stats_view.ui:88
+msgid "Words"
+msgstr ""
+
+#: data/resources/ui/editor/document_stats_view.ui:116
+msgid "Lines"
+msgstr ""
+
+#: data/resources/ui/editor/editor.ui:16
+msgid "File changed on disk"
+msgstr ""
+
+#: data/resources/ui/editor/editor.ui:17
+msgid "Resolve"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:26
+msgid "Search"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:39
+#: data/resources/ui/editor/search_bar.ui:136
+msgid "Replace"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:63
+msgid "Match Case"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:69
+msgid "Whole Words"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:75
+msgid "Use Regex"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:85
+msgid "?"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:98
+msgid "Previous Match (Shift + Return)"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:105
+msgid "Next Match (Return)"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:113
+msgid "Search and Replace (Ctrl+F)"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:119
+msgid "Close Search"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:137
+msgid "Replace (Return)"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:143
+msgid "Replace All"
+msgstr ""
+
+#: data/resources/ui/editor/search_bar.ui:144
+msgid "Replace All (Shift + Return)"
+msgstr ""
+
 #: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
 msgstr ""
@@ -77,13 +177,67 @@ msgstr ""
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr ""
 
-#: data/resources/ui/item_create_popover.ui:10
-#: data/resources/ui/library/item_rename_popover.ui:10
-msgid "Name..."
+#: data/resources/ui/library/document_context_menu.ui:6
+#: data/resources/ui/library/drafts_context_menu.ui:14
+#: data/resources/ui/library/folder_context_menu.ui:14
+#: data/resources/ui/library/root_context_menu.ui:14
+msgid "Show in File Manager"
 msgstr ""
 
-#: data/resources/ui/item_create_popover.ui:15
+#: data/resources/ui/library/document_context_menu.ui:10
+#: data/resources/ui/library/folder_context_menu.ui:18
+#: data/resources/ui/library/item_rename_popover.ui:16
+msgid "Rename"
+msgstr ""
+
+#: data/resources/ui/library/document_context_menu.ui:14
+msgid "Duplicate"
+msgstr ""
+
+#: data/resources/ui/library/document_context_menu.ui:18
+#: data/resources/ui/library/folder_context_menu.ui:22
+msgid "Move to Trash"
+msgstr ""
+
+#: data/resources/ui/library/document_context_menu.ui:22
+#: data/resources/ui/library/folder_context_menu.ui:26
+msgid "Delete Permanently"
+msgstr ""
+
+#: data/resources/ui/library/document_create_popover.ui:11
+#: data/resources/ui/library/drafts_context_menu.ui:6
+#: data/resources/ui/library/folder_context_menu.ui:6
+#: data/resources/ui/library/root_context_menu.ui:6
+#: data/resources/ui/window.ui:122
+msgid "New Document"
+msgstr ""
+
+#: data/resources/ui/library/document_create_popover.ui:16
+#: data/resources/ui/library/folder_create_popover.ui:16
+#: data/resources/ui/library/item_rename_popover.ui:11
+msgid "Name…"
+msgstr ""
+
+#: data/resources/ui/library/document_create_popover.ui:21
+#: data/resources/ui/library/folder_create_popover.ui:21
 msgid "Create"
+msgstr ""
+
+#: data/resources/ui/library/drafts_context_menu.ui:10
+#: data/resources/ui/library/folder_context_menu.ui:10
+#: data/resources/ui/library/folder_create_popover.ui:11
+#: data/resources/ui/library/root_context_menu.ui:10
+#: data/resources/ui/window.ui:126
+msgid "New Folder"
+msgstr ""
+
+#: data/resources/ui/library/err_placeholder_row.ui:23
+msgid "Project may have been moved or deleted."
+msgstr ""
+
+#: data/resources/ui/library/err_placeholder_row_context_menu.ui:6
+#: data/resources/ui/library/root_context_menu.ui:18
+msgid "Close Project"
 msgstr ""
 
 #: data/resources/ui/markdown_format_bar.ui:16
@@ -116,10 +270,6 @@ msgstr ""
 
 #: data/resources/ui/markdown_format_bar.ui:117
 msgid "Code"
-msgstr ""
-
-#: data/resources/ui/library_project_err_placeholder.ui:28
-msgid "Project may have been moved or deleted."
 msgstr ""
 
 #: data/resources/ui/preferences_dialog.ui:6
@@ -295,208 +445,86 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr ""
 
-#: data/resources/ui/window.ui:27
-msgid "Create Subfolder (Shift+Ctrl+N)"
+#: data/resources/ui/window.ui:28 data/resources/ui/window.ui:181
+msgid "Sort"
 msgstr ""
 
-#: data/resources/ui/window.ui:34
+#: data/resources/ui/window.ui:41
 msgid "Menu"
 msgstr ""
 
-#: data/resources/ui/window.ui:64
+#: data/resources/ui/window.ui:71
 msgid "Toggle Sidebar (F9)"
 msgstr ""
 
-#: data/resources/ui/window.ui:70
+#: data/resources/ui/window.ui:77
 msgid "New Document (Ctrl+N)"
 msgstr ""
 
-#: data/resources/ui/window.ui:76
+#: data/resources/ui/window.ui:84
 msgid "Exit Fullscreen"
 msgstr ""
 
-#: data/resources/ui/window.ui:84
+#: data/resources/ui/window.ui:92
 msgid "Document Info"
 msgstr ""
 
-#: data/resources/ui/window.ui:90
+#: data/resources/ui/window.ui:98
 msgid "Formatting Toolbar"
 msgstr ""
 
-#: data/resources/ui/window.ui:114
-#: data/resources/ui/library/drafts_context_menu.ui:6
-#: data/resources/ui/library/folder_context_menu.ui:6
-#: data/resources/ui/library/root_context_menu.ui:6
-msgid "New Document"
-msgstr ""
-
-#: data/resources/ui/window.ui:118
-#: data/resources/ui/library/drafts_context_menu.ui:10
-#: data/resources/ui/library/folder_context_menu.ui:10
-#: data/resources/ui/library/root_context_menu.ui:10
-msgid "Create Subfolder"
-msgstr ""
-
-#: data/resources/ui/window.ui:122
+#: data/resources/ui/window.ui:130
 msgid "Add Project"
 msgstr ""
 
-#: data/resources/ui/window.ui:128
+#: data/resources/ui/window.ui:136
 msgid "Save"
 msgstr ""
 
-#: data/resources/ui/window.ui:132
+#: data/resources/ui/window.ui:140
 msgid "Close"
 msgstr ""
 
-#: data/resources/ui/window.ui:138
+#: data/resources/ui/window.ui:146
 msgid "Search Text"
 msgstr ""
 
-#: data/resources/ui/window.ui:142
+#: data/resources/ui/window.ui:150
 msgid "Search and Replace"
 msgstr ""
 
-#: data/resources/ui/window.ui:148
+#: data/resources/ui/window.ui:156
 msgid "Toggle Fullscreen"
 msgstr ""
 
-#: data/resources/ui/window.ui:152
+#: data/resources/ui/window.ui:160
 msgid "Toggle Focus Mode"
 msgstr ""
 
-#: data/resources/ui/window.ui:158
+#: data/resources/ui/window.ui:166
 msgid "Preferences"
 msgstr ""
 
-#: data/resources/ui/window.ui:162
+#: data/resources/ui/window.ui:170
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: data/resources/ui/window.ui:166
+#: data/resources/ui/window.ui:174
 msgid "About Scratchmark"
 msgstr ""
 
-#: data/resources/ui/editor/document_stats_view.ui:18
-msgid "Statistics"
+#: data/resources/ui/window.ui:184
+msgid "A-Z"
 msgstr ""
 
-#: data/resources/ui/editor/document_stats_view.ui:32
-msgid "Characters"
+#: data/resources/ui/window.ui:189
+msgid "Z-A"
 msgstr ""
 
-#: data/resources/ui/editor/document_stats_view.ui:45
-#: data/resources/ui/editor/document_stats_view.ui:73
-#: data/resources/ui/editor/document_stats_view.ui:101
-#: data/resources/ui/editor/document_stats_view.ui:129
-msgid "N/A"
+#: data/resources/ui/window.ui:194
+msgid "Last Modified"
 msgstr ""
 
-#: data/resources/ui/editor/document_stats_view.ui:60
-msgid "Excluding Spaces"
-msgstr ""
-
-#: data/resources/ui/editor/document_stats_view.ui:88
-msgid "Words"
-msgstr ""
-
-#: data/resources/ui/editor/document_stats_view.ui:116
-msgid "Lines"
-msgstr ""
-
-#: data/resources/ui/editor/editor.ui:16
-msgid "File changed on disk"
-msgstr ""
-
-#: data/resources/ui/editor/editor.ui:17
-msgid "Resolve"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:26
-msgid "Search"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:39
-#: data/resources/ui/editor/search_bar.ui:136
-msgid "Replace"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:63
-msgid "Match Case"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:69
-msgid "Whole Words"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:75
-msgid "Use Regex"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:85
-msgid "?"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:98
-msgid "Previous Match (Shift + Return)"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:105
-msgid "Next Match (Return)"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:113
-msgid "Search and Replace (Ctrl+F)"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:119
-msgid "Close Search"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:137
-msgid "Replace (Return)"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:143
-msgid "Replace All"
-msgstr ""
-
-#: data/resources/ui/editor/search_bar.ui:144
-msgid "Replace All (Shift + Return)"
-msgstr ""
-
-#: data/resources/ui/library/drafts_context_menu.ui:14
-#: data/resources/ui/library/file_context_menu.ui:6
-#: data/resources/ui/library/folder_context_menu.ui:14
-#: data/resources/ui/library/root_context_menu.ui:14
-msgid "Show in File Manager"
-msgstr ""
-
-#: data/resources/ui/library/err_placeholder_item_context_menu.ui:6
-#: data/resources/ui/library/root_context_menu.ui:18
-msgid "Close Project"
-msgstr ""
-
-#: data/resources/ui/library/err_placeholder_item.ui:28
-msgid "Project may have been moved or deleted."
-msgstr ""
-
-#: data/resources/ui/library/file_context_menu.ui:10
-#: data/resources/ui/library/folder_context_menu.ui:18
-#: data/resources/ui/library/item_rename_popover.ui:15
-msgid "Rename"
-msgstr ""
-
-#: data/resources/ui/library/file_context_menu.ui:14
-msgid "Duplicate"
-msgstr ""
-
-#: data/resources/ui/library/file_context_menu.ui:18
-#: data/resources/ui/library/folder_context_menu.ui:22
-msgid "Move to Trash"
-msgstr ""
-
-#: data/resources/ui/library/file_context_menu.ui:22
-#: data/resources/ui/library/folder_context_menu.ui:26
-msgid "Delete Permanently"
+#: data/resources/ui/window.ui:199
+msgid "First Modified"
 msgstr ""

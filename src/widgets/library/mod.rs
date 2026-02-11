@@ -1,10 +1,10 @@
+mod document_create_popover;
 mod document_row;
 mod err_placeholder_row;
+mod folder_create_popover;
 mod folder_row;
-mod item_create_row;
 mod item_rename_popover;
 mod project_view;
-mod sort;
 
 mod imp {
     use std::cell::Cell;
@@ -52,6 +52,8 @@ mod imp {
 
         #[property(get, set)]
         ignore_hidden_files: Cell<bool>,
+        #[property(get, set)]
+        sort_method: RefCell<String>,
     }
 
     #[glib::object_subclass]
@@ -172,7 +174,6 @@ mod imp {
             for project in self.projects.borrow().deref().values() {
                 project.refresh_content();
             }
-            // self.refresh_selection();
         }
 
         pub(super) fn add_project(&self, path: PathBuf) {
@@ -242,6 +243,9 @@ mod imp {
             obj.bind_property("selected_item_path", &project_view, "selected_item_path")
                 .sync_create()
                 .bidirectional()
+                .build();
+            obj.bind_property("sort_method", &project_view, "sort_method")
+                .sync_create()
                 .build();
 
             project.refresh_content();
