@@ -136,6 +136,7 @@ mod imp {
                 .menu_model(&popover)
                 .has_arrow(false)
                 .build();
+            menu.set_halign(gtk::Align::Start);
             menu.set_parent(obj.as_ref());
             let _ = self.context_menu_popover.replace(Some(menu));
 
