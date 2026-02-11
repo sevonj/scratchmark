@@ -46,9 +46,9 @@ mod imp {
     use crate::data::ProjectItem;
     use crate::data::ProjectSorter;
     use crate::data::SortMethod;
-    use crate::widgets::library::DocumentRow;
-    use crate::widgets::library::FolderRow;
+    use crate::widgets::library::document_row::DocumentRow;
     use crate::widgets::library::err_placeholder_row::ErrPlaceholderRow;
+    use crate::widgets::library::folder_row::FolderRow;
     use crate::widgets::library::project_view::ProjectRow;
 
     #[derive(CompositeTemplate, Default, Properties)]
@@ -517,8 +517,8 @@ use gtk::prelude::*;
 use glib::Object;
 
 use crate::data::Project;
-use crate::widgets::library::DocumentRow;
-use crate::widgets::library::FolderRow;
+use crate::widgets::library::document_row::DocumentRow;
+use crate::widgets::library::folder_row::FolderRow;
 
 glib::wrapper! {
     pub struct ProjectView(ObjectSubclass<imp::ProjectView>)
