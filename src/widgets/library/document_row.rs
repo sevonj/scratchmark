@@ -98,38 +98,38 @@ mod imp {
 
             let action = gio::SimpleAction::new("rename-begin", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
-                move |_action, _parameter| this.prompt_rename()
+                move |_action, _parameter| imp.prompt_rename()
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("duplicate", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _parameter| {
-                    this.document().duplicate();
+                    imp.document().duplicate();
                 }
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("trash", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _parameter| {
-                    this.document().trash();
+                    imp.document().trash();
                 }
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("delete", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _parameter| {
-                    this.document().delete();
+                    imp.document().delete();
                 }
             ));
             actions.add_action(&action);
@@ -166,11 +166,11 @@ mod imp {
             let gesture = gtk::GestureClick::new();
             gesture.set_button(gdk::ffi::GDK_BUTTON_SECONDARY as u32);
             gesture.connect_released(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |gesture, _n, x, y| {
                     gesture.set_state(gtk::EventSequenceState::Claimed);
-                    if let Some(popover) = this.context_menu_popover.borrow().as_ref() {
+                    if let Some(popover) = imp.context_menu_popover.borrow().as_ref() {
                         popover.set_pointing_to(Some(&Rectangle::new(x as i32, y as i32, 1, 1)));
                         popover.popup();
                     };
@@ -196,11 +196,11 @@ mod imp {
                 "committed",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |_popover: ItemRenamePopover, path: PathBuf| {
-                        if let Err(e) = this.document().rename(path) {
-                            this.document().notify(&e.to_string())
+                        if let Err(e) = imp.document().rename(path) {
+                            imp.document().notify(&e.to_string())
                         }
                     }
                 ),

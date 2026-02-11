@@ -152,17 +152,17 @@ mod imp {
 
             let action = SimpleAction::new("search", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.search_bar.set_search_mode(true);
-                    this.search_entry.grab_focus();
-                    this.search_context
+                    imp.search_bar.set_search_mode(true);
+                    imp.search_entry.grab_focus();
+                    imp.search_context
                         .borrow()
                         .as_ref()
                         .unwrap()
                         .set_highlight(true);
-                    this.search_replace_buttons_container.set_visible(false);
+                    imp.search_replace_buttons_container.set_visible(false);
                 }
             ));
             self.actions.add_action(&action);
@@ -182,46 +182,46 @@ mod imp {
 
             let action = SimpleAction::new("search-replace", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.search_bar.set_search_mode(true);
-                    this.search_replace_entry.grab_focus();
-                    this.search_context
+                    imp.search_bar.set_search_mode(true);
+                    imp.search_replace_entry.grab_focus();
+                    imp.search_context
                         .borrow()
                         .as_ref()
                         .unwrap()
                         .set_highlight(true);
-                    this.search_replace_buttons_container.set_visible(true);
+                    imp.search_replace_buttons_container.set_visible(true);
                 }
             ));
             self.actions.add_action(&action);
 
             let action = SimpleAction::new("hide", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.search_bar.set_search_mode(false);
-                    this.search_context
+                    imp.search_bar.set_search_mode(false);
+                    imp.search_context
                         .borrow()
                         .as_ref()
                         .unwrap()
                         .set_highlight(false);
-                    this.search_replace_buttons_container.set_visible(false);
+                    imp.search_replace_buttons_container.set_visible(false);
                 }
             ));
             self.actions.add_action(&action);
 
             let action = SimpleAction::new("search-prev", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _| {
-                    if this.search_occurrences.get().unwrap_or(0) < 1 {
+                    if imp.search_occurrences.get().unwrap_or(0) < 1 {
                         return;
                     }
-                    let search_context_bind = this.search_context.borrow();
+                    let search_context_bind = imp.search_context.borrow();
                     let search_context = search_context_bind.as_ref().unwrap();
                     let mark = search_context.buffer().get_insert();
                     let iter = search_context.buffer().iter_at_mark(&mark);
@@ -230,13 +230,13 @@ mod imp {
                         None::<&Cancellable>,
                         clone!(
                             #[weak]
-                            this,
+                            imp,
                             move |result| {
                                 match result {
                                     Ok((start, end, _wrapped)) => {
-                                        this.update_search_position(Some((start, end)))
+                                        imp.update_search_position(Some((start, end)))
                                     }
-                                    Err(_) => this.update_search_position(None),
+                                    Err(_) => imp.update_search_position(None),
                                 }
                             }
                         ),
@@ -247,13 +247,13 @@ mod imp {
 
             let action = SimpleAction::new("search-next", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _| {
-                    if this.search_occurrences.get().unwrap_or(0) < 1 {
+                    if imp.search_occurrences.get().unwrap_or(0) < 1 {
                         return;
                     }
-                    let search_context_bind = this.search_context.borrow();
+                    let search_context_bind = imp.search_context.borrow();
                     let search_context = search_context_bind.as_ref().unwrap();
                     let mark = search_context.buffer().selection_bound();
                     let iter = search_context.buffer().iter_at_mark(&mark);
@@ -262,13 +262,13 @@ mod imp {
                         None::<&Cancellable>,
                         clone!(
                             #[weak]
-                            this,
+                            imp,
                             move |result| {
                                 match result {
                                     Ok((start, end, _wrapped)) => {
-                                        this.update_search_position(Some((start, end)))
+                                        imp.update_search_position(Some((start, end)))
                                     }
-                                    Err(_) => this.update_search_position(None),
+                                    Err(_) => imp.update_search_position(None),
                                 }
                             }
                         ),
@@ -279,26 +279,26 @@ mod imp {
 
             let action = SimpleAction::new("commit-replace", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _| {
-                    if this.search_occurrences.get().unwrap_or(0) < 1 {
+                    if imp.search_occurrences.get().unwrap_or(0) < 1 {
                         return;
                     }
-                    let search_context_bind = this.search_context.borrow();
+                    let search_context_bind = imp.search_context.borrow();
                     let search_context = search_context_bind.as_ref().unwrap();
                     let mark = search_context.buffer().get_insert();
                     let iter = search_context.buffer().iter_at_mark(&mark);
-                    let text = this.search_replace_entry.text();
+                    let text = imp.search_replace_entry.text();
 
                     search_context.forward_async(
                         &iter,
                         None::<&Cancellable>,
                         clone!(
                             #[weak]
-                            this,
+                            imp,
                             move |result| {
-                                let search_context_bind = this.search_context.borrow();
+                                let search_context_bind = imp.search_context.borrow();
                                 let search_context = search_context_bind.as_ref().unwrap();
                                 match result {
                                     Ok((mut match_start, mut match_end, _wrapped)) => {
@@ -308,7 +308,7 @@ mod imp {
                                             &text,
                                         );
                                     }
-                                    Err(_) => this.update_search_position(None),
+                                    Err(_) => imp.update_search_position(None),
                                 }
                             }
                         ),
@@ -319,12 +319,12 @@ mod imp {
 
             let action = SimpleAction::new("commit-replace-all", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _| {
-                    let search_context_bind = this.search_context.borrow();
+                    let search_context_bind = imp.search_context.borrow();
                     let search_context = search_context_bind.as_ref().unwrap();
-                    let text = this.search_replace_entry.text();
+                    let text = imp.search_replace_entry.text();
                     let _ = search_context.replace_all(&text);
                 }
             ));
@@ -333,20 +333,20 @@ mod imp {
             // This action is a workaround to capture <Shift>Return from the Entry
             let action = SimpleAction::new("shiftreturn", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _| {
-                    let Some(currently_focused) = this.obj().root().and_then(|r| r.focus()) else {
+                    let Some(currently_focused) = imp.obj().root().and_then(|r| r.focus()) else {
                         return;
                     };
-                    let search_entry: &Entry = this.search_entry.as_ref();
-                    let replace_entry: &Entry = this.search_replace_entry.as_ref();
+                    let search_entry: &Entry = imp.search_entry.as_ref();
+                    let replace_entry: &Entry = imp.search_replace_entry.as_ref();
                     if currently_focused.is_ancestor(search_entry) {
-                        this.obj()
+                        imp.obj()
                             .activate_action("search.search-prev", None)
                             .unwrap();
                     } else if currently_focused.is_ancestor(replace_entry) {
-                        this.obj()
+                        imp.obj()
                             .activate_action("search.commit-replace-all", None)
                             .unwrap();
                     }
@@ -367,23 +367,23 @@ mod imp {
 
         pub(super) fn set_search_context(&self, search_context: SearchContext) {
             search_context.connect_occurrences_count_notify(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |search_context: &SearchContext| {
                     let cnt = search_context.occurrences_count();
-                    this.search_occurrences.replace(Some(cnt));
+                    imp.search_occurrences.replace(Some(cnt));
 
                     let found_any = cnt > 0;
-                    this.search_prev_button.set_sensitive(found_any); // TODO: Disable action instead
-                    this.search_next_button.set_sensitive(found_any); // TODO: Disable action instead
-                    this.search_replace_all_button.set_sensitive(found_any); // TODO: Disable action instead
+                    imp.search_prev_button.set_sensitive(found_any); // TODO: Disable action instead
+                    imp.search_next_button.set_sensitive(found_any); // TODO: Disable action instead
+                    imp.search_replace_all_button.set_sensitive(found_any); // TODO: Disable action instead
                     if !found_any {
-                        this.update_search_position(None);
-                        this.update_search_occurrence_text();
+                        imp.update_search_position(None);
+                        imp.update_search_occurrence_text();
                         return;
                     }
 
-                    if this.is_search_focused() {
+                    if imp.is_search_focused() {
                         let mark = search_context.buffer().get_insert();
                         let iter = search_context.buffer().iter_at_mark(&mark);
                         search_context.forward_async(
@@ -391,21 +391,21 @@ mod imp {
                             None::<&Cancellable>,
                             clone!(
                                 #[weak]
-                                this,
+                                imp,
                                 move |result| {
                                     match result {
                                         Ok((start, end, _wrapped)) => {
-                                            this.update_search_position(Some((start, end)))
+                                            imp.update_search_position(Some((start, end)))
                                         }
-                                        Err(_) => this.update_search_position(None),
+                                        Err(_) => imp.update_search_position(None),
                                     }
                                 }
                             ),
                         );
                     } else {
-                        this.update_search_position(None);
+                        imp.update_search_position(None);
                     }
-                    this.update_search_occurrence_text();
+                    imp.update_search_occurrence_text();
                 }
             ));
             let search_settings = search_context.settings();

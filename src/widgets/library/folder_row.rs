@@ -142,11 +142,11 @@ mod imp {
             let gesture = gtk::GestureClick::new();
             gesture.set_button(gdk::ffi::GDK_BUTTON_SECONDARY as u32);
             gesture.connect_released(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |gesture, _n, x, y| {
                     gesture.set_state(gtk::EventSequenceState::Claimed);
-                    if let Some(popover) = this.context_menu_popover.borrow().as_ref() {
+                    if let Some(popover) = imp.context_menu_popover.borrow().as_ref() {
                         popover
                             .set_pointing_to(Some(&gdk::Rectangle::new(x as i32, y as i32, 1, 1)));
                         popover.popup();
@@ -171,11 +171,11 @@ mod imp {
                 "committed",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |_popover: ItemRenamePopover, path: PathBuf| {
-                        if let Err(e) = this.folder().rename(path) {
-                            this.folder().notify(&e.to_string())
+                        if let Err(e) = imp.folder().rename(path) {
+                            imp.folder().notify(&e.to_string())
                         }
                     }
                 ),
@@ -336,11 +336,11 @@ mod imp {
 
             let action = gio::SimpleAction::new("trash", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _parameter| {
-                    if let Err(e) = this.folder().trash() {
-                        this.folder().notify(&e.to_string())
+                    if let Err(e) = imp.folder().trash() {
+                        imp.folder().notify(&e.to_string())
                     }
                 }
             ));
@@ -348,11 +348,11 @@ mod imp {
 
             let action = gio::SimpleAction::new("delete", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _parameter| {
-                    if let Err(e) = this.folder().delete() {
-                        this.folder().notify(&e.to_string())
+                    if let Err(e) = imp.folder().delete() {
+                        imp.folder().notify(&e.to_string())
                     }
                 }
             ));
@@ -366,11 +366,11 @@ mod imp {
 
             let action = gio::SimpleAction::new("close-project", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _parameter| {
-                    if let Err(e) = this.folder().close_project() {
-                        this.folder().notify(&e.to_string())
+                    if let Err(e) = imp.folder().close_project() {
+                        imp.folder().notify(&e.to_string())
                     }
                 }
             ));

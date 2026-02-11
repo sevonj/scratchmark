@@ -91,11 +91,11 @@ mod imp {
             let gesture = gtk::GestureClick::new();
             gesture.set_button(gdk::ffi::GDK_BUTTON_SECONDARY as u32);
             gesture.connect_released(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |gesture, _n, x, y| {
                     gesture.set_state(gtk::EventSequenceState::Claimed);
-                    if let Some(popover) = this.context_menu_popover.borrow().as_ref() {
+                    if let Some(popover) = imp.context_menu_popover.borrow().as_ref() {
                         popover.set_pointing_to(Some(&Rectangle::new(x as i32, y as i32, 1, 1)));
                         popover.popup();
                     };
@@ -126,9 +126,9 @@ glib::wrapper! {
 
 impl ErrPlaceholderRow {
     pub fn new(path: &Path) -> Self {
-        let this: ErrPlaceholderRow = Object::builder().build();
+        let imp: ErrPlaceholderRow = Object::builder().build();
         let name = path.file_name().unwrap().to_string_lossy().into_owned();
-        this.imp().title.set_text(&name);
-        this
+        imp.imp().title.set_text(&name);
+        imp
     }
 }

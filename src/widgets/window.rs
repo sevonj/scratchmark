@@ -271,31 +271,31 @@ mod imp {
             obj.add_controller(self.motion_controller.clone());
 
             self.motion_controller.connect_motion(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_controller, x, y| {
-                    if this.obj().focus_mode_active() {
+                    if imp.obj().focus_mode_active() {
                         // Exit focus mode if cursor moved
                         const THRESHOLD: f64 = 100.;
-                        let (start_x, start_y) = this.focus_mode_cursor_position.get();
+                        let (start_x, start_y) = imp.focus_mode_cursor_position.get();
                         let (delta_x, delta_y) = (x - start_x, y - start_y);
                         if (delta_x * delta_x + delta_y * delta_y).sqrt() > THRESHOLD {
-                            this.set_focus_mode_active(false);
+                            imp.set_focus_mode_active(false);
                         }
                     } else {
-                        this.focus_mode_cursor_position.replace((x, y));
+                        imp.focus_mode_cursor_position.replace((x, y));
                     }
                 }
             ));
             self.motion_controller.connect_enter(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
-                move |_controller, _x, _y| this.set_focus_mode_active(false)
+                move |_controller, _x, _y| imp.set_focus_mode_active(false)
             ));
             self.motion_controller.connect_leave(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
-                move |_controller| this.set_focus_mode_active(false)
+                move |_controller| imp.set_focus_mode_active(false)
             ));
 
             self.editor_sidebar_toggle.set_sensitive(false);
@@ -310,10 +310,10 @@ mod imp {
                 "open-document",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |_: LibraryView, path: PathBuf| {
-                        this.load_document(path);
+                        imp.load_document(path);
                     }
                 ),
             );
@@ -508,17 +508,17 @@ mod imp {
                 "close-project-requested",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |library_view: LibraryView, project_path: PathBuf| {
-                        let contains_edited_file = this
+                        let contains_edited_file = imp
                             .editor
                             .borrow()
                             .as_ref()
                             .is_some_and(|editor| editor.path().starts_with(&project_path));
 
-                        if contains_edited_file && let Err(e) = this.close_editor() {
-                            this.toast(&e.to_string());
+                        if contains_edited_file && let Err(e) = imp.close_editor() {
+                            imp.toast(&e.to_string());
                             return;
                         }
 
@@ -531,10 +531,10 @@ mod imp {
                 "notify-err",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |_: LibraryView, msg: String| {
-                        this.toast(&msg);
+                        imp.toast(&msg);
                     }
                 ),
             );
@@ -586,21 +586,21 @@ mod imp {
                 .build();
 
             format_bar_toggle.connect_active_notify(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_| {
-                    this.update_toolbar_style();
+                    imp.update_toolbar_style();
                 }
             ));
 
             self.editor_sidebar_toggle.connect_active_notify(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |toggle| {
-                    if let Some(editor) = this.editor.borrow().as_ref() {
+                    if let Some(editor) = imp.editor.borrow().as_ref() {
                         editor.set_show_sidebar(toggle.is_active());
                     }
-                    this.update_toolbar_style();
+                    imp.update_toolbar_style();
                 }
             ));
 
@@ -611,11 +611,11 @@ mod imp {
             self.update_window_title();
 
             obj.connect_close_request(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 #[upgrade_or]
                 glib::Propagation::Proceed,
-                move |_| this.on_close_request()
+                move |_| imp.on_close_request()
             ));
 
             let action = SimpleAction::new("toggle-fullscreen", None);
@@ -643,39 +643,39 @@ mod imp {
             obj.add_action(&action);
 
             obj.connect_fullscreened_notify(clone!(
-                #[weak (rename_to = this)]
+                #[weak (rename_to = imp)]
                 self,
-                move |_| this.update_toolbar_visibility()
+                move |_| imp.update_toolbar_visibility()
             ));
             self.update_toolbar_visibility();
             self.setup_fullscreen_headerbar();
 
             let action = SimpleAction::new("file-new", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.library_view.prompt_create_document();
+                    imp.library_view.prompt_create_document();
                 }
             ));
             obj.add_action(&action);
 
             let action = SimpleAction::new("folder-new", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.library_view.prompt_create_subfolder();
+                    imp.library_view.prompt_create_subfolder();
                 }
             ));
             obj.add_action(&action);
 
             let action = SimpleAction::new("project-add", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.library_view
+                    imp.library_view
                         .activate_action("library.project-add", None)
                         .unwrap();
                 }
@@ -684,21 +684,21 @@ mod imp {
 
             let action = SimpleAction::new("file-save", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.save_document();
+                    imp.save_document();
                 }
             ));
             obj.add_action(&action);
 
             let action = SimpleAction::new("file-close", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    if let Err(e) = this.close_editor() {
-                        this.toast(&e.to_string());
+                    if let Err(e) = imp.close_editor() {
+                        imp.toast(&e.to_string());
                     }
                 }
             ));
@@ -706,20 +706,20 @@ mod imp {
 
             let action = SimpleAction::new("file-rename-selected", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.library_view.prompt_rename_selected();
+                    imp.library_view.prompt_rename_selected();
                 }
             ));
             obj.add_action(&action);
 
             let action = SimpleAction::new("library-refresh", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.library_view.refresh_content();
+                    imp.library_view.refresh_content();
                 }
             ));
             obj.add_action(&action);
@@ -737,20 +737,20 @@ mod imp {
 
             let action = SimpleAction::new("show-about", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.show_about();
+                    imp.show_about();
                 }
             ));
             obj.add_action(&action);
 
             let action = SimpleAction::new("preferences", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.show_preferences();
+                    imp.show_preferences();
                 }
             ));
             obj.add_action(&action);
@@ -778,7 +778,7 @@ mod imp {
             obj.insert_action_group("editor", Some(&editor_actions));
 
             fn forward_action_to_editor(
-                this: &Window,
+                imp: &Window,
                 name: &str,
                 parameter_type: Option<&glib::VariantTy>,
                 editor_actions: &SimpleActionGroup,
@@ -787,9 +787,9 @@ mod imp {
                 let name = format!("editor.{name}");
                 action.connect_activate(clone!(
                     #[weak]
-                    this,
+                    imp,
                     move |_action, param| {
-                        if let Some(editor) = this.editor.borrow().as_ref() {
+                        if let Some(editor) = imp.editor.borrow().as_ref() {
                             editor.activate_action(&name, param).expect(&name);
                         }
                     }
@@ -798,7 +798,7 @@ mod imp {
             }
 
             fn forward_heading_action_to_editor(
-                this: &Window,
+                imp: &Window,
                 name: &str,
                 level: i32,
                 editor_actions: &SimpleActionGroup,
@@ -807,9 +807,9 @@ mod imp {
                 let name = format!("editor.{name}");
                 action.connect_activate(clone!(
                     #[weak]
-                    this,
+                    imp,
                     move |_, _| {
-                        if let Some(editor) = this.editor.borrow().as_ref() {
+                        if let Some(editor) = imp.editor.borrow().as_ref() {
                             editor
                                 .activate_action("editor.format-heading", Some(&level.to_variant()))
                                 .expect(&name);
@@ -835,9 +835,9 @@ mod imp {
             forward_action_to_editor(self, "hide-search", None, &editor_actions);
             forward_action_to_editor(self, "shiftreturn", None, &editor_actions);
 
-            obj.connect_map(|this| {
-                this.imp()
-                    .editor_actions_set_enabled(this.imp().editor.borrow().is_some());
+            obj.connect_map(|obj| {
+                obj.imp()
+                    .editor_actions_set_enabled(obj.imp().editor.borrow().is_some());
             });
 
             self.load_state();
@@ -1036,11 +1036,11 @@ mod imp {
                 "close-requested",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |_: Editor| {
-                        if let Err(e) = this.close_editor() {
-                            this.toast(&e.to_string());
+                        if let Err(e) = imp.close_editor() {
+                            imp.toast(&e.to_string());
                         }
                     }
                 ),
@@ -1050,10 +1050,10 @@ mod imp {
                 "saved",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |_: Editor| {
-                        this.library_view.refresh_content();
+                        imp.library_view.refresh_content();
                     }
                 ),
             );
@@ -1062,12 +1062,11 @@ mod imp {
                 "saved-as",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |editor: Editor| {
-                        this.library_view
-                            .set_open_document_path(Some(editor.path()));
-                        this.update_window_title();
+                        imp.library_view.set_open_document_path(Some(editor.path()));
+                        imp.update_window_title();
                     }
                 ),
             );
@@ -1076,10 +1075,10 @@ mod imp {
                 "buffer-changed",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |_: Editor| {
-                        this.set_focus_mode_active(true);
+                        imp.set_focus_mode_active(true);
                     }
                 ),
             );
@@ -1242,11 +1241,11 @@ mod imp {
                 "font-changed",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |_: PreferencesDialog, font: FontDescription| {
-                        if let Err(e) = this.set_editor_font(font) {
-                            this.toast(&e.to_string());
+                        if let Err(e) = imp.set_editor_font(font) {
+                            imp.toast(&e.to_string());
                         }
                     }
                 ),
@@ -1280,31 +1279,31 @@ mod imp {
 
         fn setup_fullscreen_headerbar(&self) {
             self.motion_controller.connect_motion(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_controller, x, y| {
-                    if !this.obj().is_fullscreen() {
+                    if !imp.obj().is_fullscreen() {
                         return;
                     }
 
-                    let root = this.obj().root().unwrap();
-                    let bounds = this.main_header_bar.compute_bounds(&root).unwrap();
+                    let root = imp.obj().root().unwrap();
+                    let bounds = imp.main_header_bar.compute_bounds(&root).unwrap();
                     let x_start = bounds.x() as f64;
                     let x_end = (bounds.x() + bounds.width()) as f64;
 
                     if x < x_start || x_end < x {
-                        this.main_header_revealer.set_reveal_child(false);
+                        imp.main_header_revealer.set_reveal_child(false);
                         return;
                     }
 
                     const REVEAL_THRESHOLD: f64 = 50.0;
                     const HIDE_THRESHOLD: f64 = 120.0;
-                    let revealed = this.main_header_revealer.reveals_child();
+                    let revealed = imp.main_header_revealer.reveals_child();
 
                     if revealed && y > HIDE_THRESHOLD {
-                        this.main_header_revealer.set_reveal_child(false);
+                        imp.main_header_revealer.set_reveal_child(false);
                     } else if !revealed && y < REVEAL_THRESHOLD {
-                        this.main_header_revealer.set_reveal_child(true);
+                        imp.main_header_revealer.set_reveal_child(true);
                     }
                 }
             ));

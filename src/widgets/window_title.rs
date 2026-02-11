@@ -45,9 +45,9 @@ mod imp {
             let obj = self.obj();
             self.parent_constructed();
 
-            obj.connect_notify(None, move |this, _| {
+            obj.connect_notify(None, move |obj, _| {
                 // On any property change
-                this.imp().update_window_title();
+                obj.imp().update_window_title();
             });
         }
     }
