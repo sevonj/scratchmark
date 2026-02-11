@@ -67,11 +67,7 @@ mod imp {
     impl ObjectImpl for DocumentRow {
         fn signals() -> &'static [Signal] {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
-            SIGNALS.get_or_init(|| {
-                vec![
-                    Signal::builder("needs-attention").build(),
-                ]
-            })
+            SIGNALS.get_or_init(|| vec![Signal::builder("needs-attention").build()])
         }
 
         fn constructed(&self) {
