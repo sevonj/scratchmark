@@ -107,10 +107,10 @@ mod imp {
                 "scroll-to-mark",
                 false,
                 closure_local!(
-                    #[weak(rename_to = this)]
+                    #[weak(rename_to = imp)]
                     self,
                     move |_: EditorSearchBar, mark: TextMark| {
-                        this.source_view.scroll_to_mark(&mark, 0.0, false, 0.5, 0.5);
+                        imp.source_view.scroll_to_mark(&mark, 0.0, false, 0.5, 0.5);
                     }
                 ),
             );
@@ -217,10 +217,10 @@ mod imp {
             // This action is a workaround to capture <Shift>Return from the Entry
             let action = SimpleAction::new("shiftreturn", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _| {
-                    this.search_bar
+                    imp.search_bar
                         .activate_action("search.shiftreturn", None)
                         .unwrap();
                 }
@@ -229,10 +229,10 @@ mod imp {
 
             let action = gio::SimpleAction::new("show-search", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.search_bar
+                    imp.search_bar
                         .activate_action("search.search", None)
                         .unwrap();
                 }
@@ -241,10 +241,10 @@ mod imp {
 
             let action = gio::SimpleAction::new("show-search-with-text", Some(VariantTy::STRING));
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, text| {
-                    this.search_bar
+                    imp.search_bar
                         .activate_action("search.search-with-text", text)
                         .unwrap();
                 }
@@ -253,10 +253,10 @@ mod imp {
 
             let action = gio::SimpleAction::new("show-search-replace", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.search_bar
+                    imp.search_bar
                         .activate_action("search.search-replace", None)
                         .unwrap();
                 }
@@ -265,73 +265,71 @@ mod imp {
 
             let action = gio::SimpleAction::new("hide-search", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    this.search_bar
-                        .activate_action("search.hide", None)
-                        .unwrap();
+                    imp.search_bar.activate_action("search.hide", None).unwrap();
                 }
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("format-bold", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
-                move |_, _| this.buffer.get().unwrap().format_bold()
+                move |_, _| imp.buffer.get().unwrap().format_bold()
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("format-italic", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
-                move |_, _| this.buffer.get().unwrap().format_italic()
+                move |_, _| imp.buffer.get().unwrap().format_italic()
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("format-strikethrough", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
-                move |_, _| this.buffer.get().unwrap().format_strikethrough()
+                move |_, _| imp.buffer.get().unwrap().format_strikethrough()
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("format-highlight", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
-                move |_, _| this.buffer.get().unwrap().format_highlight()
+                move |_, _| imp.buffer.get().unwrap().format_highlight()
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("format-heading", Some(VariantTy::INT32));
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, param| {
                     let heading_level: i32 = param.unwrap().get().unwrap();
-                    this.buffer.get().unwrap().format_heading(heading_level);
-                    this.source_view.grab_focus();
+                    imp.buffer.get().unwrap().format_heading(heading_level);
+                    imp.source_view.grab_focus();
                 }
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("format-blockquote", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
-                move |_, _| this.buffer.get().unwrap().format_blockquote()
+                move |_, _| imp.buffer.get().unwrap().format_blockquote()
             ));
             actions.add_action(&action);
 
             let action = gio::SimpleAction::new("format-code", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
-                move |_, _| this.buffer.get().unwrap().format_code()
+                move |_, _| imp.buffer.get().unwrap().format_code()
             ));
             actions.add_action(&action);
         }
@@ -365,11 +363,11 @@ mod imp {
                 .monitor(FileMonitorFlags::NONE, None::<&Cancellable>)
                 .expect("Editor: Failed to create file monitor");
             filemon.connect_changed(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_, _, _, _| {
-                    this.file_changed_on_disk.set(true);
-                    this.file_changed_on_disk_banner.set_revealed(true);
+                    imp.file_changed_on_disk.set(true);
+                    imp.file_changed_on_disk_banner.set_revealed(true);
                 }
             ));
 

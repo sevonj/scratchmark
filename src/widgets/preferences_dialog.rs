@@ -78,15 +78,15 @@ mod imp {
             let settings = self.settings.get().unwrap();
 
             self.editor_font_button.connect_activated(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
-                move |_| this.show_font_dialog()
+                move |_| imp.show_font_dialog()
             ));
 
             self.editor_font_reset_button.connect_activated(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
-                move |_| this.reset_font()
+                move |_| imp.reset_font()
             ));
 
             let editor_minimap_toggle: &SwitchRow = self.editor_minimap_toggle.as_ref();
@@ -168,8 +168,8 @@ glib::wrapper! {
 
 impl PreferencesDialog {
     pub fn new(settings: Settings) -> Self {
-        let this: PreferencesDialog = Object::builder().build();
-        this.imp().bind_settings(settings);
-        this
+        let obj: PreferencesDialog = Object::builder().build();
+        obj.imp().bind_settings(settings);
+        obj
     }
 }

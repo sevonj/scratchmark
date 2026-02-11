@@ -54,10 +54,10 @@ mod imp {
 
             let action = SimpleAction::new("bold", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _parameter| {
-                    if let Some(editor) = this.editor.borrow().as_ref() {
+                    if let Some(editor) = imp.editor.borrow().as_ref() {
                         editor.activate_action("editor.format-bold", None).unwrap();
                     }
                 }
@@ -66,10 +66,10 @@ mod imp {
 
             let action = SimpleAction::new("italic", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _parameter| {
-                    if let Some(editor) = this.editor.borrow().as_ref() {
+                    if let Some(editor) = imp.editor.borrow().as_ref() {
                         editor
                             .activate_action("editor.format-italic", None)
                             .unwrap();
@@ -80,10 +80,10 @@ mod imp {
 
             let action = SimpleAction::new("strikethrough", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _parameter| {
-                    if let Some(editor) = this.editor.borrow().as_ref() {
+                    if let Some(editor) = imp.editor.borrow().as_ref() {
                         editor
                             .activate_action("editor.format-strikethrough", None)
                             .unwrap();
@@ -94,10 +94,10 @@ mod imp {
 
             let action = SimpleAction::new("highlight", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _parameter| {
-                    if let Some(editor) = this.editor.borrow().as_ref() {
+                    if let Some(editor) = imp.editor.borrow().as_ref() {
                         editor
                             .activate_action("editor.format-highlight", None)
                             .unwrap();
@@ -108,10 +108,10 @@ mod imp {
 
             let action = SimpleAction::new("heading", Some(glib::VariantTy::INT32));
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, size| {
-                    if let Some(editor) = this.editor.borrow().as_ref() {
+                    if let Some(editor) = imp.editor.borrow().as_ref() {
                         editor
                             .activate_action("editor.format-heading", size)
                             .unwrap();
@@ -122,10 +122,10 @@ mod imp {
 
             let action = SimpleAction::new("blockquote", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _parameter| {
-                    if let Some(editor) = this.editor.borrow().as_ref() {
+                    if let Some(editor) = imp.editor.borrow().as_ref() {
                         editor
                             .activate_action("editor.format-blockquote", None)
                             .unwrap();
@@ -136,10 +136,10 @@ mod imp {
 
             let action = SimpleAction::new("code", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = this)]
+                #[weak(rename_to = imp)]
                 self,
                 move |_action, _parameter| {
-                    if let Some(editor) = this.editor.borrow().as_ref() {
+                    if let Some(editor) = imp.editor.borrow().as_ref() {
                         editor.activate_action("editor.format-code", None).unwrap();
                     }
                 }

@@ -61,35 +61,35 @@ mod imp {
     impl ObjectImpl for ItemRenamePopover {
         fn constructed(&self) {
             self.parent_constructed();
-            let this = self;
+            let imp = self;
             let obj = self.obj();
 
             obj.connect_closed(clone!(
                 #[weak]
-                this,
+                imp,
                 move |_| {
-                    this.reset();
+                    imp.reset();
                 }
             ));
             self.name_field.connect_changed(clone!(
                 #[weak]
-                this,
+                imp,
                 move |name_field| {
-                    this.refresh(name_field.text());
+                    imp.refresh(name_field.text());
                 }
             ));
             self.name_field.connect_activate(clone!(
                 #[weak]
-                this,
+                imp,
                 move |_| {
-                    this.commit();
+                    imp.commit();
                 }
             ));
             self.commit_button.connect_clicked(clone!(
                 #[weak]
-                this,
+                imp,
                 move |_| {
-                    this.commit();
+                    imp.commit();
                 }
             ));
         }
@@ -192,15 +192,15 @@ glib::wrapper! {
 
 impl ItemRenamePopover {
     pub fn for_folder() -> Self {
-        let this: Self = Object::builder().build();
-        this.imp().kind.replace(imp::Kind::Folder);
-        this
+        let obj: Self = Object::builder().build();
+        obj.imp().kind.replace(imp::Kind::Folder);
+        obj
     }
 
     pub fn for_document() -> Self {
-        let this: Self = Object::builder().build();
-        this.imp().kind.replace(imp::Kind::Document);
-        this
+        let obj: Self = Object::builder().build();
+        obj.imp().kind.replace(imp::Kind::Document);
+        obj
     }
 }
 
