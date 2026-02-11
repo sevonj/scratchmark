@@ -54,8 +54,6 @@ mod imp {
             })
         }
     }
-
-    impl Document {}
 }
 
 use std::path::PathBuf;
