@@ -75,11 +75,13 @@ mod imp {
 
 use std::cell::Ref;
 use std::collections::HashMap;
-use std::path::{Path, PathBuf};
+use std::path::Path;
+use std::path::PathBuf;
 use std::time::SystemTime;
 
 use adw::subclass::prelude::ObjectSubclassIsExt;
-use gtk::glib::{self, closure_local};
+use gtk::glib;
+use gtk::glib::closure_local;
 
 use gtk::glib::CollationKey;
 use gtk::glib::Object;
