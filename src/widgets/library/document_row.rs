@@ -44,8 +44,8 @@ mod imp {
         pub(super) document: OnceLock<Document>,
         pub(super) bindings: RefCell<Vec<Binding>>,
 
-        context_menu_popover: RefCell<Option<PopoverMenu>>,
-        pub(super) rename_popover: RefCell<Option<ItemRenamePopover>>,
+        context_menu_popover: OnceLock<PopoverMenu>,
+        pub(super) rename_popover: OnceLock<ItemRenamePopover>,
         pub(super) drag_source: RefCell<Option<DragSource>>,
     }
 
@@ -98,9 +98,9 @@ mod imp {
 
             let action = gio::SimpleAction::new("rename-begin", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = imp)]
-                self,
-                move |_action, _parameter| imp.prompt_rename()
+                #[weak]
+                obj,
+                move |_action, _parameter| obj.prompt_rename()
             ));
             actions.add_action(&action);
 
@@ -140,30 +140,23 @@ mod imp {
     impl ListBoxRowImpl for DocumentRow {}
 
     impl DocumentRow {
-        pub(super) fn prompt_rename(&self) {
-            self.obj().emit_by_name::<()>("needs-attention", &[]);
-            self.rename_popover.borrow().as_ref().unwrap().popup();
-        }
-
         pub(super) fn document(&self) -> &Document {
             self.document.get().unwrap()
         }
 
         fn setup_context_menu(&self) {
             let obj = self.obj();
-
             let builder = Builder::from_resource(
                 "/org/scratchmark/Scratchmark/ui/library/document_context_menu.ui",
             );
-            let popover = builder.object::<MenuModel>("context-menu").unwrap();
-            let menu = PopoverMenu::builder()
-                .menu_model(&popover)
+            let model = builder.object::<MenuModel>("context-menu").unwrap();
+            let popover = PopoverMenu::builder()
+                .menu_model(&model)
                 .has_arrow(false)
                 .build();
-            menu.set_halign(gtk::Align::Start);
-            menu.set_parent(&*obj);
-            let _ = self.context_menu_popover.replace(Some(menu));
-
+            popover.set_halign(gtk::Align::Start);
+            popover.set_parent(&*obj);
+            self.context_menu_popover.set(popover).unwrap();
             let gesture = gtk::GestureClick::new();
             gesture.set_button(gdk::ffi::GDK_BUTTON_SECONDARY as u32);
             gesture.connect_released(clone!(
@@ -171,29 +164,24 @@ mod imp {
                 self,
                 move |gesture, _n, x, y| {
                     gesture.set_state(gtk::EventSequenceState::Claimed);
-                    if let Some(popover) = imp.context_menu_popover.borrow().as_ref() {
-                        popover.set_pointing_to(Some(&Rectangle::new(x as i32, y as i32, 1, 1)));
-                        popover.popup();
-                    };
+                    let popover = imp.context_menu_popover.get().unwrap();
+                    popover.set_pointing_to(Some(&Rectangle::new(x as i32, y as i32, 1, 1)));
+                    popover.popup();
                 }
             ));
             obj.add_controller(gesture);
 
             obj.connect_destroy(move |obj| {
-                if let Some(popover) = obj.imp().context_menu_popover.take() {
-                    popover.unparent();
-                }
+                obj.imp().context_menu_popover.get().unwrap().unparent();
             });
         }
 
         fn setup_rename_menu(&self) {
             let obj = self.obj();
-
-            let rename_popover = ItemRenamePopover::for_document();
-            rename_popover.set_parent(&*obj);
-            rename_popover.set_path(self.document.get().unwrap().path());
-
-            rename_popover.connect_closure(
+            let popover = ItemRenamePopover::for_document();
+            popover.set_parent(&*obj);
+            popover.set_path(self.document.get().unwrap().path());
+            popover.connect_closure(
                 "committed",
                 false,
                 closure_local!(
@@ -206,13 +194,9 @@ mod imp {
                     }
                 ),
             );
-
-            let _ = self.rename_popover.replace(Some(rename_popover));
-
+            self.rename_popover.set(popover).unwrap();
             obj.connect_destroy(move |obj| {
-                if let Some(popover) = obj.imp().rename_popover.take() {
-                    popover.unparent();
-                }
+                obj.imp().rename_popover.get().unwrap().unparent();
             });
         }
 
@@ -340,7 +324,8 @@ impl DocumentRow {
     }
 
     pub fn prompt_rename(&self) {
-        self.imp().prompt_rename();
+        self.emit_by_name::<()>("needs-attention", &[]);
+        self.imp().rename_popover.get().unwrap().popup();
     }
 
     pub fn rename(&self, path: PathBuf) {

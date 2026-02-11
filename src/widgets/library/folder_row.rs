@@ -52,7 +52,7 @@ mod imp {
         #[property(get, set)]
         pub(super) is_expanded: Cell<bool>,
 
-        pub(super) context_menu_popover: RefCell<Option<PopoverMenu>>,
+        pub(super) context_menu_popover: OnceLock<PopoverMenu>,
         pub(super) document_create_popover: OnceLock<DocumentCreatePopover>,
         pub(super) folder_create_popover: OnceLock<FolderCreatePopover>,
         pub(super) rename_popover: OnceLock<ItemRenamePopover>,
@@ -127,19 +127,15 @@ mod imp {
 
         pub(super) fn setup_context_menu(&self, resource_path: &str) {
             let obj = self.obj();
-
             let builder = Builder::from_resource(resource_path);
-            let popover = builder
-                .object::<MenuModel>("context-menu")
-                .expect("FolderItem context-menu model failed");
-            let menu = PopoverMenu::builder()
-                .menu_model(&popover)
+            let model = builder.object::<MenuModel>("context-menu").unwrap();
+            let popover = PopoverMenu::builder()
+                .menu_model(&model)
                 .has_arrow(false)
                 .build();
-            menu.set_halign(gtk::Align::Start);
-            menu.set_parent(obj.as_ref());
-            let _ = self.context_menu_popover.replace(Some(menu));
-
+            popover.set_halign(gtk::Align::Start);
+            popover.set_parent(obj.as_ref());
+            self.context_menu_popover.set(popover).unwrap();
             let gesture = gtk::GestureClick::new();
             gesture.set_button(gdk::ffi::GDK_BUTTON_SECONDARY as u32);
             gesture.connect_released(clone!(
@@ -147,28 +143,23 @@ mod imp {
                 self,
                 move |gesture, _n, x, y| {
                     gesture.set_state(gtk::EventSequenceState::Claimed);
-                    if let Some(popover) = imp.context_menu_popover.borrow().as_ref() {
-                        popover
-                            .set_pointing_to(Some(&gdk::Rectangle::new(x as i32, y as i32, 1, 1)));
-                        popover.popup();
-                    };
+                    let popover = imp.context_menu_popover.get().unwrap();
+                    popover.set_pointing_to(Some(&gdk::Rectangle::new(x as i32, y as i32, 1, 1)));
+                    popover.popup();
                 }
             ));
             obj.add_controller(gesture);
-
             obj.connect_destroy(move |obj| {
-                if let Some(popover) = obj.imp().context_menu_popover.take() {
-                    popover.unparent();
-                }
+                obj.imp().context_menu_popover.get().unwrap().unparent();
             });
         }
 
         pub(super) fn setup_rename_menu(&self) {
             let obj = self.obj();
-            let rename_popover = ItemRenamePopover::for_folder();
-            rename_popover.set_parent(&*obj);
-            rename_popover.set_path(self.folder.get().unwrap().path());
-            rename_popover.connect_closure(
+            let popover = ItemRenamePopover::for_folder();
+            popover.set_parent(&*obj);
+            popover.set_path(self.folder.get().unwrap().path());
+            popover.connect_closure(
                 "committed",
                 false,
                 closure_local!(
@@ -181,7 +172,10 @@ mod imp {
                     }
                 ),
             );
-            self.rename_popover.set(rename_popover).unwrap();
+            self.rename_popover.set(popover).unwrap();
+            obj.connect_destroy(move |obj| {
+                obj.imp().rename_popover.get().unwrap().unparent();
+            });
         }
 
         pub(super) fn setup_document_create_menu(&self) {
@@ -202,6 +196,9 @@ mod imp {
                 ),
             );
             self.document_create_popover.set(popover).unwrap();
+            obj.connect_destroy(move |obj| {
+                obj.imp().document_create_popover.get().unwrap().unparent();
+            });
         }
 
         pub(super) fn setup_folder_create_menu(&self) {
@@ -222,6 +219,9 @@ mod imp {
                 ),
             );
             self.folder_create_popover.set(popover).unwrap();
+            obj.connect_destroy(move |obj| {
+                obj.imp().folder_create_popover.get().unwrap().unparent();
+            });
         }
 
         pub(super) fn setup_drag(&self) {
