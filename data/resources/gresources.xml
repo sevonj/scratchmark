@@ -8,12 +8,13 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/search_bar.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/document_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/document_row.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/document_create_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/drafts_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/err_placeholder_row_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/err_placeholder_row.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/folder_create_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/folder_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/folder_row.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library/item_create_row.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/item_rename_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/library_view.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/project_view.ui</file>

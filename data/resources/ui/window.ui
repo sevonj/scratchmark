@@ -117,7 +117,7 @@
         <attribute name="action">win.file-new</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Create Subfolder</attribute>
+        <attribute name="label" translatable="yes">New Folder</attribute>
         <attribute name="action">win.folder-new</attribute>
       </item>
       <item>

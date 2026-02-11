@@ -296,7 +296,6 @@ impl Folder {
         if child_modified > self.modified() {
             self.imp().modified.borrow_mut().replace(child_modified);
             self.emit_by_name::<()>("metadata-changed", &[]);
-        } else {
         }
     }
 }

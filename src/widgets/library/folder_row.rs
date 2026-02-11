@@ -30,6 +30,8 @@ mod imp {
 
     use super::DocumentRow;
     use crate::data::Folder;
+    use crate::widgets::library::document_create_popover::DocumentCreatePopover;
+    use crate::widgets::library::folder_create_popover::FolderCreatePopover;
     use crate::widgets::library::item_rename_popover::ItemRenamePopover;
 
     #[derive(CompositeTemplate, Default, Properties)]
@@ -51,7 +53,9 @@ mod imp {
         pub(super) is_expanded: Cell<bool>,
 
         pub(super) context_menu_popover: RefCell<Option<PopoverMenu>>,
-        pub(super) rename_popover: RefCell<Option<ItemRenamePopover>>,
+        pub(super) document_create_popover: OnceLock<DocumentCreatePopover>,
+        pub(super) folder_create_popover: OnceLock<FolderCreatePopover>,
+        pub(super) rename_popover: OnceLock<ItemRenamePopover>,
         pub(super) drag_source: RefCell<Option<DragSource>>,
     }
 
@@ -86,6 +90,7 @@ mod imp {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
+                    Signal::builder("needs-attention").build(),
                     Signal::builder("prompt-create-document").build(),
                     Signal::builder("prompt-create-subfolder").build(),
                 ]
@@ -97,10 +102,6 @@ mod imp {
     impl ListBoxRowImpl for FolderRow {}
 
     impl FolderRow {
-        pub(super) fn prompt_rename(&self) {
-            self.rename_popover.borrow().as_ref().unwrap().popup();
-        }
-
         pub(super) fn folder(&self) -> &Folder {
             self.folder.get().unwrap()
         }
@@ -163,11 +164,9 @@ mod imp {
 
         pub(super) fn setup_rename_menu(&self) {
             let obj = self.obj();
-
             let rename_popover = ItemRenamePopover::for_folder();
             rename_popover.set_parent(&*obj);
             rename_popover.set_path(self.folder.get().unwrap().path());
-
             rename_popover.connect_closure(
                 "committed",
                 false,
@@ -181,14 +180,47 @@ mod imp {
                     }
                 ),
             );
+            self.rename_popover.set(rename_popover).unwrap();
+        }
 
-            let _ = self.rename_popover.replace(Some(rename_popover));
+        pub(super) fn setup_document_create_menu(&self) {
+            let obj = self.obj();
+            let popover = DocumentCreatePopover::new(self.folder().path());
+            popover.set_parent(&*obj);
+            popover.connect_closure(
+                "committed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: DocumentCreatePopover, name: PathBuf| {
+                        if let Err(e) = imp.folder().create_document(name) {
+                            imp.folder().notify(&e.to_string())
+                        }
+                    }
+                ),
+            );
+            self.document_create_popover.set(popover).unwrap();
+        }
 
-            obj.connect_destroy(move |obj| {
-                if let Some(popover) = obj.imp().rename_popover.take() {
-                    popover.unparent();
-                }
-            });
+        pub(super) fn setup_folder_create_menu(&self) {
+            let obj = self.obj();
+            let popover = FolderCreatePopover::new(self.folder().path());
+            popover.set_parent(&*obj);
+            popover.connect_closure(
+                "committed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: FolderCreatePopover, name: PathBuf| {
+                        if let Err(e) = imp.folder().create_subfolder(name) {
+                            imp.folder().notify(&e.to_string())
+                        }
+                    }
+                ),
+            );
+            self.folder_create_popover.set(popover).unwrap();
         }
 
         pub(super) fn setup_drag(&self) {
@@ -294,11 +326,10 @@ mod imp {
 
             let action = gio::SimpleAction::new("rename-begin", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = imp)]
-                self,
+                #[weak]
+                obj,
                 move |_action, _parameter| {
-                    assert!(!imp.obj().folder().is_root());
-                    imp.rename_popover.borrow().as_ref().unwrap().popup();
+                    obj.prompt_rename();
                 }
             ));
             actions.add_action(&action);
@@ -412,6 +443,8 @@ impl FolderRow {
                 imp.folder_icon.set_icon_name(Some("draft-table-symbolic"));
             }
         }
+        imp.setup_document_create_menu();
+        imp.setup_folder_create_menu();
 
         imp.setup_drop();
         obj.set_is_expanded(false);
@@ -428,7 +461,18 @@ impl FolderRow {
     }
 
     pub fn prompt_rename(&self) {
-        self.imp().prompt_rename();
+        self.emit_by_name::<()>("needs-attention", &[]);
+        self.imp().rename_popover.get().unwrap().popup();
+    }
+
+    pub fn prompt_create_document(&self) {
+        self.emit_by_name::<()>("needs-attention", &[]);
+        self.imp().document_create_popover.get().unwrap().popup();
+    }
+
+    pub fn prompt_create_folder(&self) {
+        self.emit_by_name::<()>("needs-attention", &[]);
+        self.imp().folder_create_popover.get().unwrap().popup();
     }
 
     pub fn rename(&self, path: PathBuf) {

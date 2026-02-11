@@ -1,7 +1,8 @@
+mod document_create_popover;
 mod document_row;
 mod err_placeholder_row;
+mod folder_create_popover;
 mod folder_row;
-mod item_create_row;
 mod item_rename_popover;
 mod project_view;
 
