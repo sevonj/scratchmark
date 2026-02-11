@@ -23,9 +23,15 @@
                   <object class="AdwHeaderBar">
                     <child type="start">
                       <object class="GtkMenuButton">
-                        <property name="icon-name">open-menu-symbolic</property>
+                        <property name="icon-name">library-sort-symbolic</property>
+                        <property name="always-show-arrow">True</property>
                         <property name="tooltip-text" translatable="yes">Sort</property>
-                        <property name="menu-model">sort_menu</property>
+                        <property name="popover">
+                          <object class="GtkPopoverMenu">
+                            <property name="menu-model">sort_menu</property>
+                            <property name="halign">GTK_ALIGN_START</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                     <child type="end">

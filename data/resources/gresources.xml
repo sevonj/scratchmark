@@ -38,6 +38,7 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/folder-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/info-outline-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/library-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/library-sort-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/list-compact-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/match-words-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/markdown-symbolic.svg</file>
