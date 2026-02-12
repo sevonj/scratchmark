@@ -26,8 +26,6 @@ mod imp {
     use gtk::EventControllerMotion;
     use gtk::Revealer;
     use gtk::ToggleButton;
-    use gtk::gio::Cancellable;
-    use gtk::gio::File;
     use gtk::gio::Settings;
     use gtk::gio::SettingsBindFlags;
     use gtk::gio::SimpleAction;
@@ -319,25 +317,51 @@ mod imp {
             );
 
             self.library_view.connect_closure(
-                "folder-trash-requested",
+                "document-trashed",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
-                    move |_: LibraryView, folder: Folder| {
-                        obj.imp().trash_folder(&folder);
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: LibraryView, path: PathBuf| {
+                        let is_edited = imp
+                            .editor
+                            .borrow()
+                            .as_ref()
+                            .is_some_and(|e| e.path() == path);
+
+                        if is_edited {
+                            if let Some(editor) = imp.editor.borrow().as_ref() {
+                                editor.stop_file_monitor();
+                                editor.set_file_changed_on_disk(false);
+                            }
+                            imp.close_editor()
+                                .expect("Window: on document-trashed - failed to close editor");
+                        }
                     }
                 ),
             );
 
             self.library_view.connect_closure(
-                "document-trash-requested",
+                "folder-trashed",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
-                    move |_: LibraryView, doc: Document| {
-                        obj.imp().trash_document(&doc);
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: LibraryView, path: PathBuf| {
+                        let contains_edited = imp
+                            .editor
+                            .borrow()
+                            .as_ref()
+                            .is_some_and(|e| e.path().starts_with(&path));
+
+                        if contains_edited {
+                            if let Some(editor) = imp.editor.borrow().as_ref() {
+                                editor.stop_file_monitor();
+                                editor.set_file_changed_on_disk(false);
+                            }
+                            imp.close_editor()
+                                .expect("Window: on folder-trashed - failed to close editor");
+                        }
                     }
                 ),
             );
@@ -528,7 +552,7 @@ mod imp {
             );
 
             self.library_view.connect_closure(
-                "notify-err",
+                "toast",
                 false,
                 closure_local!(
                     #[weak(rename_to = imp)]
@@ -1100,48 +1124,6 @@ mod imp {
             self.editor_actions_set_enabled(true);
             self.update_window_title();
             self.update_toolbar_style();
-        }
-
-        fn trash_folder(&self, folder: &Folder) {
-            assert!(!folder.is_root());
-
-            let path = folder.path();
-            let parent_of_currently_open = self
-                .editor
-                .borrow()
-                .as_ref()
-                .is_some_and(|e| e.path().starts_with(&path));
-            if parent_of_currently_open && let Err(e) = self.close_editor() {
-                self.toast(&e.to_string());
-                return;
-            }
-            if let Err(e) = File::for_path(path).trash(None::<&Cancellable>) {
-                println!("{e}");
-                self.toast("Couldn't move to trash.");
-                return;
-            }
-            self.toast("Moved to trash");
-            self.library_view.refresh_content();
-        }
-
-        fn trash_document(&self, doc: &Document) {
-            let path = doc.path();
-            let currently_open = self
-                .editor
-                .borrow()
-                .as_ref()
-                .is_some_and(|e| e.path() == path);
-            if currently_open && let Err(e) = self.close_editor() {
-                self.toast(&e.to_string());
-                return;
-            }
-            if let Err(e) = File::for_path(path).trash(None::<&Cancellable>) {
-                println!("{e}");
-                self.toast("Couldn't move to trash.");
-                return;
-            }
-            self.toast("Moved to trash");
-            self.library_view.refresh_content();
         }
 
         fn delete_folder(&self, folder: &Folder) {

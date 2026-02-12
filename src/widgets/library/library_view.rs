@@ -17,6 +17,7 @@ mod imp {
     use gtk::CompositeTemplate;
     use gtk::FileDialog;
     use gtk::gio::Cancellable;
+    use gtk::gio::File;
     use gtk::gio::SimpleAction;
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Properties;
@@ -122,17 +123,16 @@ mod imp {
                     Signal::builder("document-delete-requested")
                         .param_types([Document::static_type()])
                         .build(),
-                    Signal::builder("folder-trash-requested")
-                        .param_types([Folder::static_type()])
+                    Signal::builder("document-trashed")
+                        .param_types([PathBuf::static_type()])
                         .build(),
-                    Signal::builder("document-trash-requested")
-                        .param_types([Document::static_type()])
+                    Signal::builder("folder-trashed")
+                        .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("close-project-requested")
                         .param_types([PathBuf::static_type()])
                         .build(),
-                    // Error that should be toasted to the user
-                    Signal::builder("notify-err")
+                    Signal::builder("toast")
                         .param_types([String::static_type()])
                         .build(),
                 ]
@@ -288,10 +288,10 @@ mod imp {
                 "trash-requested",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
-                    move |folder: Folder| {
-                        obj.emit_by_name::<()>("folder-trash-requested", &[&folder]);
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |dir: Folder| {
+                        imp.trash_folder(&dir);
                     }
                 ),
             );
@@ -315,7 +315,7 @@ mod imp {
                     #[weak]
                     obj,
                     move |_: Folder, msg: String| {
-                        obj.emit_by_name::<()>("notify-err", &[&msg]);
+                        obj.emit_by_name::<()>("toast", &[&msg]);
                     }
                 ),
             );
@@ -373,10 +373,10 @@ mod imp {
                 "trash-requested",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
+                    #[weak(rename_to = imp)]
+                    self,
                     move |doc: Document| {
-                        obj.emit_by_name::<()>("document-trash-requested", &[&doc]);
+                        imp.trash_document(&doc);
                     }
                 ),
             );
@@ -392,6 +392,44 @@ mod imp {
                     }
                 ),
             );
+        }
+
+        fn trash_folder(&self, folder: &Folder) {
+            let obj = self.obj();
+            assert!(!folder.is_root());
+
+            let path = folder.path();
+            obj.emit_by_name::<()>("folder-trashed", &[&path]);
+
+            for project in self.projects.borrow().deref().values() {
+                if path.starts_with(project.project().path()) {
+                    if let Err(e) = File::for_path(path).trash(None::<&Cancellable>) {
+                        println!("{e}");
+                        obj.emit_by_name::<()>("toast", &[&"Couldn't move to trash"]);
+                    }
+                    obj.emit_by_name::<()>("toast", &[&"Moved to trash"]);
+                    project.refresh_content();
+                    break;
+                }
+            }
+        }
+
+        fn trash_document(&self, doc: &Document) {
+            let obj = self.obj();
+            let path = doc.path();
+            obj.emit_by_name::<()>("document-trashed", &[&path]);
+
+            for project in self.projects.borrow().deref().values() {
+                if path.starts_with(project.project().path()) {
+                    if let Err(e) = File::for_path(path).trash(None::<&Cancellable>) {
+                        println!("{e}");
+                        obj.emit_by_name::<()>("toast", &[&"Couldn't move to trash"]);
+                    }
+                    obj.emit_by_name::<()>("toast", &[&"Moved to trash"]);
+                    project.refresh_content();
+                    break;
+                }
+            }
         }
     }
 }
