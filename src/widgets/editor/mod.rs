@@ -56,7 +56,7 @@ mod imp {
         #[template_child]
         pub(super) search_bar: TemplateChild<EditorSearchBar>,
         #[template_child]
-        pub(super) file_changed_on_disk_banner: TemplateChild<Banner>,
+        file_changed_on_disk_banner: TemplateChild<Banner>,
         #[template_child]
         pub(super) editor_split: TemplateChild<OverlaySplitView>,
         #[template_child]
@@ -67,7 +67,7 @@ mod imp {
         pub(super) scrolled_window: TemplateChild<ScrolledWindow>,
 
         pub(super) file: RefCell<Option<File>>,
-        pub(super) filemon: RefCell<Option<FileMonitor>>,
+        file_monitor: RefCell<Option<FileMonitor>>,
         pub(super) path: RefCell<Option<PathBuf>>,
 
         #[property(get, set)]
@@ -121,6 +121,15 @@ mod imp {
                 .bidirectional()
                 .build();
 
+            let file_changed_on_disk_banner: &Banner = &self.file_changed_on_disk_banner;
+            obj.bind_property(
+                "file_changed_on_disk",
+                file_changed_on_disk_banner,
+                "revealed",
+            )
+            .sync_create()
+            .build();
+
             self.file_changed_on_disk_banner
                 .connect_button_clicked(clone!(
                     #[weak]
@@ -154,33 +163,29 @@ mod imp {
                                 #[weak]
                                 obj,
                                 move |_: AlertDialog, response: String| {
+                                    let imp = obj.imp();
                                     if response == "keep-both" {
                                         let new_path = file_actions::incremented_path(obj.path());
                                         obj.set_path(new_path);
-                                        obj.imp().file_changed_on_disk.set(false);
-                                        obj.imp().file_changed_on_disk_banner.set_revealed(false);
+                                        obj.set_file_changed_on_disk(false);
                                         if let Err(e) = obj.save() {
                                             obj.emit_by_name::<()>("toast", &[&e.to_string()]);
                                             return;
                                         };
                                         obj.emit_by_name::<()>("saved-as", &[]);
                                     } else if response == "overwrite" {
-                                        obj.imp().file_changed_on_disk.set(false);
+                                        obj.set_file_changed_on_disk(false);
                                         if let Err(e) = obj.save() {
                                             obj.emit_by_name::<()>("toast", &[&e.to_string()]);
                                             return;
                                         };
-                                        obj.imp().file_changed_on_disk.set(false);
-                                        obj.imp().file_changed_on_disk_banner.set_revealed(false);
+                                        obj.set_file_changed_on_disk(false);
                                     } else if response == "discard" {
                                         let file = gio::File::for_path(obj.path());
                                         match file_actions::read_file_to_string(&file) {
                                             Ok(text) => {
-                                                obj.imp().source_view.buffer().set_text(&text);
-                                                obj.imp().file_changed_on_disk.set(false);
-                                                obj.imp()
-                                                    .file_changed_on_disk_banner
-                                                    .set_revealed(false);
+                                                imp.source_view.buffer().set_text(&text);
+                                                obj.set_file_changed_on_disk(false);
                                             }
                                             Err(e) => {
                                                 obj.emit_by_name::<()>("toast", &[&e.to_string()])
@@ -355,14 +360,17 @@ mod imp {
     impl BinImpl for Editor {}
 
     impl Editor {
-        pub(super) fn setup_filemon(&self) {
+        pub(super) fn start_file_monitor(&self) {
+            self.stop_file_monitor();
+
             let Some(ref mut file) = *self.file.borrow_mut() else {
                 panic!("Editor file uninitialized");
             };
-            let filemon = file
+            let monitor = file
                 .monitor(FileMonitorFlags::NONE, None::<&Cancellable>)
                 .expect("Editor: Failed to create file monitor");
-            filemon.connect_changed(clone!(
+
+            monitor.connect_changed(clone!(
                 #[weak(rename_to = imp)]
                 self,
                 move |_, _, _, _| {
@@ -370,9 +378,12 @@ mod imp {
                     imp.file_changed_on_disk_banner.set_revealed(true);
                 }
             ));
-
             self.file_changed_on_disk.set(false);
-            self.filemon.replace(Some(filemon));
+            self.file_monitor.replace(Some(monitor));
+        }
+
+        pub(crate) fn stop_file_monitor(&self) {
+            self.file_monitor.take().map(|fm| fm.cancel());
         }
     }
 }
@@ -425,7 +436,7 @@ impl Editor {
         imp.source_view.set_monospace(true);
         imp.source_view.set_buffer(Some(&buffer));
         imp.search_bar.set_search_context(search_context);
-        imp.setup_filemon();
+        imp.start_file_monitor();
         buffer.connect_changed(clone!(
             #[weak]
             obj,
@@ -449,7 +460,8 @@ impl Editor {
         if imp.file_changed_on_disk.get() {
             return Err(ScratchmarkError::FileChanged);
         }
-        imp.filemon.borrow().as_ref().unwrap().cancel();
+
+        self.stop_file_monitor();
 
         let buffer = imp.source_view.buffer();
         let start = buffer.start_iter();
@@ -470,7 +482,7 @@ impl Editor {
                 .unwrap();
             output_stream.flush(None::<&Cancellable>).unwrap();
         }
-        imp.setup_filemon();
+        imp.start_file_monitor();
         self.set_unsaved_changes(false);
         self.emit_by_name::<()>("saved", &[]);
         Ok(())
@@ -482,15 +494,16 @@ impl Editor {
     }
 
     pub fn set_path(&self, path: PathBuf) {
+        let imp = self.imp();
         let file = gtk::gio::File::for_path(&path);
-        self.imp().file.replace(Some(file));
-        self.imp().path.replace(Some(path));
-        self.imp().setup_filemon();
+        imp.file.replace(Some(file));
+        imp.path.replace(Some(path));
+        imp.start_file_monitor();
     }
 
     /// For preventing "file changed" banner when renaming the file or such.
-    pub fn cancel_filemon(&self) {
-        self.imp().filemon.borrow().as_ref().unwrap().cancel();
+    pub fn stop_file_monitor(&self) {
+        self.imp().stop_file_monitor();
     }
 
     pub fn set_font(&self, family: &str, size: u32) {

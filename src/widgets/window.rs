@@ -392,21 +392,21 @@ mod imp {
 
                         let old_path = folder.path();
                         let new_path = file_actions::incremented_path(new_path);
-                        let open_document_affected = imp
+                        let contains_open_document = imp
                             .editor
                             .borrow()
                             .as_ref()
                             .is_some_and(|e| e.path().starts_with(&old_path));
 
-                        if open_document_affected {
-                            imp.editor.borrow().as_ref().unwrap().cancel_filemon();
+                        if contains_open_document {
+                            imp.editor.borrow().as_ref().unwrap().stop_file_monitor();
                         }
 
                         if let Err(e) = imp.library_view.move_item(old_path, new_path.clone()) {
                             imp.toast(&e.to_string());
                         }
 
-                        if open_document_affected {
+                        if contains_open_document {
                             let open_document_path = imp.editor.borrow().as_ref().unwrap().path();
                             let relative = open_document_path.strip_prefix(folder.path()).unwrap();
                             let doc_path = new_path.join(relative);
@@ -441,7 +441,7 @@ mod imp {
                             .is_some_and(|e| e.path() == doc.path());
 
                         if is_open_in_editor {
-                            imp.editor.borrow().as_ref().unwrap().cancel_filemon();
+                            imp.editor.borrow().as_ref().unwrap().stop_file_monitor();
                         }
 
                         if let Err(e) = imp.library_view.move_item(old_path, new_path.clone()) {
