@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the scratchmark package.
 # Filipe Motta <luizfilipemotta@gmail.com>, 2025.
-# Anonymous <anonymous@noreply.codeberg.org>, 2025.
+# Anonymous <anonymous@noreply.codeberg.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 00:02+0200\n"
-"PO-Revision-Date: 2025-12-31 13:16+0000\n"
+"POT-Creation-Date: 2026-02-11 19:53+0200\n"
+"PO-Revision-Date: 2026-02-11 18:26+0000\n"
 "Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
 "scratchmark/app/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Scratchmark"
 msgstr "Scratchmark"
@@ -62,17 +62,116 @@ msgid ""
 "had enough of Scratchmark, it's easy to switch to something else."
 msgstr ""
 
+msgid "Editor interface"
+msgstr ""
+
+msgid "Focus mode"
+msgstr ""
+
+msgid "All panels open"
+msgstr ""
+
+msgid "Statistics"
+msgstr "Estatísticas"
+
+msgid "Characters"
+msgstr "Caracteres"
+
+msgid "N/A"
+msgstr "Nenhum"
+
+msgid "Excluding Spaces"
+msgstr "Desconsiderando espaços"
+
+msgid "Words"
+msgstr "Palavras"
+
+msgid "Lines"
+msgstr "Linhas"
+
+msgid "File changed on disk"
+msgstr "Arquivo alterado no disco"
+
+msgid "Resolve"
+msgstr "Resolver"
+
+msgid "Search"
+msgstr "Pesquisar"
+
+msgid "Replace"
+msgstr "Substituir"
+
+msgid "Match Case"
+msgstr "Diferenciar maiúsculas e minúsculas"
+
+msgid "Whole Words"
+msgstr "Palavras inteiras"
+
+msgid "Use Regex"
+msgstr "Usar expressão regular"
+
+msgid "?"
+msgstr "?"
+
+msgid "Previous Match (Shift + Return)"
+msgstr "Correspondência anterior (Shift + Enter)"
+
+msgid "Next Match (Return)"
+msgstr "Próxima correspondência (Enter)"
+
+msgid "Search and Replace (Ctrl+F)"
+msgstr "Pesquisar e substituir (Ctrl + F)"
+
+msgid "Close Search"
+msgstr "Fechar pesquisa"
+
+msgid "Replace (Return)"
+msgstr "Substituir (Enter)"
+
+msgid "Replace All"
+msgstr "Substituir tudo"
+
+msgid "Replace All (Shift + Return)"
+msgstr "Substituir tudo (Shift + Enter)"
+
 msgid "Nothing Open"
 msgstr "Nada aberto"
 
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr "Crie um novo documento ou abra um existente a partir da barra lateral"
 
-msgid "Name..."
-msgstr "Nome..."
+msgid "Show in File Manager"
+msgstr "Mostrar no gerenciador de arquivos"
+
+msgid "Rename"
+msgstr "Renomear"
+
+msgid "Duplicate"
+msgstr "Duplicar"
+
+msgid "Move to Trash"
+msgstr "Mover para a Lixeira"
+
+msgid "Delete Permanently"
+msgstr "Excluir permanentemente"
+
+msgid "New Document"
+msgstr "Novo documento"
+
+msgid "Name…"
+msgstr ""
 
 msgid "Create"
 msgstr "Criar"
+
+msgid "New Folder"
+msgstr "Nova pasta"
+
+msgid "Project may have been moved or deleted."
+msgstr ""
+
+msgid "Close Project"
+msgstr "Fechar projeto"
 
 msgid "Bold (Ctrl+B)"
 msgstr "Negrito (Ctrl+B)"
@@ -234,7 +333,7 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Atualização manual"
 
-msgid "Create Subfolder (Shift+Ctrl+N)"
+msgid "Sort"
 msgstr ""
 
 msgid "Menu"
@@ -254,12 +353,6 @@ msgstr "Informações do documento"
 
 msgid "Formatting Toolbar"
 msgstr "Barra de formatação"
-
-msgid "New Document"
-msgstr "Novo documento"
-
-msgid "Create Subfolder"
-msgstr "Criar subpasta"
 
 msgid "Add Project"
 msgstr "Adicionar projeto"
@@ -291,89 +384,23 @@ msgstr "Atalhos de teclado"
 msgid "About Scratchmark"
 msgstr "Sobre o Scratchmark"
 
-msgid "Statistics"
-msgstr "Estatísticas"
-
-msgid "Characters"
-msgstr "Caracteres"
-
-msgid "N/A"
-msgstr "Nenhum"
-
-msgid "Excluding Spaces"
-msgstr "Desconsiderando espaços"
-
-msgid "Words"
-msgstr "Palavras"
-
-msgid "Lines"
-msgstr "Linhas"
-
-msgid "File changed on disk"
-msgstr "Arquivo alterado no disco"
-
-msgid "Resolve"
-msgstr "Resolver"
-
-msgid "Search"
-msgstr "Pesquisar"
-
-msgid "Replace"
-msgstr "Substituir"
-
-msgid "Match Case"
-msgstr "Diferenciar maiúsculas e minúsculas"
-
-msgid "Whole Words"
-msgstr "Palavras inteiras"
-
-msgid "Use Regex"
-msgstr "Usar expressão regular"
-
-msgid "?"
-msgstr "?"
-
-msgid "Previous Match (Shift + Return)"
-msgstr "Correspondência anterior (Shift + Enter)"
-
-msgid "Next Match (Return)"
-msgstr "Próxima correspondência (Enter)"
-
-msgid "Search and Replace (Ctrl+F)"
-msgstr "Pesquisar e substituir (Ctrl + F)"
-
-msgid "Close Search"
-msgstr "Fechar pesquisa"
-
-msgid "Replace (Return)"
-msgstr "Substituir (Enter)"
-
-msgid "Replace All"
-msgstr "Substituir tudo"
-
-msgid "Replace All (Shift + Return)"
-msgstr "Substituir tudo (Shift + Enter)"
-
-msgid "Show in File Manager"
-msgstr "Mostrar no gerenciador de arquivos"
-
-msgid "Close Project"
-msgstr "Fechar projeto"
-
-msgid "Project may have been moved or deleted."
+msgid "A-Z"
 msgstr ""
 
-msgid "Rename"
-msgstr "Renomear"
+msgid "Z-A"
+msgstr ""
 
-msgid "Duplicate"
-msgstr "Duplicar"
+msgid "Last Modified"
+msgstr ""
 
-msgid "Move to Trash"
-msgstr "Mover para a Lixeira"
+msgid "First Modified"
+msgstr ""
 
-msgid "Delete Permanently"
-msgstr "Excluir permanentemente"
+#~ msgid "Name..."
+#~ msgstr "Nome..."
+
+#~ msgid "Create Subfolder"
+#~ msgstr "Criar subpasta"
 
 #~ msgid "New"
 #~ msgstr "Novo"
@@ -411,9 +438,6 @@ msgstr "Excluir permanentemente"
 
 #~ msgid "Enter Fullscreen"
 #~ msgstr "Entrar em tela cheia"
-
-#~ msgid "New Folder"
-#~ msgstr "Nova pasta"
 
 #~ msgid "Rename Folder"
 #~ msgstr "Renomear pasta"

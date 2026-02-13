@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the scratchmark package.
-# Anonymous <anonymous@noreply.codeberg.org>, 2025.
+# Anonymous <anonymous@noreply.codeberg.org>, 2025, 2026.
 # Outbreak2096 <outbreak2096@noreply.codeberg.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 00:02+0200\n"
-"PO-Revision-Date: 2026-01-13 05:21+0000\n"
+"POT-Creation-Date: 2026-02-11 19:53+0200\n"
+"PO-Revision-Date: 2026-02-12 22:46+0000\n"
 "Last-Translator: Outbreak2096 <outbreak2096@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.codeberg.org/projects/scratchmark/app/zh_Hans/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Scratchmark"
 msgstr "Scratchmark"
@@ -72,17 +72,116 @@ msgstr ""
 "Scratchmark 的库中即可。反之亦然：如果您不想再使用 Scratchmark，也可以轻松切"
 "换到其他软件。"
 
+msgid "Editor interface"
+msgstr "编辑器界面"
+
+msgid "Focus mode"
+msgstr "专注模式"
+
+msgid "All panels open"
+msgstr "所有面板打开"
+
+msgid "Statistics"
+msgstr "统计数据"
+
+msgid "Characters"
+msgstr "字符"
+
+msgid "N/A"
+msgstr "不适用"
+
+msgid "Excluding Spaces"
+msgstr "不包含空格"
+
+msgid "Words"
+msgstr "单词"
+
+msgid "Lines"
+msgstr "行"
+
+msgid "File changed on disk"
+msgstr "磁盘上的文件已更改"
+
+msgid "Resolve"
+msgstr "解析"
+
+msgid "Search"
+msgstr "查找"
+
+msgid "Replace"
+msgstr "替换"
+
+msgid "Match Case"
+msgstr "匹配大小写"
+
+msgid "Whole Words"
+msgstr "完整单词"
+
+msgid "Use Regex"
+msgstr "使用正则表达式"
+
+msgid "?"
+msgstr "？"
+
+msgid "Previous Match (Shift + Return)"
+msgstr "上一个匹配 (Shift + Return)"
+
+msgid "Next Match (Return)"
+msgstr "下一个匹配 (Return)"
+
+msgid "Search and Replace (Ctrl+F)"
+msgstr "查找与替换 (Ctrl+F)"
+
+msgid "Close Search"
+msgstr "关闭查找"
+
+msgid "Replace (Return)"
+msgstr "替换 (Return)"
+
+msgid "Replace All"
+msgstr "替换全部"
+
+msgid "Replace All (Shift + Return)"
+msgstr "替换全部 (Shift + Return)"
+
 msgid "Nothing Open"
 msgstr "无打开"
 
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr "创建新文档或从侧边栏打开现有文档"
 
-msgid "Name..."
+msgid "Show in File Manager"
+msgstr "在文件管理器中显示"
+
+msgid "Rename"
+msgstr "重命名"
+
+msgid "Duplicate"
+msgstr "复制"
+
+msgid "Move to Trash"
+msgstr "移至回收站"
+
+msgid "Delete Permanently"
+msgstr "永久删除"
+
+msgid "New Document"
+msgstr "新文档"
+
+msgid "Name…"
 msgstr "名称…"
 
 msgid "Create"
 msgstr "创建"
+
+msgid "New Folder"
+msgstr "新文件夹"
+
+msgid "Project may have been moved or deleted."
+msgstr "项目可能已被移动或删除。"
+
+msgid "Close Project"
+msgstr "关闭项目"
 
 msgid "Bold (Ctrl+B)"
 msgstr "粗体 (Ctrl+B)"
@@ -244,8 +343,8 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "手动刷新"
 
-msgid "Create Subfolder (Shift+Ctrl+N)"
-msgstr ""
+msgid "Sort"
+msgstr "排序"
 
 msgid "Menu"
 msgstr "菜单"
@@ -264,12 +363,6 @@ msgstr "文档信息"
 
 msgid "Formatting Toolbar"
 msgstr "格式化工具栏"
-
-msgid "New Document"
-msgstr "新文档"
-
-msgid "Create Subfolder"
-msgstr "创建子文件夹"
 
 msgid "Add Project"
 msgstr "添加项目"
@@ -301,89 +394,23 @@ msgstr "键盘快捷键"
 msgid "About Scratchmark"
 msgstr "关于 Scratchmark"
 
-msgid "Statistics"
-msgstr "统计数据"
+msgid "A-Z"
+msgstr "A-Z"
 
-msgid "Characters"
-msgstr "字符"
+msgid "Z-A"
+msgstr "Z-A"
 
-msgid "N/A"
-msgstr "不适用"
+msgid "Last Modified"
+msgstr "最后修改"
 
-msgid "Excluding Spaces"
-msgstr "不包含空格"
+msgid "First Modified"
+msgstr "首次修改"
 
-msgid "Words"
-msgstr "单词"
+#~ msgid "Name..."
+#~ msgstr "名称…"
 
-msgid "Lines"
-msgstr "行"
-
-msgid "File changed on disk"
-msgstr "磁盘上的文件已更改"
-
-msgid "Resolve"
-msgstr "解析"
-
-msgid "Search"
-msgstr "查找"
-
-msgid "Replace"
-msgstr "替换"
-
-msgid "Match Case"
-msgstr "匹配大小写"
-
-msgid "Whole Words"
-msgstr "完整单词"
-
-msgid "Use Regex"
-msgstr "使用正则表达式"
-
-msgid "?"
-msgstr "？"
-
-msgid "Previous Match (Shift + Return)"
-msgstr "上一个匹配 (Shift + Return)"
-
-msgid "Next Match (Return)"
-msgstr "下一个匹配 (Return)"
-
-msgid "Search and Replace (Ctrl+F)"
-msgstr "查找与替换 (Ctrl+F)"
-
-msgid "Close Search"
-msgstr "关闭查找"
-
-msgid "Replace (Return)"
-msgstr "替换 (Return)"
-
-msgid "Replace All"
-msgstr "替换全部"
-
-msgid "Replace All (Shift + Return)"
-msgstr "替换全部 (Shift + Return)"
-
-msgid "Show in File Manager"
-msgstr "在文件管理器中显示"
-
-msgid "Close Project"
-msgstr "关闭项目"
-
-msgid "Project may have been moved or deleted."
-msgstr ""
-
-msgid "Rename"
-msgstr "重命名"
-
-msgid "Duplicate"
-msgstr "复制"
-
-msgid "Move to Trash"
-msgstr "移至回收站"
-
-msgid "Delete Permanently"
-msgstr "永久删除"
+#~ msgid "Create Subfolder"
+#~ msgstr "创建子文件夹"
 
 #~ msgid "New"
 #~ msgstr "新建"

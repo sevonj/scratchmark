@@ -3,16 +3,17 @@
 # Copyright (C) 2025 THE scratchmark'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the scratchmark package.
 # Łukasz Horodecki <dakilla@gmail.com>, 2025.
-# Anonymous <anonymous@noreply.codeberg.org>, 2025.
-# Eryk Michalak <gnu.ewm@protonmail.com>, 2025.
+# Anonymous <anonymous@noreply.codeberg.org>, 2025, 2026.
+# Eryk Michalak <gnu.ewm@protonmail.com>, 2025, 2026.
 # LukaszH77 <lukaszh77@noreply.codeberg.org>, 2026.
+# LukaszH77 <lukasz@horodecki.net>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 00:02+0200\n"
-"PO-Revision-Date: 2026-01-06 08:21+0000\n"
-"Last-Translator: LukaszH77 <lukaszh77@noreply.codeberg.org>\n"
+"POT-Creation-Date: 2026-02-11 19:53+0200\n"
+"PO-Revision-Date: 2026-02-11 18:56+0000\n"
+"Last-Translator: LukaszH77 <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
 "app/pl/>\n"
 "Language: pl\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Scratchmark"
 msgstr "Scratchmark"
@@ -85,17 +86,116 @@ msgstr ""
 "również w drugą stronę: jeżeli będziesz mieć dosyć Scratchmark, łatwo będzie "
 "przenieść się do czegoś innego."
 
+msgid "Editor interface"
+msgstr "Interfejs edytora"
+
+msgid "Focus mode"
+msgstr "Tryb skupienia"
+
+msgid "All panels open"
+msgstr "Otwarte wszystkie panele"
+
+msgid "Statistics"
+msgstr "Statystyki"
+
+msgid "Characters"
+msgstr "Znaki"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "Excluding Spaces"
+msgstr "Z wyłączeniem spacji"
+
+msgid "Words"
+msgstr "Słowa"
+
+msgid "Lines"
+msgstr "Linie"
+
+msgid "File changed on disk"
+msgstr "Plik został zmieniony na dysku"
+
+msgid "Resolve"
+msgstr "Rozwiąż"
+
+msgid "Search"
+msgstr "Szukaj"
+
+msgid "Replace"
+msgstr "Zastąp"
+
+msgid "Match Case"
+msgstr "Dopasuj wielkość znaków"
+
+msgid "Whole Words"
+msgstr "Całe słowa"
+
+msgid "Use Regex"
+msgstr "Użyj wyrażeń regularnych"
+
+msgid "?"
+msgstr "?"
+
+msgid "Previous Match (Shift + Return)"
+msgstr "Poprzednie trafienie (Shift + Enter)"
+
+msgid "Next Match (Return)"
+msgstr "Następne trafienie (Enter)"
+
+msgid "Search and Replace (Ctrl+F)"
+msgstr "Szukaj i zastąp"
+
+msgid "Close Search"
+msgstr "Zamknij wyszukiwanie"
+
+msgid "Replace (Return)"
+msgstr "Zastąp (Enter)"
+
+msgid "Replace All"
+msgstr "Zastąp wszystkie"
+
+msgid "Replace All (Shift + Return)"
+msgstr "Zastąp wszystkie (Shift + Enter)"
+
 msgid "Nothing Open"
 msgstr "Nic nie jest otwarte"
 
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr "Utwórz nowy dokument lub otwórz już istniejący w panelu bocznym"
 
-msgid "Name..."
-msgstr "Nazwa..."
+msgid "Show in File Manager"
+msgstr "Pokaż w menedżerze plików"
+
+msgid "Rename"
+msgstr "Zmień nazwę"
+
+msgid "Duplicate"
+msgstr "Duplikuj"
+
+msgid "Move to Trash"
+msgstr "Przenieś do śmieci"
+
+msgid "Delete Permanently"
+msgstr "Usuń trwale"
+
+msgid "New Document"
+msgstr "Nowy dokument"
+
+msgid "Name…"
+msgstr "Nazwa…"
 
 msgid "Create"
 msgstr "Utwórz"
+
+msgid "New Folder"
+msgstr "Nowy katalog"
+
+msgid "Project may have been moved or deleted."
+msgstr "Projekt mógł zostać przeniesiony lub usunięty."
+
+msgid "Close Project"
+msgstr "Zamknij projekt"
 
 msgid "Bold (Ctrl+B)"
 msgstr "Pogrubienie (Ctrl+B)"
@@ -258,8 +358,8 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Ręczne odświeżenie"
 
-msgid "Create Subfolder (Shift+Ctrl+N)"
-msgstr ""
+msgid "Sort"
+msgstr "Sortowanie"
 
 msgid "Menu"
 msgstr "Menu"
@@ -278,12 +378,6 @@ msgstr "Informacje o dokumencie"
 
 msgid "Formatting Toolbar"
 msgstr "Pasek formatowania"
-
-msgid "New Document"
-msgstr "Nowy dokument"
-
-msgid "Create Subfolder"
-msgstr "Utwórz podkatalog"
 
 msgid "Add Project"
 msgstr "Dodaj projekt"
@@ -315,89 +409,23 @@ msgstr "Skróty klawiszowe"
 msgid "About Scratchmark"
 msgstr "O programie"
 
-msgid "Statistics"
-msgstr "Statystyki"
+msgid "A-Z"
+msgstr "A-Z"
 
-msgid "Characters"
-msgstr "Znaki"
+msgid "Z-A"
+msgstr "Z-A"
 
-msgid "N/A"
-msgstr "N/A"
+msgid "Last Modified"
+msgstr "Od ostatnio zmienionego"
 
-msgid "Excluding Spaces"
-msgstr "Z wyłączeniem spacji"
+msgid "First Modified"
+msgstr "Od najdawniej zmienionego"
 
-msgid "Words"
-msgstr "Słowa"
+#~ msgid "Name..."
+#~ msgstr "Nazwa..."
 
-msgid "Lines"
-msgstr "Linie"
-
-msgid "File changed on disk"
-msgstr "Plik został zmieniony na dysku"
-
-msgid "Resolve"
-msgstr "Rozwiąż"
-
-msgid "Search"
-msgstr "Szukaj"
-
-msgid "Replace"
-msgstr "Zastąp"
-
-msgid "Match Case"
-msgstr "Dopasuj wielkość znaków"
-
-msgid "Whole Words"
-msgstr "Całe słowa"
-
-msgid "Use Regex"
-msgstr "Użyj wyrażeń regularnych"
-
-msgid "?"
-msgstr "?"
-
-msgid "Previous Match (Shift + Return)"
-msgstr "Poprzednie trafienie (Shift + Enter)"
-
-msgid "Next Match (Return)"
-msgstr "Następne trafienie (Enter)"
-
-msgid "Search and Replace (Ctrl+F)"
-msgstr "Szukaj i zastąp"
-
-msgid "Close Search"
-msgstr "Zamknij wyszukiwanie"
-
-msgid "Replace (Return)"
-msgstr "Zastąp (Enter)"
-
-msgid "Replace All"
-msgstr "Zastąp wszystkie"
-
-msgid "Replace All (Shift + Return)"
-msgstr "Zastąp wszystkie (Shift + Enter)"
-
-msgid "Show in File Manager"
-msgstr "Pokaż w menedżerze plików"
-
-msgid "Close Project"
-msgstr "Zamknij projekt"
-
-msgid "Project may have been moved or deleted."
-msgstr ""
-
-msgid "Rename"
-msgstr "Zmień nazwę"
-
-msgid "Duplicate"
-msgstr "Duplikuj"
-
-msgid "Move to Trash"
-msgstr "Przenieś do śmieci"
-
-msgid "Delete Permanently"
-msgstr "Usuń trwale"
+#~ msgid "Create Subfolder"
+#~ msgstr "Utwórz podkatalog"
 
 #~ msgid "New"
 #~ msgstr "Nowy"
@@ -436,9 +464,6 @@ msgstr "Usuń trwale"
 
 #~ msgid "Enter Fullscreen"
 #~ msgstr "Włącz pełny ekran"
-
-#~ msgid "New Folder"
-#~ msgstr "Nowy katalog"
 
 #~ msgid "Rename Folder"
 #~ msgstr "Zmień nazwę katalogu"

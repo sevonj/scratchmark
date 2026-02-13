@@ -4,14 +4,14 @@
 # Automatically generated, 2025.
 # Sevonj <>, 2025.
 #
-# Anonymous <anonymous@noreply.codeberg.org>, 2025.
+# Anonymous <anonymous@noreply.codeberg.org>, 2025, 2026.
 # sevon <sevon@noreply.codeberg.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 00:02+0200\n"
-"PO-Revision-Date: 2026-01-16 22:35+0000\n"
+"POT-Creation-Date: 2026-02-11 19:53+0200\n"
+"PO-Revision-Date: 2026-02-11 18:26+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/scratchmark/"
 "app/fi/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Scratchmark"
 msgstr "Scratchmark"
@@ -84,17 +84,116 @@ msgstr ""
 "myös toisinpäin: jos olet kyllästynyt Scratchmarkiin, voit helposti siirtyä "
 "johonkin muuhun sovellukseen."
 
+msgid "Editor interface"
+msgstr ""
+
+msgid "Focus mode"
+msgstr ""
+
+msgid "All panels open"
+msgstr ""
+
+msgid "Statistics"
+msgstr "Tilastot"
+
+msgid "Characters"
+msgstr "Merkkejä"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "Excluding Spaces"
+msgstr "Poislukien välilyönnit"
+
+msgid "Words"
+msgstr "Sanoja"
+
+msgid "Lines"
+msgstr "Rivejä"
+
+msgid "File changed on disk"
+msgstr "Tiedosto on muuttunut levyllä"
+
+msgid "Resolve"
+msgstr "Ratkaise"
+
+msgid "Search"
+msgstr "Etsi"
+
+msgid "Replace"
+msgstr "Korvaa"
+
+msgid "Match Case"
+msgstr "Huomioi kirjainkoko"
+
+msgid "Whole Words"
+msgstr "Kokonaiset sanat"
+
+msgid "Use Regex"
+msgstr "Säännölliset lausekkeet (Regex)"
+
+msgid "?"
+msgstr "?"
+
+msgid "Previous Match (Shift + Return)"
+msgstr "Edellinen osuma (Shift + Enter)"
+
+msgid "Next Match (Return)"
+msgstr "Seuraava osuma (Enter)"
+
+msgid "Search and Replace (Ctrl+F)"
+msgstr "Etsi ja korvaa (Ctrl+F)"
+
+msgid "Close Search"
+msgstr "Sulje haku"
+
+msgid "Replace (Return)"
+msgstr "Korvaa (Enter)"
+
+msgid "Replace All"
+msgstr "Korvaa kaikki"
+
+msgid "Replace All (Shift + Return)"
+msgstr "Korvaa kaikki (Shift + Enter)"
+
 msgid "Nothing Open"
 msgstr "Ei avattua tiedostoa"
 
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr "Luo uusi tiedosto tai avaa olemassaoleva sivupalkista"
 
-msgid "Name..."
-msgstr "Nimi..."
+msgid "Show in File Manager"
+msgstr "Näytä tiedostoselaimessa"
+
+msgid "Rename"
+msgstr "Nimeä uudelleen"
+
+msgid "Duplicate"
+msgstr "Luo kopio"
+
+msgid "Move to Trash"
+msgstr "Siirrä roskakoriin"
+
+msgid "Delete Permanently"
+msgstr "Poista pysyvästi"
+
+msgid "New Document"
+msgstr "Uusi tiedosto"
+
+msgid "Name…"
+msgstr ""
 
 msgid "Create"
 msgstr "Luo"
+
+msgid "New Folder"
+msgstr ""
+
+msgid "Project may have been moved or deleted."
+msgstr "Projekti voi olla siirretty tai poistettu."
+
+msgid "Close Project"
+msgstr "Sulje projekti"
 
 msgid "Bold (Ctrl+B)"
 msgstr "Lihavointi (Ctrl+B)"
@@ -257,8 +356,8 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Päivitä kirjasto"
 
-msgid "Create Subfolder (Shift+Ctrl+N)"
-msgstr "Luo alikansio (Shift+Ctrl+N)"
+msgid "Sort"
+msgstr ""
 
 msgid "Menu"
 msgstr "Valikko"
@@ -277,12 +376,6 @@ msgstr "Tiedoston tiedot"
 
 msgid "Formatting Toolbar"
 msgstr "Muotoilupalkki"
-
-msgid "New Document"
-msgstr "Uusi tiedosto"
-
-msgid "Create Subfolder"
-msgstr "Luo alikansio"
 
 msgid "Add Project"
 msgstr "Lisää projekti"
@@ -314,89 +407,26 @@ msgstr "Pikanäppäimet"
 msgid "About Scratchmark"
 msgstr "Tietoja - Scratchmark"
 
-msgid "Statistics"
-msgstr "Tilastot"
+msgid "A-Z"
+msgstr ""
 
-msgid "Characters"
-msgstr "Merkkejä"
+msgid "Z-A"
+msgstr ""
 
-msgid "N/A"
-msgstr "N/A"
+msgid "Last Modified"
+msgstr ""
 
-msgid "Excluding Spaces"
-msgstr "Poislukien välilyönnit"
+msgid "First Modified"
+msgstr ""
 
-msgid "Words"
-msgstr "Sanoja"
+#~ msgid "Name..."
+#~ msgstr "Nimi..."
 
-msgid "Lines"
-msgstr "Rivejä"
+#~ msgid "Create Subfolder (Shift+Ctrl+N)"
+#~ msgstr "Luo alikansio (Shift+Ctrl+N)"
 
-msgid "File changed on disk"
-msgstr "Tiedosto on muuttunut levyllä"
-
-msgid "Resolve"
-msgstr "Ratkaise"
-
-msgid "Search"
-msgstr "Etsi"
-
-msgid "Replace"
-msgstr "Korvaa"
-
-msgid "Match Case"
-msgstr "Huomioi kirjainkoko"
-
-msgid "Whole Words"
-msgstr "Kokonaiset sanat"
-
-msgid "Use Regex"
-msgstr "Säännölliset lausekkeet (Regex)"
-
-msgid "?"
-msgstr "?"
-
-msgid "Previous Match (Shift + Return)"
-msgstr "Edellinen osuma (Shift + Enter)"
-
-msgid "Next Match (Return)"
-msgstr "Seuraava osuma (Enter)"
-
-msgid "Search and Replace (Ctrl+F)"
-msgstr "Etsi ja korvaa (Ctrl+F)"
-
-msgid "Close Search"
-msgstr "Sulje haku"
-
-msgid "Replace (Return)"
-msgstr "Korvaa (Enter)"
-
-msgid "Replace All"
-msgstr "Korvaa kaikki"
-
-msgid "Replace All (Shift + Return)"
-msgstr "Korvaa kaikki (Shift + Enter)"
-
-msgid "Show in File Manager"
-msgstr "Näytä tiedostoselaimessa"
-
-msgid "Close Project"
-msgstr "Sulje projekti"
-
-msgid "Project may have been moved or deleted."
-msgstr "Projekti voi olla siirretty tai poistettu."
-
-msgid "Rename"
-msgstr "Nimeä uudelleen"
-
-msgid "Duplicate"
-msgstr "Luo kopio"
-
-msgid "Move to Trash"
-msgstr "Siirrä roskakoriin"
-
-msgid "Delete Permanently"
-msgstr "Poista pysyvästi"
+#~ msgid "Create Subfolder"
+#~ msgstr "Luo alikansio"
 
 #~ msgid "New"
 #~ msgstr "Uusi"
