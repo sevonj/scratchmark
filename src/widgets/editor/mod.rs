@@ -1,4 +1,5 @@
 mod document_stats_view;
+mod file_changed_on_disk_dialog;
 mod minimap;
 mod search_bar;
 mod text_view;
@@ -41,6 +42,7 @@ mod imp {
     use crate::data::DocumentStats;
     use crate::data::MarkdownBuffer;
     use crate::util::file_actions;
+    use crate::widgets::editor::file_changed_on_disk_dialog::FileChangedOnDiskDialog;
 
     #[derive(Debug, Properties, CompositeTemplate, Default)]
     #[properties(wrapper_type = super::Editor)]
@@ -135,27 +137,7 @@ mod imp {
                     #[weak]
                     obj,
                     move |_| {
-                        let heading = "File changed";
-                        let body = "The file has changed on disk.";
-                        let dialog = AlertDialog::new(
-                            Some(heading),
-                            Some(body), // once told me the world is gonna roll me
-                        );
-                        dialog.add_response("discard", "Discard changes");
-                        dialog.add_response("overwrite", "Overwrite file");
-                        dialog.add_response("keep-both", "Keep both");
-                        dialog.set_response_appearance(
-                            "keep-both",
-                            adw::ResponseAppearance::Suggested,
-                        );
-                        dialog.set_response_appearance(
-                            "overwrite",
-                            adw::ResponseAppearance::Destructive,
-                        );
-                        dialog.set_response_appearance(
-                            "discard",
-                            adw::ResponseAppearance::Destructive,
-                        );
+                        let dialog = FileChangedOnDiskDialog::default();
                         dialog.connect_closure(
                             "response",
                             false,
@@ -163,10 +145,8 @@ mod imp {
                                 #[weak]
                                 obj,
                                 move |_: AlertDialog, response: String| {
-                                    let imp = obj.imp();
                                     if response == "keep-both" {
-                                        let new_path = file_actions::incremented_path(obj.path());
-                                        obj.set_path(new_path);
+                                        obj.set_path(file_actions::incremented_path(obj.path()));
                                         obj.set_file_changed_on_disk(false);
                                         if let Err(e) = obj.save() {
                                             obj.emit_by_name::<()>("toast", &[&e.to_string()]);
@@ -184,7 +164,7 @@ mod imp {
                                         let file = gio::File::for_path(obj.path());
                                         match file_actions::read_file_to_string(&file) {
                                             Ok(text) => {
-                                                imp.source_view.buffer().set_text(&text);
+                                                obj.imp().source_view.buffer().set_text(&text);
                                                 obj.set_file_changed_on_disk(false);
                                             }
                                             Err(e) => {

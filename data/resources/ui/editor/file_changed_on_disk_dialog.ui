@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="FileChangedOnDiskDialog" parent="AdwAlertDialog">
+    <property name="heading" translatable="yes">File changed</property>
+    <property name="body" translatable="yes">The file has changed on disk.</property>
+    <property name="default-response">keep-both</property>
+    <responses>
+      <response id="discard" translatable="yes" appearance="destructive">Discard changes</response>
+      <response id="overwrite" translatable="yes" appearance="destructive">Overwrite file</response>
+      <response id="keep-both" translatable="yes" appearance="suggested">Keep both</response>
+    </responses>
+  </template>
+</interface>
