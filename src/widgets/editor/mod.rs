@@ -34,6 +34,7 @@ mod imp {
     use gtk::TextMark;
     use gtk::gio::Cancellable;
     use gtk::gio::SimpleAction;
+    use gtk::glib::GString;
 
     use super::document_stats_view::DocumentStatsView;
     use super::minimap::Minimap;
@@ -78,6 +79,10 @@ mod imp {
         unsaved_changes: Cell<bool>,
         #[property(get, set)]
         show_sidebar: Cell<bool>,
+        #[property(get, set)]
+        font_size: Cell<u32>,
+        #[property(get, set)]
+        font_family: RefCell<GString>,
     }
 
     #[glib::object_subclass]
@@ -185,6 +190,14 @@ mod imp {
                 .sync_create()
                 .bidirectional()
                 .build();
+
+            obj.connect_font_family_notify(clone!(move |obj| {
+                obj.imp().refresh_font();
+            }));
+
+            obj.connect_font_size_notify(clone!(move |obj| {
+                obj.imp().refresh_font();
+            }));
 
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("editor", Some(&actions));
@@ -354,6 +367,12 @@ mod imp {
         pub(crate) fn stop_file_monitor(&self) {
             self.file_monitor.take().map(|fm| fm.cancel());
         }
+
+        fn refresh_font(&self) {
+            let obj = self.obj();
+            self.source_view
+                .set_font(&obj.font_family(), obj.font_size());
+        }
     }
 }
 
@@ -473,10 +492,6 @@ impl Editor {
     /// For preventing "file changed" banner when renaming the file or such.
     pub fn stop_file_monitor(&self) {
         self.imp().stop_file_monitor();
-    }
-
-    pub fn set_font(&self, family: &str, size: u32) {
-        self.imp().source_view.set_font(family, size);
     }
 
     pub fn document_stats(&self) -> DocumentStats {

@@ -31,7 +31,6 @@ mod imp {
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Properties;
     use gtk::glib::VariantTy;
-    use gtk::pango::FontDescription;
 
     use crate::APP_ID;
     use crate::config;
@@ -133,6 +132,8 @@ mod imp {
             }
 
             let settings = Settings::new(APP_ID);
+            self.settings.set(settings.clone()).unwrap();
+            self.settings_sanity_check();
             #[cfg(not(feature = "generatescreenshots"))]
             {
                 settings
@@ -262,9 +263,6 @@ mod imp {
                 obj.imp().set_focus_mode_active(focus_mode_enabled)
             });
 
-            self.settings
-                .set(settings)
-                .expect("`settings` should not be set before calling `setup_settings`.");
             obj.add_controller(self.motion_controller.clone());
 
             self.motion_controller.connect_motion(clone!(
@@ -679,7 +677,7 @@ mod imp {
                 #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    imp.show_preferences();
+                    PreferencesDialog::new(imp.settings().clone()).present(Some(&*imp.obj()));
                 }
             ));
             obj.add_action(&action);
@@ -781,6 +779,14 @@ mod imp {
     impl Window {
         fn settings(&self) -> &Settings {
             self.settings.get().expect("Settings uninitialized.")
+        }
+
+        /// Filter bad values that break the app
+        fn settings_sanity_check(&self) {
+            let settings = self.settings();
+            if settings.uint("editor-font-size") > 200 {
+                settings.reset("editor-font-size");
+            }
         }
 
         fn update_window_title(&self) {
@@ -953,12 +959,15 @@ mod imp {
                 }
             };
 
-            let font_family = self.settings().string("editor-font-family");
-            let font_size = self.settings().uint("editor-font-size");
-            editor.set_font(font_family.as_str(), font_size);
+            let settings = self.settings();
+            settings
+                .bind("editor-font-size", &editor, "font_size")
+                .build();
+            settings
+                .bind("editor-font-family", &editor, "font_family")
+                .build();
 
             editor.set_show_sidebar(self.editor_sidebar_toggle.is_active());
-
             self.editor_sidebar_toggle.set_sensitive(true);
 
             editor.connect_closure(
@@ -1051,38 +1060,6 @@ mod imp {
             obj.action_set_enabled("editor.show-search-replace", enabled);
             obj.action_set_enabled("editor.hide-search", enabled);
             obj.action_set_enabled("editor.shiftreturn", enabled);
-        }
-
-        fn show_preferences(&self) {
-            let dialog = PreferencesDialog::new(self.settings().clone());
-            dialog.connect_closure(
-                "font-changed",
-                false,
-                closure_local!(
-                    #[weak(rename_to = imp)]
-                    self,
-                    move |_: PreferencesDialog, font: FontDescription| {
-                        if let Err(e) = imp.set_editor_font(font) {
-                            imp.toast(&e.to_string());
-                        }
-                    }
-                ),
-            );
-            dialog.present(Some(&*self.obj()));
-        }
-
-        fn set_editor_font(&self, font: FontDescription) -> Result<(), glib::error::BoolError> {
-            let family = font.family().unwrap_or_default();
-            let size = font.size() as u32;
-
-            self.settings().set_uint("editor-font-size", size)?;
-            self.settings().set_string("editor-font-family", &family)?;
-
-            if let Some(editor) = self.editor.borrow().as_ref() {
-                editor.set_font(family.as_str(), size);
-            };
-
-            Ok(())
         }
 
         /// App quit

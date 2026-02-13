@@ -1,12 +1,10 @@
 mod imp {
     use std::cell::OnceCell;
-    use std::sync::OnceLock;
 
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use gtk::glib;
     use gtk::glib::clone;
-    use gtk::glib::subclass::Signal;
     use gtk::pango;
 
     use adw::ActionRow;
@@ -49,22 +47,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for PreferencesDialog {
-        fn constructed(&self) {
-            self.parent_constructed();
-        }
-
-        fn signals() -> &'static [Signal] {
-            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
-            SIGNALS.get_or_init(|| {
-                vec![
-                    Signal::builder("font-changed")
-                        .param_types([FontDescription::static_type()])
-                        .build(),
-                ]
-            })
-        }
-    }
+    impl ObjectImpl for PreferencesDialog {}
 
     impl WidgetImpl for PreferencesDialog {}
     impl AdwDialogImpl for PreferencesDialog {}
@@ -72,10 +55,7 @@ mod imp {
 
     impl PreferencesDialog {
         pub(super) fn bind_settings(&self, settings: Settings) {
-            self.settings
-                .set(settings)
-                .expect("Settings set multiple times");
-            let settings = self.settings.get().unwrap();
+            self.settings.set(settings.clone()).unwrap();
 
             self.editor_font_button.connect_activated(clone!(
                 #[weak(rename_to = imp)]
@@ -123,33 +103,26 @@ mod imp {
                 None::<&Cancellable>,
                 clone!(
                     #[weak]
-                    obj,
+                    settings,
                     move |result| {
-                        let Ok(mut font) = result else {
+                        let Ok(font) = result else {
                             return;
                         };
-                        let font_size = font.size();
-                        font.set_size(font_size / pango::SCALE);
-                        obj.emit_by_name("font-changed", &[&font])
+                        settings
+                            .set_uint("editor-font-size", (font.size() / pango::SCALE) as u32)
+                            .unwrap();
+                        settings
+                            .set_string("editor-font-family", &font.family().unwrap_or_default())
+                            .unwrap();
                     }
                 ),
             );
         }
 
         fn reset_font(&self) {
-            let obj = self.obj();
             let settings = self.settings.get().unwrap();
-
             settings.reset("editor-font-family");
             settings.reset("editor-font-size");
-            let font_family = settings.string("editor-font-family");
-            let font_size = settings.uint("editor-font-size");
-
-            let mut font = FontDescription::default();
-            font.set_family(&font_family);
-            font.set_size(font_size as i32);
-
-            obj.emit_by_name("font-changed", &[&font])
         }
     }
 }
