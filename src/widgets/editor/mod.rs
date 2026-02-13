@@ -73,11 +73,11 @@ mod imp {
         pub(super) path: RefCell<Option<PathBuf>>,
 
         #[property(get, set)]
-        pub(super) file_changed_on_disk: Cell<bool>,
+        file_changed_on_disk: Cell<bool>,
         #[property(get, set)]
-        pub(super) unsaved_changes: Cell<bool>,
+        unsaved_changes: Cell<bool>,
         #[property(get, set)]
-        pub(super) show_sidebar: Cell<bool>,
+        show_sidebar: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -343,11 +343,11 @@ mod imp {
                 #[weak(rename_to = imp)]
                 self,
                 move |_, _, _, _| {
-                    imp.file_changed_on_disk.set(true);
+                    imp.obj().set_file_changed_on_disk(true);
                     imp.file_changed_on_disk_banner.set_revealed(true);
                 }
             ));
-            self.file_changed_on_disk.set(false);
+            self.obj().set_file_changed_on_disk(false);
             self.file_monitor.replace(Some(monitor));
         }
 
@@ -426,7 +426,7 @@ impl Editor {
 
     pub fn save(&self) -> Result<(), ScratchmarkError> {
         let imp = self.imp();
-        if imp.file_changed_on_disk.get() {
+        if self.file_changed_on_disk() {
             return Err(ScratchmarkError::FileChanged);
         }
 
