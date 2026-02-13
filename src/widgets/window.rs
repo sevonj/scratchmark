@@ -952,20 +952,6 @@ mod imp {
             self.editor_sidebar_toggle.set_sensitive(true);
 
             editor.connect_closure(
-                "close-requested",
-                false,
-                closure_local!(
-                    #[weak(rename_to = imp)]
-                    self,
-                    move |_: Editor| {
-                        if let Err(e) = imp.close_editor() {
-                            imp.toast(&e.to_string());
-                        }
-                    }
-                ),
-            );
-
-            editor.connect_closure(
                 "saved",
                 false,
                 closure_local!(

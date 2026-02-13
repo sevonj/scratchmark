@@ -209,16 +209,6 @@ mod imp {
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("editor", Some(&actions));
 
-            let action = gio::SimpleAction::new("close", None);
-            action.connect_activate(clone!(
-                #[weak]
-                obj,
-                move |_action, _parameter| {
-                    obj.emit_by_name::<()>("close-requested", &[]);
-                }
-            ));
-            actions.add_action(&action);
-
             // This action is a workaround to capture <Shift>Return from the Entry
             let action = SimpleAction::new("shiftreturn", None);
             action.connect_activate(clone!(
@@ -343,7 +333,6 @@ mod imp {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
-                    Signal::builder("close-requested").build(),
                     Signal::builder("saved").build(),
                     Signal::builder("saved-as").build(),
                     Signal::builder("stats-changed").build(),
