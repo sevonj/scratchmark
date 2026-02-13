@@ -7,6 +7,7 @@ data/resources/ui/editor/editor.ui
 data/resources/ui/editor/minimap.ui
 data/resources/ui/editor/search_bar.ui
 data/resources/ui/editor_placeholder.ui
+data/resources/ui/library/delete_confirm_dialog.ui
 data/resources/ui/library/document_context_menu.ui
 data/resources/ui/library/document_create_popover.ui
 data/resources/ui/library/document_row.ui

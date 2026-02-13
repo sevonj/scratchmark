@@ -28,6 +28,7 @@ mod imp {
     use crate::data::Document;
     use crate::data::Folder;
     use crate::data::Project;
+    use crate::widgets::library::delete_confirm_dialog::DeleteConfirmDialog;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::LibraryView)]
@@ -117,16 +118,7 @@ mod imp {
                     Signal::builder("document-rename-requested")
                         .param_types([Document::static_type(), PathBuf::static_type()])
                         .build(),
-                    Signal::builder("folder-delete-requested")
-                        .param_types([Folder::static_type()])
-                        .build(),
-                    Signal::builder("document-delete-requested")
-                        .param_types([Document::static_type()])
-                        .build(),
-                    Signal::builder("document-trashed")
-                        .param_types([PathBuf::static_type()])
-                        .build(),
-                    Signal::builder("folder-trashed")
+                    Signal::builder("path-removed")
                         .param_types([PathBuf::static_type()])
                         .build(),
                     Signal::builder("close-project-requested")
@@ -300,10 +292,10 @@ mod imp {
                 "delete-requested",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
-                    move |folder: Folder| {
-                        obj.emit_by_name::<()>("folder-delete-requested", &[&folder]);
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |dir: Folder| {
+                        imp.delete_folder(&dir);
                     }
                 ),
             );
@@ -385,51 +377,125 @@ mod imp {
                 "delete-requested",
                 false,
                 closure_local!(
-                    #[weak]
-                    obj,
+                    #[weak(rename_to = imp)]
+                    self,
                     move |doc: Document| {
-                        obj.emit_by_name::<()>("document-delete-requested", &[&doc]);
+                        imp.delete_document(&doc);
                     }
                 ),
             );
         }
 
-        fn trash_folder(&self, folder: &Folder) {
+        fn trash_document(&self, document: &Document) {
             let obj = self.obj();
-            assert!(!folder.is_root());
+            let path = document.path();
 
-            let path = folder.path();
-            obj.emit_by_name::<()>("folder-trashed", &[&path]);
+            if let Err(e) = File::for_path(&path).trash(None::<&Cancellable>) {
+                println!("{e}");
+                obj.emit_by_name::<()>("toast", &[&"Couldn't move to trash"]);
+            }
+            obj.emit_by_name::<()>("path-removed", &[&path]);
+            obj.emit_by_name::<()>("toast", &[&"Moved to trash"]);
 
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.project().path()) {
-                    if let Err(e) = File::for_path(path).trash(None::<&Cancellable>) {
-                        println!("{e}");
-                        obj.emit_by_name::<()>("toast", &[&"Couldn't move to trash"]);
-                    }
-                    obj.emit_by_name::<()>("toast", &[&"Moved to trash"]);
                     project.refresh_content();
                     break;
                 }
             }
         }
 
-        fn trash_document(&self, doc: &Document) {
+        fn trash_folder(&self, folder: &Folder) {
+            assert!(!folder.is_root());
             let obj = self.obj();
-            let path = doc.path();
-            obj.emit_by_name::<()>("document-trashed", &[&path]);
+            let path = folder.path();
+
+            if let Err(e) = File::for_path(&path).trash(None::<&Cancellable>) {
+                println!("{e}");
+                obj.emit_by_name::<()>("toast", &[&"Couldn't move to trash"]);
+            }
+            obj.emit_by_name::<()>("path-removed", &[&path]);
+            obj.emit_by_name::<()>("toast", &[&"Moved to trash"]);
 
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.project().path()) {
-                    if let Err(e) = File::for_path(path).trash(None::<&Cancellable>) {
-                        println!("{e}");
-                        obj.emit_by_name::<()>("toast", &[&"Couldn't move to trash"]);
-                    }
-                    obj.emit_by_name::<()>("toast", &[&"Moved to trash"]);
                     project.refresh_content();
                     break;
                 }
             }
+        }
+
+        fn delete_document(&self, document: &Document) {
+            let obj = self.obj();
+            let path = document.path();
+
+            let areyousure = DeleteConfirmDialog::new(&document.stem());
+            areyousure.connect_closure(
+                "response",
+                false,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: DeleteConfirmDialog, response: String| {
+                        if response == "delete" {
+                            let obj = imp.obj();
+                            if let Err(e) = std::fs::remove_file(&path) {
+                                println!("{e}");
+                                obj.emit_by_name::<()>("toast", &[&"Couldn't delete folder."]);
+                                return;
+                            }
+
+                            obj.emit_by_name::<()>("path-removed", &[&path]);
+                            obj.emit_by_name::<()>("toast", &[&"Permanently deleted"]);
+
+                            for project in imp.projects.borrow().deref().values() {
+                                if path.starts_with(project.project().path()) {
+                                    project.refresh_content();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                ),
+            );
+            areyousure.present(obj.root().as_ref());
+        }
+
+        fn delete_folder(&self, folder: &Folder) {
+            assert!(!folder.is_root());
+            let obj = self.obj();
+            let path = folder.path();
+
+            let areyousure = DeleteConfirmDialog::new(&folder.name());
+            areyousure.connect_closure(
+                "response",
+                false,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: DeleteConfirmDialog, response: String| {
+                        if response == "delete" {
+                            let obj = imp.obj();
+                            if let Err(e) = std::fs::remove_dir_all(&path) {
+                                println!("{e}");
+                                obj.emit_by_name::<()>("toast", &[&"Couldn't delete folder."]);
+                                return;
+                            }
+
+                            obj.emit_by_name::<()>("path-removed", &[&path]);
+                            obj.emit_by_name::<()>("toast", &[&"Permanently deleted"]);
+
+                            for project in imp.projects.borrow().deref().values() {
+                                if path.starts_with(project.project().path()) {
+                                    project.refresh_content();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                ),
+            );
+            areyousure.present(obj.root().as_ref());
         }
     }
 }

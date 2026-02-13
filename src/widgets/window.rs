@@ -11,7 +11,6 @@ mod imp {
     use gtk::glib;
 
     use adw::AboutDialog;
-    use adw::AlertDialog;
     use adw::ApplicationWindow;
     use adw::HeaderBar;
     use adw::NavigationPage;
@@ -317,32 +316,7 @@ mod imp {
             );
 
             self.library_view.connect_closure(
-                "document-trashed",
-                false,
-                closure_local!(
-                    #[weak(rename_to = imp)]
-                    self,
-                    move |_: LibraryView, path: PathBuf| {
-                        let is_edited = imp
-                            .editor
-                            .borrow()
-                            .as_ref()
-                            .is_some_and(|e| e.path() == path);
-
-                        if is_edited {
-                            if let Some(editor) = imp.editor.borrow().as_ref() {
-                                editor.stop_file_monitor();
-                                editor.set_file_changed_on_disk(false);
-                            }
-                            imp.close_editor()
-                                .expect("Window: on document-trashed - failed to close editor");
-                        }
-                    }
-                ),
-            );
-
-            self.library_view.connect_closure(
-                "folder-trashed",
+                "path-removed",
                 false,
                 closure_local!(
                     #[weak(rename_to = imp)]
@@ -359,48 +333,8 @@ mod imp {
                                 editor.stop_file_monitor();
                                 editor.set_file_changed_on_disk(false);
                             }
-                            imp.close_editor()
-                                .expect("Window: on folder-trashed - failed to close editor");
+                            imp.close_editor_without_saving();
                         }
-                    }
-                ),
-            );
-
-            self.library_view.connect_closure(
-                "folder-delete-requested",
-                false,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |_: LibraryView, folder: Folder| {
-                        let heading = "Delete folder?";
-                        let body = format!(
-                            "Are you sure you want to permanently delete {}?",
-                            folder.name()
-                        );
-                        let dialog = AlertDialog::new(Some(heading), Some(&body));
-                        dialog.add_response("cancel", "Cancel");
-                        dialog.add_response("commit-delete", "Delete");
-                        dialog.set_response_appearance(
-                            "commit-delete",
-                            adw::ResponseAppearance::Destructive,
-                        );
-                        dialog.connect_closure(
-                            "response",
-                            false,
-                            closure_local!(
-                                #[weak]
-                                obj,
-                                #[weak]
-                                folder,
-                                move |_: AlertDialog, response: String| {
-                                    if response == "commit-delete" {
-                                        obj.imp().delete_folder(&folder);
-                                    }
-                                }
-                            ),
-                        );
-                        dialog.present(Some(&obj));
                     }
                 ),
             );
@@ -485,45 +419,6 @@ mod imp {
                         );
 
                         imp.update_window_title();
-                    }
-                ),
-            );
-
-            self.library_view.connect_closure(
-                "document-delete-requested",
-                false,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |_: LibraryView, doc: Document| {
-                        let heading = "Delete document?";
-                        let body = format!(
-                            "Are you sure you want to permanently delete {}?",
-                            doc.stem()
-                        );
-                        let dialog = AlertDialog::new(Some(heading), Some(&body));
-                        dialog.add_response("cancel", "Cancel");
-                        dialog.add_response("commit-delete", "Delete");
-                        dialog.set_response_appearance(
-                            "commit-delete",
-                            adw::ResponseAppearance::Destructive,
-                        );
-                        dialog.connect_closure(
-                            "response",
-                            false,
-                            closure_local!(
-                                #[weak]
-                                obj,
-                                #[weak]
-                                doc,
-                                move |_: AlertDialog, response: String| {
-                                    if response == "commit-delete" {
-                                        obj.imp().delete_document(&doc);
-                                    }
-                                }
-                            ),
-                        );
-                        dialog.present(Some(&obj));
                     }
                 ),
             );
@@ -1126,44 +1021,6 @@ mod imp {
             self.update_toolbar_style();
         }
 
-        fn delete_folder(&self, folder: &Folder) {
-            assert!(!folder.is_root());
-
-            let path = folder.path();
-            let parent_of_currently_open = self
-                .editor
-                .borrow()
-                .as_ref()
-                .is_some_and(|e| e.path().starts_with(&path));
-            if parent_of_currently_open && let Err(e) = self.close_editor() {
-                self.toast(&e.to_string());
-                return;
-            }
-            if let Err(e) = std::fs::remove_dir_all(path) {
-                println!("{e}");
-                self.toast("Couldn't delete folder.");
-            }
-            self.library_view.refresh_content();
-        }
-
-        fn delete_document(&self, doc: &Document) {
-            let path = doc.path();
-            let currently_open = self
-                .editor
-                .borrow()
-                .as_ref()
-                .is_some_and(|e| e.path() == path);
-            if currently_open && let Err(e) = self.close_editor() {
-                self.toast(&e.to_string());
-                return;
-            }
-            if let Err(e) = std::fs::remove_file(path) {
-                println!("{e}");
-                self.toast("Couldn't delete file.");
-            }
-            self.library_view.refresh_content();
-        }
-
         fn save_document(&self) {
             let mut editor_bind = self.editor.borrow_mut();
             let Some(editor) = editor_bind.as_mut() else {
@@ -1180,8 +1037,12 @@ mod imp {
             if let Some(editor) = self.editor.borrow_mut().as_ref() {
                 editor.save()?;
             }
-            self.editor.replace(None);
+            self.close_editor_without_saving();
+            Ok(())
+        }
 
+        fn close_editor_without_saving(&self) {
+            self.editor.replace(None);
             self.main_toolbar_view
                 .set_content(Some(&EditorPlaceholder::default()));
             self.update_window_title();
@@ -1191,7 +1052,6 @@ mod imp {
             self.editor_actions_set_enabled(false);
             self.set_focus_mode_active(false);
             self.update_toolbar_style();
-            Ok(())
         }
 
         fn editor_actions_set_enabled(&self, enabled: bool) {
