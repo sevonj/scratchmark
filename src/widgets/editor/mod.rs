@@ -34,6 +34,7 @@ mod imp {
     use gtk::TextMark;
     use gtk::gio::Cancellable;
     use gtk::gio::SimpleAction;
+    use gtk::glib::GString;
 
     use super::document_stats_view::DocumentStatsView;
     use super::minimap::Minimap;
@@ -73,11 +74,15 @@ mod imp {
         pub(super) path: RefCell<Option<PathBuf>>,
 
         #[property(get, set)]
-        pub(super) file_changed_on_disk: Cell<bool>,
+        file_changed_on_disk: Cell<bool>,
         #[property(get, set)]
-        pub(super) unsaved_changes: Cell<bool>,
+        unsaved_changes: Cell<bool>,
         #[property(get, set)]
-        pub(super) show_sidebar: Cell<bool>,
+        show_sidebar: Cell<bool>,
+        #[property(get, set)]
+        font_size: Cell<u32>,
+        #[property(get, set)]
+        font_family: RefCell<GString>,
     }
 
     #[glib::object_subclass]
@@ -185,6 +190,14 @@ mod imp {
                 .sync_create()
                 .bidirectional()
                 .build();
+
+            obj.connect_font_family_notify(clone!(move |obj| {
+                obj.imp().refresh_font();
+            }));
+
+            obj.connect_font_size_notify(clone!(move |obj| {
+                obj.imp().refresh_font();
+            }));
 
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("editor", Some(&actions));
@@ -343,16 +356,22 @@ mod imp {
                 #[weak(rename_to = imp)]
                 self,
                 move |_, _, _, _| {
-                    imp.file_changed_on_disk.set(true);
+                    imp.obj().set_file_changed_on_disk(true);
                     imp.file_changed_on_disk_banner.set_revealed(true);
                 }
             ));
-            self.file_changed_on_disk.set(false);
+            self.obj().set_file_changed_on_disk(false);
             self.file_monitor.replace(Some(monitor));
         }
 
         pub(crate) fn stop_file_monitor(&self) {
             self.file_monitor.take().map(|fm| fm.cancel());
+        }
+
+        fn refresh_font(&self) {
+            let obj = self.obj();
+            self.source_view
+                .set_font(&obj.font_family(), obj.font_size());
         }
     }
 }
@@ -426,7 +445,7 @@ impl Editor {
 
     pub fn save(&self) -> Result<(), ScratchmarkError> {
         let imp = self.imp();
-        if imp.file_changed_on_disk.get() {
+        if self.file_changed_on_disk() {
             return Err(ScratchmarkError::FileChanged);
         }
 
@@ -473,10 +492,6 @@ impl Editor {
     /// For preventing "file changed" banner when renaming the file or such.
     pub fn stop_file_monitor(&self) {
         self.imp().stop_file_monitor();
-    }
-
-    pub fn set_font(&self, family: &str, size: u32) {
-        self.imp().source_view.set_font(family, size);
     }
 
     pub fn document_stats(&self) -> DocumentStats {
