@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-11 19:53+0200\n"
+"POT-Creation-Date: 2026-02-13 14:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,6 +175,22 @@ msgstr ""
 
 #: data/resources/ui/editor_placeholder.ui:11
 msgid "Create a new document or open an existing one from the sidebar"
+msgstr ""
+
+#: data/resources/ui/library/delete_confirm_dialog.ui:4
+msgid "Delete permanently?"
+msgstr ""
+
+#: data/resources/ui/library/delete_confirm_dialog.ui:5
+msgid "\"{filename}\" will be permanently deleted."
+msgstr ""
+
+#: data/resources/ui/library/delete_confirm_dialog.ui:9
+msgid "_Cancel"
+msgstr ""
+
+#: data/resources/ui/library/delete_confirm_dialog.ui:10
+msgid "_Delete"
 msgstr ""
 
 #: data/resources/ui/library/document_context_menu.ui:6
