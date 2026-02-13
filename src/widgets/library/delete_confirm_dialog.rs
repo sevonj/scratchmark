@@ -55,7 +55,7 @@ impl DeleteConfirmDialog {
     pub fn new(filename: &str) -> Self {
         let obj: DeleteConfirmDialog = Object::builder().build();
         let body = obj.body();
-        obj.set_body(&body.replace("{filename}", filename));
+        obj.set_body(&body.replace("{{filename}}", filename));
         obj
     }
 

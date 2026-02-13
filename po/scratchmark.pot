@@ -182,7 +182,7 @@ msgid "Delete permanently?"
 msgstr ""
 
 #: data/resources/ui/library/delete_confirm_dialog.ui:5
-msgid "\"{filename}\" will be permanently deleted."
+msgid "\"{{filename}}\" will be permanently deleted."
 msgstr ""
 
 #: data/resources/ui/library/delete_confirm_dialog.ui:9

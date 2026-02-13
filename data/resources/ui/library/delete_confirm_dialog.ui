@@ -2,7 +2,7 @@
 <interface>
   <template class="DeleteConfirmDialog" parent="AdwAlertDialog">
     <property name="heading" translatable="yes">Delete permanently?</property>
-    <property name="body" translatable="yes">"{filename}" will be permanently deleted.</property>
+    <property name="body" translatable="yes">"{{filename}}" will be permanently deleted.</property>
     <property name="default-response">delete</property>
     <property name="close-response">cancel</property>
     <responses>
