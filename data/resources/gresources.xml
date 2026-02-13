@@ -4,6 +4,7 @@
   <gresource prefix="/org/scratchmark/Scratchmark">
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/document_stats_view.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/editor.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/editor/file_changed_on_disk_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/minimap.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/search_bar.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/delete_confirm_dialog.ui</file>

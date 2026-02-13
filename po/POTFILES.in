@@ -4,6 +4,7 @@ data/org.scratchmark.Scratchmark.gschema.xml
 data/resources/ui/about_dialog.ui
 data/resources/ui/editor/document_stats_view.ui
 data/resources/ui/editor/editor.ui
+data/resources/ui/editor/file_changed_on_disk_dialog.ui
 data/resources/ui/editor/minimap.ui
 data/resources/ui/editor/search_bar.ui
 data/resources/ui/editor_placeholder.ui
