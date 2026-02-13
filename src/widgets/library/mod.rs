@@ -1,3 +1,4 @@
+mod delete_confirm_dialog;
 mod document_create_popover;
 mod document_row;
 mod err_placeholder_row;
