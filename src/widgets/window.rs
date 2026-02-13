@@ -606,7 +606,13 @@ mod imp {
                 #[weak(rename_to = imp)]
                 self,
                 move |_, _| {
-                    imp.save_document();
+                    if let Some(editor) = imp.editor.borrow().as_ref() {
+                        if let Err(e) = editor.save() {
+                            imp.toast(&e.to_string());
+                            return;
+                        }
+                        imp.toast("Saved");
+                    }
                 }
             ));
             obj.add_action(&action);
@@ -656,10 +662,14 @@ mod imp {
 
             let action = SimpleAction::new("show-about", None);
             action.connect_activate(clone!(
-                #[weak(rename_to = imp)]
-                self,
+                #[weak]
+                obj,
                 move |_, _| {
-                    imp.show_about();
+                    let builder =
+                        Builder::from_resource("/org/scratchmark/Scratchmark/ui/about_dialog.ui");
+                    let dialog: AboutDialog = builder.object("dialog").unwrap();
+                    dialog.set_version(config::VERSION);
+                    dialog.present(Some(&obj));
                 }
             ));
             obj.add_action(&action);
@@ -1007,18 +1017,6 @@ mod imp {
             self.update_toolbar_style();
         }
 
-        fn save_document(&self) {
-            let mut editor_bind = self.editor.borrow_mut();
-            let Some(editor) = editor_bind.as_mut() else {
-                return;
-            };
-            if let Err(e) = editor.save() {
-                self.toast(&e.to_string());
-                return;
-            }
-            self.toast("Saved");
-        }
-
         fn close_editor(&self) -> Result<(), ScratchmarkError> {
             if let Some(editor) = self.editor.borrow_mut().as_ref() {
                 editor.save()?;
@@ -1053,14 +1051,6 @@ mod imp {
             obj.action_set_enabled("editor.show-search-replace", enabled);
             obj.action_set_enabled("editor.hide-search", enabled);
             obj.action_set_enabled("editor.shiftreturn", enabled);
-        }
-
-        fn show_about(&self) {
-            let obj = self.obj();
-            let builder = Builder::from_resource("/org/scratchmark/Scratchmark/ui/about_dialog.ui");
-            let dialog: AboutDialog = builder.object("dialog").unwrap();
-            dialog.set_version(config::VERSION);
-            dialog.present(Some(&*obj));
         }
 
         fn show_preferences(&self) {
