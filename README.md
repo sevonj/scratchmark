@@ -47,7 +47,7 @@ https://scratchmark.org
 [➜ Translation](https://translate.codeberg.org/projects/scratchmark/app/)  
 [➜ Project Backlog](https://github.com/users/sevonj/projects/20)  
 [➜ Website Source](https://github.com/sevonj/scratchmark.org)  
-[➜ Matrix Room](https://matrix.to/#/!XlfKaypcRYWGQuwQqn:matrix.org)  
+[➜ Chat #scratchmark:matrix.org](https://matrix.to/#/#scratchmark:matrix.org)
 
 If you find an issue that's important to you, give it a thumbs up.  
 You're also welcome to improve the website, which is currently rather barebones.  
