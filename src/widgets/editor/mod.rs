@@ -83,6 +83,8 @@ mod imp {
         font_size: Cell<u32>,
         #[property(get, set)]
         font_family: RefCell<GString>,
+        #[property(get, set)]
+        scroll_pos: Cell<f64>,
     }
 
     #[glib::object_subclass]
@@ -109,6 +111,11 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
+
+            obj.bind_property("scroll_pos", &self.scrolled_window.vadjustment(), "value")
+                .sync_create()
+                .bidirectional()
+                .build();
 
             self.search_bar.connect_closure(
                 "scroll-to-mark",
@@ -504,14 +511,6 @@ impl Editor {
             return;
         };
         source_view.scroll_to_iter(&mut iter, 0., false, 0., 0.);
-    }
-
-    pub fn scroll_to_top(&self) {
-        let vadjustment = self.imp().scrolled_window.vadjustment();
-        vadjustment.set_value(vadjustment.lower());
-        self.imp()
-            .scrolled_window
-            .set_vadjustment(Some(&vadjustment));
     }
 
     fn refresh_document_stats(&self, buffer: &MarkdownBuffer) {
