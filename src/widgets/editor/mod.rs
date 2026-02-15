@@ -87,6 +87,8 @@ mod imp {
         #[property(get, set)]
         font_family: RefCell<GString>,
         #[property(get, set)]
+        scroll_pos: Cell<f64>,
+        #[property(get, set)]
         limit_width: Cell<bool>,
         #[property(get, set)]
         max_width: Cell<i32>,
@@ -115,6 +117,11 @@ mod imp {
     impl ObjectImpl for Editor {
         fn constructed(&self) {
             let obj = self.obj();
+
+            obj.bind_property("scroll_pos", &self.scrolled_window.vadjustment(), "value")
+                .sync_create()
+                .bidirectional()
+                .build();
 
             self.search_bar.connect_closure(
                 "scroll-to-mark",

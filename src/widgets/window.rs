@@ -206,7 +206,7 @@ mod imp {
                                 format_bar.set_visible(false);
                                 if let Some(editor) = imp.editor.borrow().as_ref() {
                                     editor.activate_action("editor.hide-search", None).unwrap();
-                                    editor.scroll_to_top();
+                                    editor.set_scroll_pos(0.);
                                 }
                                 glib::Propagation::Stop
                             }
@@ -219,7 +219,7 @@ mod imp {
                                 format_bar.set_visible(false);
                                 if let Some(editor) = imp.editor.borrow().as_ref() {
                                     editor.activate_action("editor.hide-search", None).unwrap();
-                                    editor.scroll_to_top();
+                                    editor.set_scroll_pos(0.);
                                     editor.scroll_to_line(20);
                                 }
                                 glib::Propagation::Stop
@@ -241,7 +241,7 @@ mod imp {
                                     editor
                                         .activate_action("editor.show-search-replace", None)
                                         .unwrap();
-                                    editor.scroll_to_top();
+                                    editor.set_scroll_pos(0.);
                                     editor
                                         .activate_action("editor.show-search-replace", None)
                                         .unwrap();
