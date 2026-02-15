@@ -20,6 +20,7 @@ mod imp {
 
     use adw::AlertDialog;
     use adw::Banner;
+    use adw::ClampScrollable;
     use adw::OverlaySplitView;
     use gio::File;
     use gio::FileMonitor;
@@ -51,6 +52,8 @@ mod imp {
     pub struct Editor {
         #[template_child]
         pub(super) source_view: TemplateChild<EditorTextView>,
+        #[template_child]
+        pub(super) source_view_clamp: TemplateChild<ClampScrollable>,
         pub(super) buffer: OnceCell<MarkdownBuffer>,
         #[template_child]
         pub(super) stats_view: TemplateChild<DocumentStatsView>,
@@ -83,6 +86,10 @@ mod imp {
         font_size: Cell<u32>,
         #[property(get, set)]
         font_family: RefCell<GString>,
+        #[property(get, set)]
+        limit_width: Cell<bool>,
+        #[property(get, set)]
+        max_width: Cell<i32>,
     }
 
     #[glib::object_subclass]
@@ -107,7 +114,6 @@ mod imp {
     #[glib::derived_properties]
     impl ObjectImpl for Editor {
         fn constructed(&self) {
-            self.parent_constructed();
             let obj = self.obj();
 
             self.search_bar.connect_closure(
@@ -197,6 +203,14 @@ mod imp {
 
             obj.connect_font_size_notify(clone!(move |obj| {
                 obj.imp().refresh_font();
+            }));
+
+            obj.connect_limit_width_notify(clone!(move |obj| {
+                obj.imp().refresh_max_width();
+            }));
+
+            obj.connect_max_width_notify(clone!(move |obj| {
+                obj.imp().refresh_max_width();
             }));
 
             let actions = SimpleActionGroup::new();
@@ -320,6 +334,8 @@ mod imp {
                 move |_, _| imp.buffer.get().unwrap().format_code()
             ));
             actions.add_action(&action);
+
+            self.parent_constructed();
         }
 
         fn signals() -> &'static [Signal] {
@@ -372,6 +388,40 @@ mod imp {
             let obj = self.obj();
             self.source_view
                 .set_font(&obj.font_family(), obj.font_size());
+            self.refresh_max_width();
+        }
+
+        fn refresh_max_width(&self) {
+            let obj = self.obj();
+            // Delayed to make sure the font change is completed first.
+            // The idle needs to be here to not break the one in new(), causing a flicker.
+            glib::idle_add_local_once(clone!(
+                #[weak]
+                obj,
+                move || {
+                    let imp = obj.imp();
+                    if obj.limit_width() {
+                        let char_width =
+                            imp.source_view
+                                .pango_context()
+                                .metrics(None, None)
+                                .approximate_char_width() as f32
+                                / gtk::pango::SCALE as f32;
+                        let margin = imp.source_view.margin_start()
+                            + imp.source_view.margin_end()
+                            + imp.source_view.left_margin()
+                            + imp.source_view.right_margin();
+                        let max_width =
+                            obj.max_width() as f32 * char_width + margin as f32 + char_width;
+                        imp.source_view_clamp.set_maximum_size(max_width as i32);
+                        imp.source_view_clamp
+                            .set_tightening_threshold((max_width * 0.6) as i32);
+                    } else {
+                        imp.source_view_clamp.set_maximum_size(i32::MAX);
+                        imp.source_view_clamp.set_tightening_threshold(i32::MAX);
+                    }
+                }
+            ));
         }
     }
 }
@@ -405,7 +455,8 @@ glib::wrapper! {
 }
 
 impl Editor {
-    pub fn new(path: PathBuf) -> Result<Self, ScratchmarkError> {
+    /// * `max_width_px` - cached value to avoid flicker at before font is loaded
+    pub fn new(path: PathBuf, max_width_px: i32) -> Result<Self, ScratchmarkError> {
         let file = gtk::gio::File::for_path(&path);
         let text = file_actions::read_file_to_string(&file)?;
         let buffer = MarkdownBuffer::default();
@@ -440,6 +491,9 @@ impl Editor {
             }
         ));
         obj.refresh_document_stats(&buffer);
+        imp.source_view_clamp.set_maximum_size(max_width_px);
+        imp.source_view_clamp
+            .set_tightening_threshold((max_width_px as f32 * 0.6) as i32);
         Ok(obj)
     }
 
@@ -512,6 +566,10 @@ impl Editor {
         self.imp()
             .scrolled_window
             .set_vadjustment(Some(&vadjustment));
+    }
+
+    pub fn max_width_px(&self) -> i32 {
+        self.imp().source_view_clamp.maximum_size()
     }
 
     fn refresh_document_stats(&self, buffer: &MarkdownBuffer) {
