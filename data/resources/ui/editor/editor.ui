@@ -28,7 +28,7 @@
                                     <object class="GtkScrolledWindow" id="scrolled_window">
                                         <property name="hexpand">true</property>
                                         <child>
-                                            <object class="AdwClampScrollable">
+                                            <object class="AdwClampScrollable" id="source_view_clamp">
                                                 <property name="maximum-size">768</property>
                                                 <property name="tightening-threshold">640</property>
                                                 <child>
