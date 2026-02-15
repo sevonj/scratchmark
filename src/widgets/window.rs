@@ -26,7 +26,6 @@ mod imp {
     use gtk::Revealer;
     use gtk::ToggleButton;
     use gtk::gio::Settings;
-    use gtk::gio::SettingsBindFlags;
     use gtk::gio::SimpleAction;
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Properties;
@@ -170,7 +169,7 @@ mod imp {
                         library_view,
                         "ignore-hidden-files",
                     )
-                    .flags(SettingsBindFlags::GET)
+                    .get()
                     .build();
             }
             #[cfg(feature = "generatescreenshots")]
@@ -950,7 +949,9 @@ mod imp {
                 return;
             }
 
-            let editor = match Editor::new(path.clone()) {
+            let settings = self.settings();
+            let max_width_px = settings.int("editor-max-width-cached-px");
+            let editor = match Editor::new(path.clone(), max_width_px) {
                 Ok(editor) => editor,
                 Err(e) => {
                     self.toast(&e.to_string());
@@ -958,14 +959,6 @@ mod imp {
                     return;
                 }
             };
-
-            let settings = self.settings();
-            settings
-                .bind("editor-font-size", &editor, "font_size")
-                .build();
-            settings
-                .bind("editor-font-family", &editor, "font_family")
-                .build();
 
             editor.set_show_sidebar(self.editor_sidebar_toggle.is_active());
             self.editor_sidebar_toggle.set_sensitive(true);
@@ -1012,9 +1005,21 @@ mod imp {
                 .bind_property("unsaved-changes", window_title, "unsaved-changes")
                 .sync_create()
                 .build();
-            self.settings()
+
+            settings
+                .bind("editor-font-size", &editor, "font_size")
+                .build();
+            settings
+                .bind("editor-font-family", &editor, "font_family")
+                .build();
+            settings
+                .bind("editor-limit-width", &editor, "limit_width")
+                .build();
+            settings
+                .bind("editor-max-width", &editor, "max_width")
+                .build();
+            settings
                 .bind("editor-show-minimap", &editor, "show-minimap")
-                .flags(SettingsBindFlags::DEFAULT)
                 .build();
 
             self.main_toolbar_view.set_content(Some(&editor));
@@ -1028,6 +1033,9 @@ mod imp {
 
         fn close_editor(&self) -> Result<(), ScratchmarkError> {
             if let Some(editor) = self.editor.borrow_mut().as_ref() {
+                self.settings()
+                    .set_int("editor-max-width-cached-px", editor.max_width_px())
+                    .unwrap();
                 editor.save()?;
             }
             self.close_editor_without_saving();

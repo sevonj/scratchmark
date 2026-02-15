@@ -8,12 +8,12 @@ mod imp {
     use gtk::pango;
 
     use adw::ActionRow;
+    use adw::SpinRow;
     use adw::SwitchRow;
     use gtk::CompositeTemplate;
     use gtk::FontDialog;
     use gtk::gio::Cancellable;
     use gtk::gio::Settings;
-    use gtk::gio::SettingsBindFlags;
     use gtk::pango::FontDescription;
 
     #[derive(CompositeTemplate, Default)]
@@ -27,6 +27,10 @@ mod imp {
         editor_font_reset_button: TemplateChild<ActionRow>,
         #[template_child]
         editor_minimap_toggle: TemplateChild<SwitchRow>,
+        #[template_child]
+        editor_limit_width_toggle: TemplateChild<SwitchRow>,
+        #[template_child]
+        editor_max_width_spin: TemplateChild<SpinRow>,
 
         #[template_child]
         library_ignore_hidden_files_toggle: TemplateChild<SwitchRow>,
@@ -69,21 +73,31 @@ mod imp {
                 move |_| imp.reset_font()
             ));
 
-            let editor_minimap_toggle: &SwitchRow = self.editor_minimap_toggle.as_ref();
+            let editor_minimap_toggle: &SwitchRow = &self.editor_minimap_toggle;
             settings
                 .bind("editor-show-minimap", editor_minimap_toggle, "active")
-                .flags(SettingsBindFlags::DEFAULT)
+                .build();
+            let editor_limit_width_toggle: &SwitchRow = &self.editor_limit_width_toggle;
+            settings
+                .bind("editor-limit-width", editor_limit_width_toggle, "active")
+                .build();
+            let editor_max_width_spin: &SpinRow = &self.editor_max_width_spin;
+            settings
+                .bind("editor-max-width", editor_max_width_spin, "value")
+                .build();
+            settings
+                .bind("editor-limit-width", editor_max_width_spin, "sensitive")
+                .get()
                 .build();
 
             let library_ignore_hidden_files_toggle: &SwitchRow =
-                self.library_ignore_hidden_files_toggle.as_ref();
+                &self.library_ignore_hidden_files_toggle;
             settings
                 .bind(
                     "library-ignore-hidden-files",
                     library_ignore_hidden_files_toggle,
                     "active",
                 )
-                .flags(SettingsBindFlags::DEFAULT)
                 .build();
         }
 
