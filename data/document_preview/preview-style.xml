@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme id="preview-style" name="Preview Style" version="1.0">
+  <author>sevonj</author>
+  <_description>Default Theme for Scratchmark</_description>
+
+  <!-- transparent bg -->
+  <style name="text" background="#00000000" />
+
+  <style name="markdown:h1" bold="true" />
+  <style name="markdown:h2" bold="true" />
+  <style name="markdown:h3" bold="true" />
+  <style name="markdown:h4" bold="true" />
+  <style name="markdown:h5" bold="true" />
+  <style name="markdown:h6" bold="true" />
+  <style name="markdown:bold" bold="true" />
+  <style name="markdown:italic" italic="true" />
+  <style name="markdown:bold-italic" bold="true" italic="true" />
+  <style name="markdown:code" />
+  <style name="markdown:strikethrough" strikethrough="true" />
+  <!-- TODO style name="markdown:subscript" /-->
+  <!-- TODO style name="markdown:superscript" /-->
+
+</style-scheme>

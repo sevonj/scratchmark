@@ -247,6 +247,9 @@ mod imp {
                 .expect("Tried to add a document, but couldn't find its parent.");
             parent.add_document(doc.clone());
 
+            drop(documents);
+            drop(folders);
+
             self.obj().emit_by_name::<()>("document-added", &[&doc]);
         }
 
@@ -266,6 +269,8 @@ mod imp {
                     .expect("Tried to add a folder, but couldn't find its parent.");
                 parent.add_subfolder(folder.clone());
             }
+
+            drop(folders);
 
             self.obj().emit_by_name::<()>("folder-added", &[&folder]);
 

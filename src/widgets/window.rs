@@ -4,6 +4,7 @@ mod imp {
     use std::cell::RefCell;
     use std::path::PathBuf;
 
+    use adw::SplitButton;
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use glib::clone;
@@ -45,6 +46,7 @@ mod imp {
     use crate::widgets::MarkdownFormatBar;
     use crate::widgets::PreferencesDialog;
     use crate::widgets::WindowTitle;
+    use crate::widgets::library::FolderView;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::Window)]
@@ -54,16 +56,15 @@ mod imp {
         top_split: TemplateChild<OverlaySplitView>,
 
         #[template_child]
-        sidebar_page: TemplateChild<NavigationPage>,
-        #[template_child]
         sidebar_toolbar_view: TemplateChild<ToolbarView>,
         #[template_child]
-        sidebar_toggle: TemplateChild<ToggleButton>,
-        /// Bound to setting. Does not directly map to sidebar visibility, because even when this
-        /// is true, the sidebar can be hidden by focus mode or too narrow window.
-        #[property(get, set)]
-        show_sidebar: Cell<bool>,
-
+        sidebar_button: TemplateChild<Button>,
+        #[template_child]
+        sidebar_split_button: TemplateChild<SplitButton>,
+        // /// Bound to setting. Does not directly map to sidebar visibility, because even when this
+        // /// is true, the sidebar can be hidden by focus mode or too narrow window.
+        // #[property(get, set)]
+        // show_sidebar: Cell<bool>,
         #[template_child]
         main_page: TemplateChild<NavigationPage>,
         #[template_child]
@@ -88,6 +89,8 @@ mod imp {
         editor_sidebar_toggle: TemplateChild<ToggleButton>,
 
         library_view: LibraryView,
+        #[template_child]
+        library_folder_column: TemplateChild<FolderView>,
         editor: RefCell<Option<Editor>>,
 
         motion_controller: EventControllerMotion,
@@ -108,6 +111,7 @@ mod imp {
         type ParentType = ApplicationWindow;
 
         fn class_init(klass: &mut Self::Class) {
+            FolderView::ensure_type();
             MarkdownFormatBar::ensure_type();
             WindowTitle::ensure_type();
 
@@ -144,9 +148,9 @@ mod imp {
                 settings
                     .bind("win-is-maximized", obj.as_ref(), "maximized")
                     .build();
-                settings
-                    .bind("library-show-sidebar", obj.as_ref(), "show-sidebar")
-                    .build();
+                // settings
+                //     .bind("library-show-sidebar", obj.as_ref(), "show-sidebar")
+                //     .build();
                 let editor_sidebar_toggle: &ToggleButton = self.editor_sidebar_toggle.as_ref();
                 settings
                     .bind("editor-show-sidebar", editor_sidebar_toggle, "active")
@@ -170,6 +174,20 @@ mod imp {
                         "ignore-hidden-files",
                     )
                     .get()
+                    .build();
+                settings
+                    .bind(
+                        "library-two-column-sidebar",
+                        library_view,
+                        "two-column-sidebar",
+                    )
+                    .build();
+                settings
+                    .bind("library-sort-method", library_view, "sort-method")
+                    .build();
+                let folder_column: &FolderView = &self.library_folder_column;
+                settings
+                    .bind("library-details-sort-method", folder_column, "sort-method")
                     .build();
             }
             #[cfg(feature = "generatescreenshots")]
@@ -254,6 +272,16 @@ mod imp {
                 ));
                 obj.add_controller(key_controller);
             }
+
+            let folder_column: &FolderView = &self.library_folder_column;
+            self.library_view
+                .bind_property("selected_folder", folder_column, "folder")
+                .sync_create()
+                .build();
+            self.library_view
+                .bind_property("two_column_sidebar", folder_column, "visible")
+                .sync_create()
+                .build();
 
             obj.connect_notify(Some("focus-mode-enabled"), move |obj, _| {
                 let focus_mode_enabled = obj.focus_mode_enabled();
@@ -455,42 +483,43 @@ mod imp {
                 ),
             );
 
-            if !self.top_split.is_collapsed() {
-                // Get initial state from setting.
-                self.top_split.set_show_sidebar(obj.show_sidebar());
-            }
+            // if !self.top_split.is_collapsed() {
+            //     // Get initial state from setting.
+            //     self.top_split.set_show_sidebar(obj.show_sidebar());
+            // }
 
-            self.sidebar_toggle.connect_active_notify(clone!(
+            self.sidebar_split_button.connect_clicked(clone!(
                 #[weak]
                 obj,
-                move |sidebar_toggle| {
-                    // Sidebar toggle clicked
-                    if obj.imp().top_split.is_collapsed() {
-                        // Window is narrow, sidebar is an overlay. Do not change the setting.
-                        return;
-                    }
-                    if obj.focus_mode_active() {
-                        return;
-                    }
-                    obj.set_show_sidebar(sidebar_toggle.is_active())
+                move |_| obj.imp().set_sidebar_open(false)
+            ));
+
+            self.sidebar_button.connect_clicked(clone!(
+                #[weak]
+                obj,
+                move |_| {
+                    // // Sidebar toggle clicked
+                    // if obj.imp().top_split.is_collapsed() {
+                    //     // Window is narrow, sidebar is an overlay. Do not change the setting.
+                    //     return;
+                    // }
+                    // if obj.focus_mode_active() {
+                    //     return;
+                    // }
+                    obj.imp().set_sidebar_open(true);
                 }
             ));
 
             self.top_split.connect_collapsed_notify(clone!(
-                #[weak]
-                obj,
-                move |top_split| {
-                    if !top_split.is_collapsed() {
-                        // Sidebar was uncollapsed, get uncollapsed state from setting again.
-                        top_split.set_show_sidebar(obj.show_sidebar());
-                    }
-                }
+                #[weak(rename_to = imp)]
+                self,
+                move |_| imp.on_sidebar_collapse_changed()
             ));
 
-            let sidebar_toggle: &ToggleButton = self.sidebar_toggle.as_ref();
+            let sidebar_button: &Button = &self.sidebar_button;
             self.top_split
-                .bind_property("show-sidebar", sidebar_toggle, "active")
-                .bidirectional()
+                .bind_property("show-sidebar", sidebar_button, "visible")
+                .invert_boolean()
                 .sync_create()
                 .build();
 
@@ -640,20 +669,15 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak(rename_to = imp)]
                 self,
-                move |_, _| {
-                    imp.library_view.refresh_content();
-                }
+                move |_, _| imp.library_view.refresh_content()
             ));
             obj.add_action(&action);
 
             let action = SimpleAction::new("toggle-sidebar", None);
             action.connect_activate(clone!(
-                #[weak]
-                top_split,
-                move |_, _| {
-                    let show = !top_split.shows_sidebar();
-                    top_split.set_show_sidebar(show);
-                }
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| imp.set_sidebar_open(!top_split.shows_sidebar())
             ));
             obj.add_action(&action);
 
@@ -684,7 +708,7 @@ mod imp {
             let library_actions = SimpleActionGroup::new();
             obj.insert_action_group("library", Some(&library_actions));
             let action = SimpleAction::new_stateful(
-                "sort-type",
+                "sort-method",
                 Some(VariantTy::STRING),
                 &SortMethod::default().to_string().to_variant(),
             );
@@ -698,6 +722,20 @@ mod imp {
                         .set_sort_method(param.get::<String>().unwrap());
                 }
             ));
+            library_actions.add_action(&action);
+
+            let action =
+                SimpleAction::new_stateful("two-column-sidebar", None, &false.to_variant());
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |action, _| {
+                    let show = !action.state().unwrap().get::<bool>().unwrap();
+                    imp.library_view.set_two_column_sidebar(show);
+                    action.set_state(&show.to_variant());
+                }
+            ));
+            action.set_state(&self.library_view.two_column_sidebar().to_variant());
             library_actions.add_action(&action);
 
             let editor_actions = SimpleActionGroup::new();
@@ -825,10 +863,30 @@ mod imp {
                 active = false;
             }
             obj.set_focus_mode_active(active);
-            self.top_split
-                .set_show_sidebar(obj.show_sidebar() && !active);
+            // self.top_split
+            //     .set_show_sidebar(obj.show_sidebar() && !active);
             self.update_toolbar_visibility();
             self.update_toolbar_style();
+        }
+
+        fn set_sidebar_open(&self, open: bool) {
+            if self.top_split.is_collapsed() {
+                self.top_split.set_show_sidebar(open);
+            } else {
+                let settings = self.settings();
+                settings.set_boolean("library-show-sidebar", open).unwrap();
+                self.top_split.set_show_sidebar(open);
+            }
+        }
+
+        fn on_sidebar_collapse_changed(&self) {
+            if self.top_split.is_collapsed() {
+                self.top_split.set_show_sidebar(false);
+            } else {
+                let settings = self.settings();
+                let setting = settings.boolean("library-show-sidebar");
+                self.top_split.set_show_sidebar(setting);
+            }
         }
 
         fn update_toolbar_visibility(&self) {
@@ -1022,6 +1080,8 @@ mod imp {
                 .bind("editor-show-minimap", &editor, "show-minimap")
                 .build();
 
+            self.library_folder_column
+                .set_open_document(Some(path.clone()));
             self.main_toolbar_view.set_content(Some(&editor));
             self.format_bar.bind_editor(Some(editor.clone()));
             self.editor.replace(Some(editor));
@@ -1044,6 +1104,8 @@ mod imp {
 
         fn close_editor_without_saving(&self) {
             self.editor.replace(None);
+            self.library_folder_column
+                .set_open_document(None::<PathBuf>);
             self.main_toolbar_view
                 .set_content(Some(&EditorPlaceholder::default()));
             self.update_window_title();

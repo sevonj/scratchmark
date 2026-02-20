@@ -41,6 +41,8 @@ mod imp {
         open_document_path: RefCell<Option<PathBuf>>,
         #[property(nullable, get, set)]
         selected_item_path: RefCell<Option<PathBuf>>,
+        #[property(nullable, get, set)]
+        selected_folder: RefCell<Option<Folder>>,
 
         pub(super) projects: RefCell<HashMap<PathBuf, ProjectView>>,
 
@@ -48,6 +50,8 @@ mod imp {
         ignore_hidden_files: Cell<bool>,
         #[property(get, set)]
         sort_method: RefCell<String>,
+        #[property(get, set)]
+        two_column_sidebar: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -69,7 +73,13 @@ mod imp {
     impl ObjectImpl for LibraryView {
         fn constructed(&self) {
             let obj = self.obj();
-            self.parent_constructed();
+
+            obj.connect_selected_item_path_notify(move |obj| {
+                obj.imp().refresh_selected_folder();
+            });
+            obj.connect_two_column_sidebar_notify(move |obj| {
+                obj.imp().refresh_selected_folder();
+            });
 
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("library", Some(&actions));
@@ -90,7 +100,8 @@ mod imp {
                                 if let Ok(file) = result
                                     && let Some(path) = file.path()
                                 {
-                                    obj.add_project(path);
+                                    obj.add_project(path.clone());
+                                    obj.set_selected_item_path(Some(path));
                                 }
                             }
                         ),
@@ -103,6 +114,7 @@ mod imp {
             let drafts_path = drafts.project().path();
             self.load_project(drafts);
             obj.set_selected_item_path(Some(drafts_path));
+            self.parent_constructed();
         }
 
         fn signals() -> &'static [Signal] {
@@ -137,37 +149,80 @@ mod imp {
 
     impl LibraryView {
         pub(super) fn folder_item(&self, path: &Path) -> Option<FolderRow> {
-            for project in self.projects.borrow().deref().values() {
-                if path.starts_with(project.project().path()) {
-                    return project.folder_item(path);
+            for project_view in self.projects.borrow().deref().values() {
+                if path.starts_with(project_view.project().path()) {
+                    return project_view.folder_item(path);
                 }
             }
             None
         }
 
         pub(super) fn document_item(&self, path: &Path) -> Option<DocumentRow> {
-            for project in self.projects.borrow().deref().values() {
-                if path.starts_with(project.project().path()) {
-                    return project.document_item(path);
+            for project_view in self.projects.borrow().deref().values() {
+                if path.starts_with(project_view.project().path()) {
+                    return project_view.document_item(path);
                 }
             }
             None
         }
 
+        pub(super) fn has_document(&self, path: &Path) -> bool {
+            for project_view in self.projects.borrow().deref().values() {
+                let project = project_view.project();
+                if path.starts_with(project.path()) {
+                    return project.has_document(path);
+                }
+            }
+            false
+        }
+
+        pub(super) fn has_folder(&self, path: &Path) -> bool {
+            for project_view in self.projects.borrow().deref().values() {
+                let project = project_view.project();
+                if path.starts_with(project.path()) {
+                    return project.has_folder(path);
+                }
+            }
+            false
+        }
+
         pub(super) fn refresh_content(&self) {
-            for project in self.projects.borrow().deref().values() {
-                project.refresh_content();
+            for project_view in self.projects.borrow().deref().values() {
+                project_view.project().refresh_content();
             }
         }
 
         pub(super) fn add_project(&self, path: PathBuf) {
-            for project in self.projects.borrow().deref().values() {
-                let compare = project.project().path();
+            for project_view in self.projects.borrow().deref().values() {
+                let compare = project_view.project().path();
                 if path.starts_with(&compare) || compare.starts_with(&path) {
                     return;
                 }
             }
-            self.load_project(ProjectView::new(&Project::new(path)).clone());
+            self.load_project(ProjectView::new(&Project::new(path)));
+        }
+
+        fn refresh_selected_folder(&self) {
+            let obj = self.obj();
+
+            let path = obj.selected_item_path().map(|path| {
+                if self.has_document(&path) {
+                    path.parent().unwrap().to_path_buf()
+                } else {
+                    path
+                }
+            });
+
+            let Some(folder_row) = path.and_then(|path| self.folder_item(&path)) else {
+                obj.set_selected_folder(None::<Folder>);
+                return;
+            };
+
+            let folder = folder_row.folder();
+
+            if obj.selected_folder().as_ref() != Some(folder) {
+                obj.set_selected_folder(Some(folder.clone()));
+            }
         }
 
         fn load_project(&self, project_view: ProjectView) {
@@ -231,9 +286,11 @@ mod imp {
             obj.bind_property("sort_method", &project_view, "sort_method")
                 .sync_create()
                 .build();
+            obj.bind_property("two_column_sidebar", &project_view, "two_column_sidebar")
+                .sync_create()
+                .build();
 
             project.refresh_content();
-            obj.set_selected_item_path(Some(project.path()));
         }
 
         fn connect_folder(&self, folder: &Folder) {
@@ -397,8 +454,9 @@ mod imp {
             obj.emit_by_name::<()>("path-removed", &[&path]);
             obj.emit_by_name::<()>("toast", &[&"Moved to trash"]);
 
-            for project in self.projects.borrow().deref().values() {
-                if path.starts_with(project.project().path()) {
+            for project_view in self.projects.borrow().deref().values() {
+                let project = project_view.project();
+                if path.starts_with(project.path()) {
                     project.refresh_content();
                     break;
                 }
@@ -417,8 +475,9 @@ mod imp {
             obj.emit_by_name::<()>("path-removed", &[&path]);
             obj.emit_by_name::<()>("toast", &[&"Moved to trash"]);
 
-            for project in self.projects.borrow().deref().values() {
-                if path.starts_with(project.project().path()) {
+            for project_view in self.projects.borrow().deref().values() {
+                let project = project_view.project();
+                if path.starts_with(project.path()) {
                     project.refresh_content();
                     break;
                 }
@@ -448,8 +507,9 @@ mod imp {
                             obj.emit_by_name::<()>("path-removed", &[&path]);
                             obj.emit_by_name::<()>("toast", &[&"Permanently deleted"]);
 
-                            for project in imp.projects.borrow().deref().values() {
-                                if path.starts_with(project.project().path()) {
+                            for project_view in imp.projects.borrow().deref().values() {
+                                let project = project_view.project();
+                                if path.starts_with(project.path()) {
                                     project.refresh_content();
                                     break;
                                 }
@@ -485,8 +545,9 @@ mod imp {
                             obj.emit_by_name::<()>("path-removed", &[&path]);
                             obj.emit_by_name::<()>("toast", &[&"Permanently deleted"]);
 
-                            for project in imp.projects.borrow().deref().values() {
-                                if path.starts_with(project.project().path()) {
+                            for project_view in imp.projects.borrow().deref().values() {
+                                let project = project_view.project();
+                                if path.starts_with(project.path()) {
                                     project.refresh_content();
                                     break;
                                 }

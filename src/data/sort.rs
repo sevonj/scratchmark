@@ -56,12 +56,11 @@ mod imp {
 
             loop {
                 let Some(item_a) = sort_cache.get(path_a) else {
-                    unreachable!();
-                    // if self.sort_cache.borrow().get(path_b).is_none() {
-                    //     return gtk::Ordering::Equal;
-                    // } else {
-                    //     return gtk::Ordering::Smaller;
-                    // }
+                    if sort_cache.get(path_b).is_none() {
+                        return gtk::Ordering::Equal;
+                    } else {
+                        return gtk::Ordering::Smaller;
+                    }
                 };
                 let Some(item_b) = sort_cache.get(path_b) else {
                     unreachable!();
@@ -87,8 +86,7 @@ mod imp {
                     }
                 };
                 let Some(next_b) = iter_b.next() else {
-                    unreachable!();
-                    // return gtk::Ordering::Larger;
+                    return gtk::Ordering::Larger;
                 };
                 path_a = *next_a;
                 path_b = *next_b;
@@ -165,6 +163,15 @@ impl TryFrom<&str> for SortMethod {
     }
 }
 
+impl SortMethod {
+    pub fn is_ascending(&self) -> bool {
+        match self {
+            SortMethod::AlphanumericAsc | SortMethod::ModifiedAsc => true,
+            SortMethod::AlphanumericDesc | SortMethod::ModifiedDesc => false,
+        }
+    }
+}
+
 glib::wrapper! {
     pub struct ProjectSorter(ObjectSubclass<imp::ProjectSorter>);
 }
@@ -186,6 +193,10 @@ impl ProjectSorter {
 
     pub fn remove(&self, path: &Path) {
         self.imp().sort_cache.borrow_mut().remove(path);
+    }
+
+    pub fn clear(&self) {
+        self.imp().sort_cache.borrow_mut().clear();
     }
 
     pub fn sort(&self, a: PathBuf, b: PathBuf) -> gtk::Ordering {

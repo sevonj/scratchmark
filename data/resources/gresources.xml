@@ -10,6 +10,7 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library/delete_confirm_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/document_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/document_row.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/document_preview_row.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/document_create_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/drafts_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/err_placeholder_row_context_menu.ui</file>
@@ -17,9 +18,9 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library/folder_create_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/folder_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/folder_row.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/library/folder_view.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/item_rename_popover.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/library_view.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/library/project_view.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/root_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/about_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_placeholder.ui</file>
@@ -40,6 +41,8 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/folder-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/info-outline-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/library-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/library-sort-asc-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/library-sort-desc-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/library-sort-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/list-compact-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/match-words-symbolic.svg</file>
