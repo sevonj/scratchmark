@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-22 14:29+0200\n"
+"POT-Creation-Date: 2026-02-22 17:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -349,22 +349,18 @@ msgid "Clamp Editor Width"
 msgstr ""
 
 #: data/resources/ui/preferences_dialog.ui:42
-msgid "Max Characters Per Row"
+msgid "Max Editor Width"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:43
-msgid "Width is approximated from average character width"
-msgstr ""
-
-#: data/resources/ui/preferences_dialog.ui:57 data/resources/ui/window.ui:19
+#: data/resources/ui/preferences_dialog.ui:54 data/resources/ui/window.ui:19
 msgid "Library"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:60
+#: data/resources/ui/preferences_dialog.ui:57
 msgid "Ignore Hidden Files"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:61
+#: data/resources/ui/preferences_dialog.ui:58
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
 
@@ -438,62 +434,77 @@ msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:92
+#: data/resources/ui/shortcuts.ui:90
+msgctxt "shortcut window"
+msgid "Zoom In"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:96
+msgctxt "shortcut window"
+msgid "Zoom Out"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:102
+msgctxt "shortcut window"
+msgid "Reset Zoom"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:110
 msgctxt "shortcut window"
 msgid "Formatting"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:95
+#: data/resources/ui/shortcuts.ui:113
 msgctxt "shortcut window"
 msgid "Bold"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:101
+#: data/resources/ui/shortcuts.ui:119
 msgctxt "shortcut window"
 msgid "Italic"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:107
+#: data/resources/ui/shortcuts.ui:125
 msgctxt "shortcut window"
 msgid "Heading 1"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:113
+#: data/resources/ui/shortcuts.ui:131
 msgctxt "shortcut window"
 msgid "Heading 2"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:119
+#: data/resources/ui/shortcuts.ui:137
 msgctxt "shortcut window"
 msgid "Heading 3"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:125
+#: data/resources/ui/shortcuts.ui:143
 msgctxt "shortcut window"
 msgid "Heading 4"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:131
+#: data/resources/ui/shortcuts.ui:149
 msgctxt "shortcut window"
 msgid "Heading 5"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:137
+#: data/resources/ui/shortcuts.ui:155
 msgctxt "shortcut window"
 msgid "Heading 6"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:145
+#: data/resources/ui/shortcuts.ui:163
 msgctxt "shortcut window"
 msgid "Library"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:148
+#: data/resources/ui/shortcuts.ui:166
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr ""
 
-#: data/resources/ui/window.ui:28 data/resources/ui/window.ui:181
+#: data/resources/ui/window.ui:28 data/resources/ui/window.ui:195
 msgid "Sort"
 msgstr ""
 
@@ -534,45 +545,57 @@ msgid "Close"
 msgstr ""
 
 #: data/resources/ui/window.ui:146
-msgid "Search Text"
+msgid "Zoom In"
 msgstr ""
 
 #: data/resources/ui/window.ui:150
-msgid "Search and Replace"
+msgid "Zoom Out"
 msgstr ""
 
-#: data/resources/ui/window.ui:156
-msgid "Toggle Fullscreen"
+#: data/resources/ui/window.ui:154
+msgid "Reset Zoom"
 msgstr ""
 
 #: data/resources/ui/window.ui:160
-msgid "Toggle Focus Mode"
+msgid "Search Text"
 msgstr ""
 
-#: data/resources/ui/window.ui:166
-msgid "Preferences"
+#: data/resources/ui/window.ui:164
+msgid "Search and Replace"
 msgstr ""
 
 #: data/resources/ui/window.ui:170
-msgid "Keyboard Shortcuts"
+msgid "Toggle Fullscreen"
 msgstr ""
 
 #: data/resources/ui/window.ui:174
-msgid "About Scratchmark"
+msgid "Toggle Focus Mode"
+msgstr ""
+
+#: data/resources/ui/window.ui:180
+msgid "Preferences"
 msgstr ""
 
 #: data/resources/ui/window.ui:184
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: data/resources/ui/window.ui:188
+msgid "About Scratchmark"
+msgstr ""
+
+#: data/resources/ui/window.ui:198
 msgid "A-Z"
 msgstr ""
 
-#: data/resources/ui/window.ui:189
+#: data/resources/ui/window.ui:203
 msgid "Z-A"
 msgstr ""
 
-#: data/resources/ui/window.ui:194
+#: data/resources/ui/window.ui:208
 msgid "Last Modified"
 msgstr ""
 
-#: data/resources/ui/window.ui:199
+#: data/resources/ui/window.ui:213
 msgid "First Modified"
 msgstr ""
