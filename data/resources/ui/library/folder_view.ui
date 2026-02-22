@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="FolderView" parent="AdwNavigationPage">
+    <property name="title" translatable="no">folder-name-here</property>
+    <property name="child">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <!--property name="show-title">False</property-->
+            <child type="end">
+              <object class="GtkMenuButton" id="sort_button">
+                <property name="icon-name">library-sort-asc-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Sort</property>
+                <property name="popover">
+                  <object class="GtkPopoverMenu">
+                    <property name="menu-model">sort_menu</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+            <property name="vexpand">True</property>
+            <child>
+              <object class="GtkLabel" id="empty_placeholder">
+                <property name="label" translatable="yes">Folder is empty</property>
+                <style>
+                  <class name="dimmed" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">True</property>
+                <property name="hexpand">true</property>
+                <property name="width-request">256</property>
+                <child>
+                  <object class="GtkListBox" id="listbox">
+                    <style>
+                      <class name="navigation-sidebar" />
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+  <menu id="sort_menu">
+    <section>
+      <attribute name="label" translatable="yes">Sort</attribute>
+      <!-- see SortMethod enum-->
+      <item>
+        <attribute name="label" translatable="yes">A-Z</attribute>
+        <attribute name="action">folder-view.sort-method</attribute>
+        <attribute name="target">AlphanumericAsc</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Z-A</attribute>
+        <attribute name="action">folder-view.sort-method</attribute>
+        <attribute name="target">AlphanumericDesc</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Last Modified</attribute>
+        <attribute name="action">folder-view.sort-method</attribute>
+        <attribute name="target">ModifiedDesc</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">First Modified</attribute>
+        <attribute name="action">folder-view.sort-method</attribute>
+        <attribute name="target">ModifiedAsc</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

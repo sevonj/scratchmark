@@ -6,12 +6,17 @@
                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                 <property name="spacing">4</property>
                 <child>
-                    <object class="GtkImage" id="expand_icon">
-                        <style>
-                            <class name="dim-label" />
-                        </style>
-                        <property name="icon-name">down-small-symbolic</property>
-                        <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
+                    <object class="AdwBin">
+                        <property name="width-request">16</property>
+                        <child>
+                            <object class="GtkImage" id="expand_icon">
+                                <style>
+                                    <class name="dim-label" />
+                                </style>
+                                <property name="icon-name">down-small-symbolic</property>
+                                <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
+                            </object>
+                        </child>
                     </object>
                 </child>
                 <child>

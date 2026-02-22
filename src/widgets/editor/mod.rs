@@ -446,9 +446,7 @@ use gtk::gio::FileCreateFlags;
 use gtk::glib::Object;
 use sourceview5::SearchContext;
 use sourceview5::SearchSettings;
-use sourceview5::StyleSchemeManager;
 
-use crate::config::PKGDATADIR;
 use crate::data::DocumentStats;
 use crate::data::MarkdownBuffer;
 use crate::error::ScratchmarkError;
@@ -466,7 +464,7 @@ impl Editor {
     pub fn new(path: PathBuf, max_width_px: i32) -> Result<Self, ScratchmarkError> {
         let file = gtk::gio::File::for_path(&path);
         let text = file_actions::read_file_to_string(&file)?;
-        let buffer = MarkdownBuffer::default();
+        let buffer = MarkdownBuffer::default().with_style_scheme("scratchmark");
         buffer.set_text(&text);
 
         let search_settings = SearchSettings::default();
@@ -476,7 +474,6 @@ impl Editor {
         let obj: Self = Object::builder().build();
         let imp = obj.imp();
         imp.buffer.set(buffer.clone()).unwrap();
-        Self::load_buffer_style_scheme(&buffer);
         imp.file.replace(Some(file));
         imp.path.replace(Some(path));
         imp.source_view.set_monospace(true);
@@ -585,32 +582,6 @@ impl Editor {
         imp.stats_view.set_stats(&stats);
         imp.stats.replace(stats);
         self.emit_by_name::<()>("stats-changed", &[]);
-    }
-
-    fn load_buffer_style_scheme(buffer: &MarkdownBuffer) {
-        let scheme_id = "scratchmark";
-
-        // Try fetching the scheme
-        if let Some(style_scheme) = StyleSchemeManager::default().scheme(scheme_id) {
-            buffer.set_style_scheme(Some(&style_scheme));
-            return;
-        }
-
-        // Fetch failed, add paths and try again
-        StyleSchemeManager::default().append_search_path(&format!("{PKGDATADIR}/editor_schemes"));
-        #[cfg(not(feature = "installed"))]
-        {
-            const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
-            StyleSchemeManager::default()
-                .append_search_path(format!("{MANIFEST_DIR}/data/editor_schemes").as_str());
-        }
-
-        if let Some(style_scheme) = StyleSchemeManager::default().scheme(scheme_id) {
-            buffer.set_style_scheme(Some(&style_scheme));
-            return;
-        }
-
-        println!("Failed to load scheme with id '{scheme_id}'.")
     }
 
     fn on_buffer_changed(&self, buffer: &MarkdownBuffer) {

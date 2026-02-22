@@ -19,6 +19,15 @@
     <key name="library-show-sidebar" type="b">
       <default>true</default>
     </key>
+    <key name="library-two-column-sidebar" type="b">
+      <default>true</default>
+    </key>
+    <key name="library-sort-method" type="s">
+      <default>"AlphanumericAsc"</default>
+    </key>
+    <key name="library-details-sort-method" type="s">
+      <default>"AlphanumericAsc"</default>
+    </key>
     <key name="editor-show-sidebar" type="b">
       <default>false</default>
     </key>

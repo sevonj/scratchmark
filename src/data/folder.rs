@@ -67,6 +67,7 @@ mod imp {
                         .param_types([String::static_type()])
                         .build(),
                     Signal::builder("metadata-changed").build(),
+                    Signal::builder("contents-changed").build(),
                 ]
             })
         }
@@ -200,6 +201,7 @@ impl Folder {
             ),
         );
         self.imp().documents.borrow_mut().insert(doc.path(), doc);
+        self.emit_by_name::<()>("contents-changed", &[]);
     }
 
     pub fn add_subfolder(&self, folder: Folder) {
@@ -219,14 +221,17 @@ impl Folder {
             .subfolders
             .borrow_mut()
             .insert(folder.path(), folder);
+        self.emit_by_name::<()>("contents-changed", &[]);
     }
 
     pub fn remove_document(&self, path: &Path) {
         self.imp().documents.borrow_mut().remove(path);
+        self.emit_by_name::<()>("contents-changed", &[]);
     }
 
     pub fn remove_subfolder(&self, path: &Path) {
         self.imp().subfolders.borrow_mut().remove(path);
+        self.emit_by_name::<()>("contents-changed", &[]);
     }
 
     pub fn select(&self) {

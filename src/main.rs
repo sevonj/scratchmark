@@ -7,6 +7,11 @@ mod widgets;
 use gtk::glib;
 use gtk::prelude::*;
 
+use gtk::glib::GString;
+use sourceview5::LanguageManager;
+use sourceview5::StyleSchemeManager;
+
+use config::PKGDATADIR;
 use util::file_actions;
 use widgets::Window;
 
@@ -40,6 +45,9 @@ fn main() -> glib::ExitCode {
     setup_accels(&app);
 
     app.connect_activate(|app| {
+        setup_buffer_styles();
+        setup_language_manager();
+
         let window = Window::new(app);
         window.set_title(Some("Scratchmark"));
         window.present();
@@ -74,6 +82,40 @@ fn setup_accels(app: &adw::Application) {
     app.set_accels_for_action("win.toggle-focus", &["F8"]);
     app.set_accels_for_action("win.show-help-overlay", &["<Control>question"]);
     app.set_accels_for_action("win.preferences", &["<ctrl>comma"]);
+}
+
+fn setup_buffer_styles() {
+    StyleSchemeManager::default().append_search_path(&format!("{PKGDATADIR}/editor_schemes"));
+    StyleSchemeManager::default().append_search_path(&format!("{PKGDATADIR}/document_preview"));
+
+    #[cfg(not(feature = "installed"))]
+    {
+        const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
+        StyleSchemeManager::default()
+            .append_search_path(format!("{MANIFEST_DIR}/data/editor_schemes").as_str());
+        StyleSchemeManager::default()
+            .append_search_path(format!("{MANIFEST_DIR}/data/document_preview").as_str());
+    }
+}
+
+fn setup_language_manager() {
+    let lm = LanguageManager::default();
+    let mut search_path = lm.search_path();
+
+    #[cfg(feature = "installed")]
+    {
+        let lang_spec_dir = &format!("{PKGDATADIR}/language_specs");
+        search_path.insert(0, lang_spec_dir.into());
+    }
+    #[cfg(not(feature = "installed"))]
+    {
+        const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
+        let lang_spec_dir = format!("{MANIFEST_DIR}/data/language_specs");
+        search_path.insert(0, lang_spec_dir.into());
+    }
+
+    let dirs: Vec<&str> = search_path.iter().map(GString::as_str).collect();
+    lm.set_search_path(&dirs);
 }
 
 #[cfg(test)]

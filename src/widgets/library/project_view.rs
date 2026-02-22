@@ -1,74 +1,48 @@
-#[derive(Debug, Clone)]
-pub enum ProjectRow {
-    Doc(DocumentRow),
-    Dir(FolderRow),
-}
-
-impl ProjectRow {
-    pub fn is_selected(&self) -> bool {
-        match self {
-            ProjectRow::Doc(document_row) => document_row.is_selected(),
-            ProjectRow::Dir(folder_row) => folder_row.is_selected(),
-        }
-    }
-
-    pub fn to_list_box_row(&self) -> ListBoxRow {
-        match self {
-            ProjectRow::Doc(document_row) => document_row.clone().upcast(),
-            ProjectRow::Dir(folder_row) => folder_row.clone().upcast(),
-        }
-    }
-}
-
 mod imp {
+    use std::cell::Cell;
     use std::cell::RefCell;
-    use std::collections::HashMap;
     use std::collections::HashSet;
     use std::path::Path;
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
+    use adw::prelude::BinExt;
     use adw::subclass::prelude::*;
-    use gtk::ListBoxRow;
     use gtk::glib;
     use gtk::glib::clone;
     use gtk::glib::closure_local;
     use gtk::glib::subclass::*;
     use gtk::prelude::*;
 
-    use gtk::CompositeTemplate;
-    use gtk::ListBox;
     use gtk::glib::Properties;
 
     use crate::data::Document;
     use crate::data::Folder;
     use crate::data::Project;
     use crate::data::ProjectItem;
-    use crate::data::ProjectSorter;
-    use crate::data::SortMethod;
     use crate::widgets::library::document_row::DocumentRow;
     use crate::widgets::library::err_placeholder_row::ErrPlaceholderRow;
     use crate::widgets::library::folder_row::FolderRow;
-    use crate::widgets::library::project_view::ProjectRow;
+    use crate::widgets::library::project_list_box::ProjectListBox;
+    use crate::widgets::library::project_list_box::ProjectRow;
 
-    #[derive(CompositeTemplate, Default, Properties)]
+    #[derive(Default, Properties)]
     #[properties(wrapper_type = super::ProjectView)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/project_view.ui")]
     pub struct ProjectView {
-        #[template_child]
-        pub(super) project_vbox: TemplateChild<ListBox>,
-        pub(super) project_rows: RefCell<HashMap<PathBuf, ProjectRow>>,
+        pub(super) listbox: ProjectListBox,
         pub(super) project: OnceLock<Project>,
 
         #[property(nullable, get, set)]
         open_document_path: RefCell<Option<PathBuf>>,
         #[property(nullable, get, set)]
         selected_item_path: RefCell<Option<PathBuf>>,
+
         previous_open_document: RefCell<Option<Document>>,
         expanded_folders_queue: RefCell<HashSet<PathBuf>>,
-        pub(super) sorter: RefCell<ProjectSorter>,
         #[property(get, set)]
         sort_method: RefCell<String>,
+        #[property(get, set)]
+        two_column_sidebar: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -76,14 +50,6 @@ mod imp {
         const NAME: &'static str = "ProjectView";
         type Type = super::ProjectView;
         type ParentType = adw::Bin;
-
-        fn class_init(klass: &mut Self::Class) {
-            klass.bind_template();
-        }
-
-        fn instance_init(obj: &InitializingObject<Self>) {
-            obj.init_template();
-        }
     }
 
     #[glib::derived_properties]
@@ -91,76 +57,14 @@ mod imp {
         fn constructed(&self) {
             let obj = self.obj();
 
-            self.project_vbox.set_focusable(false);
-            let sorter = self.sorter.borrow().clone();
-            self.project_vbox.set_sort_func(clone!(
-                #[strong]
-                sorter,
-                move |a, b| {
-                    fn row_to_path(row: &ListBoxRow) -> Option<PathBuf> {
-                        if let Ok(row) = row.clone().downcast::<DocumentRow>() {
-                            Some(row.document().path())
-                        } else if let Ok(row) = row.clone().downcast::<FolderRow>() {
-                            Some(row.folder().path())
-                        } else {
-                            None
-                        }
-                    }
-                    sorter.sort(row_to_path(a).unwrap(), row_to_path(b).unwrap())
-                }
-            ));
+            obj.set_child(Some(&self.listbox));
+            obj.bind_property("sort_method", &self.listbox, "sort_method")
+                .sync_create()
+                .build();
 
-            obj.connect_sort_method_notify(clone!(move |obj| {
-                let sort_method_str = obj.sort_method();
-                let Ok(sort_method) = SortMethod::try_from(sort_method_str.as_str()) else {
-                    return;
-                };
-                let imp = obj.imp();
-                imp.sorter.borrow().set_sort_method(sort_method);
-                imp.project_vbox.invalidate_sort();
-            }));
-
-            self.project_vbox.connect_row_activated(clone!(
-                #[weak]
-                obj,
-                move |_vbox, row| {
-                    if let Ok(folder_item) = row.clone().downcast::<FolderRow>() {
-                        folder_item.on_click();
-                        obj.set_selected_item_path(Some(folder_item.folder().path()));
-                    } else if let Ok(document_item) = row.clone().downcast::<DocumentRow>() {
-                        document_item.on_click();
-                        obj.set_selected_item_path(Some(document_item.document().path()));
-                    };
-                }
-            ));
-
-            obj.connect_open_document_path_notify(move |obj| {
-                let imp = obj.imp();
-                if let Some(prev) = imp.previous_open_document.borrow().as_ref() {
-                    prev.set_is_open_in_editor(false);
-                }
-                let new = obj
-                    .open_document_path()
-                    .and_then(|path| imp.document_item(&path));
-                if let Some(row) = &new {
-                    row.document().set_is_open_in_editor(true);
-                    obj.imp().project_vbox.select_row(Some(row));
-                }
-                imp.previous_open_document
-                    .replace(new.map(|row| row.document().clone()));
-            });
-
-            obj.connect_selected_item_path_notify(move |obj| {
-                obj.imp().refresh_selection();
-            });
-
-            self.project_vbox.connect_selected_rows_changed(clone!(
-                #[weak(rename_to = imp)]
-                self,
-                move |_| {
-                    imp.refresh_selection();
-                }
-            ));
+            obj.connect_open_document_path_notify(move |obj| obj.imp().on_open_document_changed());
+            obj.connect_selected_item_path_notify(move |obj| obj.imp().refresh_listbox_selection());
+            obj.connect_two_column_sidebar_notify(move |obj| obj.imp().refresh_listbox_selection());
 
             self.parent_constructed();
         }
@@ -170,45 +74,46 @@ mod imp {
     impl BinImpl for ProjectView {}
 
     impl ProjectView {
-        pub(super) fn project(&self) -> &Project {
-            self.project.get().unwrap()
-        }
-
-        pub(super) fn project_row(&self, path: &Path) -> Option<ProjectRow> {
-            self.project_rows.borrow().get(path).cloned()
-        }
-
         pub(super) fn document_item(&self, path: &Path) -> Option<DocumentRow> {
-            self.project_row(path).and_then(|item| match item {
+            self.listbox.get(path).and_then(|item| match item {
                 ProjectRow::Doc(document_row) => Some(document_row),
                 _ => None,
             })
         }
 
         pub(super) fn folder_item(&self, path: &Path) -> Option<FolderRow> {
-            self.project_row(path).and_then(|item| match item {
+            self.listbox.get(path).and_then(|item| match item {
                 ProjectRow::Dir(folder_row) => Some(folder_row),
                 _ => None,
             })
         }
 
-        fn refresh_selection(&self) {
+        fn refresh_listbox_selection(&self) {
             let obj = self.obj();
-            if let Some(path) = obj.selected_item_path()
-                && let Some(item) = self.project_row(&path)
+
+            let path_or_parent_path = obj.selected_item_path().map(|path| {
+                if !obj.two_column_sidebar() || self.project.get().unwrap().has_folder(&path) {
+                    path
+                } else {
+                    path.parent().unwrap().to_path_buf()
+                }
+            });
+
+            if let Some(path) = path_or_parent_path
+                && let Some(item) = self.listbox.get(&path)
             {
                 if !item.is_selected() {
-                    self.project_vbox.select_row(Some(&item.to_list_box_row()));
+                    self.listbox.select_row(&path);
                 }
             } else {
-                self.project_vbox.unselect_all();
-            };
+                self.listbox.unselect_all();
+            }
         }
 
         fn insert_item(&self, item: ProjectItem) {
             let obj = self.obj();
             let path = item.path();
-            if self.has_item(&path) || !self.is_item_visible(&path) {
+            if self.listbox.has(&path) || !self.is_item_visible(&path) {
                 return;
             }
 
@@ -221,21 +126,25 @@ mod imp {
                 ProjectItem::Dir(dir) => {
                     let folder_row = FolderRow::new(dir);
                     self.connect_folder_row(&folder_row);
+                    if obj
+                        .open_document_path()
+                        .is_some_and(|p| p.starts_with(&path))
+                        || obj
+                            .selected_item_path()
+                            .is_some_and(|p| p.starts_with(&path))
+                    {
+                        folder_row.set_is_expanded(true);
+                    }
                     ProjectRow::Dir(folder_row)
                 }
             };
 
-            self.sorter.borrow().insert(item.clone());
-            self.project_rows
-                .borrow_mut()
-                .insert(path.clone(), project_row.clone());
-            self.project_vbox.insert(&project_row.to_list_box_row(), -1);
+            self.listbox.insert(project_row);
 
             let is_selected = obj.selected_item_path().is_some_and(|sel| sel == path);
 
             if is_selected {
-                self.project_vbox
-                    .select_row(Some(&project_row.to_list_box_row()));
+                self.listbox.select_row(&path);
             }
 
             match item {
@@ -260,7 +169,7 @@ mod imp {
                                 #[weak(rename_to = imp)]
                                 self,
                                 move |_: Folder| {
-                                    imp.project_vbox.invalidate_sort();
+                                    imp.listbox.invalidate_sort();
                                 }
                             ),
                         );
@@ -270,6 +179,12 @@ mod imp {
         }
 
         fn connect_document_row(&self, document_row: &DocumentRow) {
+            self.obj()
+                .bind_property("two_column_sidebar", document_row, "visible")
+                .invert_boolean()
+                .sync_create()
+                .build();
+
             document_row.connect_closure(
                 "needs-attention",
                 true,
@@ -286,6 +201,11 @@ mod imp {
 
         fn connect_folder_row(&self, folder_row: &FolderRow) {
             let obj = self.obj();
+
+            obj.bind_property("two-column-sidebar", folder_row, "two-column-sidebar")
+                .sync_create()
+                .build();
+
             let folder = folder_row.folder();
             folder_row.connect_is_expanded_notify(clone!(
                 #[weak(rename_to = imp)]
@@ -360,11 +280,9 @@ mod imp {
         }
 
         fn remove_item(&self, path: &Path) {
-            let Some(item) = self.project_rows.borrow_mut().remove(path) else {
+            let Some(item) = self.listbox.remove(path) else {
                 return;
             };
-            self.project_vbox.remove(&item.to_list_box_row());
-            self.sorter.borrow().remove(path);
 
             if let ProjectRow::Dir(folder_row) = item {
                 for path in folder_row.folder().subfolders().keys() {
@@ -378,14 +296,14 @@ mod imp {
 
         /// Expand all parents
         pub(super) fn make_visible(&self, path: &Path) {
-            if !path.starts_with(self.project().path()) {
+            if !path.starts_with(self.project.get().unwrap().path()) {
                 return;
             }
 
-            if !self.has_item(path) {
-                if let Some(folder) = self.project().get_folder(path) {
+            if !self.listbox.has(path) {
+                if let Some(folder) = self.project.get().unwrap().get_folder(path) {
                     self.insert_item(ProjectItem::Dir(folder));
-                } else if let Some(document) = self.project().get_document(path) {
+                } else if let Some(document) = self.project.get().unwrap().get_document(path) {
                     self.insert_item(ProjectItem::Doc(document));
                 }
             }
@@ -396,7 +314,7 @@ mod imp {
         }
 
         pub(super) fn expand_folder(&self, path: &Path) {
-            if let Some(ProjectRow::Dir(folder_view)) = self.project_row(path) {
+            if let Some(ProjectRow::Dir(folder_view)) = self.listbox.get(path) {
                 folder_view.set_is_expanded(true);
                 self.expanded_folders_queue.borrow_mut().remove(path);
             } else {
@@ -406,17 +324,13 @@ mod imp {
             }
         }
 
-        fn has_item(&self, path: &Path) -> bool {
-            self.project_rows.borrow().contains_key(path)
-        }
-
         fn is_item_visible(&self, path: &Path) -> bool {
             let components = path.parent().unwrap().components();
             let mut check_path = PathBuf::new();
             for component in components {
                 check_path.push(component);
 
-                if let Some(item) = self.project_rows.borrow().get(&check_path)
+                if let Some(item) = self.listbox.get(&check_path)
                     && let ProjectRow::Dir(folder_row) = item
                     && !folder_row.is_expanded()
                 {
@@ -426,13 +340,9 @@ mod imp {
             true
         }
 
-        pub(super) fn refresh_content(&self) {
-            self.project().refresh_content();
-            self.project_vbox.invalidate_sort();
-        }
-
         fn mark_invalid(&self) {
-            let err_placeholder: ErrPlaceholderRow = ErrPlaceholderRow::new(&self.project().path());
+            let err_placeholder: ErrPlaceholderRow =
+                ErrPlaceholderRow::new(&self.project.get().unwrap().path());
             err_placeholder.connect_closure(
                 "close-project-requested",
                 false,
@@ -444,9 +354,8 @@ mod imp {
                     }
                 ),
             );
-            self.project_rows.borrow_mut().clear();
-            self.project_vbox.remove_all();
-            self.project_vbox.append(&err_placeholder);
+            self.listbox.clear();
+            //self.listbox.append(&err_placeholder);
         }
 
         pub(super) fn bind(&self, project: &Project) {
@@ -503,6 +412,23 @@ mod imp {
                 self.insert_item(ProjectItem::Doc(doc.clone()));
             }
         }
+
+        fn on_open_document_changed(&self) {
+            if let Some(prev) = self.previous_open_document.borrow_mut().take() {
+                prev.set_is_open_in_editor(false);
+            }
+
+            if let Some(path) = self.obj().open_document_path()
+                && let Some(row) = self.document_item(&path)
+            {
+                let doc = row.document().clone();
+                doc.set_is_open_in_editor(true);
+                self.listbox.select_row(&path);
+                self.previous_open_document.replace(Some(doc));
+            } else {
+                self.listbox.unselect_all();
+            }
+        }
     }
 }
 
@@ -519,6 +445,7 @@ use glib::Object;
 use crate::data::Project;
 use crate::widgets::library::document_row::DocumentRow;
 use crate::widgets::library::folder_row::FolderRow;
+use crate::widgets::library::project_list_box::ProjectRow;
 
 glib::wrapper! {
     pub struct ProjectView(ObjectSubclass<imp::ProjectView>)
@@ -535,7 +462,7 @@ impl ProjectView {
     }
 
     pub fn project(&self) -> &Project {
-        self.imp().project()
+        self.imp().project.get().unwrap()
     }
 
     pub fn document_item(&self, path: &Path) -> Option<DocumentRow> {
@@ -546,13 +473,9 @@ impl ProjectView {
         self.imp().folder_item(path)
     }
 
-    pub fn refresh_content(&self) {
-        self.imp().refresh_content();
-    }
-
     pub fn expanded_folder_paths(&self) -> Vec<String> {
         let mut paths = vec![];
-        for (path, item) in self.imp().project_rows.borrow().iter() {
+        for (path, item) in self.imp().listbox.rows().iter() {
             if !self.project().has_item(path) {
                 continue;
             }

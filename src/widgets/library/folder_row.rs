@@ -50,7 +50,9 @@ mod imp {
         pub(super) folder: OnceLock<Folder>,
         pub(super) bindings: RefCell<Vec<Binding>>,
         #[property(get, set)]
-        pub(super) is_expanded: Cell<bool>,
+        is_expanded: Cell<bool>,
+        #[property(get, set)]
+        two_column_sidebar: Cell<bool>,
 
         pub(super) context_menu_popover: OnceLock<PopoverMenu>,
         pub(super) document_create_popover: OnceLock<DocumentCreatePopover>,
@@ -79,9 +81,8 @@ mod imp {
         fn constructed(&self) {
             let obj = self.obj();
 
-            obj.connect_notify(Some("is-expanded"), move |obj, _| {
-                obj.imp().on_expanded_changed();
-            });
+            obj.connect_is_expanded_notify(move |obj| obj.imp().refresh_icons());
+            obj.connect_two_column_sidebar_notify(move |obj| obj.imp().refresh_icons());
 
             self.parent_constructed();
         }
@@ -106,16 +107,23 @@ mod imp {
             self.folder.get().unwrap()
         }
 
-        fn on_expanded_changed(&self) {
-            if self.is_expanded.get() {
+        fn refresh_icons(&self) {
+            let obj = self.obj();
+            let is_empty = self.folder().subfolders().is_empty() && obj.two_column_sidebar();
+            let is_expanded = self.is_expanded.get();
+
+            self.expand_icon.set_visible(!is_empty);
+            if is_expanded {
                 self.expand_icon.set_icon_name("down-small-symbolic".into());
-                if !self.folder().is_root() {
-                    self.folder_icon.set_icon_name(Some("folder-open-symbolic"));
-                }
             } else {
                 self.expand_icon
                     .set_icon_name("right-small-symbolic".into());
-                if !self.folder().is_root() {
+            }
+
+            if !self.folder().is_root() {
+                if is_expanded && !is_empty {
+                    self.folder_icon.set_icon_name(Some("folder-open-symbolic"));
+                } else {
                     self.folder_icon.set_icon_name(Some("folder-symbolic"));
                 }
             }
@@ -391,6 +399,17 @@ mod imp {
                 .sync_create()
                 .build();
             bindings.push(title_binding);
+
+            folder.connect_closure(
+                "contents-changed",
+                true,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: Folder| { imp.refresh_icons() }
+                ),
+            );
+            self.refresh_icons();
         }
     }
 }

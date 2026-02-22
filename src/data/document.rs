@@ -28,6 +28,8 @@ mod imp {
         pub(super) is_open_in_editor: Cell<bool>,
         pub(super) modified: RefCell<Option<SystemTime>>,
         pub(super) collation_key: OnceLock<CollationKey>,
+        #[property(nullable, get, set)]
+        pub(super) preview: RefCell<Option<String>>,
     }
 
     #[glib::object_subclass]
@@ -50,22 +52,37 @@ mod imp {
                     Signal::builder("trash-requested").build(),
                     Signal::builder("delete-requested").build(),
                     Signal::builder("metadata-changed").build(),
+                    Signal::builder("preview-updated").build(),
                 ]
             })
+        }
+
+        fn constructed(&self) {
+            let obj = self.obj();
+
+            obj.connect_preview_notify(move |obj| {
+                obj.emit_by_name::<()>("preview-updated", &[]);
+            });
+
+            self.parent_constructed();
         }
     }
 }
 
+use std::fs::File;
+use std::io::BufReader;
+use std::io::Read;
 use std::path::PathBuf;
 use std::time::SystemTime;
 
 use gtk::glib;
-use gtk::glib::CollationKey;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 
 use gtk::gio::Cancellable;
 use gtk::gio::FileCopyFlags;
+use gtk::glib::CollationKey;
+use gtk::glib::MainContext;
 use gtk::glib::Object;
 use gtk::glib::object::ObjectExt;
 
@@ -139,6 +156,22 @@ impl Document {
     pub fn set_modified(&self, modified: SystemTime) {
         self.imp().modified.borrow_mut().replace(modified);
         self.emit_by_name::<()>("metadata-changed", &[]);
+    }
+
+    pub fn refresh_preview(&self) {
+        let obj = self.clone();
+        MainContext::default().spawn_local(async move {
+            let Ok(file) = File::open(obj.path()) else {
+                return;
+            };
+            let mut reader = BufReader::new(file);
+            let mut buffer = vec![0; 100];
+            let Ok(n) = reader.read(&mut buffer) else {
+                return;
+            };
+            buffer.truncate(n);
+            obj.set_preview(Some(String::from_utf8_lossy(&buffer).to_string()));
+        });
     }
 }
 

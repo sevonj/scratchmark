@@ -15,35 +15,50 @@
     <child>
       <object class="AdwOverlaySplitView" id="top_split">
         <property name="sidebar">
-          <object class="AdwNavigationPage" id="sidebar_page">
+          <object class="AdwNavigationPage">
             <property name="title" translatable="yes">Library</property>
             <property name="child">
-              <object class="AdwToolbarView" id="sidebar_toolbar_view">
-                <child type="top">
-                  <object class="AdwHeaderBar">
-                    <child type="start">
-                      <object class="GtkMenuButton">
-                        <property name="icon-name">library-sort-symbolic</property>
-                        <property name="always-show-arrow">True</property>
-                        <property name="tooltip-text" translatable="yes">Sort</property>
-                        <property name="popover">
-                          <object class="GtkPopoverMenu">
-                            <property name="menu-model">sort_menu</property>
-                            <property name="halign">GTK_ALIGN_START</property>
+              <object class="AdwNavigationSplitView" id="inner_view">
+                <property name="min-sidebar-width">290</property>
+                <property name="max-sidebar-width">520</property>
+                <property name="sidebar-width-fraction">0.355</property>
+                <property name="sidebar">
+                  <object class="AdwNavigationPage">
+                    <property name="title" translatable="yes">Library</property>
+                    <property name="child">
+                      <object class="AdwToolbarView" id="sidebar_toolbar_view">
+                        <child type="top">
+                          <object class="AdwHeaderBar">
+                            <child type="start">
+                              <object class="AdwSplitButton" id="sidebar_split_button">
+                                <property name="icon-name">dock-left-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Hide Sidebar (F9)</property>
+                                <property name="dropdown-tooltip" translatable="yes">Sidebar Options</property>
+                                <property name="popover">
+                                  <object class="GtkPopoverMenu">
+                                    <property name="menu-model">sidebar_menu</property>
+                                    <property name="halign">GTK_ALIGN_START</property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                            <child type="end">
+                              <object class="GtkMenuButton">
+                                <property name="primary">True</property>
+                                <property name="icon-name">open-menu-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Menu</property>
+                                <property name="menu-model">primary_menu</property>
+                              </object>
+                            </child>
                           </object>
-                        </property>
+                        </child>
                       </object>
-                    </child>
-                    <child type="end">
-                      <object class="GtkMenuButton">
-                        <property name="primary">True</property>
-                        <property name="icon-name">open-menu-symbolic</property>
-                        <property name="tooltip-text" translatable="yes">Menu</property>
-                        <property name="menu-model">primary_menu</property>
-                      </object>
-                    </child>
+                    </property>
                   </object>
-                </child>
+                </property>
+                <property name="content">
+                  <object class="FolderView" id="library_folder_column" />
+                </property>
               </object>
             </property>
           </object>
@@ -66,9 +81,9 @@
                               <object class="WindowTitle" id="window_title" />
                             </property>
                             <child type="start">
-                              <object class="GtkToggleButton" id="sidebar_toggle">
+                              <object class="GtkButton" id="sidebar_button">
                                 <property name="icon-name">dock-left-symbolic</property>
-                                <property name="tooltip-text" translatable="yes">Toggle Sidebar (F9)</property>
+                                <property name="tooltip-text" translatable="yes">Show Sidebar (F9)</property>
                               </object>
                             </child>
                             <child type="start">
@@ -176,28 +191,34 @@
       </item>
     </section>
   </menu>
-  <menu id="sort_menu">
+  <menu id="sidebar_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Two-Column Sidebar</attribute>
+        <attribute name="action">library.two-column-sidebar</attribute>
+      </item>
+    </section>
     <section>
       <attribute name="label" translatable="yes">Sort</attribute>
       <!-- see SortMethod enum-->
       <item>
         <attribute name="label" translatable="yes">A-Z</attribute>
-        <attribute name="action">library.sort-type</attribute>
+        <attribute name="action">library.sort-method</attribute>
         <attribute name="target">AlphanumericAsc</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Z-A</attribute>
-        <attribute name="action">library.sort-type</attribute>
+        <attribute name="action">library.sort-method</attribute>
         <attribute name="target">AlphanumericDesc</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Last Modified</attribute>
-        <attribute name="action">library.sort-type</attribute>
+        <attribute name="action">library.sort-method</attribute>
         <attribute name="target">ModifiedDesc</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">First Modified</attribute>
-        <attribute name="action">library.sort-type</attribute>
+        <attribute name="action">library.sort-method</attribute>
         <attribute name="target">ModifiedAsc</attribute>
       </item>
     </section>
