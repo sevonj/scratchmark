@@ -180,9 +180,8 @@ mod imp {
 
 use adw::subclass::prelude::*;
 use gtk::glib;
-use sourceview5::prelude::*;
+use sourceview5::{StyleSchemeManager, prelude::*};
 
-use gtk::glib::GString;
 use gtk::glib::Object;
 use sourceview5::LanguageManager;
 
@@ -198,13 +197,22 @@ glib::wrapper! {
 impl Default for MarkdownBuffer {
     fn default() -> Self {
         let obj: Self = Object::builder().build();
-        let lm = Self::language_manager();
+        let lm = LanguageManager::default();
         obj.set_language(Some(&lm.language("markdown").unwrap()));
         obj
     }
 }
 
 impl MarkdownBuffer {
+    pub fn with_style_scheme(self, scheme_id: &str) -> Self {
+        if let Some(style_scheme) = StyleSchemeManager::default().scheme(scheme_id) {
+            self.set_style_scheme(Some(&style_scheme));
+        } else {
+            println!("MarkdownBuffer: Failed to load scheme with id '{scheme_id}'.")
+        }
+        self
+    }
+
     pub fn stats(&self) -> DocumentStats {
         let num_lines = self.line_count();
         let num_chars = self.char_count();
@@ -264,27 +272,6 @@ impl MarkdownBuffer {
 
     pub fn format_code(&self) {
         formatting::format_code(self);
-    }
-
-    fn language_manager() -> LanguageManager {
-        let lm = LanguageManager::default();
-        let mut search_path = lm.search_path();
-
-        #[cfg(feature = "installed")]
-        {
-            let lang_spec_dir = &format!("{PKGDATADIR}/language_specs");
-            search_path.insert(0, lang_spec_dir.into());
-        }
-        #[cfg(not(feature = "installed"))]
-        {
-            const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
-            let lang_spec_dir = format!("{MANIFEST_DIR}/data/language_specs");
-            search_path.insert(0, lang_spec_dir.into());
-        }
-
-        let dirs: Vec<&str> = search_path.iter().map(GString::as_str).collect();
-        lm.set_search_path(&dirs);
-        lm
     }
 }
 
