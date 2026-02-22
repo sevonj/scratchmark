@@ -56,16 +56,14 @@ mod imp {
 
             loop {
                 let Some(item_a) = sort_cache.get(path_a) else {
-                    unreachable!();
-                    // if self.sort_cache.borrow().get(path_b).is_none() {
-                    //     return gtk::Ordering::Equal;
-                    // } else {
-                    //     return gtk::Ordering::Smaller;
-                    // }
+                    if sort_cache.get(path_b).is_none() {
+                        return gtk::Ordering::Equal;
+                    } else {
+                        return gtk::Ordering::Smaller;
+                    }
                 };
                 let Some(item_b) = sort_cache.get(path_b) else {
-                    unreachable!();
-                    // return gtk::Ordering::Larger;
+                    return gtk::Ordering::Larger;
                 };
 
                 if item_a.is_dir() == item_b.is_dir() {
@@ -186,6 +184,10 @@ impl ProjectSorter {
 
     pub fn remove(&self, path: &Path) {
         self.imp().sort_cache.borrow_mut().remove(path);
+    }
+
+    pub fn clear(&self) {
+        self.imp().sort_cache.borrow_mut().clear();
     }
 
     pub fn sort(&self, a: PathBuf, b: PathBuf) -> gtk::Ordering {

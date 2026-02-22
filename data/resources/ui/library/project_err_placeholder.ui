@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <template class="ErrPlaceholderRow" parent="AdwBin">
+    <template class="ProjectErrPlaceholder" parent="AdwBin">
         <child>
             <object class="GtkBox" id="title_row">
                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
