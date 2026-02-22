@@ -5,7 +5,7 @@
     <property name="developer_name" translatable="no">Sevonj &amp; co.</property>
     <property name="application_icon" translatable="no">org.scratchmark.Scratchmark</property>
     <property name="issue_url" translatable="no">https://github.com/sevonj/scratchmark/issues/</property>
-    <property name="website" translatable="no">https://github.com/sevonj/scratchmark/</property>
+    <property name="website" translatable="no">https://scratchmark.org/</property>
     <property name="support_url" translatable="no">https://github.com/sevonj/scratchmark/discussions/</property>
     <property name="artists" translatable="no">Mirabelle SALLES https://github.com/oiimrosabel</property>
   </object>
