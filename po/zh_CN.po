@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-11 19:53+0200\n"
-"PO-Revision-Date: 2026-02-12 22:46+0000\n"
+"POT-Creation-Date: 2026-02-13 14:25+0200\n"
+"PO-Revision-Date: 2026-02-13 23:49+0000\n"
 "Last-Translator: Outbreak2096 <outbreak2096@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.codeberg.org/projects/scratchmark/app/zh_Hans/>\n"
@@ -149,6 +149,18 @@ msgstr "无打开"
 
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr "创建新文档或从侧边栏打开现有文档"
+
+msgid "Delete permanently?"
+msgstr "永久删除？"
+
+msgid "\"{{filename}}\" will be permanently deleted."
+msgstr "“{{filename}}”将被永久删除。"
+
+msgid "_Cancel"
+msgstr "取消(_C)"
+
+msgid "_Delete"
+msgstr "删除(_D)"
 
 msgid "Show in File Manager"
 msgstr "在文件管理器中显示"

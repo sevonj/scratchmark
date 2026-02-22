@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-11 19:53+0200\n"
-"PO-Revision-Date: 2026-02-11 18:56+0000\n"
+"POT-Creation-Date: 2026-02-13 14:25+0200\n"
+"PO-Revision-Date: 2026-02-13 12:27+0000\n"
 "Last-Translator: yakushabb <yakushabb@gmail.com>\n"
 "Language-Team: Turkish <https://translate.codeberg.org/projects/scratchmark/"
 "app/tr/>\n"
@@ -156,6 +156,18 @@ msgstr "Hiçbir Şey Açık Değil"
 
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr "Kenar çubuğundan yeni belge oluşturun ya da var olan belgeyi açın"
+
+msgid "Delete permanently?"
+msgstr ""
+
+msgid "\"{{filename}}\" will be permanently deleted."
+msgstr ""
+
+msgid "_Cancel"
+msgstr ""
+
+msgid "_Delete"
+msgstr ""
 
 msgid "Show in File Manager"
 msgstr "Dosya Yöneticisinde Göster"

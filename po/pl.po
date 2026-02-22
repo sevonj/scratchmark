@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-11 19:53+0200\n"
-"PO-Revision-Date: 2026-02-11 18:56+0000\n"
+"POT-Creation-Date: 2026-02-13 14:25+0200\n"
+"PO-Revision-Date: 2026-02-14 21:54+0000\n"
 "Last-Translator: LukaszH77 <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
 "app/pl/>\n"
@@ -163,6 +163,18 @@ msgstr "Nic nie jest otwarte"
 
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr "Utwórz nowy dokument lub otwórz już istniejący w panelu bocznym"
+
+msgid "Delete permanently?"
+msgstr "Usunąć na zawsze?"
+
+msgid "\"{{filename}}\" will be permanently deleted."
+msgstr "Plik \"{{filename}}\" zostanie usunięty na zawsze."
+
+msgid "_Cancel"
+msgstr "_Anuluj"
+
+msgid "_Delete"
+msgstr "_Usuń"
 
 msgid "Show in File Manager"
 msgstr "Pokaż w menedżerze plików"
