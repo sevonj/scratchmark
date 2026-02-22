@@ -19,17 +19,17 @@ mod imp {
     use gtk::glib::subclass::Signal;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/err_placeholder_row.ui")]
-    pub struct ErrPlaceholderRow {
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/library/project_err_placeholder.ui")]
+    pub struct ProjectErrPlaceholder {
         #[template_child]
         pub(super) title: TemplateChild<Label>,
         context_menu_popover: RefCell<Option<PopoverMenu>>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for ErrPlaceholderRow {
-        const NAME: &'static str = "ErrPlaceholderRow";
-        type Type = super::ErrPlaceholderRow;
+    impl ObjectSubclass for ProjectErrPlaceholder {
+        const NAME: &'static str = "ProjectErrPlaceholder";
+        type Type = super::ProjectErrPlaceholder;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -41,7 +41,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for ErrPlaceholderRow {
+    impl ObjectImpl for ProjectErrPlaceholder {
         fn signals() -> &'static [Signal] {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| vec![Signal::builder("close-project-requested").build()])
@@ -68,13 +68,13 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for ErrPlaceholderRow {}
-    impl BinImpl for ErrPlaceholderRow {}
+    impl WidgetImpl for ProjectErrPlaceholder {}
+    impl BinImpl for ProjectErrPlaceholder {}
 
-    impl ErrPlaceholderRow {
+    impl ProjectErrPlaceholder {
         fn setup_context_menu(&self) {
             let resource_path =
-                "/org/scratchmark/Scratchmark/ui/library/err_placeholder_row_context_menu.ui";
+                "/org/scratchmark/Scratchmark/ui/library/project_err_placeholder_context_menu.ui";
             let obj = self.obj();
 
             let builder = Builder::from_resource(resource_path);
@@ -120,14 +120,14 @@ use glib::Object;
 use gtk::glib;
 
 glib::wrapper! {
-    pub struct ErrPlaceholderRow(ObjectSubclass<imp::ErrPlaceholderRow>)
+    pub struct ProjectErrPlaceholder(ObjectSubclass<imp::ProjectErrPlaceholder>)
         @extends adw::Bin, gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl ErrPlaceholderRow {
+impl ProjectErrPlaceholder {
     pub fn new(path: &Path) -> Self {
-        let imp: ErrPlaceholderRow = Object::builder().build();
+        let imp: ProjectErrPlaceholder = Object::builder().build();
         let name = path.file_name().unwrap().to_string_lossy().into_owned();
         imp.imp().title.set_text(&name);
         imp
