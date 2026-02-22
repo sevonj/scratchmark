@@ -6,12 +6,13 @@ mod imp {
     use std::path::Path;
     use std::path::PathBuf;
     use std::sync::OnceLock;
+    use std::sync::mpsc::Receiver;
+    use std::sync::mpsc::channel;
+    use std::thread;
     use std::time::Duration;
     use std::time::SystemTime;
 
     use adw::subclass::prelude::*;
-    use async_channel::Receiver;
-    use async_channel::Sender;
     use glib::closure_local;
     use glib::subclass::*;
     use gtk::glib;
@@ -19,8 +20,6 @@ mod imp {
     use gtk::glib::clone;
     use gtk::glib::timeout_add_local;
     use gtk::prelude::*;
-
-    use gtk::glib::MainContext;
 
     use crate::data::Document;
     use crate::data::Folder;
@@ -47,7 +46,6 @@ mod imp {
         /// Project folder is inaccessible or deleted
         is_invalid: Cell<bool>,
         crawler_rx: RefCell<Option<Receiver<CrawlMsg>>>,
-        crawler_tx: RefCell<Option<Sender<CrawlMsg>>>,
 
         pub(super) folders: RefCell<HashMap<PathBuf, super::Folder>>,
         pub(super) documents: RefCell<HashMap<PathBuf, Document>>,
@@ -71,10 +69,6 @@ mod imp {
                 obj.refresh_content();
             });
 
-            let (sender, receiver) = async_channel::unbounded();
-            self.crawler_tx.replace(Some(sender));
-            self.crawler_rx.replace(Some(receiver));
-
             timeout_add_local(
                 Duration::from_millis(100),
                 clone!(
@@ -82,26 +76,29 @@ mod imp {
                     obj,
                     move || {
                         let imp = obj.imp();
-                        let mut bind = imp.crawler_rx.borrow_mut();
-                        let receiver = bind.as_mut().unwrap();
-                        while let Ok(entry) = receiver.try_recv() {
-                            match entry {
-                                CrawlMsg::FoundDir {
-                                    path,
-                                    depth,
-                                    modified,
-                                } => {
-                                    imp.add_folder(Folder::new_subfolder(path, depth, modified));
-                                }
-                                CrawlMsg::FoundFile {
-                                    path,
-                                    depth,
-                                    modified,
-                                } => {
-                                    imp.add_document(Document::new(path, depth, modified));
-                                }
-                                CrawlMsg::Done => {
-                                    imp.prune();
+
+                        if let Some(receiver) = imp.crawler_rx.borrow_mut().as_mut() {
+                            while let Ok(entry) = receiver.try_recv() {
+                                match entry {
+                                    CrawlMsg::FoundDir {
+                                        path,
+                                        depth,
+                                        modified,
+                                    } => {
+                                        imp.add_folder(Folder::new_subfolder(
+                                            path, depth, modified,
+                                        ));
+                                    }
+                                    CrawlMsg::FoundFile {
+                                        path,
+                                        depth,
+                                        modified,
+                                    } => {
+                                        imp.add_document(Document::new(path, depth, modified));
+                                    }
+                                    CrawlMsg::Done => {
+                                        imp.prune();
+                                    }
                                 }
                             }
                         }
@@ -161,10 +158,12 @@ mod imp {
             }
 
             let ignore_hidden = self.ignore_hidden_files.get();
-            let sender = self.crawler_tx.borrow().as_ref().unwrap().clone();
             let root_path = self.path().to_path_buf();
 
-            MainContext::default().spawn_local(async move {
+            let (sender, receiver) = channel();
+            self.crawler_rx.replace(Some(receiver));
+
+            thread::spawn(move || {
                 let mut search_stack: VecDeque<(PathBuf, u32)> = VecDeque::from([(root_path, 1)]);
 
                 loop {
@@ -191,14 +190,11 @@ mod imp {
 
                         if metadata.is_dir() {
                             search_stack.push_back((path.clone(), depth + 1));
-                            sender
-                                .send(CrawlMsg::FoundDir {
-                                    path,
-                                    depth,
-                                    modified,
-                                })
-                                .await
-                                .unwrap();
+                            let _ = sender.send(CrawlMsg::FoundDir {
+                                path,
+                                depth,
+                                modified,
+                            });
                         } else {
                             if !path
                                 .extension()
@@ -207,18 +203,15 @@ mod imp {
                                 continue;
                             }
 
-                            sender
-                                .send(CrawlMsg::FoundFile {
-                                    path,
-                                    depth,
-                                    modified,
-                                })
-                                .await
-                                .unwrap();
+                            let _ = sender.send(CrawlMsg::FoundFile {
+                                path,
+                                depth,
+                                modified,
+                            });
                         }
                     }
                 }
-                sender.send(CrawlMsg::Done).await.unwrap();
+                let _ = sender.send(CrawlMsg::Done);
             });
         }
 
