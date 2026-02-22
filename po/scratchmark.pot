@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-13 14:25+0200\n"
+"POT-Creation-Date: 2026-02-22 14:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:3
+#: data/org.scratchmark.Scratchmark.desktop.in:2
 msgid "Scratchmark"
 msgstr ""
 
-#: data/org.scratchmark.Scratchmark.desktop.in:4
+#: data/org.scratchmark.Scratchmark.desktop.in:3
 msgid "Markdown editor"
 msgstr ""
 
-#: data/org.scratchmark.Scratchmark.desktop.in:10
+#: data/org.scratchmark.Scratchmark.desktop.in:9
 msgid "Scratchmark Markdown editor"
 msgstr ""
 
@@ -114,6 +114,26 @@ msgstr ""
 
 #: data/resources/ui/editor/editor.ui:17
 msgid "Resolve"
+msgstr ""
+
+#: data/resources/ui/editor/file_changed_on_disk_dialog.ui:4
+msgid "File changed"
+msgstr ""
+
+#: data/resources/ui/editor/file_changed_on_disk_dialog.ui:5
+msgid "The file has changed on disk."
+msgstr ""
+
+#: data/resources/ui/editor/file_changed_on_disk_dialog.ui:8
+msgid "Discard changes"
+msgstr ""
+
+#: data/resources/ui/editor/file_changed_on_disk_dialog.ui:9
+msgid "Overwrite file"
+msgstr ""
+
+#: data/resources/ui/editor/file_changed_on_disk_dialog.ui:10
+msgid "Keep both"
 msgstr ""
 
 #: data/resources/ui/editor/search_bar.ui:26
@@ -247,11 +267,11 @@ msgstr ""
 msgid "New Folder"
 msgstr ""
 
-#: data/resources/ui/library/err_placeholder_row.ui:23
+#: data/resources/ui/library/project_err_placeholder.ui:23
 msgid "Project may have been moved or deleted."
 msgstr ""
 
-#: data/resources/ui/library/err_placeholder_row_context_menu.ui:6
+#: data/resources/ui/library/project_err_placeholder_context_menu.ui:6
 #: data/resources/ui/library/root_context_menu.ui:18
 msgid "Close Project"
 msgstr ""
@@ -324,15 +344,27 @@ msgstr ""
 msgid "Show overview of the document on the right side"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:39 data/resources/ui/window.ui:19
-msgid "Library"
+#: data/resources/ui/preferences_dialog.ui:37
+msgid "Clamp Editor Width"
 msgstr ""
 
 #: data/resources/ui/preferences_dialog.ui:42
-msgid "Ignore Hidden Files"
+msgid "Max Characters Per Row"
 msgstr ""
 
 #: data/resources/ui/preferences_dialog.ui:43
+msgid "Width is approximated from average character width"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:57 data/resources/ui/window.ui:19
+msgid "Library"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:60
+msgid "Ignore Hidden Files"
+msgstr ""
+
+#: data/resources/ui/preferences_dialog.ui:61
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
 
