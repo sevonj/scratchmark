@@ -39,13 +39,10 @@
             </child>
             <child>
               <object class="AdwSpinRow" id="editor_max_width_spin">
-                <property name="title" translatable="yes">Max Characters Per Row</property>
-                <property name="subtitle" translatable="yes">Width is approximated from average character width</property>
+                <property name="title" translatable="yes">Max Editor Width</property>
                 <property name="adjustment">
                   <object class="GtkAdjustment">
-                    <property name="lower">10</property>
-                    <property name="upper">500</property>
-                    <property name="step-increment">5</property>
+                    <property name="step-increment">100</property>
                   </object>
                 </property>
               </object>

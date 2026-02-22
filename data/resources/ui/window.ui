@@ -143,6 +143,20 @@
     </section>
     <section>
       <item>
+        <attribute name="label" translatable="yes">Zoom In</attribute>
+        <attribute name="action">editor.zoom-in</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Zoom Out</attribute>
+        <attribute name="action">editor.zoom-out</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Reset Zoom</attribute>
+        <attribute name="action">editor.zoom-reset</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
         <attribute name="label" translatable="yes">Search Text</attribute>
         <attribute name="action">editor.show-search</attribute>
       </item>

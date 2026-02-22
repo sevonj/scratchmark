@@ -37,11 +37,8 @@
     <key name="editor-limit-width" type="b">
       <default>true</default>
     </key>
-    <key name="editor-max-width" type="i">
-      <default>100</default>
-    </key>
-    <key name="editor-max-width-cached-px" type="i">
-      <default>800</default>
+    <key name="editor-max-width" type="u">
+      <default>1200</default>
     </key>
     <key name="win-width" type="i">
       <default>1200</default>

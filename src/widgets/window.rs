@@ -132,7 +132,7 @@ mod imp {
 
             let settings = Settings::new(APP_ID);
             self.settings.set(settings.clone()).unwrap();
-            self.settings_sanity_check();
+            crate::settings::sanity_filter(&settings);
             #[cfg(not(feature = "generatescreenshots"))]
             {
                 settings
@@ -761,6 +761,48 @@ mod imp {
             forward_action_to_editor(self, "hide-search", None, &editor_actions);
             forward_action_to_editor(self, "shiftreturn", None, &editor_actions);
 
+            let action = SimpleAction::new("zoom-in", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| {
+                    let settings = imp.settings();
+                    let old_size = settings.uint("editor-font-size");
+                    for size in crate::settings::EDITOR_FONT_SIZES.iter() {
+                        if *size > old_size {
+                            settings.set_uint("editor-font-size", *size).unwrap();
+                            break;
+                        }
+                    }
+                }
+            ));
+            editor_actions.add_action(&action);
+
+            let action = SimpleAction::new("zoom-out", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| {
+                    let settings = imp.settings();
+                    let old_size = settings.uint("editor-font-size");
+                    for size in crate::settings::EDITOR_FONT_SIZES.iter().rev() {
+                        if *size < old_size {
+                            settings.set_uint("editor-font-size", *size).unwrap();
+                            break;
+                        }
+                    }
+                }
+            ));
+            editor_actions.add_action(&action);
+
+            let action = SimpleAction::new("zoom-reset", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| imp.settings().reset("editor-font-size")
+            ));
+            editor_actions.add_action(&action);
+
             obj.connect_map(|obj| {
                 obj.imp()
                     .editor_actions_set_enabled(obj.imp().editor.borrow().is_some());
@@ -778,14 +820,6 @@ mod imp {
     impl Window {
         fn settings(&self) -> &Settings {
             self.settings.get().expect("Settings uninitialized.")
-        }
-
-        /// Filter bad values that break the app
-        fn settings_sanity_check(&self) {
-            let settings = self.settings();
-            if settings.uint("editor-font-size") > 200 {
-                settings.reset("editor-font-size");
-            }
         }
 
         fn update_window_title(&self) {
@@ -950,8 +984,7 @@ mod imp {
             }
 
             let settings = self.settings();
-            let max_width_px = settings.int("editor-max-width-cached-px");
-            let editor = match Editor::new(path.clone(), max_width_px) {
+            let editor = match Editor::new(path.clone()) {
                 Ok(editor) => editor,
                 Err(e) => {
                     self.toast(&e.to_string());
@@ -1033,9 +1066,6 @@ mod imp {
 
         fn close_editor(&self) -> Result<(), ScratchmarkError> {
             if let Some(editor) = self.editor.borrow_mut().as_ref() {
-                self.settings()
-                    .set_int("editor-max-width-cached-px", editor.max_width_px())
-                    .unwrap();
                 editor.save()?;
             }
             self.close_editor_without_saving();
