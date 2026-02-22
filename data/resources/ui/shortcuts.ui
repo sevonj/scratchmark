@@ -85,6 +85,24 @@
                 <property name="action-name">editor.show-search-replace</property>
               </object>
             </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Zoom In</property>
+                <property name="action-name">editor.zoom-in</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Zoom Out</property>
+                <property name="action-name">editor.zoom-out</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Reset Zoom</property>
+                <property name="action-name">editor.zoom-reset</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>

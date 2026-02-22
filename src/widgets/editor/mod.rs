@@ -91,7 +91,7 @@ mod imp {
         #[property(get, set)]
         limit_width: Cell<bool>,
         #[property(get, set)]
-        max_width: Cell<i32>,
+        max_width: Cell<u32>,
     }
 
     #[glib::object_subclass]
@@ -395,40 +395,25 @@ mod imp {
             let obj = self.obj();
             self.source_view
                 .set_font(&obj.font_family(), obj.font_size());
-            self.refresh_max_width();
         }
 
         fn refresh_max_width(&self) {
             let obj = self.obj();
-            // Delayed to make sure the font change is completed first.
-            // The idle needs to be here to not break the one in new(), causing a flicker.
-            glib::idle_add_local_once(clone!(
-                #[weak]
-                obj,
-                move || {
-                    let imp = obj.imp();
-                    if obj.limit_width() {
-                        let char_width =
-                            imp.source_view
-                                .pango_context()
-                                .metrics(None, None)
-                                .approximate_char_width() as f32
-                                / gtk::pango::SCALE as f32;
-                        let margin = imp.source_view.margin_start()
-                            + imp.source_view.margin_end()
-                            + imp.source_view.left_margin()
-                            + imp.source_view.right_margin();
-                        let max_width =
-                            obj.max_width() as f32 * char_width + margin as f32 + char_width;
-                        imp.source_view_clamp.set_maximum_size(max_width as i32);
-                        imp.source_view_clamp
-                            .set_tightening_threshold((max_width * 0.6) as i32);
-                    } else {
-                        imp.source_view_clamp.set_maximum_size(i32::MAX);
-                        imp.source_view_clamp.set_tightening_threshold(i32::MAX);
-                    }
-                }
-            ));
+
+            let imp = obj.imp();
+            if obj.limit_width() {
+                let margin = imp.source_view.margin_start()
+                    + imp.source_view.margin_end()
+                    + imp.source_view.left_margin()
+                    + imp.source_view.right_margin();
+                let max_width = obj.max_width() as i32 + margin;
+                imp.source_view_clamp.set_maximum_size(max_width);
+                imp.source_view_clamp
+                    .set_tightening_threshold((max_width as f32 * 0.6) as i32);
+            } else {
+                imp.source_view_clamp.set_maximum_size(i32::MAX);
+                imp.source_view_clamp.set_tightening_threshold(i32::MAX);
+            }
         }
     }
 }
@@ -460,8 +445,7 @@ glib::wrapper! {
 }
 
 impl Editor {
-    /// * `max_width_px` - cached value to avoid flicker at before font is loaded
-    pub fn new(path: PathBuf, max_width_px: i32) -> Result<Self, ScratchmarkError> {
+    pub fn new(path: PathBuf) -> Result<Self, ScratchmarkError> {
         let file = gtk::gio::File::for_path(&path);
         let text = file_actions::read_file_to_string(&file)?;
         let buffer = MarkdownBuffer::default().with_style_scheme("scratchmark");
@@ -495,9 +479,6 @@ impl Editor {
             }
         ));
         obj.refresh_document_stats(&buffer);
-        imp.source_view_clamp.set_maximum_size(max_width_px);
-        imp.source_view_clamp
-            .set_tightening_threshold((max_width_px as f32 * 0.6) as i32);
         Ok(obj)
     }
 

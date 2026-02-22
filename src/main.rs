@@ -1,6 +1,7 @@
 mod config;
 mod data;
 mod error;
+mod settings;
 mod util;
 mod widgets;
 
@@ -71,6 +72,9 @@ fn setup_accels(app: &adw::Application) {
     app.set_accels_for_action("editor.format-h4", &["<Ctrl>4"]);
     app.set_accels_for_action("editor.format-h5", &["<Ctrl>5"]);
     app.set_accels_for_action("editor.format-h6", &["<Ctrl>6"]);
+    app.set_accels_for_action("editor.zoom-in", &["<Ctrl>plus"]);
+    app.set_accels_for_action("editor.zoom-out", &["<Ctrl>minus"]);
+    app.set_accels_for_action("editor.zoom-reset", &["<Ctrl>0"]);
     app.set_accels_for_action("editor.show-search", &["<Ctrl>F"]);
     app.set_accels_for_action("editor.show-search-replace", &["<Ctrl>R"]);
     app.set_accels_for_action("editor.hide-search", &["Escape"]);

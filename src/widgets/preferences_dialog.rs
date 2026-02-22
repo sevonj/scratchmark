@@ -5,7 +5,6 @@ mod imp {
     use adw::subclass::prelude::*;
     use gtk::glib;
     use gtk::glib::clone;
-    use gtk::pango;
 
     use adw::ActionRow;
     use adw::SpinRow;
@@ -14,7 +13,6 @@ mod imp {
     use gtk::FontDialog;
     use gtk::gio::Cancellable;
     use gtk::gio::Settings;
-    use gtk::pango::FontDescription;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/preferences_dialog.ui")]
@@ -82,6 +80,12 @@ mod imp {
                 .bind("editor-limit-width", editor_limit_width_toggle, "active")
                 .build();
             let editor_max_width_spin: &SpinRow = &self.editor_max_width_spin;
+            editor_max_width_spin
+                .adjustment()
+                .set_upper(crate::settings::EDITOR_WIDTH_LIMIT_MAX as f64);
+            editor_max_width_spin
+                .adjustment()
+                .set_lower(crate::settings::EDITOR_WIDTH_LIMIT_MIN as f64);
             settings
                 .bind("editor-max-width", editor_max_width_spin, "value")
                 .build();
@@ -105,28 +109,26 @@ mod imp {
             let obj = self.obj();
             let settings = self.settings.get().expect("settings not set!");
 
-            let font_family = settings.string("editor-font-family");
-            let font_size = settings.uint("editor-font-size");
-            let mut initial = FontDescription::new();
-            initial.set_family(&font_family);
-            initial.set_size(font_size as i32 * pango::SCALE);
+            let context = obj.pango_context();
+            let family_name = settings.string("editor-font-family");
+            let family = context
+                .list_families()
+                .into_iter()
+                .find(|f| f.name() == family_name);
 
-            FontDialog::builder().modal(true).build().choose_font(
+            FontDialog::builder().modal(true).build().choose_family(
                 obj.root().and_downcast_ref::<gtk::Window>(),
-                Some(&initial),
+                family.as_ref(),
                 None::<&Cancellable>,
                 clone!(
                     #[weak]
                     settings,
                     move |result| {
-                        let Ok(font) = result else {
+                        let Ok(family) = result else {
                             return;
                         };
                         settings
-                            .set_uint("editor-font-size", (font.size() / pango::SCALE) as u32)
-                            .unwrap();
-                        settings
-                            .set_string("editor-font-family", &font.family().unwrap_or_default())
+                            .set_string("editor-font-family", &family.to_string())
                             .unwrap();
                     }
                 ),
