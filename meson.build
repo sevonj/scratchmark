@@ -1,5 +1,5 @@
 project('scratchmark', 'rust', 
-          version: '1.7.1',
+          version: '1.8.0-beta',
     meson_version: '>= 1.3.0',
   default_options: [ 'warning_level=2', 'werror=false', 'offline=false' ],
 )
