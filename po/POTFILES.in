@@ -13,13 +13,13 @@ data/resources/ui/library/document_context_menu.ui
 data/resources/ui/library/document_create_popover.ui
 data/resources/ui/library/document_row.ui
 data/resources/ui/library/drafts_context_menu.ui
-data/resources/ui/library/err_placeholder_row.ui
-data/resources/ui/library/err_placeholder_row_context_menu.ui
 data/resources/ui/library/folder_context_menu.ui
 data/resources/ui/library/folder_create_popover.ui
 data/resources/ui/library/folder_row.ui
 data/resources/ui/library/item_rename_popover.ui
 data/resources/ui/library/library_view.ui
+data/resources/ui/library/project_err_placeholder.ui
+data/resources/ui/library/project_err_placeholder_context_menu.ui
 data/resources/ui/library/project_view.ui
 data/resources/ui/library/root_context_menu.ui
 data/resources/ui/markdown_format_bar.ui
