@@ -11,7 +11,7 @@
               <object class="AdwActionRow" id="editor_font_button">
                 <property name="activatable">true</property>
                 <property name="title" translatable="yes">Change Font</property>
-                <property name="subtitle" translatable="yes">Customize font size and typeface</property>
+                <property name="subtitle" translatable="yes">Use a different font family</property>
               </object>
             </child>
             <child>
