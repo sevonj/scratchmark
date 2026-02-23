@@ -9,7 +9,6 @@ mod imp {
     use gtk::gdk;
     use gtk::gio;
     use gtk::glib;
-    use gtk::glib::subclass::*;
     use gtk::prelude::*;
 
     use gtk::Builder;
@@ -65,11 +64,6 @@ mod imp {
     }
 
     impl ObjectImpl for DocumentRow {
-        fn signals() -> &'static [Signal] {
-            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
-            SIGNALS.get_or_init(|| vec![Signal::builder("needs-attention").build()])
-        }
-
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
@@ -320,11 +314,12 @@ impl DocumentRow {
     }
 
     pub fn on_click(&self) {
+        self.document().select();
         self.document().open();
     }
 
     pub fn prompt_rename(&self) {
-        self.emit_by_name::<()>("needs-attention", &[]);
+        self.document().select();
         self.imp().rename_popover.get().unwrap().popup();
     }
 

@@ -29,14 +29,16 @@ mod imp {
         pub(super) listbox: ProjectListBox,
         pub(super) project: OnceLock<Project>,
 
+        // Props are controlled from outside and bound one-way. Don't set, listen only.
         #[property(nullable, get, set)]
         open_document_path: RefCell<Option<PathBuf>>,
         #[property(nullable, get, set)]
         selected_item_path: RefCell<Option<PathBuf>>,
-        previous_open_document: RefCell<Option<Document>>,
-        expanded_folders_queue: RefCell<HashSet<PathBuf>>,
         #[property(get, set)]
         sort_method: RefCell<String>,
+
+        previous_open_document: RefCell<Option<Document>>,
+        expanded_folders_queue: RefCell<HashSet<PathBuf>>,
     }
 
     #[glib::object_subclass]
@@ -102,11 +104,7 @@ mod imp {
             }
 
             let project_row = match &item {
-                ProjectItem::Doc(doc) => {
-                    let document_row = DocumentRow::new(doc);
-                    self.connect_document_row(&document_row);
-                    ProjectRow::Doc(document_row)
-                }
+                ProjectItem::Doc(doc) => ProjectRow::Doc(DocumentRow::new(doc)),
                 ProjectItem::Dir(dir) => {
                     let folder_row = FolderRow::new(dir);
                     self.connect_folder_row(&folder_row);
@@ -153,21 +151,6 @@ mod imp {
             }
         }
 
-        fn connect_document_row(&self, document_row: &DocumentRow) {
-            document_row.connect_closure(
-                "needs-attention",
-                true,
-                closure_local!(
-                    #[weak(rename_to = imp)]
-                    self,
-                    move |document_row: DocumentRow| {
-                        imp.obj()
-                            .set_selected_item_path(Some(document_row.document().path()));
-                    }
-                ),
-            );
-        }
-
         fn connect_folder_row(&self, folder_row: &FolderRow) {
             let obj = self.obj();
             let folder = folder_row.folder();
@@ -192,43 +175,6 @@ mod imp {
                     }
                 }
             ));
-
-            folder_row.connect_closure(
-                "needs-attention",
-                true,
-                closure_local!(
-                    #[weak(rename_to = imp)]
-                    self,
-                    move |folder_row: FolderRow| {
-                        imp.obj()
-                            .set_selected_item_path(Some(folder_row.folder().path()));
-                    }
-                ),
-            );
-
-            folder_row.connect_closure(
-                "prompt-create-subfolder",
-                true,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |folder_row: FolderRow| {
-                        obj.prompt_create_subfolder(folder_row.folder().path());
-                    }
-                ),
-            );
-
-            folder_row.connect_closure(
-                "prompt-create-document",
-                true,
-                closure_local!(
-                    #[weak]
-                    obj,
-                    move |folder_row: FolderRow| {
-                        obj.prompt_create_document(folder_row.folder().path());
-                    }
-                ),
-            );
 
             folder.connect_closure(
                 "document-created",
@@ -459,8 +405,8 @@ impl ProjectView {
     }
 
     pub fn prompt_create_document(&self, parent_path: PathBuf) {
-        if let Some(parent) = self.folder_item(&parent_path) {
-            parent.prompt_create_document();
+        if let Some(folder) = self.folder_item(&parent_path) {
+            folder.prompt_create_document();
         }
     }
 

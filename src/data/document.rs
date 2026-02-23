@@ -42,6 +42,7 @@ mod imp {
             static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
             SIGNALS.get_or_init(|| {
                 vec![
+                    Signal::builder("selected").build(),
                     Signal::builder("open").build(),
                     Signal::builder("duplicated").build(),
                     Signal::builder("rename-requested")
@@ -101,6 +102,10 @@ impl Document {
         imp.collation_key.set(collation_key).unwrap();
 
         obj
+    }
+
+    pub fn select(&self) {
+        self.emit_by_name::<()>("selected", &[]);
     }
 
     pub fn open(&self) {

@@ -186,6 +186,10 @@ impl Folder {
         self.imp().subfolders.borrow()
     }
 
+    pub fn select(&self) {
+        self.emit_by_name::<()>("selected", &[]);
+    }
+
     pub fn add_document(&self, doc: Document) {
         self.on_child_modified_changed(doc.modified());
         doc.connect_closure(
@@ -227,10 +231,6 @@ impl Folder {
 
     pub fn remove_subfolder(&self, path: &Path) {
         self.imp().subfolders.borrow_mut().remove(path);
-    }
-
-    pub fn select(&self) {
-        self.emit_by_name::<()>("selected", &[]);
     }
 
     pub fn rename(&self, path: PathBuf) -> Result<(), ScratchmarkError> {
