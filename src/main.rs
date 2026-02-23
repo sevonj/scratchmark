@@ -50,6 +50,16 @@ fn main() -> glib::ExitCode {
         setup_language_manager();
 
         let window = Window::new(app);
+        #[cfg(feature = "installed")]
+        {
+            use gtk::gio::SimpleAction;
+
+            // Some users would be pretty confused if the app suddenly turned into a picture of a mobile phone.
+            // This disables developer tools by adding dummy actions to their shortcuts.
+            // There's probably a better way to do this.
+            window.add_action(&SimpleAction::new("eat-inspector", None));
+            window.add_action(&SimpleAction::new("eat-adaptive-preview", None));
+        }
         window.set_title(Some("Scratchmark"));
         window.present();
     });
@@ -86,6 +96,9 @@ fn setup_accels(app: &adw::Application) {
     app.set_accels_for_action("win.toggle-focus", &["F8"]);
     app.set_accels_for_action("win.show-help-overlay", &["<Control>question"]);
     app.set_accels_for_action("win.preferences", &["<ctrl>comma"]);
+
+    app.set_accels_for_action("win.eat-inspector", &["<ctrl><Shift>I"]);
+    app.set_accels_for_action("win.eat-adaptive-preview", &["<ctrl><Shift>M"]);
 }
 
 fn setup_buffer_styles() {
