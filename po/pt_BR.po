@@ -3,13 +3,15 @@
 # This file is distributed under the same license as the scratchmark package.
 # Filipe Motta <luizfilipemotta@gmail.com>, 2025.
 # Anonymous <anonymous@noreply.codeberg.org>, 2025, 2026.
+# sevon <sevon@noreply.codeberg.org>, 2026.
+# emilly_msh_msh <emilly_msh_msh@noreply.codeberg.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-13 14:25+0200\n"
-"PO-Revision-Date: 2026-02-13 12:27+0000\n"
-"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"POT-Creation-Date: 2026-02-22 17:09+0200\n"
+"PO-Revision-Date: 2026-02-23 10:46+0000\n"
+"Last-Translator: emilly_msh_msh <emilly_msh_msh@noreply.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
 "scratchmark/app/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -29,10 +31,10 @@ msgid "Scratchmark Markdown editor"
 msgstr "Editor Markdown Scratchmark"
 
 msgid "Markdown editor for writing"
-msgstr ""
+msgstr "Editor Markdown para escrita"
 
 msgid "# Markdown Editor for Writing"
-msgstr ""
+msgstr "# Editor Markdown para escrita"
 
 msgid ""
 "**Scratchmark** is a pleasant text editor for writing. It tries to give you "
@@ -47,12 +49,18 @@ msgid ""
 "It uses Markdown, which means that ==all text formatting can be done by "
 "typing.=="
 msgstr ""
+"Ele usa Markdown, o que significa que ==toda a formatação de texto pode ser "
+"feita digitando.=="
 
 msgid ""
 "The editor is simple and intuitive, so anyone should be able to just pick it "
 "up and start writing. It can display simple writing statistics, and has "
 "features, such as focus mode and fullscreen support to reduce distractions."
 msgstr ""
+"O editor é simples e intuitivo, então qualquer pessoa deve ser capaz de "
+"pegar e começar a escrever. Ele pode mostrar estatísticas simples de "
+"escrita, e têm funcionalidades, como modo foco e suporte de tela cheia para "
+"reduzir distrações."
 
 msgid ""
 "Markdown is an open and widely used markup language. Documents created with "
@@ -63,13 +71,13 @@ msgid ""
 msgstr ""
 
 msgid "Editor interface"
-msgstr ""
+msgstr "Interface do editor"
 
 msgid "Focus mode"
-msgstr ""
+msgstr "Modo foco"
 
 msgid "All panels open"
-msgstr ""
+msgstr "Todos os painéis abertos"
 
 msgid "Statistics"
 msgstr "Estatísticas"
@@ -94,6 +102,21 @@ msgstr "Arquivo alterado no disco"
 
 msgid "Resolve"
 msgstr "Resolver"
+
+msgid "File changed"
+msgstr "Arquivo modificado"
+
+msgid "The file has changed on disk."
+msgstr "O arquivo for modificado no disco."
+
+msgid "Discard changes"
+msgstr "Descartar mudanças"
+
+msgid "Overwrite file"
+msgstr "Sobrescrever arquivo"
+
+msgid "Keep both"
+msgstr "Manter ambos"
 
 msgid "Search"
 msgstr "Pesquisar"
@@ -141,16 +164,16 @@ msgid "Create a new document or open an existing one from the sidebar"
 msgstr "Crie um novo documento ou abra um existente a partir da barra lateral"
 
 msgid "Delete permanently?"
-msgstr ""
+msgstr "Excluir permanentemente?"
 
 msgid "\"{{filename}}\" will be permanently deleted."
-msgstr ""
+msgstr "\"{{filename}}\" será excluído permanentemente."
 
 msgid "_Cancel"
-msgstr ""
+msgstr "_Cancelar"
 
 msgid "_Delete"
-msgstr ""
+msgstr "_Excluir"
 
 msgid "Show in File Manager"
 msgstr "Mostrar no gerenciador de arquivos"
@@ -171,7 +194,7 @@ msgid "New Document"
 msgstr "Novo documento"
 
 msgid "Name…"
-msgstr ""
+msgstr "Nome…"
 
 msgid "Create"
 msgstr "Criar"
@@ -180,7 +203,7 @@ msgid "New Folder"
 msgstr "Nova pasta"
 
 msgid "Project may have been moved or deleted."
-msgstr ""
+msgstr "Projeto pode ter sido movido ou excluído."
 
 msgid "Close Project"
 msgstr "Fechar projeto"
@@ -198,10 +221,10 @@ msgid "Highlight"
 msgstr "Destaque"
 
 msgid "Heading 1 (Ctrl+1)"
-msgstr ""
+msgstr "Cabeçalho 1 (Ctrl+1)"
 
 msgid "Heading 2 (Ctrl+2)"
-msgstr ""
+msgstr "Cabeçalho 2 (Ctrl+2)"
 
 msgid "Blockquote"
 msgstr "Citação"
@@ -235,6 +258,12 @@ msgstr "Mostrar minimapa"
 
 msgid "Show overview of the document on the right side"
 msgstr "Mostrar visão geral do documento no lado direito"
+
+msgid "Clamp Editor Width"
+msgstr "Prender a largura do editor"
+
+msgid "Max Editor Width"
+msgstr "Largura máxima do editor"
 
 msgid "Library"
 msgstr "Biblioteca"
@@ -271,7 +300,7 @@ msgstr "Documento"
 
 msgctxt "shortcut window"
 msgid "New Document"
-msgstr "Nova documento"
+msgstr "Novo documento"
 
 msgctxt "shortcut window"
 msgid "Add Project"
@@ -302,40 +331,52 @@ msgid "Search and Replace Text"
 msgstr "Pesquisar e substituir texto"
 
 msgctxt "shortcut window"
+msgid "Zoom In"
+msgstr "Aumentar o zoom"
+
+msgctxt "shortcut window"
+msgid "Zoom Out"
+msgstr "Diminuir o zoom"
+
+msgctxt "shortcut window"
+msgid "Reset Zoom"
+msgstr "Resetar o zoom"
+
+msgctxt "shortcut window"
 msgid "Formatting"
 msgstr ""
 
 msgctxt "shortcut window"
 msgid "Bold"
-msgstr ""
+msgstr "Negrito"
 
 msgctxt "shortcut window"
 msgid "Italic"
-msgstr ""
+msgstr "Itálico"
 
 msgctxt "shortcut window"
 msgid "Heading 1"
-msgstr ""
+msgstr "Cabeçalho 1"
 
 msgctxt "shortcut window"
 msgid "Heading 2"
-msgstr ""
+msgstr "Cabeçalho 2"
 
 msgctxt "shortcut window"
 msgid "Heading 3"
-msgstr ""
+msgstr "Cabeçalho 3"
 
 msgctxt "shortcut window"
 msgid "Heading 4"
-msgstr ""
+msgstr "Cabeçalho 4"
 
 msgctxt "shortcut window"
 msgid "Heading 5"
-msgstr ""
+msgstr "Cabeçalho 5"
 
 msgctxt "shortcut window"
 msgid "Heading 6"
-msgstr ""
+msgstr "Cabeçalho 6"
 
 msgctxt "shortcut window"
 msgid "Library"
@@ -346,16 +387,16 @@ msgid "Manual Refresh"
 msgstr "Atualização manual"
 
 msgid "Sort"
-msgstr ""
+msgstr "Ordenar"
 
 msgid "Menu"
 msgstr "Menu"
 
 msgid "Toggle Sidebar (F9)"
-msgstr "Ativar/Desativar barra lateral"
+msgstr "Ativar/Desativar barra lateral (F9)"
 
 msgid "New Document (Ctrl+N)"
-msgstr "Nova documento (Ctrl + N)"
+msgstr "Novo documento (Ctrl + N)"
 
 msgid "Exit Fullscreen"
 msgstr "Sair da tela cheia"
@@ -374,6 +415,15 @@ msgstr "Salvar"
 
 msgid "Close"
 msgstr "Fechar"
+
+msgid "Zoom In"
+msgstr "Aumentar o zoom"
+
+msgid "Zoom Out"
+msgstr "Diminuir o zoom"
+
+msgid "Reset Zoom"
+msgstr "Resetar o zoom"
 
 msgid "Search Text"
 msgstr "Pesquisar no texto"
@@ -397,16 +447,16 @@ msgid "About Scratchmark"
 msgstr "Sobre o Scratchmark"
 
 msgid "A-Z"
-msgstr ""
+msgstr "A-Z"
 
 msgid "Z-A"
-msgstr ""
+msgstr "Z-A"
 
 msgid "Last Modified"
-msgstr ""
+msgstr "Modificados recentemente"
 
 msgid "First Modified"
-msgstr ""
+msgstr "Modificados antigamente"
 
 #~ msgid "Name..."
 #~ msgstr "Nome..."

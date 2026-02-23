@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-13 14:25+0200\n"
-"PO-Revision-Date: 2026-02-13 14:05+0000\n"
+"POT-Creation-Date: 2026-02-22 17:09+0200\n"
+"PO-Revision-Date: 2026-02-23 10:46+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/scratchmark/"
 "app/fi/>\n"
@@ -116,6 +116,21 @@ msgstr "Tiedosto on muuttunut levyllä"
 
 msgid "Resolve"
 msgstr "Ratkaise"
+
+msgid "File changed"
+msgstr "Tiedosto muuttunut"
+
+msgid "The file has changed on disk."
+msgstr "Tiedosto on muuttunut levyllä."
+
+msgid "Discard changes"
+msgstr "Hylkää muutokset"
+
+msgid "Overwrite file"
+msgstr "Ylikirjoita"
+
+msgid "Keep both"
+msgstr "Säilytä molemmat"
 
 msgid "Search"
 msgstr "Etsi"
@@ -258,6 +273,12 @@ msgstr "Näytä minikartta"
 msgid "Show overview of the document on the right side"
 msgstr "Näytä yleiskatsaus tiedostosta oikealla puolella"
 
+msgid "Clamp Editor Width"
+msgstr "Rajoita editorin leveyttä"
+
+msgid "Max Editor Width"
+msgstr "Editorin maksimileveys"
+
 msgid "Library"
 msgstr "Kirjasto"
 
@@ -323,6 +344,18 @@ msgstr "Etsi tekstiä"
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr "Etsi ja korvaa tesktiä"
+
+msgctxt "shortcut window"
+msgid "Zoom In"
+msgstr "Suurenna tekstiä"
+
+msgctxt "shortcut window"
+msgid "Zoom Out"
+msgstr "Pienennä tekstiä"
+
+msgctxt "shortcut window"
+msgid "Reset Zoom"
+msgstr "Palauta oletuskoko"
 
 msgctxt "shortcut window"
 msgid "Formatting"
@@ -397,6 +430,15 @@ msgstr "Tallenna"
 
 msgid "Close"
 msgstr "Sulje"
+
+msgid "Zoom In"
+msgstr "Suurenna tekstiä"
+
+msgid "Zoom Out"
+msgstr "Pienennä tekstiä"
+
+msgid "Reset Zoom"
+msgstr "Palauta oletuskoko"
 
 msgid "Search Text"
 msgstr "Etsi tekstiä"

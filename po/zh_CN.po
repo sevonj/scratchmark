@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-13 14:25+0200\n"
-"PO-Revision-Date: 2026-02-13 23:49+0000\n"
+"POT-Creation-Date: 2026-02-22 17:09+0200\n"
+"PO-Revision-Date: 2026-02-23 10:46+0000\n"
 "Last-Translator: Outbreak2096 <outbreak2096@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.codeberg.org/projects/scratchmark/app/zh_Hans/>\n"
@@ -104,6 +104,21 @@ msgstr "磁盘上的文件已更改"
 
 msgid "Resolve"
 msgstr "解析"
+
+msgid "File changed"
+msgstr "文件已更改"
+
+msgid "The file has changed on disk."
+msgstr "磁盘上的文件已更改。"
+
+msgid "Discard changes"
+msgstr "丢弃更改"
+
+msgid "Overwrite file"
+msgstr "覆盖文件"
+
+msgid "Keep both"
+msgstr "保留两者"
 
 msgid "Search"
 msgstr "查找"
@@ -246,6 +261,12 @@ msgstr "显示缩略图"
 msgid "Show overview of the document on the right side"
 msgstr "在右侧显示文档概览"
 
+msgid "Clamp Editor Width"
+msgstr "限制编辑器宽度"
+
+msgid "Max Editor Width"
+msgstr "最大编辑器宽度"
+
 msgid "Library"
 msgstr "库"
 
@@ -310,6 +331,18 @@ msgstr "查找文本"
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr "查找并替换文本"
+
+msgctxt "shortcut window"
+msgid "Zoom In"
+msgstr "放大"
+
+msgctxt "shortcut window"
+msgid "Zoom Out"
+msgstr "缩小"
+
+msgctxt "shortcut window"
+msgid "Reset Zoom"
+msgstr "重置缩放"
 
 msgctxt "shortcut window"
 msgid "Formatting"
@@ -384,6 +417,15 @@ msgstr "保存"
 
 msgid "Close"
 msgstr "关闭"
+
+msgid "Zoom In"
+msgstr "放大"
+
+msgid "Zoom Out"
+msgstr "缩小"
+
+msgid "Reset Zoom"
+msgstr "重置缩放"
 
 msgid "Search Text"
 msgstr "查找文本"

@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-13 14:25+0200\n"
-"PO-Revision-Date: 2026-02-14 21:54+0000\n"
+"POT-Creation-Date: 2026-02-22 17:09+0200\n"
+"PO-Revision-Date: 2026-02-22 21:13+0000\n"
 "Last-Translator: LukaszH77 <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
 "app/pl/>\n"
@@ -118,6 +118,21 @@ msgstr "Plik został zmieniony na dysku"
 
 msgid "Resolve"
 msgstr "Rozwiąż"
+
+msgid "File changed"
+msgstr "Plik został zmieniony"
+
+msgid "The file has changed on disk."
+msgstr "Plik został zmieniony na dysku."
+
+msgid "Discard changes"
+msgstr "Porzuć zmiany"
+
+msgid "Overwrite file"
+msgstr "Nadpisz plik"
+
+msgid "Keep both"
+msgstr "Zachowaj oba"
 
 msgid "Search"
 msgstr "Szukaj"
@@ -260,6 +275,12 @@ msgstr "Pokaż minimapę"
 msgid "Show overview of the document on the right side"
 msgstr "Pokaż podgląd dokumentu po prawej stronie"
 
+msgid "Clamp Editor Width"
+msgstr "Ogranicz szerokość edytora"
+
+msgid "Max Editor Width"
+msgstr "Maksymalna szerokość edytora"
+
 msgid "Library"
 msgstr "Biblioteka"
 
@@ -325,6 +346,18 @@ msgstr "Szukaj tekstu"
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr "Szukaj i zastąp tekst"
+
+msgctxt "shortcut window"
+msgid "Zoom In"
+msgstr "Powiększa tekst"
+
+msgctxt "shortcut window"
+msgid "Zoom Out"
+msgstr "Pomniejsza tekst"
+
+msgctxt "shortcut window"
+msgid "Reset Zoom"
+msgstr "Resetuje powiększenie"
 
 msgctxt "shortcut window"
 msgid "Formatting"
@@ -399,6 +432,15 @@ msgstr "Zapisz"
 
 msgid "Close"
 msgstr "Zamknij"
+
+msgid "Zoom In"
+msgstr "Powiększ tekst"
+
+msgid "Zoom Out"
+msgstr "Pomniejsz tekst"
+
+msgid "Reset Zoom"
+msgstr "Zresetuj powiększenie"
 
 msgid "Search Text"
 msgstr "Szukaj tekstu"
