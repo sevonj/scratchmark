@@ -226,7 +226,6 @@ mod imp {
                 .build();
             obj.bind_property("selected_item_path", &project_view, "selected_item_path")
                 .sync_create()
-                .bidirectional()
                 .build();
             obj.bind_property("sort_method", &project_view, "sort_method")
                 .sync_create()
@@ -238,6 +237,16 @@ mod imp {
 
         fn connect_folder(&self, folder: &Folder) {
             let obj = self.obj();
+
+            folder.connect_closure(
+                "selected",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |folder: Folder| obj.set_selected_item_path(Some(folder.path()))
+                ),
+            );
 
             folder.connect_closure(
                 "rename-requested",
@@ -322,6 +331,16 @@ mod imp {
             if is_open {
                 doc.set_is_open_in_editor(true);
             }
+
+            doc.connect_closure(
+                "selected",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |doc: Document| obj.set_selected_item_path(Some(doc.path()))
+                ),
+            );
 
             doc.connect_closure(
                 "open",

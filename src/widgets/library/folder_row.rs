@@ -26,7 +26,6 @@ mod imp {
     use gtk::gio::SimpleActionGroup;
     use gtk::glib::Binding;
     use gtk::glib::Properties;
-    use gtk::glib::subclass::Signal;
 
     use super::DocumentRow;
     use crate::data::Folder;
@@ -84,17 +83,6 @@ mod imp {
             });
 
             self.parent_constructed();
-        }
-
-        fn signals() -> &'static [Signal] {
-            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
-            SIGNALS.get_or_init(|| {
-                vec![
-                    Signal::builder("needs-attention").build(),
-                    Signal::builder("prompt-create-document").build(),
-                    Signal::builder("prompt-create-subfolder").build(),
-                ]
-            })
         }
     }
 
@@ -292,7 +280,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak]
                 obj,
-                move |_action, _parameter| obj.emit_by_name("prompt-create-document", &[])
+                move |_action, _parameter| obj.prompt_create_document()
             ));
             actions.add_action(&action);
 
@@ -300,7 +288,7 @@ mod imp {
             action.connect_activate(clone!(
                 #[weak]
                 obj,
-                move |_action, _parameter| obj.emit_by_name("prompt-create-subfolder", &[])
+                move |_action, _parameter| obj.prompt_create_folder()
             ));
             actions.add_action(&action);
 
@@ -462,17 +450,17 @@ impl FolderRow {
     }
 
     pub fn prompt_rename(&self) {
-        self.emit_by_name::<()>("needs-attention", &[]);
+        self.folder().select();
         self.imp().rename_popover.get().unwrap().popup();
     }
 
     pub fn prompt_create_document(&self) {
-        self.emit_by_name::<()>("needs-attention", &[]);
+        self.folder().select();
         self.imp().document_create_popover.get().unwrap().popup();
     }
 
     pub fn prompt_create_folder(&self) {
-        self.emit_by_name::<()>("needs-attention", &[]);
+        self.folder().select();
         self.imp().folder_create_popover.get().unwrap().popup();
     }
 
