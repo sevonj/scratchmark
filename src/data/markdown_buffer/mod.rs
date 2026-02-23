@@ -17,6 +17,7 @@ mod imp {
     pub struct MarkdownBuffer {
         #[property(get, set)]
         pub(super) paste_in_progress: Cell<bool>,
+        pub(super) formatting_action_in_progress: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -69,7 +70,7 @@ mod imp {
             iter: &mut TextIter,
             process_text: Option<String>,
         ) -> (Option<String>, i32) {
-            if self.paste_in_progress.get() {
+            if self.paste_in_progress.get() || self.formatting_action_in_progress.get() {
                 return (process_text, 0);
             }
             let Some(process_text) = process_text else {
@@ -247,30 +248,43 @@ impl MarkdownBuffer {
     }
 
     pub fn format_bold(&self) {
+        self.imp().formatting_action_in_progress.set(true);
         formatting::format_bold(self);
+        self.imp().formatting_action_in_progress.set(false);
     }
 
     pub fn format_italic(&self) {
+        self.imp().formatting_action_in_progress.set(true);
         formatting::format_italic(self);
+        self.imp().formatting_action_in_progress.set(false);
     }
 
     pub fn format_strikethrough(&self) {
+        self.imp().formatting_action_in_progress.set(true);
         formatting::format_strikethrough(self);
+        self.imp().formatting_action_in_progress.set(false);
     }
 
     pub fn format_highlight(&self) {
+        self.imp().formatting_action_in_progress.set(true);
         formatting::format_highlight(self);
+        self.imp().formatting_action_in_progress.set(false);
     }
 
     pub fn format_heading(&self, heading_level: i32) {
+        self.imp().formatting_action_in_progress.set(true);
         formatting::format_heading(self, heading_level);
+        self.imp().formatting_action_in_progress.set(false);
     }
 
     pub fn format_blockquote(&self) {
+        self.imp().formatting_action_in_progress.set(true);
         formatting::format_blockquote(self);
+        self.imp().formatting_action_in_progress.set(false);
     }
 
     pub fn format_code(&self) {
+        self.imp().formatting_action_in_progress.set(true);
         formatting::format_code(self);
     }
 }

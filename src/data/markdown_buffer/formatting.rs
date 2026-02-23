@@ -25,10 +25,15 @@ pub fn format_bold(buffer: &impl TextBufferExt) {
         .or_else(|| word_around_cursor(buffer))
     {
         let start_off = start.offset();
+        let end_off = end.offset();
 
         buffer.begin_user_action();
         buffer.insert(&mut end, "**");
         buffer.insert(&mut buffer.iter_at_offset(start_off), "**");
+        buffer.select_range(
+            &buffer.iter_at_offset(start_off),
+            &buffer.iter_at_offset(end_off + 4),
+        );
         buffer.end_user_action();
         return;
     }
@@ -65,10 +70,15 @@ pub fn format_italic(buffer: &impl TextBufferExt) {
         .or_else(|| word_around_cursor(buffer))
     {
         let start_off = start.offset();
+        let end_off = end.offset();
 
         buffer.begin_user_action();
         buffer.insert(&mut end, "*");
         buffer.insert(&mut buffer.iter_at_offset(start_off), "*");
+        buffer.select_range(
+            &buffer.iter_at_offset(start_off),
+            &buffer.iter_at_offset(end_off + 2),
+        );
         buffer.end_user_action();
         return;
     }
@@ -99,10 +109,15 @@ pub fn format_strikethrough(buffer: &impl TextBufferExt) {
         .or_else(|| word_around_cursor(buffer))
     {
         let start_off = start.offset();
+        let end_off = end.offset();
 
         buffer.begin_user_action();
         buffer.insert(&mut end, "~~");
         buffer.insert(&mut buffer.iter_at_offset(start_off), "~~");
+        buffer.select_range(
+            &buffer.iter_at_offset(start_off),
+            &buffer.iter_at_offset(end_off + 4),
+        );
         buffer.end_user_action();
         return;
     }
@@ -133,10 +148,15 @@ pub fn format_highlight(buffer: &impl TextBufferExt) {
         .or_else(|| word_around_cursor(buffer))
     {
         let start_off = start.offset();
+        let end_off = end.offset();
 
         buffer.begin_user_action();
         buffer.insert(&mut end, "==");
         buffer.insert(&mut buffer.iter_at_offset(start_off), "==");
+        buffer.select_range(
+            &buffer.iter_at_offset(start_off),
+            &buffer.iter_at_offset(end_off + 4),
+        );
         buffer.end_user_action();
         return;
     }
@@ -270,10 +290,15 @@ pub fn format_code(buffer: &impl TextBufferExt) {
         .or_else(|| word_around_cursor(buffer))
     {
         let start_off = start.offset();
+        let end_off = end.offset();
 
         buffer.begin_user_action();
         buffer.insert(&mut end, "`");
         buffer.insert(&mut buffer.iter_at_offset(start_off), "`");
+        buffer.select_range(
+            &buffer.iter_at_offset(start_off),
+            &buffer.iter_at_offset(end_off + 2),
+        );
         buffer.end_user_action();
         return;
     }
@@ -417,6 +442,10 @@ mod tests {
         ( $buf:expr ) => {{ $buf.select_range(&$buf.start_iter(), &$buf.end_iter()) }};
     }
 
+    macro_rules! select_range {
+        ( $buf:expr, $start:expr, $end:expr ) => {{ $buf.select_range(&$buf.iter_at_offset($start), &$buf.iter_at_offset($end)) }};
+    }
+
     /// Get full contents of buffer
     macro_rules! contents {
         ( $buf:expr ) => {{ $buf.text(&$buf.start_iter(), &$buf.end_iter(), true) }};
@@ -492,6 +521,25 @@ mod tests {
         assert_eq!(contents!(buffer), "***text***");
         format_bold(&buffer);
         assert_eq!(contents!(buffer), "*text*");
+    }
+
+    #[test]
+    fn test_format_bold_sentence() {
+        let buffer = buf!(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam mattis lectus quam, sed hendrerit ex cursus nec. Etiam suscipit lorem nec fermentum mattis. Praesent dapibus varius velit a facilisis. Praesent euismod nulla eu enim pharetra, ut iaculis libero scelerisque. Nullam sollicitudin cursus leo, ac ultrices neque lobortis eget. Mauris id finibus diam. Nulla ut vestibulum risus. Proin ac egestas velit."
+        );
+        buffer.place_cursor(&buffer.iter_at_offset(2));
+        select_range!(&buffer, 9, 387);
+        format_bold(&buffer);
+        assert_eq!(
+            contents!(buffer),
+            "Lorem ips**um dolor sit amet, consectetur adipiscing elit. Nam mattis lectus quam, sed hendrerit ex cursus nec. Etiam suscipit lorem nec fermentum mattis. Praesent dapibus varius velit a facilisis. Praesent euismod nulla eu enim pharetra, ut iaculis libero scelerisque. Nullam sollicitudin cursus leo, ac ultrices neque lobortis eget. Mauris id finibus diam. Nulla ut vestibulum risus. Pro**in ac egestas velit."
+        );
+        format_bold(&buffer);
+        assert_eq!(
+            contents!(buffer),
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam mattis lectus quam, sed hendrerit ex cursus nec. Etiam suscipit lorem nec fermentum mattis. Praesent dapibus varius velit a facilisis. Praesent euismod nulla eu enim pharetra, ut iaculis libero scelerisque. Nullam sollicitudin cursus leo, ac ultrices neque lobortis eget. Mauris id finibus diam. Nulla ut vestibulum risus. Proin ac egestas velit."
+        );
     }
 
     #[test]
