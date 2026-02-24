@@ -1,6 +1,6 @@
 [package]
 name = "scratchmark"
-version = "1.8.0-beta"
+version = "1.8.0"
 license = "GPL-3.0-or-later"
 edition = "2024"
 

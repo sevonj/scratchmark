@@ -48,6 +48,22 @@
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <url type="translate">https://translate.codeberg.org/projects/scratchmark/app/</url>
   <releases>
+    <release version="v1.8.0" date="2026-02-24">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.8.0</url>
+      <description translate="no">
+        <ul>
+          <li>Feature: Sort library content</li>
+          <li>Feature: Adjustable editor width</li>
+          <li>Feature: Editor zoom shortcuts</li>
+          <li>Fix: Library content refresh caused a small stutter</li>
+          <li>Fix: Inline formatting actions lose selection</li>
+          <li>Fix: Library context menus are diagonally aligned</li>
+          <li>Misc: Create file/folder popovers are anchored to the parent folder instead of the toolbar</li>
+          <li>Misc: Updated website url in about dialog</li>
+          <li>i18n: Many previously hardcoded strings are now translated</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.7.1" date="2026-01-18">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.7.1</url>
       <description translate="no">
