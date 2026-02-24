@@ -181,7 +181,6 @@ mod imp {
                     settings.default_value("win-width").unwrap().get().unwrap(),
                     settings.default_value("win-height").unwrap().get().unwrap(),
                 );
-                obj.set_resizable(false);
 
                 let key_controller = EventControllerKey::new();
                 key_controller.set_propagation_phase(gtk::PropagationPhase::Capture);
@@ -198,6 +197,10 @@ mod imp {
                         let format_bar: &MarkdownFormatBar = imp.format_bar.as_ref();
                         match key {
                             Key::KP_1 => {
+                                obj.set_size_request(
+                                    settings.default_value("win-width").unwrap().get().unwrap(),
+                                    settings.default_value("win-height").unwrap().get().unwrap(),
+                                );
                                 sidebar_toggle.set_active(true);
                                 obj.set_show_sidebar(true);
                                 obj.set_focus_mode_active(false);
@@ -211,6 +214,10 @@ mod imp {
                                 glib::Propagation::Stop
                             }
                             Key::KP_2 => {
+                                obj.set_size_request(
+                                    settings.default_value("win-width").unwrap().get().unwrap(),
+                                    settings.default_value("win-height").unwrap().get().unwrap(),
+                                );
                                 sidebar_toggle.set_active(false);
                                 obj.set_show_sidebar(false);
                                 obj.set_focus_mode_active(true);
@@ -225,6 +232,10 @@ mod imp {
                                 glib::Propagation::Stop
                             }
                             Key::KP_3 => {
+                                obj.set_size_request(
+                                    settings.default_value("win-width").unwrap().get().unwrap(),
+                                    settings.default_value("win-height").unwrap().get().unwrap(),
+                                );
                                 sidebar_toggle.set_active(true);
                                 obj.set_focus_mode_active(false);
                                 obj.set_show_sidebar(true);
