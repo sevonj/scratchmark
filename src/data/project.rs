@@ -144,9 +144,6 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for Project {}
-    impl BinImpl for Project {}
-
     impl Project {
         pub(super) fn refresh_content(&self) {
             if self.is_invalid.get() {
@@ -378,9 +375,7 @@ use crate::data::FolderType;
 use crate::util::file_actions;
 
 glib::wrapper! {
-    pub struct Project(ObjectSubclass<imp::Project>)
-        @extends adw::Bin, gtk::Widget,
-        @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+    pub struct Project(ObjectSubclass<imp::Project>);
 }
 
 impl Project {
