@@ -2,14 +2,12 @@ mod imp {
     use std::cell::RefCell;
 
     use adw::subclass::prelude::*;
-    use gtk::gio;
-    use gtk::glib;
-    use gtk::prelude::*;
-
-    use gio::SimpleAction;
-    use gio::SimpleActionGroup;
-    use glib::clone;
     use gtk::CompositeTemplate;
+    use gtk::gio::SimpleAction;
+    use gtk::gio::SimpleActionGroup;
+    use gtk::glib;
+    use gtk::glib::clone;
+    use gtk::prelude::*;
 
     use crate::widgets::Editor;
 
@@ -165,9 +163,9 @@ mod imp {
     }
 }
 
-use adw::subclass::prelude::ObjectSubclassIsExt;
-use glib::Object;
+use adw::subclass::prelude::*;
 use gtk::glib;
+use gtk::glib::Object;
 
 use crate::widgets::Editor;
 

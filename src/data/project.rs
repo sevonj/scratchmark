@@ -13,11 +13,11 @@ mod imp {
     use std::time::SystemTime;
 
     use adw::subclass::prelude::*;
-    use glib::closure_local;
-    use glib::subclass::*;
     use gtk::glib;
     use gtk::glib::Properties;
     use gtk::glib::clone;
+    use gtk::glib::closure_local;
+    use gtk::glib::subclass::*;
     use gtk::glib::timeout_add_local;
     use gtk::prelude::*;
 
@@ -368,10 +368,9 @@ use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use gtk::glib;
+use gtk::glib::Object;
 use gtk::glib::closure_local;
 use sourceview5::prelude::*;
-
-use glib::Object;
 
 use crate::data::Document;
 use crate::data::Folder;

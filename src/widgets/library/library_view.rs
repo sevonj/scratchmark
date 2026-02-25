@@ -8,19 +8,18 @@ mod imp {
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
-    use gtk::glib;
-    use gtk::glib::clone;
-    use gtk::glib::closure_local;
-    use gtk::glib::subclass::*;
-    use gtk::prelude::*;
-
     use gtk::CompositeTemplate;
     use gtk::FileDialog;
     use gtk::gio::Cancellable;
     use gtk::gio::File;
     use gtk::gio::SimpleAction;
     use gtk::gio::SimpleActionGroup;
+    use gtk::glib;
     use gtk::glib::Properties;
+    use gtk::glib::clone;
+    use gtk::glib::closure_local;
+    use gtk::glib::subclass::*;
+    use gtk::prelude::*;
 
     use super::DocumentRow;
     use super::FolderRow;
@@ -526,20 +525,18 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
-use gtk::glib;
-use gtk::prelude::*;
-
-use glib::Object;
 use gtk::gio::Cancellable;
 use gtk::gio::File;
 use gtk::gio::FileCopyFlags;
-
-use crate::widgets::library::document_row::DocumentRow;
-use crate::widgets::library::folder_row::FolderRow;
-use crate::widgets::library::project_view::ProjectView;
+use gtk::glib;
+use gtk::glib::Object;
+use gtk::prelude::*;
 
 use crate::error::ScratchmarkError;
 use crate::util::file_actions;
+use crate::widgets::library::document_row::DocumentRow;
+use crate::widgets::library::folder_row::FolderRow;
+use crate::widgets::library::project_view::ProjectView;
 
 glib::wrapper! {
     pub struct LibraryView(ObjectSubclass<imp::LibraryView>)

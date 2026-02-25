@@ -1,11 +1,10 @@
 mod imp {
     use adw::subclass::prelude::*;
+    use gtk::CssProvider;
     use gtk::TextIter;
     use gtk::glib;
     use gtk::prelude::*;
     use sourceview5::subclass::prelude::*;
-
-    use gtk::CssProvider;
 
     #[derive(Debug, Default)]
     pub struct EditorTextView {
@@ -83,9 +82,8 @@ mod imp {
 }
 
 use gtk::glib;
-use gtk::subclass::prelude::*;
-
 use gtk::glib::Object;
+use gtk::subclass::prelude::*;
 
 glib::wrapper! {
     pub struct EditorTextView(ObjectSubclass<imp::EditorTextView>)

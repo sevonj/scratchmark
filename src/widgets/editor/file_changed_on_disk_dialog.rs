@@ -1,9 +1,8 @@
 mod imp {
-    use adw::subclass::prelude::*;
-    use gtk::glib;
-
     use adw::AlertDialog;
+    use adw::subclass::prelude::*;
     use gtk::CompositeTemplate;
+    use gtk::glib;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/editor/file_changed_on_disk_dialog.ui")]
@@ -35,11 +34,10 @@ mod imp {
     impl AdwAlertDialogImpl for FileChangedOnDiskDialog {}
 }
 
+use adw::AlertDialog;
 use adw::prelude::*;
 use gtk::glib;
-
-use adw::AlertDialog;
-use glib::Object;
+use gtk::glib::Object;
 
 glib::wrapper! {
     pub struct FileChangedOnDiskDialog(ObjectSubclass<imp::FileChangedOnDiskDialog>)

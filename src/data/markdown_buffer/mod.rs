@@ -5,12 +5,11 @@ mod imp {
 
     use adw::prelude::*;
     use adw::subclass::prelude::*;
+    use gtk::TextIter;
     use gtk::glib;
+    use gtk::glib::Properties;
     use sourceview5::prelude::*;
     use sourceview5::subclass::prelude::*;
-
-    use glib::Properties;
-    use gtk::TextIter;
 
     #[derive(Debug, Properties, Default)]
     #[properties(wrapper_type = super::MarkdownBuffer)]
@@ -181,10 +180,10 @@ mod imp {
 
 use adw::subclass::prelude::*;
 use gtk::glib;
-use sourceview5::{StyleSchemeManager, prelude::*};
-
 use gtk::glib::Object;
 use sourceview5::LanguageManager;
+use sourceview5::StyleSchemeManager;
+use sourceview5::prelude::*;
 
 #[cfg(feature = "installed")]
 use crate::config::PKGDATADIR;

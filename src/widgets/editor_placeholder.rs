@@ -1,8 +1,7 @@
 mod imp {
     use adw::subclass::prelude::*;
-    use gtk::glib;
-
     use gtk::CompositeTemplate;
+    use gtk::glib;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/editor_placeholder.ui")]
@@ -33,8 +32,8 @@ mod imp {
     impl BinImpl for EditorPlaceholder {}
 }
 
-use glib::Object;
 use gtk::glib;
+use gtk::glib::Object;
 
 glib::wrapper! {
     pub struct EditorPlaceholder(ObjectSubclass<imp::EditorPlaceholder>)

@@ -3,20 +3,19 @@ mod imp {
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
-    use gtk::gdk;
-    use gtk::glib;
-    use gtk::glib::clone;
-    use gtk::prelude::*;
-
     use gtk::Builder;
     use gtk::CompositeTemplate;
     use gtk::Label;
     use gtk::PopoverMenu;
+    use gtk::gdk;
     use gtk::gdk::Rectangle;
     use gtk::gio::MenuModel;
     use gtk::gio::SimpleAction;
     use gtk::gio::SimpleActionGroup;
+    use gtk::glib;
+    use gtk::glib::clone;
     use gtk::glib::subclass::Signal;
+    use gtk::prelude::*;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library/project_err_placeholder.ui")]
@@ -115,9 +114,9 @@ mod imp {
 
 use std::path::Path;
 
-use adw::subclass::prelude::ObjectSubclassIsExt;
-use glib::Object;
+use adw::subclass::prelude::*;
 use gtk::glib;
+use gtk::glib::Object;
 
 glib::wrapper! {
     pub struct ProjectErrPlaceholder(ObjectSubclass<imp::ProjectErrPlaceholder>)

@@ -11,31 +11,30 @@ mod imp {
     use std::path::PathBuf;
     use std::sync::OnceLock;
 
-    use adw::prelude::*;
-    use adw::subclass::prelude::*;
-    use glib::clone;
-    use glib::closure_local;
-    use gtk::gio;
-    use gtk::glib;
-
     use adw::AlertDialog;
     use adw::Banner;
     use adw::ClampScrollable;
     use adw::OverlaySplitView;
-    use gio::File;
-    use gio::FileMonitor;
-    use gio::FileMonitorFlags;
-    use gio::SimpleActionGroup;
-    use glib::Properties;
-    use glib::VariantTy;
-    use glib::subclass::Signal;
+    use adw::prelude::*;
+    use adw::subclass::prelude::*;
     use gtk::CompositeTemplate;
     use gtk::ScrolledWindow;
     use gtk::TemplateChild;
     use gtk::TextMark;
+    use gtk::gio;
     use gtk::gio::Cancellable;
+    use gtk::gio::File;
+    use gtk::gio::FileMonitor;
+    use gtk::gio::FileMonitorFlags;
     use gtk::gio::SimpleAction;
+    use gtk::gio::SimpleActionGroup;
+    use gtk::glib;
     use gtk::glib::GString;
+    use gtk::glib::Properties;
+    use gtk::glib::VariantTy;
+    use gtk::glib::clone;
+    use gtk::glib::closure_local;
+    use gtk::glib::subclass::Signal;
 
     use super::document_stats_view::DocumentStatsView;
     use super::minimap::Minimap;
@@ -421,16 +420,15 @@ mod imp {
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
-use glib::clone;
-use gtk::glib;
-use gtk::prelude::*;
-use sourceview5::prelude::*;
-
 use gtk::gio::Cancellable;
 use gtk::gio::FileCreateFlags;
+use gtk::glib;
 use gtk::glib::Object;
+use gtk::glib::clone;
+use gtk::prelude::*;
 use sourceview5::SearchContext;
 use sourceview5::SearchSettings;
+use sourceview5::prelude::*;
 
 use crate::data::DocumentStats;
 use crate::data::MarkdownBuffer;

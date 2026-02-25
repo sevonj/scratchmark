@@ -3,11 +3,10 @@ mod imp {
     use std::cell::RefCell;
 
     use adw::subclass::prelude::*;
-    use gtk::glib;
-    use gtk::prelude::*;
-
     use gtk::CompositeTemplate;
+    use gtk::glib;
     use gtk::glib::Properties;
+    use gtk::prelude::*;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::WindowTitle)]
@@ -80,8 +79,8 @@ mod imp {
     }
 }
 
-use glib::Object;
 use gtk::glib;
+use gtk::glib::Object;
 
 glib::wrapper! {
     pub struct WindowTitle(ObjectSubclass<imp::WindowTitle>)

@@ -1,9 +1,8 @@
 mod imp {
     use adw::subclass::prelude::*;
-    use gtk::glib;
-
     use gtk::CompositeTemplate;
     use gtk::Label;
+    use gtk::glib;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/editor/document_stats_view.ui")]
@@ -43,9 +42,9 @@ mod imp {
     impl BinImpl for DocumentStatsView {}
 }
 
-use adw::subclass::prelude::ObjectSubclassIsExt;
-use glib::Object;
+use adw::subclass::prelude::*;
 use gtk::glib;
+use gtk::glib::Object;
 
 use crate::data::DocumentStats;
 

@@ -4,10 +4,6 @@ mod imp {
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
-    use gtk::glib;
-    use gtk::prelude::*;
-    use sourceview5::prelude::*;
-
     use gtk::Button;
     use gtk::CompositeTemplate;
     use gtk::Entry;
@@ -19,11 +15,14 @@ mod imp {
     use gtk::gio::Cancellable;
     use gtk::gio::SimpleAction;
     use gtk::gio::SimpleActionGroup;
+    use gtk::glib;
     use gtk::glib::VariantTy;
     use gtk::glib::clone;
     use gtk::glib::subclass::Signal;
+    use gtk::prelude::*;
     use sourceview5::SearchContext;
     use sourceview5::SearchSettings;
+    use sourceview5::prelude::*;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/editor/search_bar.ui")]
@@ -467,8 +466,8 @@ mod imp {
 }
 
 use adw::subclass::prelude::*;
-use glib::Object;
 use gtk::glib;
+use gtk::glib::Object;
 use sourceview5::SearchContext;
 
 glib::wrapper! {

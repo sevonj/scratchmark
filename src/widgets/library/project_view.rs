@@ -8,10 +8,9 @@ mod imp {
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use gtk::glib;
+    use gtk::glib::Properties;
     use gtk::glib::clone;
     use gtk::glib::closure_local;
-
-    use gtk::glib::Properties;
 
     use crate::data::Document;
     use crate::data::Folder;
@@ -347,8 +346,7 @@ use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use gtk::glib;
-
-use glib::Object;
+use gtk::glib::Object;
 
 use crate::data::Project;
 use crate::widgets::library::document_row::DocumentRow;

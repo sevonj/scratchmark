@@ -3,15 +3,13 @@ mod imp {
     use std::collections::HashMap;
     use std::path::PathBuf;
 
-    use adw::prelude::BinExt;
+    use adw::prelude::*;
     use adw::subclass::prelude::*;
+    use gtk::ListBox;
     use gtk::ListBoxRow;
     use gtk::glib;
-    use gtk::glib::clone;
-    use gtk::prelude::*;
-
-    use gtk::ListBox;
     use gtk::glib::Properties;
+    use gtk::glib::clone;
 
     use super::ProjectRow;
     use crate::data::ProjectSorter;
@@ -99,10 +97,9 @@ use std::path::PathBuf;
 
 use adw::prelude::*;
 use adw::subclass::prelude::*;
-use gtk::glib;
-
-use glib::Object;
 use gtk::ListBoxRow;
+use gtk::glib;
+use gtk::glib::Object;
 
 use crate::data::ProjectItem;
 use crate::widgets::library::document_row::DocumentRow;

@@ -5,9 +5,8 @@ mod imp {
     use std::path::PathBuf;
 
     use gtk::glib;
-    use gtk::subclass::prelude::*;
-
     use gtk::glib::Properties;
+    use gtk::subclass::prelude::*;
 
     use super::SortMethod;
     use crate::data::ProjectItem;
@@ -123,9 +122,8 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use gtk::glib;
-use gtk::subclass::prelude::*;
-
 use gtk::glib::Object;
+use gtk::subclass::prelude::*;
 
 use crate::data::ProjectItem;
 

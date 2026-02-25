@@ -5,13 +5,6 @@ mod imp {
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
-    use gtk::gdk;
-    use gtk::gio;
-    use gtk::glib;
-    use gtk::glib::clone;
-    use gtk::glib::closure_local;
-    use gtk::prelude::*;
-
     use gtk::Builder;
     use gtk::CompositeTemplate;
     use gtk::DragSource;
@@ -22,10 +15,16 @@ mod imp {
     use gtk::ListBoxRow;
     use gtk::PopoverMenu;
     use gtk::TemplateChild;
+    use gtk::gdk;
+    use gtk::gio;
     use gtk::gio::MenuModel;
     use gtk::gio::SimpleActionGroup;
+    use gtk::glib;
     use gtk::glib::Binding;
     use gtk::glib::Properties;
+    use gtk::glib::clone;
+    use gtk::glib::closure_local;
+    use gtk::prelude::*;
 
     use super::DocumentRow;
     use crate::data::Folder;
@@ -386,11 +385,10 @@ mod imp {
 use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
-use gtk::glib;
-use gtk::prelude::*;
-
-use glib::Object;
 use gtk::ListBoxRow;
+use gtk::glib;
+use gtk::glib::Object;
+use gtk::prelude::*;
 
 use crate::data::Folder;
 use crate::data::FolderType;

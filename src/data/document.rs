@@ -7,11 +7,10 @@ mod imp {
 
     use gtk::glib;
     use gtk::glib::CollationKey;
+    use gtk::glib::Properties;
     use gtk::glib::subclass::*;
     use gtk::prelude::*;
     use gtk::subclass::prelude::*;
-
-    use gtk::glib::Properties;
 
     #[derive(Properties, Default)]
     #[properties(wrapper_type = super::Document)]
@@ -60,15 +59,14 @@ mod imp {
 use std::path::PathBuf;
 use std::time::SystemTime;
 
-use gtk::glib;
-use gtk::glib::CollationKey;
-use gtk::prelude::*;
-use gtk::subclass::prelude::*;
-
 use gtk::gio::Cancellable;
 use gtk::gio::FileCopyFlags;
+use gtk::glib;
+use gtk::glib::CollationKey;
 use gtk::glib::Object;
 use gtk::glib::object::ObjectExt;
+use gtk::prelude::*;
+use gtk::subclass::prelude::*;
 
 use crate::error::ScratchmarkError;
 use crate::util::file_actions;

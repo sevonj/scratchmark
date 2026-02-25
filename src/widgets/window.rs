@@ -4,12 +4,6 @@ mod imp {
     use std::cell::RefCell;
     use std::path::PathBuf;
 
-    use adw::prelude::*;
-    use adw::subclass::prelude::*;
-    use glib::clone;
-    use glib::closure_local;
-    use gtk::glib;
-
     use adw::AboutDialog;
     use adw::ApplicationWindow;
     use adw::HeaderBar;
@@ -19,6 +13,8 @@ mod imp {
     use adw::ToastOverlay;
     use adw::ToolbarStyle;
     use adw::ToolbarView;
+    use adw::prelude::*;
+    use adw::subclass::prelude::*;
     use gtk::Builder;
     use gtk::Button;
     use gtk::CompositeTemplate;
@@ -28,8 +24,11 @@ mod imp {
     use gtk::gio::Settings;
     use gtk::gio::SimpleAction;
     use gtk::gio::SimpleActionGroup;
+    use gtk::glib;
     use gtk::glib::Properties;
     use gtk::glib::VariantTy;
+    use gtk::glib::clone;
+    use gtk::glib::closure_local;
 
     use crate::APP_ID;
     use crate::config;
@@ -1157,8 +1156,7 @@ mod imp {
 
 use gtk::gio;
 use gtk::glib;
-
-use glib::Object;
+use gtk::glib::Object;
 
 glib::wrapper! {
     pub struct Window(ObjectSubclass<imp::Window>)

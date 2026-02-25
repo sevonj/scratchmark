@@ -1,8 +1,7 @@
 mod imp {
     use adw::subclass::prelude::*;
-    use gtk::glib;
-
     use gtk::CompositeTemplate;
+    use gtk::glib;
     use sourceview5::Map;
 
     #[derive(CompositeTemplate, Default)]
@@ -39,10 +38,10 @@ mod imp {
 
 use adw::subclass::prelude::*;
 use gtk::glib;
+use gtk::glib::Object;
 use sourceview5::prelude::*;
 
 use super::text_view::EditorTextView;
-use glib::Object;
 
 glib::wrapper! {
     pub struct Minimap(ObjectSubclass<imp::Minimap>)

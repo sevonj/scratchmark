@@ -3,12 +3,10 @@ use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
 
-use gtk::gio::prelude::*;
-
 use gtk::gio::Cancellable;
 use gtk::gio::File;
+use gtk::gio::prelude::*;
 use gtk::glib::GString;
-
 use gtk::glib::user_data_dir;
 
 use crate::APP_ID;

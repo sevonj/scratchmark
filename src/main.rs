@@ -6,9 +6,8 @@ mod util;
 mod widgets;
 
 use gtk::glib;
-use gtk::prelude::*;
-
 use gtk::glib::GString;
+use gtk::prelude::*;
 use sourceview5::LanguageManager;
 use sourceview5::StyleSchemeManager;
 

@@ -1,18 +1,17 @@
 mod imp {
     use std::cell::OnceCell;
 
-    use adw::prelude::*;
-    use adw::subclass::prelude::*;
-    use gtk::glib;
-    use gtk::glib::clone;
-
     use adw::ActionRow;
     use adw::SpinRow;
     use adw::SwitchRow;
+    use adw::prelude::*;
+    use adw::subclass::prelude::*;
     use gtk::CompositeTemplate;
     use gtk::FontDialog;
     use gtk::gio::Cancellable;
     use gtk::gio::Settings;
+    use gtk::glib;
+    use gtk::glib::clone;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/preferences_dialog.ui")]
@@ -50,7 +49,6 @@ mod imp {
     }
 
     impl ObjectImpl for PreferencesDialog {}
-
     impl WidgetImpl for PreferencesDialog {}
     impl AdwDialogImpl for PreferencesDialog {}
     impl PreferencesDialogImpl for PreferencesDialog {}
@@ -144,10 +142,9 @@ mod imp {
 }
 
 use adw::subclass::prelude::*;
-use gtk::glib;
-
-use glib::Object;
 use gtk::gio::Settings;
+use gtk::glib;
+use gtk::glib::Object;
 
 glib::wrapper! {
     pub struct PreferencesDialog(ObjectSubclass<imp::PreferencesDialog>)

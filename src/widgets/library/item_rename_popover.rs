@@ -5,17 +5,16 @@ mod imp {
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
-    use glib::clone;
-    use glib::subclass::*;
-    use gtk::glib;
-    use gtk::prelude::*;
-
-    use glib::GString;
     use gtk::Button;
     use gtk::CompositeTemplate;
     use gtk::Entry;
     use gtk::Label;
     use gtk::TemplateChild;
+    use gtk::glib;
+    use gtk::glib::GString;
+    use gtk::glib::clone;
+    use gtk::glib::subclass::*;
+    use gtk::prelude::*;
 
     use crate::util::file_actions::FilenameState;
 
@@ -181,8 +180,7 @@ use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use gtk::glib;
-
-use glib::Object;
+use gtk::glib::Object;
 
 glib::wrapper! {
     pub struct ItemRenamePopover(ObjectSubclass<imp::ItemRenamePopover>)

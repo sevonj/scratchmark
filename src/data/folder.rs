@@ -7,12 +7,11 @@ mod imp {
     use std::time::SystemTime;
 
     use gtk::glib;
+    use gtk::glib::CollationKey;
+    use gtk::glib::Properties;
     use gtk::glib::subclass::*;
     use gtk::prelude::*;
     use gtk::subclass::prelude::*;
-
-    use gtk::glib::CollationKey;
-    use gtk::glib::Properties;
 
     use super::FolderType;
     use crate::data::Document;
@@ -79,12 +78,11 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::time::SystemTime;
 
-use adw::subclass::prelude::ObjectSubclassIsExt;
+use adw::subclass::prelude::*;
 use gtk::glib;
-use gtk::glib::closure_local;
-
 use gtk::glib::CollationKey;
 use gtk::glib::Object;
+use gtk::glib::closure_local;
 use gtk::glib::object::ObjectExt;
 
 use crate::error::ScratchmarkError;

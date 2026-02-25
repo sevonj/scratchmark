@@ -4,16 +4,15 @@ mod imp {
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
-    use glib::clone;
-    use glib::subclass::*;
-    use gtk::glib;
-    use gtk::prelude::*;
-
     use gtk::Button;
     use gtk::CompositeTemplate;
     use gtk::Entry;
     use gtk::TemplateChild;
+    use gtk::glib;
+    use gtk::glib::clone;
     use gtk::glib::property::PropertySet;
+    use gtk::glib::subclass::*;
+    use gtk::prelude::*;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library/document_create_popover.ui")]
@@ -134,8 +133,7 @@ use std::path::PathBuf;
 
 use adw::subclass::prelude::*;
 use gtk::glib;
-
-use glib::Object;
+use gtk::glib::Object;
 
 glib::wrapper! {
     pub struct DocumentCreatePopover(ObjectSubclass<imp::DocumentCreatePopover>)
