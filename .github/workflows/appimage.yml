@@ -1,0 +1,96 @@
+name: Build AppImage
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to build (optional)'
+        required: false
+
+jobs:
+  build-appimage:
+    name: Build AppImage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Build AppImage
+        run: |
+          nix build .#appimage --print-build-logs
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.tag }}"
+            [ -z "$VERSION" ] && VERSION=$(grep '^version' Cargo.toml | head -1 | cut -d'"' -f2)
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            VERSION="${GITHUB_REF#refs/tags/}"
+          else
+            VERSION="dev"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Building version: $VERSION"
+
+      - name: Find and rename AppImage
+        run: |
+          mkdir -p release
+          cp result/*.AppImage release/Scratchmark-${{ steps.version.outputs.version }}-x86_64.AppImage
+          chmod +x release/Scratchmark-${{ steps.version.outputs.version }}-x86_64.AppImage
+          ls -lh release/
+
+      - name: Upload AppImage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: scratchmark-appimage
+          path: release/*.AppImage
+          retention-days: 30
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release/*.AppImage
+          draft: false
+          prerelease: false
+          body: |
+            ## AppImage
+
+            Download the AppImage and make it executable:
+            ```bash
+            chmod +x Scratchmark-${{ steps.version.outputs.version }}-x86_64.AppImage
+            ./Scratchmark-${{ steps.version.outputs.version }}-x86_64.AppImage
+            ```
+
+            **System Requirements:**
+            - gtk4
+            - libadwaita-1
+            - gtksourceview-5
+
+            On Ubuntu/Debian:
+            ```bash
+            sudo apt install libgtk-4-1 libadwaita-1-0 libgtksourceview-5-0
+            ```
+
+            On Fedora:
+            ```bash
+            sudo dnf install gtk4 libadwaita gtksourceview5
+            ```
+
+            On Arch Linux:
+            ```bash
+            sudo pacman -S gtk4 libadwaita gtksourceview5
+            ```
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

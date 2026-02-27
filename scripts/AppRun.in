@@ -1,0 +1,15 @@
+#!/bin/bash
+# AppRun wrapper for Scratchmark AppImage
+
+# Get the directory where this script is located
+SELF=$(readlink -f "$0")
+HERE=${SELF%/*}
+
+# Export the AppDir's share directories
+export XDG_DATA_DIRS="$HERE/usr/share:$XDG_DATA_DIRS"
+
+# Export GSettings schema directory
+export GSETTINGS_SCHEMA_DIR="$HERE/usr/share/glib-2.0/schemas"
+
+# Run the binary
+exec "$HERE/usr/bin/scratchmark" "$@"

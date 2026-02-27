@@ -111,3 +111,48 @@ Build & install:
 cd build-aux
 sh generate_flatpak.sh && flatpak install Scratchmark.flatpak --user -y
 ```
+
+### AppImage
+
+Build an AppImage using Nix (requires Nix with flakes enabled):
+
+```sh
+# Build AppImage
+nix build .#appimage
+
+# Or use the helper script
+./scripts/build-appimage.sh
+
+# Find the AppImage in dist/
+./dist/Scratchmark-*.AppImage
+```
+
+See [NIX_SETUP.md](NIX_SETUP.md) for complete documentation on Nix builds, AppImage distribution, and Cachix integration.
+
+**Note:** The AppImage does not bundle GTK4 or libadwaita. Users need these libraries installed on their system.
+
+System requirements:
+- `gtk4`
+- `libadwaita-1`
+- `gtksourceview-5`
+
+On Ubuntu/Debian:
+```bash
+sudo apt install libgtk-4-1 libadwaita-1-0 libgtksourceview-5-0
+```
+
+On Fedora:
+```bash
+sudo dnf install gtk4 libadwaita gtksourceview5
+```
+
+On Arch Linux:
+```bash
+sudo pacman -S gtk4 libadwaita gtksourceview5
+```
+
+AppImages are automatically built and released to GitHub when you push a version tag:
+```bash
+git tag v1.8.0
+git push origin v1.8.0
+```

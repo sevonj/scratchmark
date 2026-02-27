@@ -3,3 +3,18 @@
 
 *.kra~
 *.temp
+
+# Nix
+/result
+/result-*
+
+# Distribution
+/dist
+*.AppImage
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
