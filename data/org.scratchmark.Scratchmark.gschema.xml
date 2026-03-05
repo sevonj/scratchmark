@@ -40,6 +40,9 @@
     <key name="editor-max-width" type="u">
       <default>1200</default>
     </key>
+    <key name="editor-use-spellcheck" type="b">
+      <default>false</default>
+    </key>
     <key name="win-width" type="i">
       <default>1200</default>
     </key>

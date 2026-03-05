@@ -35,6 +35,8 @@ mod imp {
     use gtk::glib::clone;
     use gtk::glib::closure_local;
     use gtk::glib::subclass::Signal;
+    use libspelling::Checker;
+    use libspelling::TextBufferAdapter;
 
     use super::document_stats_view::DocumentStatsView;
     use super::minimap::Minimap;
@@ -49,32 +51,6 @@ mod imp {
     #[properties(wrapper_type = super::Editor)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/editor/editor.ui")]
     pub struct Editor {
-        #[template_child]
-        pub(super) source_view: TemplateChild<EditorTextView>,
-        #[template_child]
-        pub(super) source_view_clamp: TemplateChild<ClampScrollable>,
-        pub(super) buffer: OnceCell<MarkdownBuffer>,
-        #[template_child]
-        pub(super) stats_view: TemplateChild<DocumentStatsView>,
-        pub(super) stats: Cell<DocumentStats>,
-
-        #[template_child]
-        pub(super) search_bar: TemplateChild<EditorSearchBar>,
-        #[template_child]
-        file_changed_on_disk_banner: TemplateChild<Banner>,
-        #[template_child]
-        pub(super) editor_split: TemplateChild<OverlaySplitView>,
-        #[template_child]
-        pub(super) minimap: TemplateChild<Minimap>,
-        #[property(get, set)]
-        pub(super) show_minimap: Cell<bool>,
-        #[template_child]
-        pub(super) scrolled_window: TemplateChild<ScrolledWindow>,
-
-        pub(super) file: RefCell<Option<File>>,
-        file_monitor: RefCell<Option<FileMonitor>>,
-        pub(super) path: RefCell<Option<PathBuf>>,
-
         #[property(get, set)]
         file_changed_on_disk: Cell<bool>,
         #[property(get, set)]
@@ -91,6 +67,36 @@ mod imp {
         limit_width: Cell<bool>,
         #[property(get, set)]
         max_width: Cell<u32>,
+        #[property(get, set)]
+        use_spellcheck: Cell<bool>,
+
+        #[template_child]
+        pub(super) source_view: TemplateChild<EditorTextView>,
+        #[template_child]
+        pub(super) source_view_clamp: TemplateChild<ClampScrollable>,
+        #[template_child]
+        pub(super) stats_view: TemplateChild<DocumentStatsView>,
+
+        #[template_child]
+        pub(super) search_bar: TemplateChild<EditorSearchBar>,
+        #[template_child]
+        file_changed_on_disk_banner: TemplateChild<Banner>,
+        #[template_child]
+        pub(super) editor_split: TemplateChild<OverlaySplitView>,
+        #[template_child]
+        pub(super) minimap: TemplateChild<Minimap>,
+        #[property(get, set)]
+        pub(super) show_minimap: Cell<bool>,
+        #[template_child]
+        pub(super) scrolled_window: TemplateChild<ScrolledWindow>,
+
+        pub(super) path: RefCell<Option<PathBuf>>,
+        pub(super) buffer: OnceCell<MarkdownBuffer>,
+        pub(super) stats: Cell<DocumentStats>,
+        pub(super) file: RefCell<Option<File>>,
+        file_monitor: RefCell<Option<FileMonitor>>,
+        pub(super) checker: OnceCell<Checker>,
+        pub(super) adapter: OnceCell<TextBufferAdapter>,
     }
 
     #[glib::object_subclass]
@@ -426,6 +432,9 @@ use gtk::glib;
 use gtk::glib::Object;
 use gtk::glib::clone;
 use gtk::prelude::*;
+use libspelling::Checker;
+use libspelling::TextBufferAdapter;
+use sourceview5::Buffer;
 use sourceview5::SearchContext;
 use sourceview5::SearchSettings;
 use sourceview5::prelude::*;
@@ -456,12 +465,24 @@ impl Editor {
         let obj: Self = Object::builder().build();
         let imp = obj.imp();
         imp.buffer.set(buffer.clone()).unwrap();
+        let checker = Checker::default();
+        let adapter = TextBufferAdapter::new(&buffer.clone().upcast::<Buffer>(), &checker);
+        imp.adapter.set(adapter.clone()).unwrap();
+        imp.checker.set(checker).unwrap();
         imp.file.replace(Some(file));
         imp.path.replace(Some(path));
         imp.source_view.set_monospace(true);
         imp.source_view.set_buffer(Some(&buffer));
         imp.search_bar.set_search_context(search_context);
         imp.start_file_monitor();
+        imp.source_view
+            .set_extra_menu(Some(&imp.adapter.get().unwrap().menu_model()));
+        imp.source_view
+            .insert_action_group("spelling", Some(&adapter));
+        obj.bind_property("use_spellcheck", &adapter, "enabled")
+            .bidirectional()
+            .sync_create()
+            .build();
         buffer.connect_changed(clone!(
             #[weak]
             obj,

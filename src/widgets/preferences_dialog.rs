@@ -28,6 +28,8 @@ mod imp {
         editor_limit_width_toggle: TemplateChild<SwitchRow>,
         #[template_child]
         editor_max_width_spin: TemplateChild<SpinRow>,
+        #[template_child]
+        editor_spellcheck_toggle: TemplateChild<SwitchRow>,
 
         #[template_child]
         library_ignore_hidden_files_toggle: TemplateChild<SwitchRow>,
@@ -90,6 +92,10 @@ mod imp {
             settings
                 .bind("editor-limit-width", editor_max_width_spin, "sensitive")
                 .get()
+                .build();
+            let editor_spellcheck_toggle: &SwitchRow = &self.editor_spellcheck_toggle;
+            settings
+                .bind("editor-use-spellcheck", editor_spellcheck_toggle, "active")
                 .build();
 
             let library_ignore_hidden_files_toggle: &SwitchRow =

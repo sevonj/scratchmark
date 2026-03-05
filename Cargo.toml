@@ -11,6 +11,7 @@ gtk = { version = "0.10.3", package = "gtk4", features = ["v4_14"] }
 sourceview5 = "0.10.0"
 gettext-rs = { version = "0.7", features = ["gettext-system"] }
 regex = "1.12.2"
+libspelling = "0.4.1"
 
 [features]
 # Search for data files in install locations instead of source tree.

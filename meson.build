@@ -7,6 +7,8 @@ project('scratchmark', 'rust',
 i18n = import('i18n')
 gnome = import('gnome')
 
+dependency('libspelling-1')
+
 subdir('data')
 subdir('src')
 subdir('po')
