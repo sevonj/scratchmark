@@ -17,6 +17,15 @@ build-options:
   env:
     CARGO_HOME: "/run/build/scratchmark/cargo"
 modules:
+  - name: libspelling
+    buildsystem: meson
+    config-opts:
+      - -Ddocs=false
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/libspelling/0.4/libspelling-0.4.10.tar.xz
+        sha256: 56e3f01a3a18b575beea4c34349f99cdaba316e1f7c271b1231f7bcf5d9af73b
+
   - name: "scratchmark"
     builddir: true
     buildsystem: "meson"

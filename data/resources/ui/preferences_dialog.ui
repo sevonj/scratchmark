@@ -47,6 +47,11 @@
                 </property>
               </object>
             </child>
+            <child>
+              <object class="AdwSwitchRow" id="editor_spellcheck_toggle">
+                <property name="title" translatable="yes">Check Spelling</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>

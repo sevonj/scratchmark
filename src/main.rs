@@ -45,6 +45,7 @@ fn main() -> glib::ExitCode {
     setup_accels(&app);
 
     app.connect_activate(|app| {
+        libspelling::init();
         setup_buffer_styles();
         setup_language_manager();
 

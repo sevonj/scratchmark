@@ -1064,6 +1064,9 @@ mod imp {
             settings
                 .bind("editor-show-minimap", &editor, "show-minimap")
                 .build();
+            settings
+                .bind("editor-use-spellcheck", &editor, "use_spellcheck")
+                .build();
 
             self.main_toolbar_view.set_content(Some(&editor));
             self.format_bar.bind_editor(Some(editor.clone()));

@@ -88,7 +88,7 @@ Pull requests are gatekept by [this workflow.](https://github.com/sevonj/scratch
 Ubuntu
 
 ```
-libgtk-4-dev build-essential libglib2.0-dev libadwaita-1-dev libgtksourceview-5-dev
+libgtk-4-dev build-essential libglib2.0-dev libadwaita-1-dev libgtksourceview-5-dev libspelling-1-dev
 ```
 
 ### Flatpak
