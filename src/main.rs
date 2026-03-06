@@ -45,6 +45,11 @@ fn main() -> glib::ExitCode {
     setup_accels(&app);
 
     app.connect_activate(|app| {
+        if let Some(window) = app.windows().first() {
+            window.present();
+            return;
+        }
+
         libspelling::init();
         setup_buffer_styles();
         setup_language_manager();
