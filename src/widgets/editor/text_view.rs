@@ -43,8 +43,14 @@ mod imp {
             let buf = self.obj().buffer();
             let cursor = buf.iter_at_offset(buf.cursor_position());
             if !buf.has_selection()
-                && let Some((start, end)) = line_bounds(&buf, cursor.line())
+                && let Some((mut start, end)) = line_bounds(&buf, cursor.line())
             {
+                let mut before = start;
+                before.backward_cursor_position();
+                if buf.text(&before, &start, true) == "\n" {
+                    start = before;
+                }
+
                 buf.select_range(&start, &end);
                 self.parent_copy_clipboard();
                 buf.place_cursor(&cursor);
@@ -57,8 +63,14 @@ mod imp {
             let buf = self.obj().buffer();
             let cursor = buf.iter_at_offset(buf.cursor_position());
             if !buf.has_selection()
-                && let Some((start, end)) = line_bounds(&buf, cursor.line())
+                && let Some((mut start, end)) = line_bounds(&buf, cursor.line())
             {
+                let mut before = start;
+                before.backward_cursor_position();
+                if buf.text(&before, &start, true) == "\n" {
+                    start = before;
+                }
+
                 buf.select_range(&start, &end);
                 self.parent_cut_clipboard();
                 return;
