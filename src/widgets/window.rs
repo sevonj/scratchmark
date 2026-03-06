@@ -133,6 +133,7 @@ mod imp {
             crate::settings::sanity_filter(&settings);
             #[cfg(not(feature = "generatescreenshots"))]
             {
+                let library_view: &LibraryView = self.library_view.as_ref();
                 settings
                     .bind("win-width", obj.as_ref(), "default-width")
                     .build();
@@ -144,6 +145,13 @@ mod imp {
                     .build();
                 settings
                     .bind("library-show-sidebar", obj.as_ref(), "show-sidebar")
+                    .build();
+                settings
+                    .bind(
+                        "library-show-file-extensions",
+                        library_view,
+                        "show_file_extensions",
+                    )
                     .build();
                 let editor_sidebar_toggle: &ToggleButton = self.editor_sidebar_toggle.as_ref();
                 settings
@@ -160,7 +168,6 @@ mod imp {
                 settings
                     .bind("focus-mode-enabled", window_title, "focus-mode")
                     .build();
-                let library_view: &LibraryView = self.library_view.as_ref();
                 settings
                     .bind(
                         "library-ignore-hidden-files",

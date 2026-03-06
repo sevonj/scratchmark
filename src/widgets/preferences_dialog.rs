@@ -33,6 +33,8 @@ mod imp {
 
         #[template_child]
         library_ignore_hidden_files_toggle: TemplateChild<SwitchRow>,
+        #[template_child]
+        library_show_file_extensions_toggle: TemplateChild<SwitchRow>,
     }
 
     #[glib::object_subclass]
@@ -104,6 +106,15 @@ mod imp {
                 .bind(
                     "library-ignore-hidden-files",
                     library_ignore_hidden_files_toggle,
+                    "active",
+                )
+                .build();
+            let library_show_file_extensions_toggle: &SwitchRow =
+                &self.library_show_file_extensions_toggle;
+            settings
+                .bind(
+                    "library-show-file-extensions",
+                    library_show_file_extensions_toggle,
                     "active",
                 )
                 .build();

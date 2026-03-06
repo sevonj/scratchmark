@@ -22,6 +22,9 @@
     <key name="library-sort-method" type="s">
       <default>"AlphanumericAsc"</default>
     </key>
+    <key name="library-show-file-extensions" type="b">
+      <default>false</default>
+    </key>
     <key name="editor-show-sidebar" type="b">
       <default>false</default>
     </key>
