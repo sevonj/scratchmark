@@ -34,7 +34,6 @@ mod imp {
     use crate::config;
     use crate::data::Document;
     use crate::data::Folder;
-    use crate::data::SortMethod;
     use crate::error::ScratchmarkError;
     use crate::util::file_actions;
 
@@ -693,19 +692,24 @@ mod imp {
 
             let library_actions = SimpleActionGroup::new();
             obj.insert_action_group("library", Some(&library_actions));
+            let sort_method = settings.string("library-sort-method");
             let action = SimpleAction::new_stateful(
                 "sort-type",
                 Some(VariantTy::STRING),
-                &SortMethod::default().to_string().to_variant(),
+                &sort_method.to_variant(),
             );
+            self.library_view.set_sort_method(sort_method);
             action.connect_activate(clone!(
                 #[weak(rename_to = imp)]
                 self,
                 move |action, param| {
                     let param = param.unwrap();
                     action.set_state(param);
-                    imp.library_view
-                        .set_sort_method(param.get::<String>().unwrap());
+                    let value = param.get::<String>().unwrap();
+                    imp.settings()
+                        .set_string("library-sort-method", &value)
+                        .unwrap();
+                    imp.library_view.set_sort_method(value);
                 }
             ));
             library_actions.add_action(&action);
