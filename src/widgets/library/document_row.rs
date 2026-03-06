@@ -1,4 +1,5 @@
 mod imp {
+    use std::cell::Cell;
     use std::cell::RefCell;
     use std::path::PathBuf;
     use std::sync::OnceLock;
@@ -20,7 +21,7 @@ mod imp {
     use gtk::gio::MenuModel;
     use gtk::gio::SimpleActionGroup;
     use gtk::glib;
-    use gtk::glib::Binding;
+    use gtk::glib::Properties;
     use gtk::glib::clone;
     use gtk::glib::closure_local;
     use gtk::prelude::*;
@@ -29,9 +30,13 @@ mod imp {
     use crate::widgets::library::folder_row::FolderRow;
     use crate::widgets::library::item_rename_popover::ItemRenamePopover;
 
-    #[derive(CompositeTemplate, Default)]
+    #[derive(CompositeTemplate, Default, Properties)]
+    #[properties(wrapper_type = super::DocumentRow)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library/document_row.ui")]
     pub struct DocumentRow {
+        #[property(get, set)]
+        show_file_extensions: Cell<bool>,
+
         #[template_child]
         pub(super) open_in_editor_indicator: TemplateChild<Label>,
         #[template_child]
@@ -40,7 +45,6 @@ mod imp {
         pub(super) title_row: TemplateChild<gtk::Box>,
 
         pub(super) document: OnceLock<Document>,
-        pub(super) bindings: RefCell<Vec<Binding>>,
 
         context_menu_popover: OnceLock<PopoverMenu>,
         pub(super) rename_popover: OnceLock<ItemRenamePopover>,
@@ -62,6 +66,7 @@ mod imp {
         }
     }
 
+    #[glib::derived_properties]
     impl ObjectImpl for DocumentRow {
         fn constructed(&self) {
             self.parent_constructed();
@@ -70,6 +75,8 @@ mod imp {
             self.setup_context_menu();
             self.setup_drag();
             self.setup_drop();
+
+            obj.connect_show_file_extensions_notify(|obj| obj.imp().refresh_label());
 
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("document", Some(&actions));
@@ -250,6 +257,15 @@ mod imp {
             obj.add_controller(drop_target);
         }
 
+        fn refresh_label(&self) {
+            let document = self.document();
+            if self.obj().show_file_extensions() {
+                self.document_name_label.set_text(&document.name());
+            } else {
+                self.document_name_label.set_text(&document.stem());
+            }
+        }
+
         pub(super) fn bind(&self, document: &Document) {
             self.document.get_or_init(|| document.clone());
 
@@ -263,14 +279,7 @@ mod imp {
 
             self.title_row
                 .set_margin_start(12 * document.depth() as i32);
-            let title_label = self.document_name_label.get();
-            let mut bindings = self.bindings.borrow_mut();
-
-            let title_binding = document
-                .bind_property("stem", &title_label, "label")
-                .sync_create()
-                .build();
-            bindings.push(title_binding);
+            self.refresh_label();
         }
     }
 }

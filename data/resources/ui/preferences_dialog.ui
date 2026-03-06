@@ -63,6 +63,11 @@
                 <property name="subtitle" translatable="yes">Files and folders with a preceding "." won't show up in the library</property>
               </object>
             </child>
+            <child>
+              <object class="AdwSwitchRow" id="library_show_file_extensions_toggle">
+                <property name="title" translatable="yes">Show File Extensions</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

@@ -1,4 +1,5 @@
 mod imp {
+    use std::cell::Cell;
     use std::cell::RefCell;
     use std::collections::HashSet;
     use std::path::Path;
@@ -35,6 +36,8 @@ mod imp {
         selected_item_path: RefCell<Option<PathBuf>>,
         #[property(get, set)]
         sort_method: RefCell<String>,
+        #[property(get, set)]
+        show_file_extensions: Cell<bool>,
 
         previous_open_document: RefCell<Option<Document>>,
         expanded_folders_queue: RefCell<HashSet<PathBuf>>,
@@ -103,7 +106,11 @@ mod imp {
             }
 
             let project_row = match &item {
-                ProjectItem::Doc(doc) => ProjectRow::Doc(DocumentRow::new(doc)),
+                ProjectItem::Doc(doc) => {
+                    let document_row = DocumentRow::new(doc);
+                    self.connect_document_row(&document_row);
+                    ProjectRow::Doc(document_row)
+                }
                 ProjectItem::Dir(dir) => {
                     let folder_row = FolderRow::new(dir);
                     self.connect_folder_row(&folder_row);
@@ -148,6 +155,13 @@ mod imp {
                     }
                 }
             }
+        }
+
+        fn connect_document_row(&self, document_row: &DocumentRow) {
+            self.obj()
+                .bind_property("show_file_extensions", document_row, "show_file_extensions")
+                .sync_create()
+                .build();
         }
 
         fn connect_folder_row(&self, folder_row: &FolderRow) {

@@ -33,20 +33,21 @@ mod imp {
     #[properties(wrapper_type = super::LibraryView)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/library/library_view.ui")]
     pub struct LibraryView {
-        #[template_child]
-        pub(super) projects_container: TemplateChild<gtk::Box>,
-
         #[property(nullable, get, set)]
         open_document_path: RefCell<Option<PathBuf>>,
         #[property(nullable, get, set)]
         selected_item_path: RefCell<Option<PathBuf>>,
-
-        pub(super) projects: RefCell<HashMap<PathBuf, ProjectView>>,
-
         #[property(get, set)]
         ignore_hidden_files: Cell<bool>,
         #[property(get, set)]
         sort_method: RefCell<String>,
+        #[property(get, set)]
+        show_file_extensions: Cell<bool>,
+
+        #[template_child]
+        pub(super) projects_container: TemplateChild<gtk::Box>,
+
+        pub(super) projects: RefCell<HashMap<PathBuf, ProjectView>>,
     }
 
     #[glib::object_subclass]
@@ -229,6 +230,13 @@ mod imp {
             obj.bind_property("sort_method", &project_view, "sort_method")
                 .sync_create()
                 .build();
+            obj.bind_property(
+                "show_file_extensions",
+                &project_view,
+                "show_file_extensions",
+            )
+            .sync_create()
+            .build();
 
             project.refresh_content();
             obj.set_selected_item_path(Some(project.path()));

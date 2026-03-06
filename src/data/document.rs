@@ -20,6 +20,8 @@ mod imp {
         #[property(get, set)]
         pub(super) depth: Cell<u32>,
         #[property(get, set)]
+        pub(super) name: RefCell<String>,
+        #[property(get, set)]
         pub(super) stem: RefCell<String>,
         #[property(get, set)]
         pub(super) is_selected: Cell<bool>,
@@ -86,12 +88,13 @@ impl Document {
 
     pub fn new(path: PathBuf, depth: u32, modified: SystemTime) -> Self {
         let stem = path.file_stem().unwrap().to_string_lossy().into_owned();
-        let name = path.file_name().unwrap().to_string_lossy();
-        let collation_key = CollationKey::from(name);
+        let name = path.file_name().unwrap().to_string_lossy().into_owned();
+        let collation_key = CollationKey::from(&name);
 
         let obj: Document = Object::builder()
             .property("path", path)
             .property("depth", depth)
+            .property("name", name)
             .property("stem", stem)
             .build();
 
