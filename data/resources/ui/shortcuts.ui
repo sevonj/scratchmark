@@ -122,6 +122,12 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
+                <property name="title" translatable="yes" context="shortcut window">Link</property>
+                <property name="action-name">editor.format-link</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
                 <property name="title" translatable="yes" context="shortcut window">Heading 1</property>
                 <property name="action-name">editor.format-h1</property>
               </object>

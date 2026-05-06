@@ -270,6 +270,28 @@ pub fn format_blockquote(buffer: &impl TextBufferExt) {
     buffer.end_user_action();
 }
 
+pub fn format_insert_link(buffer: &impl TextBufferExt) {
+
+    if let Some((start, mut end)) = buffer
+        .selection_bounds()
+        .or_else(|| word_around_cursor(buffer))
+    {
+        let start_off = start.offset();
+
+        buffer.begin_user_action();
+        buffer.insert(&mut end, "]()");
+        buffer.insert(&mut buffer.iter_at_offset(start_off), "[");
+        buffer.place_cursor(&buffer.iter_at_offset(buffer.cursor_position() - 1));
+        buffer.end_user_action();
+        return;
+    }
+
+    buffer.begin_user_action();
+    buffer.insert_at_cursor("[]()");
+    buffer.place_cursor(&buffer.iter_at_offset(buffer.cursor_position() - 3));
+    buffer.end_user_action();
+}
+
 pub fn format_code(buffer: &impl TextBufferExt) {
     if let Some((start, mut end)) = find_delim_range(buffer, "`") {
         let start_off = start.offset();
@@ -790,6 +812,37 @@ mod tests {
         assert_eq!(contents!(buffer), "first\n> second\n> \n\nlast");
         format_blockquote(&buffer);
         assert_eq!(contents!(buffer), "first\nsecond\n\n\nlast");
+    }
+
+        #[test]
+    fn test_format_link_empty() {
+        let buffer = buf!("");
+        format_insert_link(&buffer);
+        assert_eq!(contents!(buffer), "[]()");
+    }
+
+    #[test]
+    fn test_format_link() {
+        let buffer = buf!("text");
+        select_all!(&buffer);
+        format_insert_link(&buffer);
+        assert_eq!(contents!(buffer), "[text]()");
+    }
+
+    #[test]
+    fn test_format_link_cursor_placement() {
+        let buffer = buf!("text  text");
+        buffer.place_cursor(&buffer.iter_at_offset(5));
+        format_insert_link(&buffer);
+        assert_eq!(contents!(buffer), "text []() text");
+    }
+
+    #[test]
+    fn test_format_link_no_selection_within_word() {
+        let buffer = buf!("text");
+        buffer.place_cursor(&buffer.iter_at_offset(2));
+        format_insert_link(&buffer);
+        assert_eq!(contents!(buffer), "[text]()");
     }
 
     #[test]

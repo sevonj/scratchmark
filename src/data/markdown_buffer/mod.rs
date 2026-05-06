@@ -282,6 +282,12 @@ impl MarkdownBuffer {
         self.imp().formatting_action_in_progress.set(false);
     }
 
+    pub fn format_insert_link(&self) {
+        self.imp().formatting_action_in_progress.set(true);
+        formatting::format_insert_link(self);
+        self.imp().formatting_action_in_progress.set(false);
+    }
+
     pub fn format_code(&self) {
         self.imp().formatting_action_in_progress.set(true);
         formatting::format_code(self);

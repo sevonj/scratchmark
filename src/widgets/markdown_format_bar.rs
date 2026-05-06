@@ -132,6 +132,20 @@ mod imp {
             ));
             self.actions.add_action(&action);
 
+            let action = SimpleAction::new("insert_link", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_action, _parameter| {
+                    if let Some(editor) = imp.editor.borrow().as_ref() {
+                        editor
+                            .activate_action("editor.format-link", None)
+                            .unwrap();
+                    }
+                }
+            ));
+            self.actions.add_action(&action);
+
             let action = SimpleAction::new("code", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = imp)]

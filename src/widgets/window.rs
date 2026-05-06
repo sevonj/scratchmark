@@ -769,6 +769,7 @@ mod imp {
             let pi32 = Some(VariantTy::INT32);
             forward_action_to_editor(self, "format-bold", None, &editor_actions);
             forward_action_to_editor(self, "format-italic", None, &editor_actions);
+            forward_action_to_editor(self, "format-link", None, &editor_actions);
             forward_action_to_editor(self, "format-heading", pi32, &editor_actions);
             forward_heading_action_to_editor(self, "format-h1", 1, &editor_actions);
             forward_heading_action_to_editor(self, "format-h2", 2, &editor_actions);
@@ -1116,6 +1117,7 @@ mod imp {
             obj.action_set_enabled("win.file-close", enabled);
             obj.action_set_enabled("editor.format-bold", enabled);
             obj.action_set_enabled("editor.format-italic", enabled);
+            obj.action_set_enabled("editor.format-link", enabled);
             obj.action_set_enabled("editor.format-heading", enabled);
             obj.action_set_enabled("editor.format-code", enabled);
             obj.action_set_enabled("editor.show-search", enabled);

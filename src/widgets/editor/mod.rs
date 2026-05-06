@@ -339,6 +339,14 @@ mod imp {
             ));
             actions.add_action(&action);
 
+            let action = gio::SimpleAction::new("format-link", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| imp.buffer.get().unwrap().format_insert_link()
+            ));
+            actions.add_action(&action);        
+
             let action = gio::SimpleAction::new("format-code", None);
             action.connect_activate(clone!(
                 #[weak(rename_to = imp)]
