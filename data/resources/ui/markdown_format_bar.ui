@@ -61,35 +61,29 @@
                 </child>
               </object>
             </child>
-            <!--child>
+            <child>
             <object class="GtkBox">
               <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                 <child>
                   <object class="GtkToggleButton">
                     <property name="icon-name">insert-link-symbolic</property>
-                    <property name="tooltip-text" translatable="yes">Insert Link</property>
+                    <property name="tooltip-text" translatable="yes">Insert Link (Ctrl+k)</property>
+                    <property name="action-name">formatbar.insert_link</property>
                   </object>
                 </child>
-                <child>
+                <!-- <child>
                   <object class="GtkToggleButton">
                     <property name="icon-name">insert-image-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Insert Image</property>
                   </object>
-                </child>
+                </child> -->
               </object>
-            </child-->
+            </child>
             <child>
               <object class="GtkToggleButton">
                 <property name="icon-name">quotation-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Blockquote</property>
                 <property name="action-name">formatbar.blockquote</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkToggleButton">
-                <property name="icon-name">insert-link-symbolic</property>
-                <property name="tooltip-text" translatable="yes">Insert Link</property>
-                <property name="action-name">formatbar.insert_link</property>
               </object>
             </child>
             <!--child>

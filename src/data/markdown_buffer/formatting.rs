@@ -271,17 +271,17 @@ pub fn format_blockquote(buffer: &impl TextBufferExt) {
 }
 
 pub fn format_insert_link(buffer: &impl TextBufferExt) {
-
     if let Some((start, mut end)) = buffer
         .selection_bounds()
         .or_else(|| word_around_cursor(buffer))
     {
         let start_off = start.offset();
+        let end_off = end.offset();
 
         buffer.begin_user_action();
         buffer.insert(&mut end, "]()");
         buffer.insert(&mut buffer.iter_at_offset(start_off), "[");
-        buffer.place_cursor(&buffer.iter_at_offset(buffer.cursor_position() - 1));
+        buffer.place_cursor(&buffer.iter_at_offset(end_off + 3));
         buffer.end_user_action();
         return;
     }
@@ -814,7 +814,7 @@ mod tests {
         assert_eq!(contents!(buffer), "first\nsecond\n\n\nlast");
     }
 
-        #[test]
+    #[test]
     fn test_format_link_empty() {
         let buffer = buf!("");
         format_insert_link(&buffer);

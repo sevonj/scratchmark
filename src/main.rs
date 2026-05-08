@@ -81,7 +81,7 @@ fn setup_accels(app: &adw::Application) {
     app.set_accels_for_action("win.file-close", &["<Ctrl>W"]);
     app.set_accels_for_action("editor.format-bold", &["<Ctrl>B"]);
     app.set_accels_for_action("editor.format-italic", &["<Ctrl>I"]);
-    app.set_accels_for_action("editor.format-link", &["<Ctrl>L"]);
+    app.set_accels_for_action("editor.format-link", &["<Ctrl>K"]);
     app.set_accels_for_action("editor.format-h1", &["<Ctrl>1"]);
     app.set_accels_for_action("editor.format-h2", &["<Ctrl>2"]);
     app.set_accels_for_action("editor.format-h3", &["<Ctrl>3"]);

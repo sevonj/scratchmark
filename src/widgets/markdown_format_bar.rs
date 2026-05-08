@@ -138,9 +138,7 @@ mod imp {
                 self,
                 move |_action, _parameter| {
                     if let Some(editor) = imp.editor.borrow().as_ref() {
-                        editor
-                            .activate_action("editor.format-link", None)
-                            .unwrap();
+                        editor.activate_action("editor.format-link", None).unwrap();
                     }
                 }
             ));
