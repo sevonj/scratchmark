@@ -166,10 +166,7 @@ mod imp {
             thread::spawn(move || {
                 let mut search_stack: VecDeque<(PathBuf, u32)> = VecDeque::from([(root_path, 1)]);
 
-                loop {
-                    let Some((folder, depth)) = search_stack.pop_front() else {
-                        break;
-                    };
+                while let Some((folder, depth)) = search_stack.pop_front() {
                     let Ok(entries) = folder.read_dir() else {
                         continue;
                     };
