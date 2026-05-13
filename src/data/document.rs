@@ -172,7 +172,7 @@ mod tests {
     #[test]
     fn test_move_valid_path() {
         std::fs::create_dir_all(PathBuf::from(PROJECT_ROOT).join("test")).unwrap();
-        let doc = Document::new("path/to/".into(), 1, SystemTime::now());
+        let doc = Document::new("path/to/".into(), 1, SystemTime::now(), SystemTime::now());
         assert!(
             doc.rename(PathBuf::from(PROJECT_ROOT).join("test").join("new_file.md"))
                 .is_ok()
@@ -181,7 +181,7 @@ mod tests {
 
     #[test]
     fn test_move_invalid_path_noparent() {
-        let doc = Document::new("path/to/".into(), 1, SystemTime::now());
+        let doc = Document::new("path/to/".into(), 1, SystemTime::now(), SystemTime::now());
         doc.connect_closure(
             "rename-requested",
             false,
