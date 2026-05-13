@@ -30,11 +30,13 @@ mod imp {
             path: PathBuf,
             depth: u32,
             modified: SystemTime,
+            accessed: SystemTime,
         },
         FoundFile {
             path: PathBuf,
             depth: u32,
             modified: SystemTime,
+            accessed: SystemTime,
         },
         Done,
     }
@@ -84,17 +86,21 @@ mod imp {
                                         path,
                                         depth,
                                         modified,
+                                        accessed,
                                     } => {
                                         imp.add_folder(Folder::new_subfolder(
-                                            path, depth, modified,
+                                            path, depth, modified, accessed,
                                         ));
                                     }
                                     CrawlMsg::FoundFile {
                                         path,
                                         depth,
                                         modified,
+                                        accessed,
                                     } => {
-                                        imp.add_document(Document::new(path, depth, modified));
+                                        imp.add_document(Document::new(
+                                            path, depth, modified, accessed,
+                                        ));
                                     }
                                     CrawlMsg::Done => {
                                         imp.prune();
@@ -184,6 +190,7 @@ mod imp {
                         }
                         let path = entry.path();
                         let modified = metadata.modified().unwrap_or(SystemTime::UNIX_EPOCH);
+                        let accessed = metadata.accessed().unwrap_or(SystemTime::UNIX_EPOCH);
 
                         if metadata.is_dir() {
                             search_stack.push_back((path.clone(), depth + 1));
@@ -191,6 +198,7 @@ mod imp {
                                 path,
                                 depth,
                                 modified,
+                                accessed,
                             });
                         } else {
                             if !path
@@ -204,6 +212,7 @@ mod imp {
                                 path,
                                 depth,
                                 modified,
+                                accessed,
                             });
                         }
                     }

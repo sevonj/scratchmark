@@ -112,6 +112,18 @@ mod imp {
                     }
                     not_equal => not_equal.into(),
                 },
+                SortMethod::AccessedAsc => match item_a.accessed().cmp(&item_b.accessed()) {
+                    std::cmp::Ordering::Equal => {
+                        item_a.collation_key().cmp(item_b.collation_key()).into()
+                    }
+                    not_equal => not_equal.into(),
+                },
+                SortMethod::AccessedDesc => match item_b.accessed().cmp(&item_a.accessed()) {
+                    std::cmp::Ordering::Equal => {
+                        item_a.collation_key().cmp(item_b.collation_key()).into()
+                    }
+                    not_equal => not_equal.into(),
+                },
             }
         }
     }
@@ -134,6 +146,8 @@ pub enum SortMethod {
     AlphanumericDesc,
     ModifiedAsc,
     ModifiedDesc,
+    AccessedAsc,
+    AccessedDesc,
 }
 
 impl Display for SortMethod {
@@ -143,6 +157,8 @@ impl Display for SortMethod {
             SortMethod::AlphanumericDesc => write!(f, "AlphanumericDesc"),
             SortMethod::ModifiedAsc => write!(f, "ModifiedAsc"),
             SortMethod::ModifiedDesc => write!(f, "ModifiedDesc"),
+            SortMethod::AccessedAsc => write!(f, "AccessedAsc"),
+            SortMethod::AccessedDesc => write!(f, "AccessedDesc"),
         }
     }
 }
@@ -156,6 +172,8 @@ impl TryFrom<&str> for SortMethod {
             "AlphanumericDesc" => Ok(Self::AlphanumericDesc),
             "ModifiedAsc" => Ok(Self::ModifiedAsc),
             "ModifiedDesc" => Ok(Self::ModifiedDesc),
+            "AccessedAsc" => Ok(Self::AccessedAsc),
+            "AccessedDesc" => Ok(Self::AccessedDesc),
             _ => Err(()),
         }
     }

@@ -214,6 +214,16 @@
         <attribute name="action">library.sort-type</attribute>
         <attribute name="target">ModifiedAsc</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">Last Accessed</attribute>
+        <attribute name="action">library.sort-type</attribute>
+        <attribute name="target">AccessedDesc</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">First Accessed</attribute>
+        <attribute name="action">library.sort-type</attribute>
+        <attribute name="target">AccessedAsc</attribute>
+      </item>
     </section>
   </menu>
 </interface>
