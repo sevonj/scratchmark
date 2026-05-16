@@ -44,6 +44,13 @@ impl ProjectItem {
         }
     }
 
+    pub fn accessed(&self) -> SystemTime {
+        match self {
+            ProjectItem::Doc(doc) => doc.accessed(),
+            ProjectItem::Dir(dir) => dir.accessed(),
+        }
+    }
+
     pub fn collation_key(&self) -> &CollationKey {
         match self {
             ProjectItem::Doc(doc) => doc.collation_key(),

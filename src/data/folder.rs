@@ -33,6 +33,7 @@ mod imp {
 
         pub(super) kind: OnceLock<FolderType>,
         pub(super) modified: RefCell<Option<SystemTime>>,
+        pub(super) accessed: RefCell<Option<SystemTime>>,
         pub(super) collation_key: OnceLock<CollationKey>,
     }
 
@@ -106,11 +107,20 @@ impl Folder {
         self.imp().modified.borrow().unwrap()
     }
 
+    pub fn accessed(&self) -> SystemTime {
+        self.imp().accessed.borrow().unwrap()
+    }
+
     pub fn collation_key(&self) -> &CollationKey {
         self.imp().collation_key.get().unwrap()
     }
 
-    pub fn new_subfolder(path: PathBuf, depth: u32, modified: SystemTime) -> Self {
+    pub fn new_subfolder(
+        path: PathBuf,
+        depth: u32,
+        modified: SystemTime,
+        accessed: SystemTime,
+    ) -> Self {
         let name = path.file_name().unwrap().to_string_lossy().into_owned();
         let collation_key = CollationKey::from(&name);
 
@@ -123,6 +133,7 @@ impl Folder {
         let imp = obj.imp();
         imp.kind.set(FolderType::Subfolder).unwrap();
         imp.modified.replace(Some(modified));
+        imp.accessed.replace(Some(accessed));
         imp.collation_key.set(collation_key).unwrap();
 
         obj
@@ -141,6 +152,7 @@ impl Folder {
         let imp = obj.imp();
         imp.kind.set(FolderType::ProjectRoot).unwrap();
         imp.modified.replace(Some(SystemTime::now()));
+        imp.accessed.replace(Some(SystemTime::now()));
         imp.collation_key.set(collation_key).unwrap();
 
         obj
@@ -160,6 +172,7 @@ impl Folder {
         let imp = obj.imp();
         imp.kind.set(FolderType::DraftsRoot).unwrap();
         imp.modified.replace(Some(SystemTime::now()));
+        imp.accessed.replace(Some(SystemTime::now()));
         imp.collation_key.set(collation_key).unwrap();
 
         obj
@@ -186,6 +199,7 @@ impl Folder {
 
     pub fn select(&self) {
         self.emit_by_name::<()>("selected", &[]);
+        self.set_accessed(SystemTime::now());
     }
 
     pub fn add_document(&self, doc: Document) {
@@ -298,6 +312,10 @@ impl Folder {
             self.emit_by_name::<()>("metadata-changed", &[]);
         }
     }
+
+    pub fn set_accessed(&self, accessed: SystemTime) {
+        self.imp().accessed.borrow_mut().replace(accessed);
+    }
 }
 
 #[cfg(test)]
@@ -312,7 +330,8 @@ mod tests {
     #[test]
     fn test_move_valid_path() {
         std::fs::create_dir_all(PathBuf::from(PROJECT_ROOT).join("test")).unwrap();
-        let folder = Folder::new_subfolder("path/to/".into(), 1, SystemTime::now());
+        let folder =
+            Folder::new_subfolder("path/to/".into(), 1, SystemTime::now(), SystemTime::now());
         assert!(
             folder
                 .rename(PathBuf::from(PROJECT_ROOT).join("test").join("new_folder"))
@@ -322,7 +341,8 @@ mod tests {
 
     #[test]
     fn test_move_invalid_path_noparent() {
-        let folder = Folder::new_subfolder("path/to/".into(), 1, SystemTime::now());
+        let folder =
+            Folder::new_subfolder("path/to/".into(), 1, SystemTime::now(), SystemTime::now());
         folder.connect_closure(
             "rename-requested",
             false,

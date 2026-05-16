@@ -28,6 +28,7 @@ mod imp {
         #[property(get, set)]
         pub(super) is_open_in_editor: Cell<bool>,
         pub(super) modified: RefCell<Option<SystemTime>>,
+        pub(super) accessed: RefCell<Option<SystemTime>>,
         pub(super) collation_key: OnceLock<CollationKey>,
     }
 
@@ -82,11 +83,15 @@ impl Document {
         self.imp().modified.borrow().unwrap()
     }
 
+    pub fn accessed(&self) -> SystemTime {
+        self.imp().accessed.borrow().unwrap()
+    }
+
     pub fn collation_key(&self) -> &CollationKey {
         self.imp().collation_key.get().unwrap()
     }
 
-    pub fn new(path: PathBuf, depth: u32, modified: SystemTime) -> Self {
+    pub fn new(path: PathBuf, depth: u32, modified: SystemTime, accessed: SystemTime) -> Self {
         let stem = path.file_stem().unwrap().to_string_lossy().into_owned();
         let name = path.file_name().unwrap().to_string_lossy().into_owned();
         let collation_key = CollationKey::from(&name);
@@ -100,6 +105,7 @@ impl Document {
 
         let imp = obj.imp();
         imp.modified.replace(Some(modified));
+        imp.accessed.replace(Some(accessed));
         imp.collation_key.set(collation_key).unwrap();
 
         obj
@@ -111,6 +117,7 @@ impl Document {
 
     pub fn open(&self) {
         self.emit_by_name::<()>("open", &[]);
+        self.set_accessed(SystemTime::now());
     }
 
     pub fn duplicate(&self) {
@@ -146,6 +153,11 @@ impl Document {
         self.imp().modified.borrow_mut().replace(modified);
         self.emit_by_name::<()>("metadata-changed", &[]);
     }
+
+    pub fn set_accessed(&self, accessed: SystemTime) {
+        self.imp().accessed.borrow_mut().replace(accessed);
+        self.emit_by_name::<()>("metadata-changed", &[]);
+    }
 }
 
 #[cfg(test)]
@@ -160,7 +172,7 @@ mod tests {
     #[test]
     fn test_move_valid_path() {
         std::fs::create_dir_all(PathBuf::from(PROJECT_ROOT).join("test")).unwrap();
-        let doc = Document::new("path/to/".into(), 1, SystemTime::now());
+        let doc = Document::new("path/to/".into(), 1, SystemTime::now(), SystemTime::now());
         assert!(
             doc.rename(PathBuf::from(PROJECT_ROOT).join("test").join("new_file.md"))
                 .is_ok()
@@ -169,7 +181,7 @@ mod tests {
 
     #[test]
     fn test_move_invalid_path_noparent() {
-        let doc = Document::new("path/to/".into(), 1, SystemTime::now());
+        let doc = Document::new("path/to/".into(), 1, SystemTime::now(), SystemTime::now());
         doc.connect_closure(
             "rename-requested",
             false,
