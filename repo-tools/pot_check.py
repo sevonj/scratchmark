@@ -1,6 +1,11 @@
+# SPDX-License-Identifier: CC0-1.0
+
+# CI check to make sure POTFILES.in is up to date.
+# If this fails, run pot_update.py
+
 import os
 import filecmp
-from update_potfiles import update_potfiles, PO_DIR
+from pot_update import update_potfiles, PO_DIR
 
 if __name__ == "__main__":
     update_potfiles("POTFILES.in.temp")

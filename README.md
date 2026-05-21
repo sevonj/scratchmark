@@ -58,7 +58,7 @@ Scratchmark is written in Rust and uses GTK4 and Libadwaita for UI.
 
 ### License
 
-Scratchmark is licensed GPL-3.0-or-later. Some parts may _additionally_ be available under other licenses, such as MIT.
+Scratchmark is licensed GPL-3.0-or-later. Some parts may additionally be available under other licenses, such as MIT.
 
 ### Building
 
@@ -74,14 +74,15 @@ export GSETTINGS_SCHEMA_DIR=$PWD/data
 
 The app needs its settings schema, and the lookup path seemingly can't be set in the code itself.
 
-### Continuous Integration
+### CI Checks
 
-Pull requests are gatekept by [this workflow.](https://github.com/sevonj/scratchmark/blob/master/.github/workflows/rust.yml) It will check if the code
+Pull requests are gatekept by [this workflow.](https://github.com/sevonj/scratchmark/blob/master/.github/workflows/rust.yml) It will check if
 
-- builds (you don't say)
-- passes unit tests (run `cargo test`)
-- has linter warnings (run `cargo clippy`)
-- is formatted (run `cargo fmt`)
+- the code builds (you don't say)
+- the code passes tests (run `cargo test`)
+- the code has linter warnings (run `cargo clippy`)
+- the code is formatted (run `cargo fmt`)
+- POTFILES.in is up to date (if you create or move ui files, run `repo-tools/pot_update.py`)
 
 ### Dependencies
 
