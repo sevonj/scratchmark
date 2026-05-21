@@ -1,9 +1,12 @@
-# Auto crawls every ui file into POTFILES.in
+# SPDX-License-Identifier: CC0-1.0
+
+# This script re-generates POTFILES.in
+# It will find every ui file and add them
 
 import os
 
-PO_DIR = os.path.dirname(os.path.realpath(__file__))
-ROOT_DIR = os.path.dirname(PO_DIR)
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+PO_DIR = os.path.join(ROOT_DIR, "po")
 IN_IN_PATH = os.path.join(PO_DIR, "POTFILES.in.in")
 
 def update_potfiles(filename: str = "POTFILES.in"):
