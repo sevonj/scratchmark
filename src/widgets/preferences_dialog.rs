@@ -25,6 +25,8 @@ mod imp {
         #[template_child]
         editor_minimap_toggle: TemplateChild<SwitchRow>,
         #[template_child]
+        editor_tabs_as_spaces_toggle: TemplateChild<SwitchRow>,
+        #[template_child]
         editor_limit_width_toggle: TemplateChild<SwitchRow>,
         #[template_child]
         editor_max_width_spin: TemplateChild<SpinRow>,
@@ -76,6 +78,14 @@ mod imp {
             let editor_minimap_toggle: &SwitchRow = &self.editor_minimap_toggle;
             settings
                 .bind("editor-show-minimap", editor_minimap_toggle, "active")
+                .build();
+            let editor_tabs_as_spaces_toggle: &SwitchRow = &self.editor_tabs_as_spaces_toggle;
+            settings
+                .bind(
+                    "editor-tabs-as-spaces",
+                    editor_tabs_as_spaces_toggle,
+                    "active",
+                )
                 .build();
             let editor_limit_width_toggle: &SwitchRow = &self.editor_limit_width_toggle;
             settings

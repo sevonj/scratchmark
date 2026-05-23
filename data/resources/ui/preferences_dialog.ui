@@ -33,6 +33,12 @@
               </object>
             </child>
             <child>
+              <object class="AdwSwitchRow" id="editor_tabs_as_spaces_toggle">
+                <property name="title" translatable="yes">Insert Tabs As Spaces</property>
+                <property name="subtitle" translatable="yes">Pressing the tab key will insert 4 spaces</property>
+              </object>
+            </child>
+            <child>
               <object class="AdwSwitchRow" id="editor_limit_width_toggle">
                 <property name="title" translatable="yes">Clamp Editor Width</property>
               </object>

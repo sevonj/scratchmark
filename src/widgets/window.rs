@@ -1077,6 +1077,9 @@ mod imp {
                 .bind("editor-show-minimap", &editor, "show-minimap")
                 .build();
             settings
+                .bind("editor-tabs-as-spaces", &editor, "tabs-as-spaces")
+                .build();
+            settings
                 .bind("editor-use-spellcheck", &editor, "use_spellcheck")
                 .build();
 

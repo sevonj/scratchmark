@@ -34,6 +34,9 @@
     <key name="editor-show-minimap" type="b">
       <default>false</default>
     </key>
+    <key name="editor-tabs-as-spaces" type="b">
+      <default>false</default>
+    </key>
     <key name="editor-font-family" type="s">
       <default>"Monospace"</default>
     </key>
