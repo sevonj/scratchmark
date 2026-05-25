@@ -37,6 +37,7 @@ mod imp {
     use gtk::glib::subclass::Signal;
     use libspelling::Checker;
     use libspelling::TextBufferAdapter;
+    use sourceview5::prelude::ViewExt;
 
     use super::document_stats_view::DocumentStatsView;
     use super::minimap::Minimap;
@@ -59,6 +60,8 @@ mod imp {
         show_sidebar: Cell<bool>,
         #[property(get, set)]
         font_size: Cell<u32>,
+        #[property(get, set)]
+        tabs_as_spaces: Cell<bool>,
         #[property(get, set)]
         font_family: RefCell<GString>,
         #[property(get, set)]
@@ -211,6 +214,10 @@ mod imp {
 
             obj.connect_font_family_notify(clone!(move |obj| {
                 obj.imp().refresh_font();
+            }));
+
+            obj.connect_tabs_as_spaces_notify(clone!(move |obj| {
+                obj.imp().refresh_tabs_as_spaces()
             }));
 
             obj.connect_font_size_notify(clone!(move |obj| {
@@ -408,6 +415,12 @@ mod imp {
             let obj = self.obj();
             self.source_view
                 .set_font(&obj.font_family(), obj.font_size());
+        }
+
+        fn refresh_tabs_as_spaces(&self) {
+            let obj = self.obj();
+            self.source_view
+                .set_insert_spaces_instead_of_tabs(obj.tabs_as_spaces());
         }
 
         fn refresh_max_width(&self) {
