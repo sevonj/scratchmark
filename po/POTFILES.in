@@ -23,7 +23,9 @@ data/resources/ui/library/project_err_placeholder_context_menu.ui
 data/resources/ui/library/project_view.ui
 data/resources/ui/library/root_context_menu.ui
 data/resources/ui/markdown_format_bar.ui
-data/resources/ui/preferences_dialog.ui
+data/resources/ui/preferences/dialog.ui
+data/resources/ui/preferences/file_ext_add_popover.ui
+data/resources/ui/preferences/file_ext_item.ui
 data/resources/ui/shortcuts.ui
 data/resources/ui/window.ui
 data/resources/ui/window_title.ui

@@ -3,6 +3,7 @@ mod imp {
     use std::cell::RefCell;
     use std::collections::HashMap;
     use std::collections::VecDeque;
+    use std::ffi::OsStr;
     use std::path::Path;
     use std::path::PathBuf;
     use std::sync::OnceLock;
@@ -54,6 +55,8 @@ mod imp {
 
         #[property(get, set)]
         ignore_hidden_files: Cell<bool>,
+        #[property(get, set)]
+        custom_file_extensions: RefCell<Vec<String>>,
     }
 
     #[glib::object_subclass]
@@ -68,6 +71,9 @@ mod imp {
             let obj = self.obj();
 
             obj.connect_ignore_hidden_files_notify(move |obj| {
+                obj.refresh_content();
+            });
+            obj.connect_custom_file_extensions_notify(move |obj| {
                 obj.refresh_content();
             });
 
@@ -164,6 +170,7 @@ mod imp {
             }
 
             let ignore_hidden = self.ignore_hidden_files.get();
+            let custom_extensions = self.obj().custom_file_extensions();
             let root_path = self.path().to_path_buf();
 
             let (sender, receiver) = channel();
@@ -201,19 +208,18 @@ mod imp {
                                 accessed,
                             });
                         } else {
-                            if !path
-                                .extension()
-                                .is_some_and(|ext| ext.eq_ignore_ascii_case("md"))
-                            {
+                            let Some(ext) = path.extension() else {
                                 continue;
-                            }
+                            };
 
-                            let _ = sender.send(CrawlMsg::FoundFile {
-                                path,
-                                depth,
-                                modified,
-                                accessed,
-                            });
+                            if is_file_ext_ok(ext, &custom_extensions) {
+                                let _ = sender.send(CrawlMsg::FoundFile {
+                                    path,
+                                    depth,
+                                    modified,
+                                    accessed,
+                                });
+                            }
                         }
                     }
                 }
@@ -302,8 +308,10 @@ mod imp {
                     .file_name()
                     .is_some_and(|s| s.as_encoded_bytes()[0] == b'.');
                 let prune_hidden = self.ignore_hidden_files.get() && is_hidden;
+                let ext = path.extension().unwrap_or_default();
+                let bad_ext = !is_file_ext_ok(ext, &self.custom_file_extensions.borrow());
 
-                if !path.exists() || prune_hidden {
+                if !path.exists() || prune_hidden || bad_ext {
                     dead_documents.push(path.clone());
 
                     let parent_path = path.parent().unwrap();
@@ -364,6 +372,18 @@ mod imp {
                 ),
             );
         }
+    }
+
+    fn is_file_ext_ok(ext: &OsStr, custom_extensions: &[String]) -> bool {
+        if ext == "md" {
+            return true;
+        }
+        for custom in custom_extensions {
+            if ext.eq_ignore_ascii_case(custom) {
+                return true;
+            }
+        }
+        false
     }
 }
 

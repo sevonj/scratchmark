@@ -74,6 +74,24 @@
                 <property name="title" translatable="yes">Show File Extensions</property>
               </object>
             </child>
+            <child>
+              <object class="AdwExpanderRow">
+                <property name="title" translatable="yes">Custom File Extensions</property>
+                <property name="subtitle" translatable="yes">Include additional file types in library</property>
+                <child>
+                  <object class="GtkFlowBox" id="library_extensions_flowbox">
+                    <property name="selection-mode">GTK_SELECTION_NONE</property>
+                    <property name="activate-on-single-click">True</property>
+                    <child>
+                      <object class="GtkMenuButton" id="library_add_ext_menubutton">
+                        <property name="icon-name">plus-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Add</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>
