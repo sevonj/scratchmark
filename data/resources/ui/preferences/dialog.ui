@@ -76,7 +76,7 @@
             </child>
             <child>
               <object class="AdwExpanderRow">
-                <property name="title" translatable="yes">File Extensions</property>
+                <property name="title" translatable="yes">Custom File Extensions</property>
                 <property name="subtitle" translatable="yes">Include additional file types in library</property>
                 <child>
                   <object class="GtkFlowBox" id="library_extensions_flowbox">

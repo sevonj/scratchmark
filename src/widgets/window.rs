@@ -271,6 +271,14 @@ mod imp {
                 obj.add_controller(key_controller);
             }
 
+            settings
+                .bind(
+                    "library-custom-file-extensions",
+                    &self.library_view,
+                    "custom_file_extensions",
+                )
+                .build();
+
             obj.connect_notify(Some("focus-mode-enabled"), move |obj, _| {
                 let focus_mode_enabled = obj.focus_mode_enabled();
                 obj.action_set_enabled("win.enable-focus", !focus_mode_enabled);

@@ -43,10 +43,11 @@ mod imp {
         sort_method: RefCell<String>,
         #[property(get, set)]
         show_file_extensions: Cell<bool>,
+        #[property(get, set)]
+        custom_file_extensions: RefCell<Vec<String>>,
 
         #[template_child]
         pub(super) projects_container: TemplateChild<gtk::Box>,
-
         pub(super) projects: RefCell<HashMap<PathBuf, ProjectView>>,
     }
 
@@ -218,6 +219,9 @@ mod imp {
                 .insert(project.path(), project_view.clone());
 
             obj.bind_property("ignore_hidden_files", project, "ignore_hidden_files")
+                .sync_create()
+                .build();
+            obj.bind_property("custom_file_extensions", project, "custom_file_extensions")
                 .sync_create()
                 .build();
 

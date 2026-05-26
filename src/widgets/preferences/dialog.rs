@@ -215,9 +215,7 @@ mod imp {
             !self.has_file_ext_already(ext) && !ext.is_empty()
         }
 
-        fn add_custom_file_ext(&self, ext: String) {
-            self.add_custom_file_ext_no_save(ext);
-
+        fn save_custom_file_exts(&self) {
             let binding = self.library_ext_items.borrow();
             let extensions: Vec<&String> = binding.keys().collect();
             self.settings
@@ -225,6 +223,11 @@ mod imp {
                 .unwrap()
                 .set_strv("library-custom-file-extensions", extensions)
                 .unwrap();
+        }
+
+        fn add_custom_file_ext(&self, ext: String) {
+            self.add_custom_file_ext_no_save(ext);
+            self.save_custom_file_exts();
         }
 
         fn add_custom_file_ext_no_save(&self, ext: String) {
@@ -253,6 +256,7 @@ mod imp {
                 return;
             };
             self.library_extensions_flowbox.remove(&item);
+            self.save_custom_file_exts();
         }
 
         fn show_font_dialog(&self) {
