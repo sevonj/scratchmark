@@ -1,5 +1,8 @@
 mod imp {
     use std::cell::OnceCell;
+    use std::cell::RefCell;
+    use std::collections::HashMap;
+    use std::sync::OnceLock;
 
     use adw::ActionRow;
     use adw::SpinRow;
@@ -7,14 +10,21 @@ mod imp {
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use gtk::CompositeTemplate;
+    use gtk::FlowBox;
     use gtk::FontDialog;
+    use gtk::MenuButton;
     use gtk::gio::Cancellable;
     use gtk::gio::Settings;
     use gtk::glib;
     use gtk::glib::clone;
+    use gtk::glib::closure_local;
+
+    use crate::util;
+    use crate::widgets::PreferencesFileExtItem;
+    use crate::widgets::preferences::file_ext_add_popover::FileExtAddPopover;
 
     #[derive(CompositeTemplate, Default)]
-    #[template(resource = "/org/scratchmark/Scratchmark/ui/preferences_dialog.ui")]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/preferences/dialog.ui")]
     pub struct PreferencesDialog {
         settings: OnceCell<Settings>,
 
@@ -37,6 +47,12 @@ mod imp {
         library_ignore_hidden_files_toggle: TemplateChild<SwitchRow>,
         #[template_child]
         library_show_file_extensions_toggle: TemplateChild<SwitchRow>,
+        #[template_child]
+        library_extensions_flowbox: TemplateChild<FlowBox>,
+        #[template_child]
+        library_add_ext_menubutton: TemplateChild<MenuButton>,
+        library_ext_items: RefCell<HashMap<String, PreferencesFileExtItem>>,
+        library_file_ext_add_popover: OnceLock<FileExtAddPopover>,
     }
 
     #[glib::object_subclass]
@@ -61,6 +77,7 @@ mod imp {
 
     impl PreferencesDialog {
         pub(super) fn bind_settings(&self, settings: Settings) {
+            let obj: glib::BorrowedObject<'_, super::PreferencesDialog> = self.obj();
             self.settings.set(settings.clone()).unwrap();
 
             self.editor_font_button.connect_activated(clone!(
@@ -128,6 +145,114 @@ mod imp {
                     "active",
                 )
                 .build();
+
+            self.library_extensions_flowbox.set_sort_func(|a, b| {
+                let a = a
+                    .child()
+                    .and_then(|c| c.downcast::<PreferencesFileExtItem>().ok());
+                let b = b
+                    .child()
+                    .and_then(|c| c.downcast::<PreferencesFileExtItem>().ok());
+
+                let Some(a) = a else {
+                    if b.is_some() {
+                        return gtk::Ordering::Larger;
+                    } else {
+                        return gtk::Ordering::Equal;
+                    }
+                };
+
+                let Some(b) = b else {
+                    return gtk::Ordering::Smaller;
+                };
+
+                a.collation_key().cmp(b.collation_key()).into()
+            });
+
+            let library_custom_file_extensions = settings.strv("library-custom-file-extensions");
+            for ext in library_custom_file_extensions {
+                self.add_custom_file_ext_no_save(ext.into());
+            }
+
+            let popover = FileExtAddPopover::default();
+            self.library_add_ext_menubutton.set_popover(Some(&popover));
+            popover.connect_closure(
+                "changed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |popover: FileExtAddPopover, ext: String| {
+                        popover.set_extension_ok(imp.can_add_ext(&ext));
+                    }
+                ),
+            );
+            popover.connect_closure(
+                "committed",
+                false,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: FileExtAddPopover, ext: String| imp.add_custom_file_ext(ext)
+                ),
+            );
+            self.library_file_ext_add_popover.set(popover).unwrap();
+            obj.connect_destroy(move |obj| {
+                obj.imp()
+                    .library_file_ext_add_popover
+                    .get()
+                    .unwrap()
+                    .unparent();
+            });
+        }
+
+        fn has_file_ext_already(&self, ext: &str) -> bool {
+            let ext = util::process_file_ext_text(ext);
+            ext == "md" || self.library_ext_items.borrow().contains_key(&ext)
+        }
+
+        fn can_add_ext(&self, ext: &str) -> bool {
+            !self.has_file_ext_already(ext) && !ext.is_empty()
+        }
+
+        fn add_custom_file_ext(&self, ext: String) {
+            self.add_custom_file_ext_no_save(ext);
+
+            let binding = self.library_ext_items.borrow();
+            let extensions: Vec<&String> = binding.keys().collect();
+            self.settings
+                .get()
+                .unwrap()
+                .set_strv("library-custom-file-extensions", extensions)
+                .unwrap();
+        }
+
+        fn add_custom_file_ext_no_save(&self, ext: String) {
+            let obj = self.obj();
+            if !self.can_add_ext(&ext) {
+                return;
+            }
+            let item = PreferencesFileExtItem::new(ext.clone());
+            item.connect_closure(
+                "remove",
+                false,
+                closure_local!(
+                    #[weak]
+                    obj,
+                    move |item: PreferencesFileExtItem| {
+                        obj.imp().remove_custom_file_ext(item.ext());
+                    }
+                ),
+            );
+            self.library_extensions_flowbox.append(&item);
+            self.library_ext_items.borrow_mut().insert(ext, item);
+        }
+
+        fn remove_custom_file_ext(&self, ext: &str) {
+            let Some(item) = self.library_ext_items.borrow_mut().remove(ext) else {
+                return;
+            };
+            self.library_extensions_flowbox.remove(&item);
         }
 
         fn show_font_dialog(&self) {

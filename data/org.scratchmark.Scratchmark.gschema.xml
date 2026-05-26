@@ -25,6 +25,9 @@
     <key name="library-show-file-extensions" type="b">
       <default>false</default>
     </key>
+    <key name="library-custom-file-extensions" type="as">
+      <default>[]</default>
+    </key>
     <key name="editor-show-sidebar" type="b">
       <default>false</default>
     </key>

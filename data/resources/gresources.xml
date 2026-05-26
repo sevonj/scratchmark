@@ -21,15 +21,18 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/library/library_view.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/project_view.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/root_context_menu.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/preferences/dialog.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/preferences/file_ext_add_popover.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/preferences/file_ext_item.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/about_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_placeholder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/markdown_format_bar.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/preferences_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/shortcuts.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window_title.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>
   </gresource>
   <gresource prefix="/org/scratchmark/Scratchmark">
+    <file preprocess="xml-stripblanks">icons/scalable/actions/close-item-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/dock-left-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/document-new-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/down-small-symbolic.svg</file>
