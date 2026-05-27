@@ -10,7 +10,7 @@
                         <style>
                             <class name="dim-label" />
                         </style>
-                        <property name="icon-name">down-small-symbolic</property>
+                        <property name="icon-name">smk-expander-down-symbolic</property>
                         <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
                     </object>
                 </child>
@@ -19,7 +19,7 @@
                         <style>
                             <class name="dim-label" />
                         </style>
-                        <property name="icon-name">folder-symbolic</property>
+                        <property name="icon-name">smk-folder-symbolic</property>
                         <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
                     </object>
                 </child>

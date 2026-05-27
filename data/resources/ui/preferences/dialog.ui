@@ -84,7 +84,7 @@
                     <property name="activate-on-single-click">True</property>
                     <child>
                       <object class="GtkMenuButton" id="library_add_ext_menubutton">
-                        <property name="icon-name">plus-symbolic</property>
+                        <property name="icon-name">smk-plus-symbolic</property>
                         <property name="tooltip-text" translatable="yes">Add</property>
                       </object>
                     </child>

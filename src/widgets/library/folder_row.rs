@@ -95,15 +95,15 @@ mod imp {
 
         fn on_expanded_changed(&self) {
             if self.is_expanded.get() {
-                self.expand_icon.set_icon_name("down-small-symbolic".into());
+                self.expand_icon.set_icon_name("smk-expander-down-symbolic".into());
                 if !self.folder().is_root() {
-                    self.folder_icon.set_icon_name(Some("folder-open-symbolic"));
+                    self.folder_icon.set_icon_name(Some("smk-folder-open-symbolic"));
                 }
             } else {
                 self.expand_icon
-                    .set_icon_name("right-small-symbolic".into());
+                    .set_icon_name("smk-expander-right-symbolic".into());
                 if !self.folder().is_root() {
-                    self.folder_icon.set_icon_name(Some("folder-symbolic"));
+                    self.folder_icon.set_icon_name(Some("smk-folder-symbolic"));
                 }
             }
         }
@@ -420,14 +420,14 @@ impl FolderRow {
                 imp.setup_context_menu(
                     "/org/scratchmark/Scratchmark/ui/library/root_context_menu.ui",
                 );
-                imp.folder_icon.set_icon_name(Some("project-symbolic"));
+                imp.folder_icon.set_icon_name(Some("smk-project-symbolic"));
                 imp.setup_actions_project_root();
             }
             FolderType::DraftsRoot => {
                 imp.setup_context_menu(
                     "/org/scratchmark/Scratchmark/ui/library/drafts_context_menu.ui",
                 );
-                imp.folder_icon.set_icon_name(Some("draft-table-symbolic"));
+                imp.folder_icon.set_icon_name(Some("smk-draft-table-symbolic"));
             }
         }
         imp.setup_document_create_menu();

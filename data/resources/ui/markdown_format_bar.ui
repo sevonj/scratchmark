@@ -73,7 +73,7 @@
                 </child>
                 <!-- <child>
                   <object class="GtkToggleButton">
-                    <property name="icon-name">insert-image-symbolic</property>
+                    <property name="icon-name">smk-insert-image-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Insert Image</property>
                   </object>
                 </child> -->
@@ -81,7 +81,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
-                <property name="icon-name">quotation-symbolic</property>
+                <property name="icon-name">smk-format-quotation-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Blockquote</property>
                 <property name="action-name">formatbar.blockquote</property>
               </object>
@@ -91,13 +91,13 @@
                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                 <child>
                   <object class="GtkToggleButton">
-                      <property name="icon-name">view-list-symbolic</property>
+                      <property name="icon-name">smk-format-list-symbolic</property>
                       <property name="tooltip-text" translatable="yes">List</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkToggleButton">
-                    <property name="icon-name">view-list-ordered-symbolic</property>
+                    <property name="icon-name">smk-format-list-ordered-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Ordered List</property>
                   </object>
                 </child>
