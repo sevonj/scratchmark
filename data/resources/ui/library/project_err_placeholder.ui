@@ -11,7 +11,7 @@
                         <style>
                             <class name="error" />
                         </style>
-                        <property name="icon-name">minus-circle-filled-symbolic</property>
+                        <property name="icon-name">smk-error-symbolic</property>
                         <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
                     </object>
                 </child>

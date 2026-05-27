@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state-names="outline empty" gpa:state="0">
+  <path d="M 14 14 L 13 13 M 1.81980848 9.39036942 C 1.29766095 8.54668236, 0.99732852 7.55142927, 0.99999994 6.48620701 C 1.00761759 3.44864082, 3.47622681 0.992382526, 6.51379299 0.99999994 C 7.6594224 1.00287294, 8.72236443 1.35580957, 9.60162067 1.95730567" id="path0" stroke-width="2" gpa:stroke-width="0.5 2 3" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:states="outline" gpa:stroke="foreground">
+    </path>
+  <path d="M 2.99892855 15 L 6 15 L 13.486207 7.51379299 C 14.3222513 6.6777482, 14.3222513 5.3222518, 13.486207 4.48620701 C 12.6501627 3.66539741, 11.3070164 3.6777482, 10.486207 4.51379299 L 3 12 Z" id="path1" stroke-width="2" gpa:stroke-width="0.5 2 3" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:states="outline" gpa:stroke="foreground">
+    </path>
+  <path d="M 4 15 L 3 14" id="path2" stroke-width="2" gpa:stroke-width="0.5 2 3" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:states="outline" gpa:stroke="foreground">
+    </path>
+  <path d="M 6 15 L 3 12" id="path3" stroke-width="2" gpa:stroke-width="0.5 2 3" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:states="outline" gpa:stroke="foreground">
+    </path>
+  <path d="M 13 8 L 10 5" id="path4" stroke-width="2" gpa:stroke-width="0.5 2 3" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:states="outline" gpa:stroke="foreground">
+    </path>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>edit-find-replace search and replace</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Jakub Steiner</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

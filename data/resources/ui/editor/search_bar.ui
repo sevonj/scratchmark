@@ -22,7 +22,7 @@
                         </style>
                         <child>
                           <object class="GtkEntry" id="search_entry">
-                            <property name="primary-icon-name">edit-find-symbolic</property>
+                            <property name="primary-icon-name">smk-search-symbolic</property>
                             <property name="placeholder-text" translatable="yes">Search</property>
                           </object>
                         </child>
@@ -35,7 +35,7 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="search_replace_entry">
-                    <property name="primary-icon-name">edit-find-replace-symbolic</property>
+                    <property name="primary-icon-name">smk-search-replace-symbolic</property>
                     <property name="placeholder-text" translatable="yes">Replace</property>
                   </object>
                 </child>
@@ -59,19 +59,19 @@
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="search_match_case_toggle">
-                            <property name="icon-name">uppercase-symbolic</property>
+                            <property name="icon-name">smk-case-sensitive-symbolic</property>
                             <property name="tooltip-text" translatable="yes">Match Case</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="search_match_whole_words_toggle">
-                            <property name="icon-name">match-words-symbolic</property>
+                            <property name="icon-name">smk-whole-words-symbolic</property>
                             <property name="tooltip-text" translatable="yes">Whole Words</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="search_match_regex_toggle">
-                            <property name="icon-name">regex-symbolic</property>
+                            <property name="icon-name">smk-regex-symbolic</property>
                             <property name="tooltip-text" translatable="yes">Use Regex</property>
                           </object>
                         </child>
@@ -93,14 +93,14 @@
                         </style>
                         <child>
                           <object class="GtkButton" id="search_prev_button">
-                            <property name="icon-name">go-up-symbolic</property>
+                            <property name="icon-name">smk-search-prev-symbolic</property>
                             <property name="action-name">search.search-prev</property>
                             <property name="tooltip-text" translatable="yes">Previous Match (Shift + Return)</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkButton" id="search_next_button">
-                            <property name="icon-name">go-down-symbolic</property>
+                            <property name="icon-name">smk-search-next-symbolic</property>
                             <property name="action-name">search.search-next</property>
                             <property name="tooltip-text" translatable="yes">Next Match (Return)</property>
                           </object>
@@ -109,13 +109,13 @@
                     </child>
                     <child>
                       <object class="GtkToggleButton" id="search_replace_toggle">
-                        <property name="icon-name">edit-find-replace-symbolic</property>
+                        <property name="icon-name">smk-search-replace-symbolic</property>
                         <property name="tooltip-text" translatable="yes">Search and Replace (Ctrl+F)</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkButton">
-                        <property name="icon-name">window-close-symbolic</property>
+                        <property name="icon-name">smk-close-symbolic</property>
                         <property name="tooltip-text" translatable="yes">Close Search</property>
                         <property name="action-name">search.hide</property>
                       </object>

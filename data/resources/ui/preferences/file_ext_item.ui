@@ -9,7 +9,7 @@
         </child>
         <child>
             <object class="GtkButton" id="remove_button">
-                <property name="icon-name">close-item-symbolic</property>
+                <property name="icon-name">smk-close-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Remove</property>
                 <style>
                     <class name="circular" />

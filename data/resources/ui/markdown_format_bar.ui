@@ -12,28 +12,28 @@
                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                 <child>
                   <object class="GtkButton">
-                    <property name="icon-name">md-bold-symbolic</property>
+                    <property name="icon-name">smk-format-bold-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Bold (Ctrl+B)</property>
                     <property name="action-name">formatbar.bold</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="icon-name">md-italic-symbolic</property>
+                    <property name="icon-name">smk-format-italic-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Italic (Ctrl+I)</property>
                     <property name="action-name">formatbar.italic</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="icon-name">md-format-strikethrough-symbolic</property>
+                    <property name="icon-name">smk-format-strikethrough-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Strikethrough</property>
                     <property name="action-name">formatbar.strikethrough</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkToggleButton">
-                    <property name="icon-name">md-format-highlight-symbolic</property>
+                    <property name="icon-name">smk-format-highlight-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Highlight</property>
                     <property name="action-name">formatbar.highlight</property>
                   </object>
@@ -45,7 +45,7 @@
                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                 <child>
                   <object class="GtkButton">
-                    <property name="icon-name">md-format-h1-symbolic</property>
+                    <property name="icon-name">smk-format-h1-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Heading 1 (Ctrl+1)</property>
                     <property name="action-name">formatbar.heading</property>
                     <property name="action-target">1</property>
@@ -53,7 +53,7 @@
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="icon-name">md-format-h2-symbolic</property>
+                    <property name="icon-name">smk-format-h2-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Heading 2 (Ctrl+2)</property>
                     <property name="action-name">formatbar.heading</property>
                     <property name="action-target">2</property>
@@ -62,18 +62,18 @@
               </object>
             </child>
             <child>
-            <object class="GtkBox">
-              <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                 <child>
                   <object class="GtkToggleButton">
-                    <property name="icon-name">insert-link-symbolic</property>
+                    <property name="icon-name">smk-insert-link-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Insert Link (Ctrl+k)</property>
                     <property name="action-name">formatbar.insert_link</property>
                   </object>
                 </child>
                 <!-- <child>
                   <object class="GtkToggleButton">
-                    <property name="icon-name">insert-image-symbolic</property>
+                    <property name="icon-name">smk-insert-image-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Insert Image</property>
                   </object>
                 </child> -->
@@ -81,7 +81,7 @@
             </child>
             <child>
               <object class="GtkToggleButton">
-                <property name="icon-name">quotation-symbolic</property>
+                <property name="icon-name">smk-format-quotation-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Blockquote</property>
                 <property name="action-name">formatbar.blockquote</property>
               </object>
@@ -91,13 +91,13 @@
                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                 <child>
                   <object class="GtkToggleButton">
-                      <property name="icon-name">view-list-symbolic</property>
+                      <property name="icon-name">smk-format-list-symbolic</property>
                       <property name="tooltip-text" translatable="yes">List</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkToggleButton">
-                    <property name="icon-name">view-list-ordered-symbolic</property>
+                    <property name="icon-name">smk-format-list-ordered-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Ordered List</property>
                   </object>
                 </child>
@@ -105,7 +105,7 @@
             </child-->
             <!--child>
               <object class="GtkToggleButton">
-                <property name="icon-name">md-horizontal-rule-symbolic</property>
+                <property name="icon-name">smk-insert-horizontal-rule-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Horizontal Rule</property>
               </object>
             </child-->
@@ -114,14 +114,14 @@
                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                 <child>
                   <object class="GtkToggleButton">
-                    <property name="icon-name">md-code-symbolic</property>
+                    <property name="icon-name">smk-format-code-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Code</property>
                     <property name="action-name">formatbar.code</property>
                   </object>
                 </child>
                 <!--child>
                   <object class="GtkToggleButton">
-                      <property name="icon-name">md-codeblock-symbolic</property>
+                      <property name="icon-name">smk-format-codeblock-symbolic</property>
                       <property name="tooltip-text" translatable="yes">Codeblock</property>
                   </object>
                 </child-->

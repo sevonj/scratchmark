@@ -28,7 +28,7 @@
                                 <style>
                                     <class name="dim-label" />
                                 </style>
-                                <property name="icon-name">text-x-generic-symbolic</property>
+                                <property name="icon-name">smk-document-symbolic</property>
                                 <property name="icon-size">GTK_ICON_SIZE_NORMAL</property>
                             </object>
                         </child>
