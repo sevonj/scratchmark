@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state-names="outline empty" gpa:state="0">
+  <path d="M 5 13 L 8 15 L 11 13" id="path0" stroke-width="2" gpa:stroke-width="0.5 2 3" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:states="outline" gpa:stroke="foreground">
+    </path>
+  <path d="M 5 8 C 5 8.55228519, 5.44771528 9, 6 9 L 10 9 C 10.5522852 9, 11 8.55228519, 11 8 M 5.00390816 2.00781202 C 5.00390816 1.45552731, 5.45162344 1.00781202, 6.00390816 1.00781202 L 10.0039082 1.00781202 C 10.5561934 1.00781202, 11.0039082 1.45552731, 11.0039082 2.00781202 M 10 5 L 15 5 M 1 5 L 6 5" id="path1" stroke-width="2" gpa:stroke-width="0.5 2 3" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:states="outline" gpa:stroke="foreground">
+    </path>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>insert-link chain arrow</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Jakub Steiner</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
