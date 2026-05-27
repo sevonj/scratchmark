@@ -23,7 +23,7 @@
                   <object class="AdwHeaderBar">
                     <child type="start">
                       <object class="GtkMenuButton">
-                        <property name="icon-name">library-sort-symbolic</property>
+                        <property name="icon-name">smk-sort-symbolic</property>
                         <property name="always-show-arrow">True</property>
                         <property name="tooltip-text" translatable="yes">Sort</property>
                         <property name="popover">
@@ -37,7 +37,7 @@
                     <child type="end">
                       <object class="GtkMenuButton">
                         <property name="primary">True</property>
-                        <property name="icon-name">open-menu-symbolic</property>
+                        <property name="icon-name">smk-open-menu-symbolic</property>
                         <property name="tooltip-text" translatable="yes">Menu</property>
                         <property name="menu-model">primary_menu</property>
                       </object>
@@ -67,20 +67,20 @@
                             </property>
                             <child type="start">
                               <object class="GtkToggleButton" id="sidebar_toggle">
-                                <property name="icon-name">dock-left-symbolic</property>
+                                <property name="icon-name">smk-sidebar-left-symbolic</property>
                                 <property name="tooltip-text" translatable="yes">Toggle Sidebar (F9)</property>
                               </object>
                             </child>
                             <child type="start">
                               <object class="GtkButton">
-                                <property name="icon-name">document-new-symbolic</property>
+                                <property name="icon-name">smk-document-new-symbolic</property>
                                 <property name="tooltip-text" translatable="yes">New Document (Ctrl+N)</property>
                                 <property name="action-name">win.file-new</property>
                               </object>
                             </child>
                             <child type="end">
                               <object class="GtkButton" id="unfullscreen_button">
-                                <property name="icon-name">view-restore-symbolic</property>
+                                <property name="icon-name">smk-view-restore-symbolic</property>
                                 <property name="tooltip-text" translatable="yes">Exit Fullscreen</property>
                                 <property name="action-name">win.unfullscreen</property>
                                 <property name="visible">False</property>
@@ -88,13 +88,13 @@
                             </child>
                             <child type="end">
                               <object class="GtkToggleButton" id="editor_sidebar_toggle">
-                                <property name="icon-name">info-outline-symbolic</property>
+                                <property name="icon-name">smk-info-symbolic</property>
                                 <property name="tooltip-text" translatable="yes">Document Info</property>
                               </object>
                             </child>
                             <child type="end">
                               <object class="GtkToggleButton" id="format_bar_toggle">
-                                <property name="icon-name">draw-text-symbolic</property>
+                                <property name="icon-name">smk-formatting-symbolic</property>
                                 <property name="tooltip-text" translatable="yes">Formatting Toolbar</property>
                               </object>
                             </child>
