@@ -1,0 +1,622 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the scratchmark package.
+# jhxnnat <jhxnnat@noreply.codeberg.org>, 2026.
+# gallegonovato <gallegonovato@noreply.codeberg.org>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: scratchmark\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-23 15:28+0200\n"
+"PO-Revision-Date: 2026-05-03 02:57+0000\n"
+"Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
+"Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
+"app/es/>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.17\n"
+
+#: data/org.scratchmark.Scratchmark.desktop.in:3
+msgid "Scratchmark"
+msgstr "Scratchmark"
+
+#: data/org.scratchmark.Scratchmark.desktop.in:4
+msgid "Markdown editor"
+msgstr "Editor de Markdown"
+
+#: data/org.scratchmark.Scratchmark.desktop.in:10
+msgid "Scratchmark Markdown editor"
+msgstr "Editor de Markdown Scratchmark"
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
+msgid "Markdown editor for writing"
+msgstr "Editor de Markdown para escritura"
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
+msgid "# Markdown Editor for Writing"
+msgstr "# Editor de Markdown para escritura"
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:17
+msgid ""
+"**Scratchmark** is a pleasant text editor for writing. It tries to give you "
+"everything you need and otherwise stay out of your way so you can just focus "
+"on the text. The app can be used for writing essays and making quick notes "
+"alike. Its file management is built around a folder structure that can "
+"handle large projects with lots of files. You can add any folder on your "
+"computer to the library, and move files around by dragging and dropping."
+msgstr ""
+"** Scratchmark ** es un editor de texto agradable para escribir. Te ofrece "
+"todo lo que necesitas sin interferir en tu trabajo, para que puedas "
+"concentrarte en el texto. La aplicación sirve tanto para escribir ensayos "
+"como para tomar notas rápidas. Su sistema de gestión de archivos se basa en "
+"una estructura de carpetas que permite manejar proyectos grandes con muchos "
+"archivos. Puedes añadir cualquier carpeta de tu ordenador a la biblioteca y "
+"mover archivos arrastrándolos y soltándolos."
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:18
+msgid ""
+"It uses Markdown, which means that ==all text formatting can be done by "
+"typing.=="
+msgstr ""
+"Utiliza Markdown, significa que ==se le puede dar formato al texto "
+"escribiendo.=="
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:19
+msgid ""
+"The editor is simple and intuitive, so anyone should be able to just pick it "
+"up and start writing. It can display simple writing statistics, and has "
+"features, such as focus mode and fullscreen support to reduce distractions."
+msgstr ""
+"El editor es simple e intuitivo, así que cualquier persona podría tomarlo y "
+"comenzar a escribir. Muestra estadísticas simples de escritura, y tiene "
+"características como el modo concentración y soporte de pantalla completa "
+"para reducir distracciones."
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:20
+msgid ""
+"Markdown is an open and widely used markup language. Documents created with "
+"Scratchmark are more or less compatible with other similar apps. If you "
+"already have a \"notebook\" or a project from another app, you can just add "
+"the folder to Scratchmark's library. This also goes the other way: if you've "
+"had enough of Scratchmark, it's easy to switch to something else."
+msgstr ""
+"Markdown es un lenguaje de enmarcado abierto muy usado. Los documentos "
+"creados con Scratchmark son más o menos compatibles con otras aplicaciones "
+"similares. Si ya tiene un \"cuaderno\" o un proyecto de otra aplicación, "
+"puede simplemente añadirlo a la librería de Scratchmark. Esto también "
+"funciona al revés: si ya tuvo suficiente de Scratchmark, puede cambiarse "
+"fácilmente a algo diferente."
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:26
+msgid "Editor interface"
+msgstr "Interfaz del editor"
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:30
+msgid "Focus mode"
+msgstr "Modo focus"
+
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:34
+msgid "All panels open"
+msgstr "Todos los paneles abiertos"
+
+#: data/resources/ui/editor/document_stats_view.ui:18
+msgid "Statistics"
+msgstr "Estadísticas"
+
+#: data/resources/ui/editor/document_stats_view.ui:32
+msgid "Characters"
+msgstr "Caracteres"
+
+#: data/resources/ui/editor/document_stats_view.ui:45
+#: data/resources/ui/editor/document_stats_view.ui:73
+#: data/resources/ui/editor/document_stats_view.ui:101
+#: data/resources/ui/editor/document_stats_view.ui:129
+msgid "N/A"
+msgstr "n/d"
+
+#: data/resources/ui/editor/document_stats_view.ui:60
+msgid "Excluding Spaces"
+msgstr "Sin incluir los espacios"
+
+#: data/resources/ui/editor/document_stats_view.ui:88
+msgid "Words"
+msgstr "Palabras"
+
+#: data/resources/ui/editor/document_stats_view.ui:116
+msgid "Lines"
+msgstr "Líneas"
+
+#: data/resources/ui/editor/editor.ui:16
+msgid "File changed on disk"
+msgstr "El archivo se ha modificado en el disco"
+
+#: data/resources/ui/editor/editor.ui:17
+msgid "Resolve"
+msgstr "Resolver"
+
+#: data/resources/ui/editor/file_changed_on_disk_dialog.ui:4
+msgid "File changed"
+msgstr "Archivo modificado"
+
+#: data/resources/ui/editor/file_changed_on_disk_dialog.ui:5
+msgid "The file has changed on disk."
+msgstr "El archivo ha cambiado en el disco."
+
+#: data/resources/ui/editor/file_changed_on_disk_dialog.ui:8
+msgid "Discard changes"
+msgstr "Descartar cambios"
+
+#: data/resources/ui/editor/file_changed_on_disk_dialog.ui:9
+msgid "Overwrite file"
+msgstr "Sobrescribir archivo"
+
+#: data/resources/ui/editor/file_changed_on_disk_dialog.ui:10
+msgid "Keep both"
+msgstr "Mantener ambos"
+
+#: data/resources/ui/editor/search_bar.ui:26
+msgid "Search"
+msgstr "Buscar"
+
+#: data/resources/ui/editor/search_bar.ui:39
+#: data/resources/ui/editor/search_bar.ui:136
+msgid "Replace"
+msgstr "Reemplazar"
+
+#: data/resources/ui/editor/search_bar.ui:63
+msgid "Match Case"
+msgstr "Distinguir mayúsculas y minúsculas"
+
+#: data/resources/ui/editor/search_bar.ui:69
+msgid "Whole Words"
+msgstr "Coincidir palabra completa"
+
+#: data/resources/ui/editor/search_bar.ui:75
+msgid "Use Regex"
+msgstr "Usar expresiones regulares"
+
+#: data/resources/ui/editor/search_bar.ui:85
+msgid "?"
+msgstr "?"
+
+#: data/resources/ui/editor/search_bar.ui:98
+msgid "Previous Match (Shift + Return)"
+msgstr "Coincidencia anterior (Shift + Enter)"
+
+#: data/resources/ui/editor/search_bar.ui:105
+msgid "Next Match (Return)"
+msgstr "Coincidencia siguiente (Enter)"
+
+#: data/resources/ui/editor/search_bar.ui:113
+msgid "Search and Replace (Ctrl+F)"
+msgstr "Buscar y reemplazar (Ctrl+F)"
+
+#: data/resources/ui/editor/search_bar.ui:119
+msgid "Close Search"
+msgstr "Cerrar la búsqueda"
+
+#: data/resources/ui/editor/search_bar.ui:137
+msgid "Replace (Return)"
+msgstr "Reemplazar (Enter)"
+
+#: data/resources/ui/editor/search_bar.ui:143
+msgid "Replace All"
+msgstr "Reemplazar todo"
+
+#: data/resources/ui/editor/search_bar.ui:144
+msgid "Replace All (Shift + Return)"
+msgstr "Reemplazar todo (Shift + Enter)"
+
+#: data/resources/ui/editor_placeholder.ui:10
+msgid "Nothing Open"
+msgstr "Nada abierto"
+
+#: data/resources/ui/editor_placeholder.ui:11
+msgid "Create a new document or open an existing one from the sidebar"
+msgstr "Crea un documento nuevo o abre uno ya existente desde la barra lateral"
+
+#: data/resources/ui/library/delete_confirm_dialog.ui:4
+msgid "Delete permanently?"
+msgstr "¿Borrar permanentemente?"
+
+#: data/resources/ui/library/delete_confirm_dialog.ui:5
+msgid "\"{{filename}}\" will be permanently deleted."
+msgstr "\"{{filename}}\" será borrado permanentemente."
+
+#: data/resources/ui/library/delete_confirm_dialog.ui:9
+msgid "_Cancel"
+msgstr "_Cancelar"
+
+#: data/resources/ui/library/delete_confirm_dialog.ui:10
+msgid "_Delete"
+msgstr "_Borrar"
+
+#: data/resources/ui/library/document_context_menu.ui:6
+#: data/resources/ui/library/drafts_context_menu.ui:14
+#: data/resources/ui/library/folder_context_menu.ui:14
+#: data/resources/ui/library/root_context_menu.ui:14
+msgid "Show in File Manager"
+msgstr "Abrir ubicación del elemento"
+
+#: data/resources/ui/library/document_context_menu.ui:10
+#: data/resources/ui/library/folder_context_menu.ui:18
+#: data/resources/ui/library/item_rename_popover.ui:16
+msgid "Rename"
+msgstr "Renombrar"
+
+#: data/resources/ui/library/document_context_menu.ui:14
+msgid "Duplicate"
+msgstr "Duplicar"
+
+#: data/resources/ui/library/document_context_menu.ui:18
+#: data/resources/ui/library/folder_context_menu.ui:22
+msgid "Move to Trash"
+msgstr "Mover a la papelera"
+
+#: data/resources/ui/library/document_context_menu.ui:22
+#: data/resources/ui/library/folder_context_menu.ui:26
+msgid "Delete Permanently"
+msgstr "Borrar permanentemente"
+
+#: data/resources/ui/library/document_create_popover.ui:11
+#: data/resources/ui/library/drafts_context_menu.ui:6
+#: data/resources/ui/library/folder_context_menu.ui:6
+#: data/resources/ui/library/root_context_menu.ui:6
+#: data/resources/ui/window.ui:122
+msgid "New Document"
+msgstr "Nuevo documento"
+
+#: data/resources/ui/library/document_create_popover.ui:16
+#: data/resources/ui/library/folder_create_popover.ui:16
+#: data/resources/ui/library/item_rename_popover.ui:11
+msgid "Name…"
+msgstr "Nombre…"
+
+#: data/resources/ui/library/document_create_popover.ui:21
+#: data/resources/ui/library/folder_create_popover.ui:21
+msgid "Create"
+msgstr "Crear"
+
+#: data/resources/ui/library/drafts_context_menu.ui:10
+#: data/resources/ui/library/folder_context_menu.ui:10
+#: data/resources/ui/library/folder_create_popover.ui:11
+#: data/resources/ui/library/root_context_menu.ui:10
+#: data/resources/ui/window.ui:126
+msgid "New Folder"
+msgstr "Carpeta nueva"
+
+#: data/resources/ui/library/project_err_placeholder.ui:23
+msgid "Project may have been moved or deleted."
+msgstr "Es posible que el proyecto se haya trasladado o eliminado."
+
+#: data/resources/ui/library/project_err_placeholder_context_menu.ui:6
+#: data/resources/ui/library/root_context_menu.ui:18
+msgid "Close Project"
+msgstr "Cerrar proyecto"
+
+#: data/resources/ui/markdown_format_bar.ui:16
+msgid "Bold (Ctrl+B)"
+msgstr "Negrita (Ctrl+B)"
+
+#: data/resources/ui/markdown_format_bar.ui:23
+msgid "Italic (Ctrl+I)"
+msgstr "Cursiva (Ctrl+I)"
+
+#: data/resources/ui/markdown_format_bar.ui:30
+msgid "Strikethrough"
+msgstr "Tachado"
+
+#: data/resources/ui/markdown_format_bar.ui:37
+msgid "Highlight"
+msgstr "Resaltado"
+
+#: data/resources/ui/markdown_format_bar.ui:49
+msgid "Heading 1 (Ctrl+1)"
+msgstr "Cabecera 1 (Ctrl+1)"
+
+#: data/resources/ui/markdown_format_bar.ui:57
+msgid "Heading 2 (Ctrl+2)"
+msgstr "Cabecera 2 (Ctrl+2)"
+
+#: data/resources/ui/markdown_format_bar.ui:84
+msgid "Blockquote"
+msgstr "Cita en bloque"
+
+#: data/resources/ui/markdown_format_bar.ui:117
+msgid "Code"
+msgstr "Código"
+
+#: data/resources/ui/preferences_dialog.ui:6
+msgid "General"
+msgstr "General"
+
+#: data/resources/ui/preferences_dialog.ui:9
+msgid "Font"
+msgstr "Fuente"
+
+#: data/resources/ui/preferences_dialog.ui:13
+msgid "Change Font"
+msgstr "Cambiar fuente"
+
+#: data/resources/ui/preferences_dialog.ui:14
+msgid "Use a different font family"
+msgstr "Usar una tipografía diferente"
+
+#: data/resources/ui/preferences_dialog.ui:20
+msgid "Reset to Default"
+msgstr "Restaurar por defecto"
+
+#: data/resources/ui/preferences_dialog.ui:21
+msgid "Use default font"
+msgstr "Usar la tipografía por defecto"
+
+#: data/resources/ui/preferences_dialog.ui:28
+msgid "Editor"
+msgstr "Editor"
+
+#: data/resources/ui/preferences_dialog.ui:31
+msgid "Show Minimap"
+msgstr "Mostrar mapa de vista general"
+
+#: data/resources/ui/preferences_dialog.ui:32
+msgid "Show overview of the document on the right side"
+msgstr "Muestra una vista general del documento en el lado derecho"
+
+#: data/resources/ui/preferences_dialog.ui:37
+msgid "Clamp Editor Width"
+msgstr "Limitar ancho del editor"
+
+#: data/resources/ui/preferences_dialog.ui:42
+msgid "Max Editor Width"
+msgstr "Ancho máximo del editor"
+
+#: data/resources/ui/preferences_dialog.ui:54 data/resources/ui/window.ui:19
+msgid "Library"
+msgstr "Librería"
+
+#: data/resources/ui/preferences_dialog.ui:57
+msgid "Ignore Hidden Files"
+msgstr "Ignorar archivos ocultos"
+
+#: data/resources/ui/preferences_dialog.ui:58
+msgid "Files and folders with a preceding \".\" won't show up in the library"
+msgstr "Archivos y carpetas precedidos por \".\" no se mostrarán en la librería"
+
+#: data/resources/ui/shortcuts.ui:11
+msgctxt "shortcut window"
+msgid "General"
+msgstr "General"
+
+#: data/resources/ui/shortcuts.ui:14
+msgctxt "shortcut window"
+msgid "Toggle Fullscreen"
+msgstr "Alternar pantalla completa"
+
+#: data/resources/ui/shortcuts.ui:20
+msgctxt "shortcut window"
+msgid "Toggle Focus Mode"
+msgstr "Alternar modo de concentración"
+
+#: data/resources/ui/shortcuts.ui:26
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: data/resources/ui/shortcuts.ui:32
+msgctxt "shortcut window"
+msgid "Show Shortcuts"
+msgstr "Mostrar los atajos del teclado"
+
+#: data/resources/ui/shortcuts.ui:40
+msgctxt "shortcut window"
+msgid "Document"
+msgstr "Documento"
+
+#: data/resources/ui/shortcuts.ui:43
+msgctxt "shortcut window"
+msgid "New Document"
+msgstr "Nuevo documento"
+
+#: data/resources/ui/shortcuts.ui:49
+msgctxt "shortcut window"
+msgid "Add Project"
+msgstr "Añadir proyecto"
+
+#: data/resources/ui/shortcuts.ui:55
+msgctxt "shortcut window"
+msgid "Save Document"
+msgstr "Guardar documento"
+
+#: data/resources/ui/shortcuts.ui:61
+msgctxt "shortcut window"
+msgid "Rename"
+msgstr "Renombrar"
+
+#: data/resources/ui/shortcuts.ui:67
+msgctxt "shortcut window"
+msgid "Close Document"
+msgstr "Cerrar documento"
+
+#: data/resources/ui/shortcuts.ui:75
+msgctxt "shortcut window"
+msgid "Editor"
+msgstr "Editor"
+
+#: data/resources/ui/shortcuts.ui:78
+msgctxt "shortcut window"
+msgid "Search Text"
+msgstr "Buscar texto"
+
+#: data/resources/ui/shortcuts.ui:84
+msgctxt "shortcut window"
+msgid "Search and Replace Text"
+msgstr "Buscar y reemplazar texto"
+
+#: data/resources/ui/shortcuts.ui:90
+msgctxt "shortcut window"
+msgid "Zoom In"
+msgstr "Acercar"
+
+#: data/resources/ui/shortcuts.ui:96
+msgctxt "shortcut window"
+msgid "Zoom Out"
+msgstr "Alejar"
+
+#: data/resources/ui/shortcuts.ui:102
+msgctxt "shortcut window"
+msgid "Reset Zoom"
+msgstr "Restablecer ampliación"
+
+#: data/resources/ui/shortcuts.ui:110
+msgctxt "shortcut window"
+msgid "Formatting"
+msgstr "Formato del texto"
+
+#: data/resources/ui/shortcuts.ui:113
+msgctxt "shortcut window"
+msgid "Bold"
+msgstr "Negrita"
+
+#: data/resources/ui/shortcuts.ui:119
+msgctxt "shortcut window"
+msgid "Italic"
+msgstr "Cursiva"
+
+#: data/resources/ui/shortcuts.ui:125
+msgctxt "shortcut window"
+msgid "Heading 1"
+msgstr "Cabecera 1"
+
+#: data/resources/ui/shortcuts.ui:131
+msgctxt "shortcut window"
+msgid "Heading 2"
+msgstr "Cabecera 2"
+
+#: data/resources/ui/shortcuts.ui:137
+msgctxt "shortcut window"
+msgid "Heading 3"
+msgstr "Cabecera 3"
+
+#: data/resources/ui/shortcuts.ui:143
+msgctxt "shortcut window"
+msgid "Heading 4"
+msgstr "Cabecera 4"
+
+#: data/resources/ui/shortcuts.ui:149
+msgctxt "shortcut window"
+msgid "Heading 5"
+msgstr "Cabecera 5"
+
+#: data/resources/ui/shortcuts.ui:155
+msgctxt "shortcut window"
+msgid "Heading 6"
+msgstr "Cabecera 6"
+
+#: data/resources/ui/shortcuts.ui:163
+msgctxt "shortcut window"
+msgid "Library"
+msgstr "Librería"
+
+#: data/resources/ui/shortcuts.ui:166
+msgctxt "shortcut window"
+msgid "Manual Refresh"
+msgstr "Recargar manualmente"
+
+#: data/resources/ui/window.ui:28 data/resources/ui/window.ui:195
+msgid "Sort"
+msgstr "Ordenar"
+
+#: data/resources/ui/window.ui:41
+msgid "Menu"
+msgstr "Menú principal"
+
+#: data/resources/ui/window.ui:71
+msgid "Toggle Sidebar (F9)"
+msgstr "Mostrar barra lateral (F9)"
+
+#: data/resources/ui/window.ui:77
+msgid "New Document (Ctrl+N)"
+msgstr "Nuevo documento (Ctrl+N)"
+
+#: data/resources/ui/window.ui:84
+msgid "Exit Fullscreen"
+msgstr "Salir de la pantalla completa"
+
+#: data/resources/ui/window.ui:92
+msgid "Document Info"
+msgstr "Información del documento"
+
+#: data/resources/ui/window.ui:98
+msgid "Formatting Toolbar"
+msgstr "Barra de herramientas"
+
+#: data/resources/ui/window.ui:130
+msgid "Add Project"
+msgstr "Añadir proyecto"
+
+#: data/resources/ui/window.ui:136
+msgid "Save"
+msgstr "Guardar"
+
+#: data/resources/ui/window.ui:140
+msgid "Close"
+msgstr "Cerrar"
+
+#: data/resources/ui/window.ui:146
+msgid "Zoom In"
+msgstr "Acercar"
+
+#: data/resources/ui/window.ui:150
+msgid "Zoom Out"
+msgstr "Alejar"
+
+#: data/resources/ui/window.ui:154
+msgid "Reset Zoom"
+msgstr "Restablecer amplicación"
+
+#: data/resources/ui/window.ui:160
+msgid "Search Text"
+msgstr "Buscar texto"
+
+#: data/resources/ui/window.ui:164
+msgid "Search and Replace"
+msgstr "Buscar y reemplazar"
+
+#: data/resources/ui/window.ui:170
+msgid "Toggle Fullscreen"
+msgstr "Alternar pantalla completa"
+
+#: data/resources/ui/window.ui:174
+msgid "Toggle Focus Mode"
+msgstr "Alternar modo de concentración"
+
+#: data/resources/ui/window.ui:180
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: data/resources/ui/window.ui:184
+msgid "Keyboard Shortcuts"
+msgstr "Atajos del teclado"
+
+#: data/resources/ui/window.ui:188
+msgid "About Scratchmark"
+msgstr "Acerca de Scratchmark"
+
+#: data/resources/ui/window.ui:198
+msgid "A-Z"
+msgstr "A-Z"
+
+#: data/resources/ui/window.ui:203
+msgid "Z-A"
+msgstr "Z-A"
+
+#: data/resources/ui/window.ui:208
+msgid "Last Modified"
+msgstr "Última modificación"
+
+#: data/resources/ui/window.ui:213
+msgid "First Modified"
+msgstr "Primera modificación"

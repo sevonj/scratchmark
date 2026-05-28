@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-22 17:09+0200\n"
-"PO-Revision-Date: 2026-02-22 21:13+0000\n"
+"POT-Creation-Date: 2026-02-23 15:28+0200\n"
+"PO-Revision-Date: 2026-03-05 21:42+0000\n"
 "Last-Translator: LukaszH77 <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
 "app/pl/>\n"
@@ -48,18 +48,18 @@ msgid ""
 "computer to the library, and move files around by dragging and dropping."
 msgstr ""
 "**Scratchmark** to przyjemny edytor tekstu. Stara się zapewnić ci wszystko, "
-"czego potrzebujesz i jednocześnie nie przeszkadzać, pozwalając na skupienie "
-"się na tekście. Aplikacja nadaje się zarówno do pisania esejów, jak i "
+"czego potrzebujesz i jednocześnie nie przeszkadzać, pozwalając na skupienie "
+"się na tekście. Aplikacja nadaje się zarówno do pisania esejów, jak i "
 "robienia szybkich notatek. Zarządzanie plikami opiera się na strukturze "
-"folderów, która może obsłużyć duże projekty z wieloma plikami. Możesz dodać "
-"do biblioteki dowolny folder z twojego komputera i przenosić pliki, "
-"przeciągając je i upuszczając."
+"folderów, która może obsłużyć duże projekty z wieloma plikami. Możesz dodać "
+"do biblioteki dowolny folder z twojego komputera i przenosić pliki, "
+"przeciągając je i upuszczając."
 
 msgid ""
 "It uses Markdown, which means that ==all text formatting can be done by "
 "typing.=="
 msgstr ""
-"Używa składni Markdown, co oznacza, że ==całe formatowanie tekstu, może być "
+"Używa składni Markdown, co oznacza, że ==całe formatowanie tekstu może być "
 "wykonane przez pisanie.=="
 
 msgid ""
@@ -67,9 +67,9 @@ msgid ""
 "up and start writing. It can display simple writing statistics, and has "
 "features, such as focus mode and fullscreen support to reduce distractions."
 msgstr ""
-"Edytor jest prosty i intuicyjny, więc każdy powinien móc po prostu go "
-"uruchomić i zacząć pisać. Może wyświetlać proste statystyki tekstu i oferuje "
-"takie funkcje jak tryb skupienie i obsługa pełnego ekranu, by ograniczyć "
+"Edytor jest prosty i intuicyjny, więc każdy powinien móc po prostu go "
+"uruchomić i zacząć pisać. Może wyświetlać proste statystyki tekstu i oferuje "
+"takie funkcje jak tryb skupienia i obsługa pełnego ekranu, by ograniczyć "
 "rozpraszanie uwagi."
 
 msgid ""
@@ -79,12 +79,12 @@ msgid ""
 "the folder to Scratchmark's library. This also goes the other way: if you've "
 "had enough of Scratchmark, it's easy to switch to something else."
 msgstr ""
-"Markdown jest otwartym i szeroko używanym językiem znaczników. Dokumenty "
-"utworzone w Scratchmark są w mniejszym lub większym stopniu kompatybilne z "
-"innymi podobnymi aplikacjami. Jeżeli masz już „notatnik” lub projekt z innej "
-"aplikacji, możesz po prostu katalog do biblioteki Scratchmark. To działa "
-"również w drugą stronę: jeżeli będziesz mieć dosyć Scratchmark, łatwo będzie "
-"przenieść się do czegoś innego."
+"Markdown jest otwartym i szeroko używanym językiem znaczników. Dokumenty "
+"utworzone w Scratchmark są w mniejszym lub większym stopniu kompatybilne z "
+"innymi podobnymi aplikacjami. Jeżeli masz już „notatnik” lub projekt z innej "
+"aplikacji, możesz po prostu dodać katalog do biblioteki Scratchmark. To "
+"działa również w drugą stronę: jeżeli będziesz mieć dosyć Scratchmark, łatwo "
+"będzie przenieść się do czegoś innego."
 
 msgid "Editor interface"
 msgstr "Interfejs edytora"
@@ -141,40 +141,40 @@ msgid "Replace"
 msgstr "Zastąp"
 
 msgid "Match Case"
-msgstr "Dopasuj wielkość znaków"
+msgstr "Rozróżnianie wielkości znaków"
 
 msgid "Whole Words"
 msgstr "Całe słowa"
 
 msgid "Use Regex"
-msgstr "Użyj wyrażeń regularnych"
+msgstr "Używanie wyrażeń regularnych"
 
 msgid "?"
 msgstr "?"
 
 msgid "Previous Match (Shift + Return)"
-msgstr "Poprzednie trafienie (Shift + Enter)"
+msgstr "Poprzednie trafienie (Shift+Enter)"
 
 msgid "Next Match (Return)"
 msgstr "Następne trafienie (Enter)"
 
 msgid "Search and Replace (Ctrl+F)"
-msgstr "Szukaj i zastąp"
+msgstr "Wyszukiwanie i zastępowanie (Ctrl+F)"
 
 msgid "Close Search"
-msgstr "Zamknij wyszukiwanie"
+msgstr "Zamyka wyszukiwanie"
 
 msgid "Replace (Return)"
-msgstr "Zastąp (Enter)"
+msgstr "Zastępuje (Enter)"
 
 msgid "Replace All"
 msgstr "Zastąp wszystkie"
 
 msgid "Replace All (Shift + Return)"
-msgstr "Zastąp wszystkie (Shift + Enter)"
+msgstr "Zastępuje wszystkie (Shift+Enter)"
 
 msgid "Nothing Open"
-msgstr "Nic nie jest otwarte"
+msgstr "Brak otwartego dokumentu"
 
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr "Utwórz nowy dokument lub otwórz już istniejący w panelu bocznym"
@@ -192,7 +192,7 @@ msgid "_Delete"
 msgstr "_Usuń"
 
 msgid "Show in File Manager"
-msgstr "Pokaż w menedżerze plików"
+msgstr "Pokaż w menedżerze plików"
 
 msgid "Rename"
 msgstr "Zmień nazwę"
@@ -201,10 +201,10 @@ msgid "Duplicate"
 msgstr "Duplikuj"
 
 msgid "Move to Trash"
-msgstr "Przenieś do śmieci"
+msgstr "Przenieś do kosza"
 
 msgid "Delete Permanently"
-msgstr "Usuń trwale"
+msgstr "Usuń trwale…"
 
 msgid "New Document"
 msgstr "Nowy dokument"
@@ -237,10 +237,10 @@ msgid "Highlight"
 msgstr "Wyróżnienie"
 
 msgid "Heading 1 (Ctrl+1)"
-msgstr "Nagłówek 1 (Ctrl+1)"
+msgstr "Nagłówek 1 (Ctrl+1)"
 
 msgid "Heading 2 (Ctrl+2)"
-msgstr "Nagłówek 2 (Ctrl+2)"
+msgstr "Nagłówek 2 (Ctrl+2)"
 
 msgid "Blockquote"
 msgstr "Cytat blokowy"
@@ -255,28 +255,28 @@ msgid "Font"
 msgstr "Czcionka"
 
 msgid "Change Font"
-msgstr "Zmień czcionkę"
+msgstr "Zmiana czcionki"
 
-msgid "Customize font size and typeface"
-msgstr "Dostosuj czcionkę i jej rozmiar"
+msgid "Use a different font family"
+msgstr "Pozwala na ustawienie innej rodziny czcionek"
 
 msgid "Reset to Default"
-msgstr "Przywróć domyślne"
+msgstr "Przywrócenie domyślnej"
 
 msgid "Use default font"
-msgstr "Użyj domyślnej czcionki"
+msgstr "Używa domyślnej czcionki"
 
 msgid "Editor"
 msgstr "Edytor"
 
 msgid "Show Minimap"
-msgstr "Pokaż minimapę"
+msgstr "Pokazywanie minimapy"
 
 msgid "Show overview of the document on the right side"
-msgstr "Pokaż podgląd dokumentu po prawej stronie"
+msgstr "Pokazuje podgląd dokumentu po prawej stronie"
 
 msgid "Clamp Editor Width"
-msgstr "Ogranicz szerokość edytora"
+msgstr "Ograniczanie szerokości edytora"
 
 msgid "Max Editor Width"
 msgstr "Maksymalna szerokość edytora"
@@ -285,11 +285,11 @@ msgid "Library"
 msgstr "Biblioteka"
 
 msgid "Ignore Hidden Files"
-msgstr "Ignoruj ukryte pliki"
+msgstr "Ignorowanie ukrytych plików"
 
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
-"Pliki i katalogi zaczynające się od \".\" nie będą widoczne w bibliotece"
+"Pliki i katalogi zaczynające się od \".\" nie będą widoczne w bibliotece"
 
 msgctxt "shortcut window"
 msgid "General"
@@ -297,11 +297,11 @@ msgstr "Ogólne"
 
 msgctxt "shortcut window"
 msgid "Toggle Fullscreen"
-msgstr "Przełącz pełny ekran"
+msgstr "Przełączenie pełnego ekranu"
 
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
-msgstr "Przełącz tryb skupienia"
+msgstr "Przełączenie trybu skupienia"
 
 msgctxt "shortcut window"
 msgid "Preferences"
@@ -309,7 +309,7 @@ msgstr "Preferencje"
 
 msgctxt "shortcut window"
 msgid "Show Shortcuts"
-msgstr "Pokaż skróty klawiszowe"
+msgstr "Wyświetlenie skrótów klawiszowych"
 
 msgctxt "shortcut window"
 msgid "Document"
@@ -321,19 +321,19 @@ msgstr "Nowy dokument"
 
 msgctxt "shortcut window"
 msgid "Add Project"
-msgstr "Dodaj projekt"
+msgstr "Dodanie projektu"
 
 msgctxt "shortcut window"
 msgid "Save Document"
-msgstr "Zapisz dokument"
+msgstr "Zapisanie dokumentu"
 
 msgctxt "shortcut window"
 msgid "Rename"
-msgstr "Zmień nazwę"
+msgstr "Zmiana nazwy"
 
 msgctxt "shortcut window"
 msgid "Close Document"
-msgstr "Zamknij dokument"
+msgstr "Zamknięcie dokumentu"
 
 msgctxt "shortcut window"
 msgid "Editor"
@@ -341,23 +341,23 @@ msgstr "Edytor"
 
 msgctxt "shortcut window"
 msgid "Search Text"
-msgstr "Szukaj tekstu"
+msgstr "Szukanie tekstu"
 
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
-msgstr "Szukaj i zastąp tekst"
+msgstr "Szukanie i zastępowanie tekstu"
 
 msgctxt "shortcut window"
 msgid "Zoom In"
-msgstr "Powiększa tekst"
+msgstr "Powiększanie tekstu"
 
 msgctxt "shortcut window"
 msgid "Zoom Out"
-msgstr "Pomniejsza tekst"
+msgstr "Pomniejszanie tekstu"
 
 msgctxt "shortcut window"
 msgid "Reset Zoom"
-msgstr "Resetuje powiększenie"
+msgstr "Przywracanie powiększenia"
 
 msgctxt "shortcut window"
 msgid "Formatting"
@@ -407,19 +407,19 @@ msgid "Sort"
 msgstr "Sortowanie"
 
 msgid "Menu"
-msgstr "Menu"
+msgstr "Menu główne"
 
 msgid "Toggle Sidebar (F9)"
-msgstr "Przełącz panel boczny (F9)"
+msgstr "Przełącza panel boczny (F9)"
 
 msgid "New Document (Ctrl+N)"
 msgstr "Nowy dokument (Ctrl+N)"
 
 msgid "Exit Fullscreen"
-msgstr "Opuść pełny ekran"
+msgstr "Opuszcza pełny ekran"
 
 msgid "Document Info"
-msgstr "Informacje o dokumencie"
+msgstr "Informacje o dokumencie"
 
 msgid "Formatting Toolbar"
 msgstr "Pasek formatowania"
@@ -440,13 +440,13 @@ msgid "Zoom Out"
 msgstr "Pomniejsz tekst"
 
 msgid "Reset Zoom"
-msgstr "Zresetuj powiększenie"
+msgstr "Przywróć powiększenie"
 
 msgid "Search Text"
 msgstr "Szukaj tekstu"
 
 msgid "Search and Replace"
-msgstr "Szukaj i zamień"
+msgstr "Szukaj i zastąp"
 
 msgid "Toggle Fullscreen"
 msgstr "Przełącz pełny ekran"
@@ -474,6 +474,9 @@ msgstr "Od ostatnio zmienionego"
 
 msgid "First Modified"
 msgstr "Od najdawniej zmienionego"
+
+#~ msgid "Customize font size and typeface"
+#~ msgstr "Dostosuj czcionkę i jej rozmiar"
 
 #~ msgid "Name..."
 #~ msgstr "Nazwa..."
