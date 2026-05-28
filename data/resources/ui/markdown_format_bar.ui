@@ -67,7 +67,7 @@
                 <child>
                   <object class="GtkToggleButton">
                     <property name="icon-name">smk-insert-link-symbolic</property>
-                    <property name="tooltip-text" translatable="yes">Insert Link (Ctrl+k)</property>
+                    <property name="tooltip-text" translatable="yes">Insert Link (Ctrl+K)</property>
                     <property name="action-name">formatbar.insert_link</property>
                   </object>
                 </child>
