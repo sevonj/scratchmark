@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 16:04+0300\n"
+"POT-Creation-Date: 2026-05-28 13:04+0300\n"
 "PO-Revision-Date: 2026-02-23 15:08+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/scratchmark/"
@@ -327,7 +327,7 @@ msgstr "Otsikko 2 (Ctrl+2)"
 
 #: data/resources/ui/markdown_format_bar.ui:70
 #, fuzzy
-msgid "Insert Link (Ctrl+k)"
+msgid "Insert Link (Ctrl+K)"
 msgstr "Kursivointi (Ctrl+I)"
 
 #: data/resources/ui/markdown_format_bar.ui:85

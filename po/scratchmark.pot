@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 16:04+0300\n"
+"POT-Creation-Date: 2026-05-28 13:04+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -302,7 +302,7 @@ msgid "Heading 2 (Ctrl+2)"
 msgstr ""
 
 #: data/resources/ui/markdown_format_bar.ui:70
-msgid "Insert Link (Ctrl+k)"
+msgid "Insert Link (Ctrl+K)"
 msgstr ""
 
 #: data/resources/ui/markdown_format_bar.ui:85
