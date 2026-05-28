@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-23 15:28+0200\n"
+"POT-Creation-Date: 2026-05-27 16:04+0300\n"
 "PO-Revision-Date: 2026-05-03 02:57+0000\n"
 "Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
@@ -19,15 +19,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.17\n"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:3
+#: data/org.scratchmark.Scratchmark.desktop.in:2
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:4
+#: data/org.scratchmark.Scratchmark.desktop.in:3
 msgid "Markdown editor"
 msgstr "Editor de Markdown"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:10
+#: data/org.scratchmark.Scratchmark.desktop.in:9
 msgid "Scratchmark Markdown editor"
 msgstr "Editor de Markdown Scratchmark"
 
@@ -272,6 +272,7 @@ msgstr "Nuevo documento"
 #: data/resources/ui/library/document_create_popover.ui:16
 #: data/resources/ui/library/folder_create_popover.ui:16
 #: data/resources/ui/library/item_rename_popover.ui:11
+#: data/resources/ui/preferences/file_ext_add_popover.ui:11
 msgid "Name…"
 msgstr "Nombre…"
 
@@ -321,69 +322,108 @@ msgstr "Cabecera 1 (Ctrl+1)"
 msgid "Heading 2 (Ctrl+2)"
 msgstr "Cabecera 2 (Ctrl+2)"
 
-#: data/resources/ui/markdown_format_bar.ui:84
+#: data/resources/ui/markdown_format_bar.ui:70
+#, fuzzy
+msgid "Insert Link (Ctrl+k)"
+msgstr "Cursiva (Ctrl+I)"
+
+#: data/resources/ui/markdown_format_bar.ui:85
 msgid "Blockquote"
 msgstr "Cita en bloque"
 
-#: data/resources/ui/markdown_format_bar.ui:117
+#: data/resources/ui/markdown_format_bar.ui:118
 msgid "Code"
 msgstr "Código"
 
-#: data/resources/ui/preferences_dialog.ui:6
+#: data/resources/ui/preferences/dialog.ui:6
 msgid "General"
 msgstr "General"
 
-#: data/resources/ui/preferences_dialog.ui:9
+#: data/resources/ui/preferences/dialog.ui:9
 msgid "Font"
 msgstr "Fuente"
 
-#: data/resources/ui/preferences_dialog.ui:13
+#: data/resources/ui/preferences/dialog.ui:13
 msgid "Change Font"
 msgstr "Cambiar fuente"
 
-#: data/resources/ui/preferences_dialog.ui:14
+#: data/resources/ui/preferences/dialog.ui:14
 msgid "Use a different font family"
 msgstr "Usar una tipografía diferente"
 
-#: data/resources/ui/preferences_dialog.ui:20
+#: data/resources/ui/preferences/dialog.ui:20
 msgid "Reset to Default"
 msgstr "Restaurar por defecto"
 
-#: data/resources/ui/preferences_dialog.ui:21
+#: data/resources/ui/preferences/dialog.ui:21
 msgid "Use default font"
 msgstr "Usar la tipografía por defecto"
 
-#: data/resources/ui/preferences_dialog.ui:28
+#: data/resources/ui/preferences/dialog.ui:28
 msgid "Editor"
 msgstr "Editor"
 
-#: data/resources/ui/preferences_dialog.ui:31
+#: data/resources/ui/preferences/dialog.ui:31
 msgid "Show Minimap"
 msgstr "Mostrar mapa de vista general"
 
-#: data/resources/ui/preferences_dialog.ui:32
+#: data/resources/ui/preferences/dialog.ui:32
 msgid "Show overview of the document on the right side"
 msgstr "Muestra una vista general del documento en el lado derecho"
 
-#: data/resources/ui/preferences_dialog.ui:37
+#: data/resources/ui/preferences/dialog.ui:37
+msgid "Insert Tabs As Spaces"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:38
+msgid "Pressing the tab key will insert 4 spaces"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:43
 msgid "Clamp Editor Width"
 msgstr "Limitar ancho del editor"
 
-#: data/resources/ui/preferences_dialog.ui:42
+#: data/resources/ui/preferences/dialog.ui:48
 msgid "Max Editor Width"
 msgstr "Ancho máximo del editor"
 
-#: data/resources/ui/preferences_dialog.ui:54 data/resources/ui/window.ui:19
+#: data/resources/ui/preferences/dialog.ui:58
+msgid "Check Spelling"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:65 data/resources/ui/window.ui:19
 msgid "Library"
 msgstr "Librería"
 
-#: data/resources/ui/preferences_dialog.ui:57
+#: data/resources/ui/preferences/dialog.ui:68
 msgid "Ignore Hidden Files"
 msgstr "Ignorar archivos ocultos"
 
-#: data/resources/ui/preferences_dialog.ui:58
+#: data/resources/ui/preferences/dialog.ui:69
 msgid "Files and folders with a preceding \".\" won't show up in the library"
-msgstr "Archivos y carpetas precedidos por \".\" no se mostrarán en la librería"
+msgstr ""
+"Archivos y carpetas precedidos por \".\" no se mostrarán en la librería"
+
+#: data/resources/ui/preferences/dialog.ui:74
+msgid "Show File Extensions"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:79
+msgid "Custom File Extensions"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:80
+msgid "Include additional file types in library"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:88
+#: data/resources/ui/preferences/file_ext_add_popover.ui:16
+msgid "Add"
+msgstr ""
+
+#: data/resources/ui/preferences/file_ext_item.ui:13
+msgid "Remove"
+msgstr ""
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
@@ -487,40 +527,45 @@ msgstr "Cursiva"
 
 #: data/resources/ui/shortcuts.ui:125
 msgctxt "shortcut window"
+msgid "Link"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:131
+msgctxt "shortcut window"
 msgid "Heading 1"
 msgstr "Cabecera 1"
 
-#: data/resources/ui/shortcuts.ui:131
+#: data/resources/ui/shortcuts.ui:137
 msgctxt "shortcut window"
 msgid "Heading 2"
 msgstr "Cabecera 2"
 
-#: data/resources/ui/shortcuts.ui:137
+#: data/resources/ui/shortcuts.ui:143
 msgctxt "shortcut window"
 msgid "Heading 3"
 msgstr "Cabecera 3"
 
-#: data/resources/ui/shortcuts.ui:143
+#: data/resources/ui/shortcuts.ui:149
 msgctxt "shortcut window"
 msgid "Heading 4"
 msgstr "Cabecera 4"
 
-#: data/resources/ui/shortcuts.ui:149
+#: data/resources/ui/shortcuts.ui:155
 msgctxt "shortcut window"
 msgid "Heading 5"
 msgstr "Cabecera 5"
 
-#: data/resources/ui/shortcuts.ui:155
+#: data/resources/ui/shortcuts.ui:161
 msgctxt "shortcut window"
 msgid "Heading 6"
 msgstr "Cabecera 6"
 
-#: data/resources/ui/shortcuts.ui:163
+#: data/resources/ui/shortcuts.ui:169
 msgctxt "shortcut window"
 msgid "Library"
 msgstr "Librería"
 
-#: data/resources/ui/shortcuts.ui:166
+#: data/resources/ui/shortcuts.ui:172
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Recargar manualmente"
@@ -620,3 +665,11 @@ msgstr "Última modificación"
 #: data/resources/ui/window.ui:213
 msgid "First Modified"
 msgstr "Primera modificación"
+
+#: data/resources/ui/window.ui:218
+msgid "Last Accessed"
+msgstr ""
+
+#: data/resources/ui/window.ui:223
+msgid "First Accessed"
+msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-23 15:28+0200\n"
+"POT-Creation-Date: 2026-05-27 16:04+0300\n"
 "PO-Revision-Date: 2026-05-12 08:58+0000\n"
 "Last-Translator: Drsheppard01 <drsheppard01@noreply.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/scratchmark/"
@@ -19,15 +19,15 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 5.17.1\n"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:3
+#: data/org.scratchmark.Scratchmark.desktop.in:2
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:4
+#: data/org.scratchmark.Scratchmark.desktop.in:3
 msgid "Markdown editor"
 msgstr "Редактор Markdown"
 
-#: data/org.scratchmark.Scratchmark.desktop.in:10
+#: data/org.scratchmark.Scratchmark.desktop.in:9
 msgid "Scratchmark Markdown editor"
 msgstr "Scratchmark редактор Markdown"
 
@@ -276,6 +276,7 @@ msgstr "Новый документ"
 #: data/resources/ui/library/document_create_popover.ui:16
 #: data/resources/ui/library/folder_create_popover.ui:16
 #: data/resources/ui/library/item_rename_popover.ui:11
+#: data/resources/ui/preferences/file_ext_add_popover.ui:11
 msgid "Name…"
 msgstr "Название…"
 
@@ -325,70 +326,108 @@ msgstr "Заголовок 1 (Ctrl+1)"
 msgid "Heading 2 (Ctrl+2)"
 msgstr "Заголовок 2 (Ctrl+2)"
 
-#: data/resources/ui/markdown_format_bar.ui:84
+#: data/resources/ui/markdown_format_bar.ui:70
+#, fuzzy
+msgid "Insert Link (Ctrl+k)"
+msgstr "Курсив (Ctrl +I)"
+
+#: data/resources/ui/markdown_format_bar.ui:85
 msgid "Blockquote"
 msgstr "Цитата"
 
-#: data/resources/ui/markdown_format_bar.ui:117
+#: data/resources/ui/markdown_format_bar.ui:118
 msgid "Code"
 msgstr "Фрагмент кода"
 
-#: data/resources/ui/preferences_dialog.ui:6
+#: data/resources/ui/preferences/dialog.ui:6
 msgid "General"
 msgstr "Общие"
 
-#: data/resources/ui/preferences_dialog.ui:9
+#: data/resources/ui/preferences/dialog.ui:9
 msgid "Font"
 msgstr "Шрифт"
 
-#: data/resources/ui/preferences_dialog.ui:13
+#: data/resources/ui/preferences/dialog.ui:13
 msgid "Change Font"
 msgstr "Изменить шрифт"
 
-#: data/resources/ui/preferences_dialog.ui:14
+#: data/resources/ui/preferences/dialog.ui:14
 msgid "Use a different font family"
 msgstr "Использовать другой шрифт"
 
-#: data/resources/ui/preferences_dialog.ui:20
+#: data/resources/ui/preferences/dialog.ui:20
 msgid "Reset to Default"
 msgstr "Вернуть значение по умолчанию"
 
-#: data/resources/ui/preferences_dialog.ui:21
+#: data/resources/ui/preferences/dialog.ui:21
 msgid "Use default font"
 msgstr "Использовать шрифт по умолчанию"
 
-#: data/resources/ui/preferences_dialog.ui:28
+#: data/resources/ui/preferences/dialog.ui:28
 msgid "Editor"
 msgstr "Редактор"
 
-#: data/resources/ui/preferences_dialog.ui:31
+#: data/resources/ui/preferences/dialog.ui:31
 msgid "Show Minimap"
 msgstr "Открыть мини-карту"
 
-#: data/resources/ui/preferences_dialog.ui:32
+#: data/resources/ui/preferences/dialog.ui:32
 msgid "Show overview of the document on the right side"
 msgstr "Показать обзор документа в правой стороне"
 
-#: data/resources/ui/preferences_dialog.ui:37
+#: data/resources/ui/preferences/dialog.ui:37
+msgid "Insert Tabs As Spaces"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:38
+msgid "Pressing the tab key will insert 4 spaces"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:43
 msgid "Clamp Editor Width"
 msgstr ""
 
-#: data/resources/ui/preferences_dialog.ui:42
+#: data/resources/ui/preferences/dialog.ui:48
 msgid "Max Editor Width"
 msgstr "Максимальная ширина редактора"
 
-#: data/resources/ui/preferences_dialog.ui:54 data/resources/ui/window.ui:19
+#: data/resources/ui/preferences/dialog.ui:58
+msgid "Check Spelling"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:65 data/resources/ui/window.ui:19
 msgid "Library"
 msgstr "Библиотека"
 
-#: data/resources/ui/preferences_dialog.ui:57
+#: data/resources/ui/preferences/dialog.ui:68
 msgid "Ignore Hidden Files"
 msgstr "Игнорировать скрытые файлы"
 
-#: data/resources/ui/preferences_dialog.ui:58
+#: data/resources/ui/preferences/dialog.ui:69
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
 "Файлы и папки, перед которыми стоит \".\", не будут отображаться в библиотеке"
+
+#: data/resources/ui/preferences/dialog.ui:74
+msgid "Show File Extensions"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:79
+msgid "Custom File Extensions"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:80
+msgid "Include additional file types in library"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:88
+#: data/resources/ui/preferences/file_ext_add_popover.ui:16
+msgid "Add"
+msgstr ""
+
+#: data/resources/ui/preferences/file_ext_item.ui:13
+msgid "Remove"
+msgstr ""
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
@@ -492,40 +531,45 @@ msgstr "Курсив"
 
 #: data/resources/ui/shortcuts.ui:125
 msgctxt "shortcut window"
+msgid "Link"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:131
+msgctxt "shortcut window"
 msgid "Heading 1"
 msgstr "Заголовок 1"
 
-#: data/resources/ui/shortcuts.ui:131
+#: data/resources/ui/shortcuts.ui:137
 msgctxt "shortcut window"
 msgid "Heading 2"
 msgstr "Заголовок 2"
 
-#: data/resources/ui/shortcuts.ui:137
+#: data/resources/ui/shortcuts.ui:143
 msgctxt "shortcut window"
 msgid "Heading 3"
 msgstr "Заголовок 3"
 
-#: data/resources/ui/shortcuts.ui:143
+#: data/resources/ui/shortcuts.ui:149
 msgctxt "shortcut window"
 msgid "Heading 4"
 msgstr "Заголовок 4"
 
-#: data/resources/ui/shortcuts.ui:149
+#: data/resources/ui/shortcuts.ui:155
 msgctxt "shortcut window"
 msgid "Heading 5"
 msgstr "Заголовок 5"
 
-#: data/resources/ui/shortcuts.ui:155
+#: data/resources/ui/shortcuts.ui:161
 msgctxt "shortcut window"
 msgid "Heading 6"
 msgstr "Заголовок 6"
 
-#: data/resources/ui/shortcuts.ui:163
+#: data/resources/ui/shortcuts.ui:169
 msgctxt "shortcut window"
 msgid "Library"
 msgstr "Библиотека"
 
-#: data/resources/ui/shortcuts.ui:166
+#: data/resources/ui/shortcuts.ui:172
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Обновление вручную"
@@ -625,3 +669,11 @@ msgstr "Последний изменённый"
 #: data/resources/ui/window.ui:213
 msgid "First Modified"
 msgstr "Первый изменённый"
+
+#: data/resources/ui/window.ui:218
+msgid "Last Accessed"
+msgstr ""
+
+#: data/resources/ui/window.ui:223
+msgid "First Accessed"
+msgstr ""
