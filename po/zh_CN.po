@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-28 13:04+0300\n"
+"POT-Creation-Date: 2026-05-28 12:09+0000\n"
 "PO-Revision-Date: 2026-05-28 11:41+0000\n"
 "Last-Translator: Outbreak2096 <outbreak2096@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
@@ -20,6 +20,7 @@ msgstr ""
 "X-Generator: Weblate 2026.5\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 

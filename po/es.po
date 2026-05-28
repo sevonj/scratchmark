@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-28 13:04+0300\n"
+"POT-Creation-Date: 2026-05-28 12:09+0000\n"
 "PO-Revision-Date: 2026-05-28 11:41+0000\n"
 "Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
@@ -20,6 +20,7 @@ msgstr ""
 "X-Generator: Weblate 2026.5\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
@@ -400,7 +401,8 @@ msgstr "Ignorar archivos ocultos"
 
 #: data/resources/ui/preferences/dialog.ui:69
 msgid "Files and folders with a preceding \".\" won't show up in the library"
-msgstr "Archivos y carpetas precedidos por \".\" no se mostrarán en la librería"
+msgstr ""
+"Archivos y carpetas precedidos por \".\" no se mostrarán en la librería"
 
 #: data/resources/ui/preferences/dialog.ui:74
 msgid "Show File Extensions"
