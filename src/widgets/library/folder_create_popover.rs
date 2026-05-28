@@ -114,15 +114,10 @@ mod imp {
 
         fn commit(&self) {
             let Some(filename) = self.filename.borrow().clone() else {
-                self.cancel();
                 return;
             };
             self.obj().emit_by_name::<()>("committed", &[&filename]);
             self.obj().popdown();
-        }
-
-        fn cancel(&self) {
-            self.obj().emit_by_name::<()>("cancelled", &[]);
         }
     }
 }
