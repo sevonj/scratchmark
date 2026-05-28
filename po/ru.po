@@ -530,9 +530,10 @@ msgid "Italic"
 msgstr "Курсив"
 
 #: data/resources/ui/shortcuts.ui:125
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Link"
-msgstr ""
+msgid "Insert Link"
+msgstr "Курсив (Ctrl +I)"
 
 #: data/resources/ui/shortcuts.ui:131
 msgctxt "shortcut window"
