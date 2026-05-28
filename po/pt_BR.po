@@ -5,13 +5,14 @@
 # Anonymous <anonymous@noreply.codeberg.org>, 2025, 2026.
 # sevon <sevon@noreply.codeberg.org>, 2026.
 # emilly_msh_msh <emilly_msh_msh@noreply.codeberg.org>, 2026.
+# Emilly MS <emilly_msh_msh@noreply.codeberg.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-28 13:04+0300\n"
 "PO-Revision-Date: 2026-05-28 11:41+0000\n"
-"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"Last-Translator: Emilly MS <emilly_msh_msh@noreply.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
 "scratchmark/app/pt_BR/>\n"
 "Language: pt_BR\n"
