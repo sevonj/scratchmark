@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-28 13:04+0300\n"
 "PO-Revision-Date: 2026-05-28 11:41+0000\n"
-"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/scratchmark/"
 "app/fi/>\n"
 "Language: fi\n"
@@ -326,9 +326,8 @@ msgid "Heading 2 (Ctrl+2)"
 msgstr "Otsikko 2 (Ctrl+2)"
 
 #: data/resources/ui/markdown_format_bar.ui:70
-#, fuzzy
 msgid "Insert Link (Ctrl+K)"
-msgstr "Kursivointi (Ctrl+I)"
+msgstr "Lisää linkki (Ctrl+K)"
 
 #: data/resources/ui/markdown_format_bar.ui:85
 msgid "Blockquote"
@@ -376,11 +375,11 @@ msgstr "Näytä yleiskatsaus tiedostosta oikealla puolella"
 
 #: data/resources/ui/preferences/dialog.ui:37
 msgid "Insert Tabs As Spaces"
-msgstr ""
+msgstr "Lisää sarkaimet välilyönteinä"
 
 #: data/resources/ui/preferences/dialog.ui:38
 msgid "Pressing the tab key will insert 4 spaces"
-msgstr ""
+msgstr "Tab-näppäin lisää 4 välilyöntiä"
 
 #: data/resources/ui/preferences/dialog.ui:43
 msgid "Clamp Editor Width"
@@ -392,7 +391,7 @@ msgstr "Editorin maksimileveys"
 
 #: data/resources/ui/preferences/dialog.ui:58
 msgid "Check Spelling"
-msgstr ""
+msgstr "Tarkista oikeinkirjoitus"
 
 #: data/resources/ui/preferences/dialog.ui:65 data/resources/ui/window.ui:19
 msgid "Library"
@@ -409,24 +408,24 @@ msgstr ""
 
 #: data/resources/ui/preferences/dialog.ui:74
 msgid "Show File Extensions"
-msgstr ""
+msgstr "Näytä tiedostopäätteet"
 
 #: data/resources/ui/preferences/dialog.ui:79
 msgid "Custom File Extensions"
-msgstr ""
+msgstr "Ylimääräiset tiedostopäätteet"
 
 #: data/resources/ui/preferences/dialog.ui:80
 msgid "Include additional file types in library"
-msgstr ""
+msgstr "Sisällytä ylimääräisiä tiedostotyyppejä kirjastoon"
 
 #: data/resources/ui/preferences/dialog.ui:88
 #: data/resources/ui/preferences/file_ext_add_popover.ui:16
 msgid "Add"
-msgstr ""
+msgstr "Lisää"
 
 #: data/resources/ui/preferences/file_ext_item.ui:13
 msgid "Remove"
-msgstr ""
+msgstr "Poista"
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
@@ -529,10 +528,9 @@ msgid "Italic"
 msgstr "Kursivoi"
 
 #: data/resources/ui/shortcuts.ui:125
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Insert Link"
-msgstr "Kursivointi (Ctrl+I)"
+msgstr "Lisää linkki"
 
 #: data/resources/ui/shortcuts.ui:131
 msgctxt "shortcut window"
@@ -672,11 +670,11 @@ msgstr "Ensin muokattu"
 
 #: data/resources/ui/window.ui:218
 msgid "Last Accessed"
-msgstr ""
+msgstr "Viimeksi avattu"
 
 #: data/resources/ui/window.ui:223
 msgid "First Accessed"
-msgstr ""
+msgstr "Ensin avattu"
 
 #~ msgid "Customize font size and typeface"
 #~ msgstr "Muokkaa fontin kokoa ja kirjasinta"
