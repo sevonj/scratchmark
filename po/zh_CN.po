@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-28 12:09+0000\n"
-"PO-Revision-Date: 2026-05-28 11:41+0000\n"
+"PO-Revision-Date: 2026-05-29 22:07+0000\n"
 "Last-Translator: Outbreak2096 <outbreak2096@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.codeberg.org/projects/scratchmark/app/zh_Hans/>\n"
@@ -315,9 +315,8 @@ msgid "Heading 2 (Ctrl+2)"
 msgstr "标题 2 (Ctrl+2)"
 
 #: data/resources/ui/markdown_format_bar.ui:70
-#, fuzzy
 msgid "Insert Link (Ctrl+K)"
-msgstr "斜体 (Ctrl+I)"
+msgstr "插入链接 (Ctrl+K)"
 
 #: data/resources/ui/markdown_format_bar.ui:85
 msgid "Blockquote"
@@ -365,11 +364,11 @@ msgstr "在右侧显示文档概览"
 
 #: data/resources/ui/preferences/dialog.ui:37
 msgid "Insert Tabs As Spaces"
-msgstr ""
+msgstr "将制表符作为空格插入"
 
 #: data/resources/ui/preferences/dialog.ui:38
 msgid "Pressing the tab key will insert 4 spaces"
-msgstr ""
+msgstr "按下 Tab 键将插入 4 个空格"
 
 #: data/resources/ui/preferences/dialog.ui:43
 msgid "Clamp Editor Width"
@@ -381,7 +380,7 @@ msgstr "最大编辑器宽度"
 
 #: data/resources/ui/preferences/dialog.ui:58
 msgid "Check Spelling"
-msgstr ""
+msgstr "检查拼写"
 
 #: data/resources/ui/preferences/dialog.ui:65 data/resources/ui/window.ui:19
 msgid "Library"
@@ -397,24 +396,24 @@ msgstr "名称以“.”开头的文件及文件夹将不会显示在库中"
 
 #: data/resources/ui/preferences/dialog.ui:74
 msgid "Show File Extensions"
-msgstr ""
+msgstr "显示文件扩展名"
 
 #: data/resources/ui/preferences/dialog.ui:79
 msgid "Custom File Extensions"
-msgstr ""
+msgstr "自定义文件扩展名"
 
 #: data/resources/ui/preferences/dialog.ui:80
 msgid "Include additional file types in library"
-msgstr ""
+msgstr "在库中包含其他文件类型"
 
 #: data/resources/ui/preferences/dialog.ui:88
 #: data/resources/ui/preferences/file_ext_add_popover.ui:16
 msgid "Add"
-msgstr ""
+msgstr "添加"
 
 #: data/resources/ui/preferences/file_ext_item.ui:13
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
@@ -517,10 +516,9 @@ msgid "Italic"
 msgstr "斜体"
 
 #: data/resources/ui/shortcuts.ui:125
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Insert Link"
-msgstr "斜体 (Ctrl+I)"
+msgstr "插入链接"
 
 #: data/resources/ui/shortcuts.ui:131
 msgctxt "shortcut window"
@@ -660,11 +658,11 @@ msgstr "首次修改"
 
 #: data/resources/ui/window.ui:218
 msgid "Last Accessed"
-msgstr ""
+msgstr "最后访问"
 
 #: data/resources/ui/window.ui:223
 msgid "First Accessed"
-msgstr ""
+msgstr "首次访问"
 
 #~ msgid "Customize font size and typeface"
 #~ msgstr "自定义字体大小和类型"
