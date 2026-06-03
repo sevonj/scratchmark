@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-28 12:09+0000\n"
-"PO-Revision-Date: 2026-05-28 11:41+0000\n"
+"PO-Revision-Date: 2026-06-04 08:07+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Turkish <https://translate.codeberg.org/projects/scratchmark/"
 "app/tr/>\n"
@@ -323,9 +323,8 @@ msgid "Heading 2 (Ctrl+2)"
 msgstr "Başlık 2 (Ctrl+2)"
 
 #: data/resources/ui/markdown_format_bar.ui:70
-#, fuzzy
 msgid "Insert Link (Ctrl+K)"
-msgstr "Eğik (Ctrl+I)"
+msgstr ""
 
 #: data/resources/ui/markdown_format_bar.ui:85
 msgid "Blockquote"
