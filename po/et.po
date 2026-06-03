@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-28 12:09+0000\n"
-"PO-Revision-Date: 2026-05-29 22:07+0000\n"
+"PO-Revision-Date: 2026-06-04 08:07+0000\n"
 "Last-Translator: Priit Jõerüüt <jrtcdbrg@noreply.codeberg.org>\n"
 "Language-Team: Estonian <https://translate.codeberg.org/projects/scratchmark/"
 "app/et/>\n"
@@ -30,15 +30,15 @@ msgstr "Markdown-tekstitoimeti"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:9
 msgid "Scratchmark Markdown editor"
-msgstr ""
+msgstr "Scratchmark: Markdowni toimeti"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:6
 msgid "Markdown editor for writing"
-msgstr ""
+msgstr "Markdown-vormingus teksti koostamine ja muutmine"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:16
 msgid "# Markdown Editor for Writing"
-msgstr ""
+msgstr "# Markdown-tekstitoimeti kirjutamise jaoks"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:17
 msgid ""
@@ -49,12 +49,21 @@ msgid ""
 "handle large projects with lots of files. You can add any folder on your "
 "computer to the library, and move files around by dragging and dropping."
 msgstr ""
+"**Scratchmark** on mugav ja meeldiv tekstitoimeti kirjutamiseks. See püüab "
+"pakkuda sulle kõike vajalikku, jäädes samas tagaplaanile, et sa saaksid "
+"keskenduda ainult tekstile. Rakendust saad kasutada nii essee kirjutamiseks "
+"kui ka kiirete märkmete tegemiseks. Selle failihaldus põhineb "
+"kaustastruktuuril, mis suudab hallata suuri projekte, mis sisaldavad palju "
+"faile. Saad lisada raamatukogusse mis tahes kausta oma arvutist ning faile "
+"ümber paigutada lohistamise teel."
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:18
 msgid ""
 "It uses Markdown, which means that ==all text formatting can be done by "
 "typing.=="
 msgstr ""
+"Ta kasutab Markdown-vormingut, mis tähendab, ==et kogu tekstivormindust saab "
+"teha lihtsalt kirjutamise käigus.=="
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:19
 msgid ""
@@ -62,6 +71,10 @@ msgid ""
 "up and start writing. It can display simple writing statistics, and has "
 "features, such as focus mode and fullscreen support to reduce distractions."
 msgstr ""
+"Tekstitoimeti on lihtne ja intuitiivne, nii et igaüks peaks suutma sellega "
+"kohe hakkama saada ja kirjutamist alustada. See kuvab lihtsaid "
+"kirjutamisstatistikaid ning pakub selliseid võimalusi nagu keskendumisrežiim "
+"ja täisekraanirežiim, mis aitavad vähendada tähelepanu hajutamist."
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:20
 msgid ""
@@ -71,118 +84,124 @@ msgid ""
 "the folder to Scratchmark's library. This also goes the other way: if you've "
 "had enough of Scratchmark, it's easy to switch to something else."
 msgstr ""
+"Markdown on avatud standard ja laialt kasutatav märgistuskeel. "
+"Scratchmarkiga loodud dokumendid on enam-vähem ühilduvad teiste sarnaste "
+"rakendustega. Kui sul on juba mõnest teisest rakendusest pärit „märkmik“ või "
+"projekt, saad selle kausta lihtsalt Scratchmarki kogusse lisada. See kehtib "
+"ka vastupidi: kui oled Scratchmarkist tüdinenud, on lihtne minna üle mõnele "
+"teisele rakendusele."
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:26
 msgid "Editor interface"
-msgstr ""
+msgstr "Tekstitoimeti kasutajaliides"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:30
 msgid "Focus mode"
-msgstr ""
+msgstr "Fookusrežiim"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:34
 msgid "All panels open"
-msgstr ""
+msgstr "Kõik ribad on avatud"
 
 #: data/resources/ui/editor/document_stats_view.ui:18
 msgid "Statistics"
-msgstr ""
+msgstr "Statistika"
 
 #: data/resources/ui/editor/document_stats_view.ui:32
 msgid "Characters"
-msgstr ""
+msgstr "Tähemärke"
 
 #: data/resources/ui/editor/document_stats_view.ui:45
 #: data/resources/ui/editor/document_stats_view.ui:73
 #: data/resources/ui/editor/document_stats_view.ui:101
 #: data/resources/ui/editor/document_stats_view.ui:129
 msgid "N/A"
-msgstr ""
+msgstr "pole teada"
 
 #: data/resources/ui/editor/document_stats_view.ui:60
 msgid "Excluding Spaces"
-msgstr ""
+msgstr "Välja arvatud tühikud"
 
 #: data/resources/ui/editor/document_stats_view.ui:88
 msgid "Words"
-msgstr ""
+msgstr "Sõnu"
 
 #: data/resources/ui/editor/document_stats_view.ui:116
 msgid "Lines"
-msgstr ""
+msgstr "Ridu"
 
 #: data/resources/ui/editor/editor.ui:16
 msgid "File changed on disk"
-msgstr ""
+msgstr "Fail on andmekandjal muutunud"
 
 #: data/resources/ui/editor/editor.ui:17
 msgid "Resolve"
-msgstr ""
+msgstr "Lahenda"
 
 #: data/resources/ui/editor/file_changed_on_disk_dialog.ui:4
 msgid "File changed"
-msgstr ""
+msgstr "Fail on muutunud"
 
 #: data/resources/ui/editor/file_changed_on_disk_dialog.ui:5
 msgid "The file has changed on disk."
-msgstr ""
+msgstr "Fail on andmekandjal muutunud."
 
 #: data/resources/ui/editor/file_changed_on_disk_dialog.ui:8
 msgid "Discard changes"
-msgstr ""
+msgstr "Loobu muudatustest"
 
 #: data/resources/ui/editor/file_changed_on_disk_dialog.ui:9
 msgid "Overwrite file"
-msgstr ""
+msgstr "Kirjuta fail üle"
 
 #: data/resources/ui/editor/file_changed_on_disk_dialog.ui:10
 msgid "Keep both"
-msgstr ""
+msgstr "Säilita mõlemad"
 
 #: data/resources/ui/editor/search_bar.ui:26
 msgid "Search"
-msgstr ""
+msgstr "Otsi"
 
 #: data/resources/ui/editor/search_bar.ui:39
 #: data/resources/ui/editor/search_bar.ui:136
 msgid "Replace"
-msgstr ""
+msgstr "Asenda"
 
 #: data/resources/ui/editor/search_bar.ui:63
 msgid "Match Case"
-msgstr ""
+msgstr "Arvesta tõstutundlikkust"
 
 #: data/resources/ui/editor/search_bar.ui:69
 msgid "Whole Words"
-msgstr ""
+msgstr "Arvesta terveid sõnu"
 
 #: data/resources/ui/editor/search_bar.ui:75
 msgid "Use Regex"
-msgstr ""
+msgstr "Kasuta regulaaravaldist"
 
 #: data/resources/ui/editor/search_bar.ui:85
 msgid "?"
-msgstr ""
+msgstr "?"
 
 #: data/resources/ui/editor/search_bar.ui:98
 msgid "Previous Match (Shift + Return)"
-msgstr ""
+msgstr "Eelmine vaste (Shift + Sisestusklahv)"
 
 #: data/resources/ui/editor/search_bar.ui:105
 msgid "Next Match (Return)"
-msgstr ""
+msgstr "Järgmine vaste (Sisestusklahv)"
 
 #: data/resources/ui/editor/search_bar.ui:113
 msgid "Search and Replace (Ctrl+F)"
-msgstr ""
+msgstr "Otsi ja asenda (Ctrl+F)"
 
 #: data/resources/ui/editor/search_bar.ui:119
 msgid "Close Search"
-msgstr ""
+msgstr "Sulge otsing"
 
 #: data/resources/ui/editor/search_bar.ui:137
 msgid "Replace (Return)"
-msgstr ""
+msgstr "Asenda (Sisestusklahv)"
 
 #: data/resources/ui/editor/search_bar.ui:143
 msgid "Replace All"
@@ -190,58 +209,58 @@ msgstr "Asenda kõik"
 
 #: data/resources/ui/editor/search_bar.ui:144
 msgid "Replace All (Shift + Return)"
-msgstr "Asenda kõik (Shift + Return)"
+msgstr "Asenda kõik (Shift + Sisestusklahv)"
 
 #: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
-msgstr ""
+msgstr "Mitte midagi pole avatud"
 
 #: data/resources/ui/editor_placeholder.ui:11
 msgid "Create a new document or open an existing one from the sidebar"
-msgstr ""
+msgstr "Loo uus dokument, ava külgpaanilt olemasoleva või loo uus projekt"
 
 #: data/resources/ui/library/delete_confirm_dialog.ui:4
 msgid "Delete permanently?"
-msgstr ""
+msgstr "Kas kustutad jäädavalt?"
 
 #: data/resources/ui/library/delete_confirm_dialog.ui:5
 msgid "\"{{filename}}\" will be permanently deleted."
-msgstr ""
+msgstr "„{{filename}}“ fail kustutatakse jäädavalt."
 
 #: data/resources/ui/library/delete_confirm_dialog.ui:9
 msgid "_Cancel"
-msgstr ""
+msgstr "_Katkesta"
 
 #: data/resources/ui/library/delete_confirm_dialog.ui:10
 msgid "_Delete"
-msgstr ""
+msgstr "_Kustuta"
 
 #: data/resources/ui/library/document_context_menu.ui:6
 #: data/resources/ui/library/drafts_context_menu.ui:14
 #: data/resources/ui/library/folder_context_menu.ui:14
 #: data/resources/ui/library/root_context_menu.ui:14
 msgid "Show in File Manager"
-msgstr ""
+msgstr "Näita failihalduris"
 
 #: data/resources/ui/library/document_context_menu.ui:10
 #: data/resources/ui/library/folder_context_menu.ui:18
 #: data/resources/ui/library/item_rename_popover.ui:16
 msgid "Rename"
-msgstr ""
+msgstr "Muuda nime"
 
 #: data/resources/ui/library/document_context_menu.ui:14
 msgid "Duplicate"
-msgstr ""
+msgstr "Tee koopia"
 
 #: data/resources/ui/library/document_context_menu.ui:18
 #: data/resources/ui/library/folder_context_menu.ui:22
 msgid "Move to Trash"
-msgstr ""
+msgstr "Viska prügikasti"
 
 #: data/resources/ui/library/document_context_menu.ui:22
 #: data/resources/ui/library/folder_context_menu.ui:26
 msgid "Delete Permanently"
-msgstr ""
+msgstr "Kustuta jäädavalt"
 
 #: data/resources/ui/library/document_create_popover.ui:11
 #: data/resources/ui/library/drafts_context_menu.ui:6
@@ -249,19 +268,19 @@ msgstr ""
 #: data/resources/ui/library/root_context_menu.ui:6
 #: data/resources/ui/window.ui:122
 msgid "New Document"
-msgstr ""
+msgstr "Uus dokument"
 
 #: data/resources/ui/library/document_create_popover.ui:16
 #: data/resources/ui/library/folder_create_popover.ui:16
 #: data/resources/ui/library/item_rename_popover.ui:11
 #: data/resources/ui/preferences/file_ext_add_popover.ui:11
 msgid "Name…"
-msgstr ""
+msgstr "Nimi…"
 
 #: data/resources/ui/library/document_create_popover.ui:21
 #: data/resources/ui/library/folder_create_popover.ui:21
 msgid "Create"
-msgstr ""
+msgstr "Loo"
 
 #: data/resources/ui/library/drafts_context_menu.ui:10
 #: data/resources/ui/library/folder_context_menu.ui:10
@@ -269,387 +288,388 @@ msgstr ""
 #: data/resources/ui/library/root_context_menu.ui:10
 #: data/resources/ui/window.ui:126
 msgid "New Folder"
-msgstr ""
+msgstr "Uus kaust"
 
 #: data/resources/ui/library/project_err_placeholder.ui:23
 msgid "Project may have been moved or deleted."
-msgstr ""
+msgstr "Projekt võib olla tõstetud teise kohta või kustutatud."
 
 #: data/resources/ui/library/project_err_placeholder_context_menu.ui:6
 #: data/resources/ui/library/root_context_menu.ui:18
 msgid "Close Project"
-msgstr ""
+msgstr "Sulge projekt"
 
 #: data/resources/ui/markdown_format_bar.ui:16
 msgid "Bold (Ctrl+B)"
-msgstr ""
+msgstr "Paks kiri (Ctrl+B)"
 
 #: data/resources/ui/markdown_format_bar.ui:23
 msgid "Italic (Ctrl+I)"
-msgstr ""
+msgstr "Kaldkiri (Ctrl+I)"
 
 #: data/resources/ui/markdown_format_bar.ui:30
 msgid "Strikethrough"
-msgstr ""
+msgstr "Läbikriipsutatud kiri"
 
 #: data/resources/ui/markdown_format_bar.ui:37
 msgid "Highlight"
-msgstr ""
+msgstr "Tõsta esile"
 
 #: data/resources/ui/markdown_format_bar.ui:49
 msgid "Heading 1 (Ctrl+1)"
-msgstr ""
+msgstr "1. pealkiri (Ctrl+1)"
 
 #: data/resources/ui/markdown_format_bar.ui:57
 msgid "Heading 2 (Ctrl+2)"
-msgstr ""
+msgstr "2. pealkiri (Ctrl+2)"
 
 #: data/resources/ui/markdown_format_bar.ui:70
 msgid "Insert Link (Ctrl+K)"
-msgstr ""
+msgstr "Lisa link (Ctrl+K)"
 
 #: data/resources/ui/markdown_format_bar.ui:85
 msgid "Blockquote"
-msgstr ""
+msgstr "Tsitaat"
 
 #: data/resources/ui/markdown_format_bar.ui:118
 msgid "Code"
-msgstr ""
+msgstr "Koodilõik"
 
 #: data/resources/ui/preferences/dialog.ui:6
 msgid "General"
-msgstr ""
+msgstr "Üldised"
 
 #: data/resources/ui/preferences/dialog.ui:9
 msgid "Font"
-msgstr ""
+msgstr "Kirjatüüp"
 
 #: data/resources/ui/preferences/dialog.ui:13
 msgid "Change Font"
-msgstr ""
+msgstr "Muuda kirjatüüpi"
 
 #: data/resources/ui/preferences/dialog.ui:14
 msgid "Use a different font family"
-msgstr ""
+msgstr "Kasuta muud kirjatüübi perekonda"
 
 #: data/resources/ui/preferences/dialog.ui:20
 msgid "Reset to Default"
-msgstr ""
+msgstr "Lähtesta vaikimisi väärtusteks"
 
 #: data/resources/ui/preferences/dialog.ui:21
 msgid "Use default font"
-msgstr ""
+msgstr "Kasuta vaikimisi kirjatüüpi"
 
 #: data/resources/ui/preferences/dialog.ui:28
 msgid "Editor"
-msgstr ""
+msgstr "Muutmisvaade"
 
 #: data/resources/ui/preferences/dialog.ui:31
 msgid "Show Minimap"
-msgstr ""
+msgstr "Näita väikest eelvaadet"
 
 #: data/resources/ui/preferences/dialog.ui:32
 msgid "Show overview of the document on the right side"
-msgstr ""
+msgstr "Näita kirjutusvaatest paremal väikest dokumendi eelvaadet"
 
 #: data/resources/ui/preferences/dialog.ui:37
 msgid "Insert Tabs As Spaces"
-msgstr ""
+msgstr "Sisesta tabulaatorisammud tühikutena"
 
 #: data/resources/ui/preferences/dialog.ui:38
 msgid "Pressing the tab key will insert 4 spaces"
-msgstr ""
+msgstr "Tabulaatorinupu vajutamisel sisestatakse 4 tühikut"
 
 #: data/resources/ui/preferences/dialog.ui:43
 msgid "Clamp Editor Width"
-msgstr ""
+msgstr "Piira muutmisvaate laiust"
 
 #: data/resources/ui/preferences/dialog.ui:48
 msgid "Max Editor Width"
-msgstr ""
+msgstr "Muutmisvaate suurim laius"
 
 #: data/resources/ui/preferences/dialog.ui:58
 msgid "Check Spelling"
-msgstr ""
+msgstr "Kontrolli õigekirja"
 
 #: data/resources/ui/preferences/dialog.ui:65 data/resources/ui/window.ui:19
 msgid "Library"
-msgstr ""
+msgstr "Kogu"
 
 #: data/resources/ui/preferences/dialog.ui:68
 msgid "Ignore Hidden Files"
-msgstr ""
+msgstr "Eira peidetud faile"
 
 #: data/resources/ui/preferences/dialog.ui:69
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
+"Failid ja kaustad, mille alguses on punkt („.“) ei saa olema kogus nähtavad"
 
 #: data/resources/ui/preferences/dialog.ui:74
 msgid "Show File Extensions"
-msgstr ""
+msgstr "Näita faililaiendeid"
 
 #: data/resources/ui/preferences/dialog.ui:79
 msgid "Custom File Extensions"
-msgstr ""
+msgstr "Sinu määratud faililaiendid"
 
 #: data/resources/ui/preferences/dialog.ui:80
 msgid "Include additional file types in library"
-msgstr ""
+msgstr "Näita kogus täiendavaid failitüüpe"
 
 #: data/resources/ui/preferences/dialog.ui:88
 #: data/resources/ui/preferences/file_ext_add_popover.ui:16
 msgid "Add"
-msgstr ""
+msgstr "Lisa"
 
 #: data/resources/ui/preferences/file_ext_item.ui:13
 msgid "Remove"
-msgstr ""
+msgstr "Eemalda"
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
 msgid "General"
-msgstr ""
+msgstr "Üldised"
 
 #: data/resources/ui/shortcuts.ui:14
 msgctxt "shortcut window"
 msgid "Toggle Fullscreen"
-msgstr ""
+msgstr "Lülita täisekraanivaade sisse/välja"
 
 #: data/resources/ui/shortcuts.ui:20
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
-msgstr ""
+msgstr "Lülita fookuse režiim sisse/välja"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
 msgid "Preferences"
-msgstr ""
+msgstr "Eelistused"
 
 #: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
 msgid "Show Shortcuts"
-msgstr ""
+msgstr "Näita kiirklahve"
 
 #: data/resources/ui/shortcuts.ui:40
 msgctxt "shortcut window"
 msgid "Document"
-msgstr ""
+msgstr "Dokument"
 
 #: data/resources/ui/shortcuts.ui:43
 msgctxt "shortcut window"
 msgid "New Document"
-msgstr ""
+msgstr "Uus dokument"
 
 #: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "Add Project"
-msgstr ""
+msgstr "Lisa projekt"
 
 #: data/resources/ui/shortcuts.ui:55
 msgctxt "shortcut window"
 msgid "Save Document"
-msgstr ""
+msgstr "Salvesta dokument"
 
 #: data/resources/ui/shortcuts.ui:61
 msgctxt "shortcut window"
 msgid "Rename"
-msgstr ""
+msgstr "Muuda nime"
 
 #: data/resources/ui/shortcuts.ui:67
 msgctxt "shortcut window"
 msgid "Close Document"
-msgstr ""
+msgstr "Sulge dokument"
 
 #: data/resources/ui/shortcuts.ui:75
 msgctxt "shortcut window"
 msgid "Editor"
-msgstr ""
+msgstr "Muutmisvaade"
 
 #: data/resources/ui/shortcuts.ui:78
 msgctxt "shortcut window"
 msgid "Search Text"
-msgstr ""
+msgstr "Otsi teksti"
 
 #: data/resources/ui/shortcuts.ui:84
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
-msgstr ""
+msgstr "Otsi ja asenda tekst"
 
 #: data/resources/ui/shortcuts.ui:90
 msgctxt "shortcut window"
 msgid "Zoom In"
-msgstr ""
+msgstr "Suumi sisse"
 
 #: data/resources/ui/shortcuts.ui:96
 msgctxt "shortcut window"
 msgid "Zoom Out"
-msgstr ""
+msgstr "Suumi välja"
 
 #: data/resources/ui/shortcuts.ui:102
 msgctxt "shortcut window"
 msgid "Reset Zoom"
-msgstr ""
+msgstr "Lähtesta suum"
 
 #: data/resources/ui/shortcuts.ui:110
 msgctxt "shortcut window"
 msgid "Formatting"
-msgstr ""
+msgstr "Vormindus"
 
 #: data/resources/ui/shortcuts.ui:113
 msgctxt "shortcut window"
 msgid "Bold"
-msgstr ""
+msgstr "Paks kiri"
 
 #: data/resources/ui/shortcuts.ui:119
 msgctxt "shortcut window"
 msgid "Italic"
-msgstr ""
+msgstr "Kaldkiri"
 
 #: data/resources/ui/shortcuts.ui:125
 msgctxt "shortcut window"
 msgid "Insert Link"
-msgstr ""
+msgstr "Lisa link"
 
 #: data/resources/ui/shortcuts.ui:131
 msgctxt "shortcut window"
 msgid "Heading 1"
-msgstr ""
+msgstr "Pealkiri 1"
 
 #: data/resources/ui/shortcuts.ui:137
 msgctxt "shortcut window"
 msgid "Heading 2"
-msgstr ""
+msgstr "Pealkiri 2"
 
 #: data/resources/ui/shortcuts.ui:143
 msgctxt "shortcut window"
 msgid "Heading 3"
-msgstr ""
+msgstr "Pealkiri 3"
 
 #: data/resources/ui/shortcuts.ui:149
 msgctxt "shortcut window"
 msgid "Heading 4"
-msgstr ""
+msgstr "Pealkiri 4"
 
 #: data/resources/ui/shortcuts.ui:155
 msgctxt "shortcut window"
 msgid "Heading 5"
-msgstr ""
+msgstr "Pealkiri 5"
 
 #: data/resources/ui/shortcuts.ui:161
 msgctxt "shortcut window"
 msgid "Heading 6"
-msgstr ""
+msgstr "Pealkiri 6"
 
 #: data/resources/ui/shortcuts.ui:169
 msgctxt "shortcut window"
 msgid "Library"
-msgstr ""
+msgstr "Kogu"
 
 #: data/resources/ui/shortcuts.ui:172
 msgctxt "shortcut window"
 msgid "Manual Refresh"
-msgstr ""
+msgstr "Uuenda failid käsitsi"
 
 #: data/resources/ui/window.ui:28 data/resources/ui/window.ui:195
 msgid "Sort"
-msgstr ""
+msgstr "Järjesta"
 
 #: data/resources/ui/window.ui:41
 msgid "Menu"
-msgstr ""
+msgstr "Menüü"
 
 #: data/resources/ui/window.ui:71
 msgid "Toggle Sidebar (F9)"
-msgstr ""
+msgstr "Ava/peida külgpaan (F9)"
 
 #: data/resources/ui/window.ui:77
 msgid "New Document (Ctrl+N)"
-msgstr ""
+msgstr "Uus dokument (Ctrl+N)"
 
 #: data/resources/ui/window.ui:84
 msgid "Exit Fullscreen"
-msgstr ""
+msgstr "Välju täisekraanivaatest"
 
 #: data/resources/ui/window.ui:92
 msgid "Document Info"
-msgstr ""
+msgstr "Dokumendi teave"
 
 #: data/resources/ui/window.ui:98
 msgid "Formatting Toolbar"
-msgstr ""
+msgstr "Vorminduse tööriistariba"
 
 #: data/resources/ui/window.ui:130
 msgid "Add Project"
-msgstr ""
+msgstr "Lisa projekt"
 
 #: data/resources/ui/window.ui:136
 msgid "Save"
-msgstr ""
+msgstr "Salvesta"
 
 #: data/resources/ui/window.ui:140
 msgid "Close"
-msgstr ""
+msgstr "Sulge"
 
 #: data/resources/ui/window.ui:146
 msgid "Zoom In"
-msgstr ""
+msgstr "Suumi sisse"
 
 #: data/resources/ui/window.ui:150
 msgid "Zoom Out"
-msgstr ""
+msgstr "Suumi välja"
 
 #: data/resources/ui/window.ui:154
 msgid "Reset Zoom"
-msgstr ""
+msgstr "Lähtesta suum"
 
 #: data/resources/ui/window.ui:160
 msgid "Search Text"
-msgstr ""
+msgstr "Otsi teksti"
 
 #: data/resources/ui/window.ui:164
 msgid "Search and Replace"
-msgstr ""
+msgstr "Otsi ja asenda"
 
 #: data/resources/ui/window.ui:170
 msgid "Toggle Fullscreen"
-msgstr ""
+msgstr "Lülita täisekraanivaade sisse/välja"
 
 #: data/resources/ui/window.ui:174
 msgid "Toggle Focus Mode"
-msgstr ""
+msgstr "Lülita fookuse režiim sisse/välja"
 
 #: data/resources/ui/window.ui:180
 msgid "Preferences"
-msgstr ""
+msgstr "Eelistused"
 
 #: data/resources/ui/window.ui:184
 msgid "Keyboard Shortcuts"
-msgstr ""
+msgstr "Klaviatuuri kiirklahvid"
 
 #: data/resources/ui/window.ui:188
 msgid "About Scratchmark"
-msgstr ""
+msgstr "Rakenduse teave: Scratchmark"
 
 #: data/resources/ui/window.ui:198
 msgid "A-Z"
-msgstr ""
+msgstr "A→Z"
 
 #: data/resources/ui/window.ui:203
 msgid "Z-A"
-msgstr ""
+msgstr "Z→A"
 
 #: data/resources/ui/window.ui:208
 msgid "Last Modified"
-msgstr ""
+msgstr "Viimati muudetud"
 
 #: data/resources/ui/window.ui:213
 msgid "First Modified"
-msgstr ""
+msgstr "Varem muudetud"
 
 #: data/resources/ui/window.ui:218
 msgid "Last Accessed"
-msgstr ""
+msgstr "Viimati avatud"
 
 #: data/resources/ui/window.ui:223
 msgid "First Accessed"
-msgstr ""
+msgstr "Varem avatud"
