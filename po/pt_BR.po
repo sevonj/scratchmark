@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-28 12:09+0000\n"
-"PO-Revision-Date: 2026-06-04 08:07+0000\n"
-"Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-06-06 11:07+0000\n"
+"Last-Translator: Emilly MS <emilly_msh_msh@noreply.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
 "scratchmark/app/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -328,7 +328,7 @@ msgstr "Cabeçalho 2 (Ctrl+2)"
 
 #: data/resources/ui/markdown_format_bar.ui:70
 msgid "Insert Link (Ctrl+K)"
-msgstr ""
+msgstr "Inserir Link (Ctrl+K)"
 
 #: data/resources/ui/markdown_format_bar.ui:85
 msgid "Blockquote"
@@ -376,11 +376,11 @@ msgstr "Mostrar visão geral do documento no lado direito"
 
 #: data/resources/ui/preferences/dialog.ui:37
 msgid "Insert Tabs As Spaces"
-msgstr ""
+msgstr "Inserir Tabulação como Espaço"
 
 #: data/resources/ui/preferences/dialog.ui:38
 msgid "Pressing the tab key will insert 4 spaces"
-msgstr ""
+msgstr "Apertar a tecla tab vai inserir 4 espaços"
 
 #: data/resources/ui/preferences/dialog.ui:43
 msgid "Clamp Editor Width"
@@ -392,7 +392,7 @@ msgstr "Largura máxima do editor"
 
 #: data/resources/ui/preferences/dialog.ui:58
 msgid "Check Spelling"
-msgstr ""
+msgstr "Verificar a Ortografia"
 
 #: data/resources/ui/preferences/dialog.ui:65 data/resources/ui/window.ui:19
 msgid "Library"
@@ -408,24 +408,24 @@ msgstr "Arquivos e pastas precedidos por um \".\" não aparecerão na biblioteca
 
 #: data/resources/ui/preferences/dialog.ui:74
 msgid "Show File Extensions"
-msgstr ""
+msgstr "Exibir Extensões de Arquivo"
 
 #: data/resources/ui/preferences/dialog.ui:79
 msgid "Custom File Extensions"
-msgstr ""
+msgstr "Extensões de Arquivo Customizadas"
 
 #: data/resources/ui/preferences/dialog.ui:80
 msgid "Include additional file types in library"
-msgstr ""
+msgstr "Incluir tipos de arquivo adicionais na biblioteca"
 
 #: data/resources/ui/preferences/dialog.ui:88
 #: data/resources/ui/preferences/file_ext_add_popover.ui:16
 msgid "Add"
-msgstr ""
+msgstr "Adicionar"
 
 #: data/resources/ui/preferences/file_ext_item.ui:13
 msgid "Remove"
-msgstr ""
+msgstr "Remover"
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
@@ -528,10 +528,9 @@ msgid "Italic"
 msgstr "Itálico"
 
 #: data/resources/ui/shortcuts.ui:125
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Insert Link"
-msgstr "Itálico (Ctrl+I)"
+msgstr "Inserir Link"
 
 #: data/resources/ui/shortcuts.ui:131
 msgctxt "shortcut window"
@@ -671,11 +670,11 @@ msgstr "Modificados antigamente"
 
 #: data/resources/ui/window.ui:218
 msgid "Last Accessed"
-msgstr ""
+msgstr "Último Acesso"
 
 #: data/resources/ui/window.ui:223
 msgid "First Accessed"
-msgstr ""
+msgstr "Primeiro Acesso"
 
 #~ msgid "Customize font size and typeface"
 #~ msgstr "Personalizar tamanho e fonte a ser usada"
