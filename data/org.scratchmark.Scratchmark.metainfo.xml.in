@@ -48,6 +48,24 @@
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <url type="translate">https://translate.codeberg.org/projects/scratchmark/app/</url>
   <releases>
+    <release version="v1.9.0" date="2026-06-09">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.9.0</url>
+      <description translate="no">
+        <ul>
+          <li>Feature: Spell check</li>
+          <li>Feature: Show file extensions</li>
+          <li>Feature: Allow custom file extensions</li>
+          <li>Feature: Insert link</li>
+          <li>Feature: Sort by time accessed</li>
+          <li>Feature: Tabs as spaces</li>
+          <li>Fix: Persistent library sort</li>
+          <li>Fix: Prevent multiple simultaneous app instances</li>
+          <li>Fix: Line copy include newline</li>
+          <li>Fix: Inconsistent and broken icons</li>
+          <li>New translations: Spanish, Estonian, Russian</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.8.0" date="2026-02-24">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.8.0</url>
       <description translate="no">
