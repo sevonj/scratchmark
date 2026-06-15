@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 11:25+0000\n"
+"POT-Creation-Date: 2026-06-15 15:26+0300\n"
 "PO-Revision-Date: 2026-06-04 08:07+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
@@ -26,7 +26,6 @@ msgstr ""
 "X-Generator: Weblate 2026.5\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
@@ -136,11 +135,11 @@ msgstr "Słowa"
 msgid "Lines"
 msgstr "Linie"
 
-#: data/resources/ui/editor/editor.ui:16
+#: data/resources/ui/editor/editor_view.ui:16
 msgid "File changed on disk"
 msgstr "Plik został zmieniony na dysku"
 
-#: data/resources/ui/editor/editor.ui:17
+#: data/resources/ui/editor/editor_view.ui:17
 msgid "Resolve"
 msgstr "Rozwiąż"
 

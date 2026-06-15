@@ -1,0 +1,607 @@
+mod imp {
+    use std::cell::Cell;
+    use std::cell::OnceCell;
+    use std::cell::RefCell;
+    use std::path::PathBuf;
+    use std::sync::OnceLock;
+
+    use adw::AlertDialog;
+    use adw::Banner;
+    use adw::ClampScrollable;
+    use adw::OverlaySplitView;
+    use adw::prelude::*;
+    use adw::subclass::prelude::*;
+    use gtk::CompositeTemplate;
+    use gtk::ScrolledWindow;
+    use gtk::TemplateChild;
+    use gtk::TextMark;
+    use gtk::gio;
+    use gtk::gio::Cancellable;
+    use gtk::gio::File;
+    use gtk::gio::FileMonitor;
+    use gtk::gio::FileMonitorFlags;
+    use gtk::gio::SimpleAction;
+    use gtk::gio::SimpleActionGroup;
+    use gtk::glib;
+    use gtk::glib::GString;
+    use gtk::glib::Properties;
+    use gtk::glib::VariantTy;
+    use gtk::glib::clone;
+    use gtk::glib::closure_local;
+    use gtk::glib::subclass::Signal;
+    use libspelling::Checker;
+    use libspelling::TextBufferAdapter;
+    use sourceview5::prelude::ViewExt;
+
+    use crate::data::DocumentStats;
+    use crate::data::MarkdownBuffer;
+    use crate::util::file_actions;
+    use crate::widgets::editor::document_stats_view::DocumentStatsView;
+    use crate::widgets::editor::file_changed_on_disk_dialog::FileChangedOnDiskDialog;
+    use crate::widgets::editor::minimap::Minimap;
+    use crate::widgets::editor::search_bar::EditorSearchBar;
+    use crate::widgets::editor::text_view::EditorTextView;
+
+    #[derive(Debug, Properties, CompositeTemplate, Default)]
+    #[properties(wrapper_type = super::EditorView)]
+    #[template(resource = "/org/scratchmark/Scratchmark/ui/editor/editor_view.ui")]
+    pub struct EditorView {
+        #[property(get, set)]
+        file_changed_on_disk: Cell<bool>,
+        #[property(get, set)]
+        unsaved_changes: Cell<bool>,
+        #[property(get, set)]
+        show_sidebar: Cell<bool>,
+        #[property(get, set)]
+        font_size: Cell<u32>,
+        #[property(get, set)]
+        tabs_as_spaces: Cell<bool>,
+        #[property(get, set)]
+        font_family: RefCell<GString>,
+        #[property(get, set)]
+        scroll_pos: Cell<f64>,
+        #[property(get, set)]
+        limit_width: Cell<bool>,
+        #[property(get, set)]
+        max_width: Cell<u32>,
+        #[property(get, set)]
+        use_spellcheck: Cell<bool>,
+
+        #[template_child]
+        pub(super) source_view: TemplateChild<EditorTextView>,
+        #[template_child]
+        pub(super) source_view_clamp: TemplateChild<ClampScrollable>,
+        #[template_child]
+        pub(super) stats_view: TemplateChild<DocumentStatsView>,
+
+        #[template_child]
+        pub(super) search_bar: TemplateChild<EditorSearchBar>,
+        #[template_child]
+        file_changed_on_disk_banner: TemplateChild<Banner>,
+        #[template_child]
+        pub(super) editor_split: TemplateChild<OverlaySplitView>,
+        #[template_child]
+        pub(super) minimap: TemplateChild<Minimap>,
+        #[property(get, set)]
+        pub(super) show_minimap: Cell<bool>,
+        #[template_child]
+        pub(super) scrolled_window: TemplateChild<ScrolledWindow>,
+
+        pub(super) path: RefCell<Option<PathBuf>>,
+        pub(super) buffer: OnceCell<MarkdownBuffer>,
+        pub(super) stats: Cell<DocumentStats>,
+        pub(super) file: RefCell<Option<File>>,
+        file_monitor: RefCell<Option<FileMonitor>>,
+        pub(super) checker: OnceCell<Checker>,
+        pub(super) adapter: OnceCell<TextBufferAdapter>,
+    }
+
+    #[glib::object_subclass]
+    impl ObjectSubclass for EditorView {
+        const NAME: &'static str = "EditorView";
+        type Type = super::EditorView;
+        type ParentType = adw::Bin;
+
+        fn class_init(klass: &mut Self::Class) {
+            EditorTextView::ensure_type();
+            DocumentStatsView::ensure_type();
+            Minimap::ensure_type();
+
+            klass.bind_template();
+        }
+
+        fn instance_init(obj: &glib::subclass::InitializingObject<Self>) {
+            obj.init_template();
+        }
+    }
+
+    #[glib::derived_properties]
+    impl ObjectImpl for EditorView {
+        fn constructed(&self) {
+            let obj = self.obj();
+
+            obj.bind_property("scroll_pos", &self.scrolled_window.vadjustment(), "value")
+                .sync_create()
+                .bidirectional()
+                .build();
+
+            self.search_bar.connect_closure(
+                "scroll-to-mark",
+                false,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: EditorSearchBar, mark: TextMark| {
+                        imp.source_view.scroll_to_mark(&mark, 0.0, false, 0.5, 0.5);
+                    }
+                ),
+            );
+
+            self.editor_split
+                .bind_property("show_sidebar", obj.as_ref(), "show_sidebar")
+                .sync_create()
+                .bidirectional()
+                .build();
+
+            let file_changed_on_disk_banner: &Banner = &self.file_changed_on_disk_banner;
+            obj.bind_property(
+                "file_changed_on_disk",
+                file_changed_on_disk_banner,
+                "revealed",
+            )
+            .sync_create()
+            .build();
+
+            self.file_changed_on_disk_banner
+                .connect_button_clicked(clone!(
+                    #[weak]
+                    obj,
+                    move |_| {
+                        let dialog = FileChangedOnDiskDialog::default();
+                        dialog.connect_closure(
+                            "response",
+                            false,
+                            closure_local!(
+                                #[weak]
+                                obj,
+                                move |_: AlertDialog, response: String| {
+                                    if response == "keep-both" {
+                                        obj.set_path(file_actions::incremented_path(obj.path()));
+                                        obj.set_file_changed_on_disk(false);
+                                        if let Err(e) = obj.save() {
+                                            obj.emit_by_name::<()>("toast", &[&e.to_string()]);
+                                            return;
+                                        };
+                                        obj.emit_by_name::<()>("saved-as", &[]);
+                                    } else if response == "overwrite" {
+                                        obj.set_file_changed_on_disk(false);
+                                        if let Err(e) = obj.save() {
+                                            obj.emit_by_name::<()>("toast", &[&e.to_string()]);
+                                            return;
+                                        };
+                                        obj.set_file_changed_on_disk(false);
+                                    } else if response == "discard" {
+                                        let file = gio::File::for_path(obj.path());
+                                        match file_actions::read_file_to_string(&file) {
+                                            Ok(text) => {
+                                                obj.imp().source_view.buffer().set_text(&text);
+                                                obj.set_file_changed_on_disk(false);
+                                            }
+                                            Err(e) => {
+                                                obj.emit_by_name::<()>("toast", &[&e.to_string()])
+                                            }
+                                        }
+                                    }
+                                }
+                            ),
+                        );
+                        dialog.present(Some(&obj));
+                    }
+                ));
+
+            self.minimap.bind(&self.source_view);
+            self.minimap
+                .bind_property("visible", obj.as_ref(), "show_minimap")
+                .sync_create()
+                .bidirectional()
+                .build();
+
+            obj.connect_font_family_notify(clone!(move |obj| {
+                obj.imp().refresh_font();
+            }));
+
+            obj.connect_tabs_as_spaces_notify(clone!(move |obj| {
+                obj.imp().refresh_tabs_as_spaces()
+            }));
+
+            obj.connect_font_size_notify(clone!(move |obj| {
+                obj.imp().refresh_font();
+            }));
+
+            obj.connect_limit_width_notify(clone!(move |obj| {
+                obj.imp().refresh_max_width();
+            }));
+
+            obj.connect_max_width_notify(clone!(move |obj| {
+                obj.imp().refresh_max_width();
+            }));
+
+            let actions = SimpleActionGroup::new();
+            obj.insert_action_group("editor", Some(&actions));
+
+            // This action is a workaround to capture <Shift>Return from the Entry
+            let action = SimpleAction::new("shiftreturn", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_action, _| {
+                    imp.search_bar
+                        .activate_action("search.shiftreturn", None)
+                        .unwrap();
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("show-search", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| {
+                    imp.search_bar
+                        .activate_action("search.search", None)
+                        .unwrap();
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("show-search-with-text", Some(VariantTy::STRING));
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, text| {
+                    imp.search_bar
+                        .activate_action("search.search-with-text", text)
+                        .unwrap();
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("show-search-replace", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| {
+                    imp.search_bar
+                        .activate_action("search.search-replace", None)
+                        .unwrap();
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("hide-search", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| {
+                    imp.search_bar.activate_action("search.hide", None).unwrap();
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("format-bold", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| imp.buffer.get().unwrap().format_bold()
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("format-italic", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| imp.buffer.get().unwrap().format_italic()
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("format-strikethrough", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| imp.buffer.get().unwrap().format_strikethrough()
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("format-highlight", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| imp.buffer.get().unwrap().format_highlight()
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("format-heading", Some(VariantTy::INT32));
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, param| {
+                    let heading_level: i32 = param.unwrap().get().unwrap();
+                    imp.buffer.get().unwrap().format_heading(heading_level);
+                    imp.source_view.grab_focus();
+                }
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("format-blockquote", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| imp.buffer.get().unwrap().format_blockquote()
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("format-link", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| imp.buffer.get().unwrap().format_insert_link()
+            ));
+            actions.add_action(&action);
+
+            let action = gio::SimpleAction::new("format-code", None);
+            action.connect_activate(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _| imp.buffer.get().unwrap().format_code()
+            ));
+            actions.add_action(&action);
+
+            self.parent_constructed();
+        }
+
+        fn signals() -> &'static [Signal] {
+            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
+            SIGNALS.get_or_init(|| {
+                vec![
+                    Signal::builder("saved").build(),
+                    Signal::builder("saved-as").build(),
+                    Signal::builder("stats-changed").build(),
+                    Signal::builder("buffer-changed").build(),
+                    Signal::builder("toast")
+                        .param_types([String::static_type()])
+                        .build(),
+                ]
+            })
+        }
+    }
+
+    impl WidgetImpl for EditorView {}
+    impl BinImpl for EditorView {}
+
+    impl EditorView {
+        pub(super) fn start_file_monitor(&self) {
+            self.stop_file_monitor();
+
+            let Some(ref mut file) = *self.file.borrow_mut() else {
+                panic!("Editor file uninitialized");
+            };
+            let monitor = file
+                .monitor(FileMonitorFlags::NONE, None::<&Cancellable>)
+                .expect("Editor: Failed to create file monitor");
+
+            monitor.connect_changed(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _, _, _| {
+                    imp.obj().set_file_changed_on_disk(true);
+                    imp.file_changed_on_disk_banner.set_revealed(true);
+                }
+            ));
+            self.obj().set_file_changed_on_disk(false);
+            self.file_monitor.replace(Some(monitor));
+        }
+
+        pub(crate) fn stop_file_monitor(&self) {
+            self.file_monitor.take().map(|fm| fm.cancel());
+        }
+
+        fn refresh_font(&self) {
+            let obj = self.obj();
+            self.source_view
+                .set_font(&obj.font_family(), obj.font_size());
+        }
+
+        fn refresh_tabs_as_spaces(&self) {
+            let obj = self.obj();
+            self.source_view
+                .set_insert_spaces_instead_of_tabs(obj.tabs_as_spaces());
+        }
+
+        fn refresh_max_width(&self) {
+            let obj = self.obj();
+
+            let imp = obj.imp();
+            if obj.limit_width() {
+                let margin = imp.source_view.margin_start()
+                    + imp.source_view.margin_end()
+                    + imp.source_view.left_margin()
+                    + imp.source_view.right_margin();
+                let max_width = obj.max_width() as i32 + margin;
+                imp.source_view_clamp.set_maximum_size(max_width);
+                imp.source_view_clamp
+                    .set_tightening_threshold((max_width as f32 * 0.6) as i32);
+            } else {
+                imp.source_view_clamp.set_maximum_size(i32::MAX);
+                imp.source_view_clamp.set_tightening_threshold(i32::MAX);
+            }
+        }
+    }
+}
+
+use std::path::PathBuf;
+
+use adw::subclass::prelude::*;
+use gtk::gio::Cancellable;
+use gtk::gio::FileCreateFlags;
+use gtk::glib;
+use gtk::glib::Object;
+use gtk::glib::clone;
+use gtk::prelude::*;
+use libspelling::Checker;
+use libspelling::TextBufferAdapter;
+use sourceview5::Buffer;
+use sourceview5::SearchContext;
+use sourceview5::SearchSettings;
+use sourceview5::prelude::*;
+
+use crate::data::DocumentStats;
+use crate::data::MarkdownBuffer;
+use crate::error::ScratchmarkError;
+use crate::util::file_actions;
+use crate::widgets::editor::text_view::EditorTextView;
+
+glib::wrapper! {
+    pub struct EditorView(ObjectSubclass<imp::EditorView>)
+        @extends adw::Bin, gtk::Widget,
+        @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
+}
+
+impl EditorView {
+    pub fn new(path: PathBuf) -> Result<Self, ScratchmarkError> {
+        let file = gtk::gio::File::for_path(&path);
+        let text = file_actions::read_file_to_string(&file)?;
+        let buffer = MarkdownBuffer::default().with_style_scheme("scratchmark");
+        buffer.set_text(&text);
+
+        let search_settings = SearchSettings::default();
+        search_settings.set_wrap_around(true);
+        let search_context = SearchContext::new(&buffer, Some(&search_settings));
+
+        let obj: Self = Object::builder().build();
+        let imp = obj.imp();
+        imp.buffer.set(buffer.clone()).unwrap();
+        let checker = Checker::default();
+        let adapter = TextBufferAdapter::new(&buffer.clone().upcast::<Buffer>(), &checker);
+        imp.adapter.set(adapter.clone()).unwrap();
+        imp.checker.set(checker).unwrap();
+        imp.file.replace(Some(file));
+        imp.path.replace(Some(path));
+        imp.source_view.set_monospace(true);
+        imp.source_view.set_buffer(Some(&buffer));
+        imp.search_bar.set_search_context(search_context);
+        imp.start_file_monitor();
+        imp.source_view
+            .set_extra_menu(Some(&imp.adapter.get().unwrap().menu_model()));
+        imp.source_view
+            .insert_action_group("spelling", Some(&adapter));
+        obj.bind_property("use_spellcheck", &adapter, "enabled")
+            .bidirectional()
+            .sync_create()
+            .build();
+        buffer.connect_changed(clone!(
+            #[weak]
+            obj,
+            move |buffer: &MarkdownBuffer| {
+                obj.on_buffer_changed(buffer);
+            }
+        ));
+        imp.source_view.connect_paste_clipboard(clone!(
+            #[weak]
+            buffer,
+            move |_| {
+                buffer.open_paste();
+            }
+        ));
+        obj.refresh_document_stats(&buffer);
+        Ok(obj)
+    }
+
+    pub fn save(&self) -> Result<(), ScratchmarkError> {
+        let imp = self.imp();
+        if self.file_changed_on_disk() {
+            return Err(ScratchmarkError::FileChanged);
+        }
+
+        self.stop_file_monitor();
+
+        let buffer = imp.source_view.buffer();
+        let start = buffer.start_iter();
+        let end = buffer.end_iter();
+        let text = buffer.text(&start, &end, true).to_string();
+        let bytes = text.as_bytes();
+        {
+            let Some(ref mut file) = *imp.file.borrow_mut() else {
+                panic!("Editor file uninitialized");
+            };
+
+            let output_stream = file
+                .replace(None, false, FileCreateFlags::NONE, None::<&Cancellable>)
+                .unwrap();
+
+            output_stream
+                .write_all(bytes, None::<&Cancellable>)
+                .unwrap();
+            output_stream.flush(None::<&Cancellable>).unwrap();
+        }
+        imp.start_file_monitor();
+        self.set_unsaved_changes(false);
+        self.emit_by_name::<()>("saved", &[]);
+        Ok(())
+    }
+
+    pub fn path(&self) -> PathBuf {
+        let opt = self.imp().path.borrow();
+        opt.as_ref().expect("Editor: path uninitialized").clone()
+    }
+
+    pub fn set_path(&self, path: PathBuf) {
+        let imp = self.imp();
+        let file = gtk::gio::File::for_path(&path);
+        imp.file.replace(Some(file));
+        imp.path.replace(Some(path));
+        imp.start_file_monitor();
+    }
+
+    /// For preventing "file changed" banner when renaming the file or such.
+    pub fn stop_file_monitor(&self) {
+        self.imp().stop_file_monitor();
+    }
+
+    pub fn document_stats(&self) -> DocumentStats {
+        self.imp().stats.get()
+    }
+
+    pub fn scroll_to_line(&self, line: i32) {
+        let source_view: &EditorTextView = self.imp().source_view.as_ref();
+        let Some(mut iter) = source_view.buffer().iter_at_line(line) else {
+            return;
+        };
+        source_view.scroll_to_iter(&mut iter, 0., false, 0., 0.);
+    }
+
+    pub fn scroll_to_top(&self) {
+        let vadjustment = self.imp().scrolled_window.vadjustment();
+        vadjustment.set_value(vadjustment.lower());
+        self.imp()
+            .scrolled_window
+            .set_vadjustment(Some(&vadjustment));
+    }
+
+    pub fn max_width_px(&self) -> i32 {
+        self.imp().source_view_clamp.maximum_size()
+    }
+
+    fn refresh_document_stats(&self, buffer: &MarkdownBuffer) {
+        let imp = self.imp();
+        let stats = buffer.stats();
+        imp.stats_view.set_stats(&stats);
+        imp.stats.replace(stats);
+        self.emit_by_name::<()>("stats-changed", &[]);
+    }
+
+    fn on_buffer_changed(&self, buffer: &MarkdownBuffer) {
+        self.refresh_document_stats(buffer);
+        self.set_unsaved_changes(true);
+        self.emit_by_name::<()>("buffer-changed", &[]);
+    }
+}

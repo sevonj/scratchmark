@@ -3,7 +3,7 @@
   <!-- Keep file paths in the same order as they'd appear in the IDE: alphanumeric, folders first -->
   <gresource prefix="/org/scratchmark/Scratchmark">
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/document_stats_view.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/editor/editor.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/editor/editor_view.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/file_changed_on_disk_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/minimap.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/search_bar.ui</file>

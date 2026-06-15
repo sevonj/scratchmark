@@ -6,7 +6,7 @@ mod preferences;
 mod window;
 mod window_title;
 
-pub use editor::Editor;
+pub use editor::EditorView;
 pub use editor_placeholder::EditorPlaceholder;
 pub use library::LibraryView;
 pub use markdown_format_bar::MarkdownFormatBar;

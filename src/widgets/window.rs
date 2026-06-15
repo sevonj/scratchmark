@@ -37,8 +37,8 @@ mod imp {
     use crate::error::ScratchmarkError;
     use crate::util::file_actions;
 
-    use crate::widgets::Editor;
     use crate::widgets::EditorPlaceholder;
+    use crate::widgets::EditorView;
     use crate::widgets::LibraryView;
     use crate::widgets::MarkdownFormatBar;
     use crate::widgets::PreferencesDialog;
@@ -86,7 +86,7 @@ mod imp {
         editor_sidebar_toggle: TemplateChild<ToggleButton>,
 
         library_view: LibraryView,
-        editor: RefCell<Option<Editor>>,
+        editor: RefCell<Option<EditorView>>,
 
         motion_controller: EventControllerMotion,
 
@@ -1014,7 +1014,7 @@ mod imp {
             }
 
             let settings = self.settings();
-            let editor = match Editor::new(path.clone()) {
+            let editor = match EditorView::new(path.clone()) {
                 Ok(editor) => editor,
                 Err(e) => {
                     self.toast(&e.to_string());
@@ -1032,7 +1032,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = imp)]
                     self,
-                    move |_: Editor| {
+                    move |_: EditorView| {
                         imp.library_view.refresh_content();
                     }
                 ),
@@ -1044,7 +1044,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = imp)]
                     self,
-                    move |editor: Editor| {
+                    move |editor: EditorView| {
                         imp.library_view.set_open_document_path(Some(editor.path()));
                         imp.update_window_title();
                     }
@@ -1057,7 +1057,7 @@ mod imp {
                 closure_local!(
                     #[weak(rename_to = imp)]
                     self,
-                    move |_: Editor| {
+                    move |_: EditorView| {
                         imp.set_focus_mode_active(true);
                     }
                 ),

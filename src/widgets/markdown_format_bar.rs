@@ -9,13 +9,13 @@ mod imp {
     use gtk::glib::clone;
     use gtk::prelude::*;
 
-    use crate::widgets::Editor;
+    use crate::widgets::EditorView;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/markdown_format_bar.ui")]
     pub struct MarkdownFormatBar {
         actions: SimpleActionGroup,
-        pub(super) editor: RefCell<Option<Editor>>,
+        pub(super) editor: RefCell<Option<EditorView>>,
     }
 
     #[glib::object_subclass]
@@ -179,7 +179,7 @@ use adw::subclass::prelude::*;
 use gtk::glib;
 use gtk::glib::Object;
 
-use crate::widgets::Editor;
+use crate::widgets::EditorView;
 
 glib::wrapper! {
     pub struct MarkdownFormatBar(ObjectSubclass<imp::MarkdownFormatBar>)
@@ -194,7 +194,7 @@ impl Default for MarkdownFormatBar {
 }
 
 impl MarkdownFormatBar {
-    pub fn bind_editor(&self, editor: Option<Editor>) {
+    pub fn bind_editor(&self, editor: Option<EditorView>) {
         self.imp().editor.replace(editor);
         self.imp().update_enabled();
     }
