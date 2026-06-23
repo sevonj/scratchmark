@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-15 15:26+0300\n"
+"POT-Creation-Date: 2026-06-23 14:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -649,4 +649,74 @@ msgstr ""
 
 #: data/resources/ui/window.ui:223
 msgid "First Accessed"
+msgstr ""
+
+#: src/error.rs:25
+msgid "Couldn't create file"
+msgstr ""
+
+#: src/error.rs:26
+msgid "Couldn't access file"
+msgstr ""
+
+#: src/error.rs:27
+msgid "Couldn't create folder"
+msgstr ""
+
+#: src/error.rs:28
+msgid "Couldn't move item"
+msgstr ""
+
+#: src/error.rs:29
+msgid "File contains invalid characters"
+msgstr ""
+
+#: src/error.rs:30
+msgid "File has changed on disk"
+msgstr ""
+
+#: src/error.rs:31
+msgid "Invalid path"
+msgstr ""
+
+#: src/widgets/library/library_view.rs:426
+#: src/widgets/library/library_view.rs:446
+msgid "Couldn't move to trash"
+msgstr ""
+
+#: src/widgets/library/library_view.rs:429
+#: src/widgets/library/library_view.rs:449
+msgid "Moved to trash"
+msgstr ""
+
+#: src/widgets/library/library_view.rs:477
+msgid "Couldn't delete document"
+msgstr ""
+
+#: src/widgets/library/library_view.rs:483
+msgid "Document deleted"
+msgstr ""
+
+#: src/widgets/library/library_view.rs:517
+msgid "Couldn't delete folder"
+msgstr ""
+
+#: src/widgets/library/library_view.rs:523
+msgid "Folder deleted"
+msgstr ""
+
+#: src/widgets/window.rs:429
+msgid "Couldn't move file"
+msgstr ""
+
+#: src/widgets/window.rs:636
+msgid "Saved"
+msgstr ""
+
+#: src/widgets/window.rs:953
+msgid "Open document has been moved or deleted"
+msgstr ""
+
+#: src/widgets/window_title.rs:72
+msgid " (Focus Mode)"
 msgstr ""

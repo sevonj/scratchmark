@@ -15,6 +15,7 @@ mod imp {
     use adw::ToolbarView;
     use adw::prelude::*;
     use adw::subclass::prelude::*;
+    use gettextrs::gettext;
     use gtk::Builder;
     use gtk::Button;
     use gtk::CompositeTemplate;
@@ -425,7 +426,7 @@ mod imp {
 
                         if let Err(e) = imp.library_view.move_item(old_path, new_path.clone()) {
                             println!("{e}");
-                            imp.toast("Couldn't move file.");
+                            imp.toast(&gettext("Couldn't move file"));
                         }
 
                         if is_open_in_editor {
@@ -632,7 +633,7 @@ mod imp {
                             imp.toast(&e.to_string());
                             return;
                         }
-                        imp.toast("Saved");
+                        imp.toast(&gettext("Saved"));
                     }
                 }
             ));
@@ -949,7 +950,7 @@ mod imp {
                 if !open_document_path.is_empty() {
                     let open_document_path = PathBuf::from(open_document_path);
                     if !open_document_path.exists() {
-                        self.toast("Opened document has been moved or deleted.");
+                        self.toast(&gettext("Open document has been moved or deleted"));
                     }
                     self.load_document(open_document_path);
                 }

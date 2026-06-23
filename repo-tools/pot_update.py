@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 # This script re-generates POTFILES.in
-# It will find every ui file and add them
+# It will find every ui and source file and add them
 
 import os
 
@@ -22,6 +22,10 @@ def update_potfiles(filename: str = "POTFILES.in"):
         for root, _, files in os.walk("data/resources"):
             for file in files:
                 if file.endswith(".ui"):
+                    potfiles.append(os.path.join(root, file) + "\n")
+        for root, _, files in os.walk("src"):
+            for file in files:
+                if file.endswith(".rs"):
                     potfiles.append(os.path.join(root, file) + "\n")
         potfiles.sort()
         f.writelines(potfiles)
