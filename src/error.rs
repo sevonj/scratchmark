@@ -1,5 +1,7 @@
 use std::error::Error;
 
+use gettextrs::gettext;
+
 #[derive(Debug, PartialEq, Eq)]
 pub enum ScratchmarkError {
     FileCreateFail,
@@ -8,25 +10,27 @@ pub enum ScratchmarkError {
     ItemMoveFail,
     InvalidChars,
     FileChanged,
+    InvalidPath,
     IsRootDir,
     NotRootDir,
-    InvalidPath,
 }
 
 impl Error for ScratchmarkError {}
 
 impl std::fmt::Display for ScratchmarkError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        use ScratchmarkError::*;
+
         match self {
-            Self::FileCreateFail => write!(f, "Couldn't create file."),
-            Self::FileOpenFail => write!(f, "Couldn't read file."),
-            Self::FolderCreateFail => write!(f, "Couldn't create folder."),
-            Self::ItemMoveFail => write!(f, "Couldn't move item."),
-            Self::InvalidChars => write!(f, "File contains invalid characters."),
-            Self::FileChanged => write!(f, "File has changed on disk."),
-            Self::IsRootDir => write!(f, "This action can't be done to a project root folder."),
-            Self::NotRootDir => write!(f, "This action can only be done to a project root folder."),
-            Self::InvalidPath => write!(f, "Invalid path."),
+            FileCreateFail => write!(f, "{}", gettext("Couldn't create file")),
+            FileOpenFail => write!(f, "{}", gettext("Couldn't access file")),
+            FolderCreateFail => write!(f, "{}", gettext("Couldn't create folder")),
+            ItemMoveFail => write!(f, "{}", gettext("Couldn't move item")),
+            InvalidChars => write!(f, "{}", gettext("File contains invalid characters")),
+            FileChanged => write!(f, "{}", gettext("File has changed on disk")),
+            InvalidPath => write!(f, "{}", gettext("Invalid path")),
+            IsRootDir => write!(f, "This action can't be done to a project root folder"),
+            NotRootDir => write!(f, "This action can only be done to a project root folder"),
         }
     }
 }

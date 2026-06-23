@@ -3,6 +3,7 @@ mod imp {
     use std::cell::RefCell;
 
     use adw::subclass::prelude::*;
+    use gettextrs::gettext;
     use gtk::CompositeTemplate;
     use gtk::glib;
     use gtk::glib::Properties;
@@ -68,7 +69,7 @@ mod imp {
             };
 
             let focus = if self.focus_mode.get() {
-                " (Focus Mode)"
+                &gettext(" (Focus Mode)")
             } else {
                 ""
             };

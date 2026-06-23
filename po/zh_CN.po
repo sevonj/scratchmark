@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-15 15:26+0300\n"
+"POT-Creation-Date: 2026-06-23 14:38+0300\n"
 "PO-Revision-Date: 2026-05-29 22:07+0000\n"
 "Last-Translator: Outbreak2096 <outbreak2096@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
@@ -663,14 +663,95 @@ msgstr "最后访问"
 msgid "First Accessed"
 msgstr "首次访问"
 
+#: src/error.rs:25
+#, fuzzy
+msgid "Couldn't create file"
+msgstr "创建子文件夹"
+
+#: src/error.rs:26
+#, fuzzy
+msgid "Couldn't access file"
+msgstr "创建子文件夹"
+
+#: src/error.rs:27
+#, fuzzy
+msgid "Couldn't create folder"
+msgstr "创建子文件夹"
+
+#: src/error.rs:28
+#, fuzzy
+msgid "Couldn't move item"
+msgstr "创建子文件夹"
+
+#: src/error.rs:29
+msgid "File contains invalid characters"
+msgstr ""
+
+#: src/error.rs:30
+#, fuzzy
+msgid "File has changed on disk"
+msgstr "磁盘上的文件已更改。"
+
+#: src/error.rs:31
+msgid "Invalid path"
+msgstr ""
+
+#: src/widgets/library/library_view.rs:426
+#: src/widgets/library/library_view.rs:446
+#, fuzzy
+msgid "Couldn't move to trash"
+msgstr "移至回收站"
+
+#: src/widgets/library/library_view.rs:429
+#: src/widgets/library/library_view.rs:449
+#, fuzzy
+msgid "Moved to trash"
+msgstr "移至回收站"
+
+#: src/widgets/library/library_view.rs:477
+#, fuzzy
+msgid "Couldn't delete document"
+msgstr "创建子文件夹"
+
+#: src/widgets/library/library_view.rs:483
+#, fuzzy
+msgid "Document deleted"
+msgstr "文档"
+
+#: src/widgets/library/library_view.rs:517
+#, fuzzy
+msgid "Couldn't delete folder"
+msgstr "创建子文件夹"
+
+#: src/widgets/library/library_view.rs:523
+msgid "Folder deleted"
+msgstr ""
+
+#: src/widgets/window.rs:429
+#, fuzzy
+msgid "Couldn't move file"
+msgstr "创建子文件夹"
+
+#: src/widgets/window.rs:636
+#, fuzzy
+msgid "Saved"
+msgstr "保存"
+
+#: src/widgets/window.rs:953
+#, fuzzy
+msgid "Open document has been moved or deleted"
+msgstr "项目可能已被移动或删除。"
+
+#: src/widgets/window_title.rs:72
+#, fuzzy
+msgid " (Focus Mode)"
+msgstr "专注模式"
+
 #~ msgid "Customize font size and typeface"
 #~ msgstr "自定义字体大小和类型"
 
 #~ msgid "Name..."
 #~ msgstr "名称…"
-
-#~ msgid "Create Subfolder"
-#~ msgstr "创建子文件夹"
 
 #~ msgid "New"
 #~ msgstr "新建"

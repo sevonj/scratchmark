@@ -8,6 +8,7 @@ mod imp {
     use std::sync::OnceLock;
 
     use adw::subclass::prelude::*;
+    use gettextrs::gettext;
     use gtk::CompositeTemplate;
     use gtk::FileDialog;
     use gtk::gio::Cancellable;
@@ -422,10 +423,10 @@ mod imp {
 
             if let Err(e) = File::for_path(&path).trash(None::<&Cancellable>) {
                 println!("{e}");
-                obj.emit_by_name::<()>("toast", &[&"Couldn't move to trash"]);
+                obj.emit_by_name::<()>("toast", &[&gettext("Couldn't move to trash")]);
             }
             obj.emit_by_name::<()>("path-removed", &[&path]);
-            obj.emit_by_name::<()>("toast", &[&"Moved to trash"]);
+            obj.emit_by_name::<()>("toast", &[&gettext("Moved to trash")]);
 
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.project().path()) {
@@ -442,10 +443,10 @@ mod imp {
 
             if let Err(e) = File::for_path(&path).trash(None::<&Cancellable>) {
                 println!("{e}");
-                obj.emit_by_name::<()>("toast", &[&"Couldn't move to trash"]);
+                obj.emit_by_name::<()>("toast", &[&gettext("Couldn't move to trash")]);
             }
             obj.emit_by_name::<()>("path-removed", &[&path]);
-            obj.emit_by_name::<()>("toast", &[&"Moved to trash"]);
+            obj.emit_by_name::<()>("toast", &[&gettext("Moved to trash")]);
 
             for project in self.projects.borrow().deref().values() {
                 if path.starts_with(project.project().path()) {
@@ -471,12 +472,15 @@ mod imp {
                             let obj = imp.obj();
                             if let Err(e) = std::fs::remove_file(&path) {
                                 println!("{e}");
-                                obj.emit_by_name::<()>("toast", &[&"Couldn't delete folder."]);
+                                obj.emit_by_name::<()>(
+                                    "toast",
+                                    &[&gettext("Couldn't delete document")],
+                                );
                                 return;
                             }
 
                             obj.emit_by_name::<()>("path-removed", &[&path]);
-                            obj.emit_by_name::<()>("toast", &[&"Permanently deleted"]);
+                            obj.emit_by_name::<()>("toast", &[&gettext("Document deleted")]);
 
                             for project in imp.projects.borrow().deref().values() {
                                 if path.starts_with(project.project().path()) {
@@ -508,12 +512,15 @@ mod imp {
                             let obj = imp.obj();
                             if let Err(e) = std::fs::remove_dir_all(&path) {
                                 println!("{e}");
-                                obj.emit_by_name::<()>("toast", &[&"Couldn't delete folder."]);
+                                obj.emit_by_name::<()>(
+                                    "toast",
+                                    &[&gettext("Couldn't delete folder")],
+                                );
                                 return;
                             }
 
                             obj.emit_by_name::<()>("path-removed", &[&path]);
-                            obj.emit_by_name::<()>("toast", &[&"Permanently deleted"]);
+                            obj.emit_by_name::<()>("toast", &[&gettext("Folder deleted")]);
 
                             for project in imp.projects.borrow().deref().values() {
                                 if path.starts_with(project.project().path()) {
