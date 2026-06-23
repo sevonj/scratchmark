@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-15 15:26+0300\n"
+"POT-Creation-Date: 2026-06-23 14:38+0300\n"
 "PO-Revision-Date: 2026-06-17 11:07+0000\n"
 "Last-Translator: Łukasz Horodecki <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
@@ -679,14 +679,95 @@ msgstr "Od ostatnio otwieranego"
 msgid "First Accessed"
 msgstr "Od najdawniej otwieranego"
 
+#: src/error.rs:25
+#, fuzzy
+msgid "Couldn't create file"
+msgstr "Utwórz podkatalog"
+
+#: src/error.rs:26
+#, fuzzy
+msgid "Couldn't access file"
+msgstr "Utwórz podkatalog"
+
+#: src/error.rs:27
+#, fuzzy
+msgid "Couldn't create folder"
+msgstr "Utwórz podkatalog"
+
+#: src/error.rs:28
+#, fuzzy
+msgid "Couldn't move item"
+msgstr "Utwórz podkatalog"
+
+#: src/error.rs:29
+msgid "File contains invalid characters"
+msgstr ""
+
+#: src/error.rs:30
+#, fuzzy
+msgid "File has changed on disk"
+msgstr "Plik został zmieniony na dysku."
+
+#: src/error.rs:31
+msgid "Invalid path"
+msgstr ""
+
+#: src/widgets/library/library_view.rs:426
+#: src/widgets/library/library_view.rs:446
+#, fuzzy
+msgid "Couldn't move to trash"
+msgstr "Przenieś do kosza"
+
+#: src/widgets/library/library_view.rs:429
+#: src/widgets/library/library_view.rs:449
+#, fuzzy
+msgid "Moved to trash"
+msgstr "Przenieś do kosza"
+
+#: src/widgets/library/library_view.rs:477
+#, fuzzy
+msgid "Couldn't delete document"
+msgstr "Utwórz podkatalog"
+
+#: src/widgets/library/library_view.rs:483
+#, fuzzy
+msgid "Document deleted"
+msgstr "Dokument"
+
+#: src/widgets/library/library_view.rs:517
+#, fuzzy
+msgid "Couldn't delete folder"
+msgstr "Utwórz podkatalog"
+
+#: src/widgets/library/library_view.rs:523
+msgid "Folder deleted"
+msgstr ""
+
+#: src/widgets/window.rs:429
+#, fuzzy
+msgid "Couldn't move file"
+msgstr "Utwórz podkatalog"
+
+#: src/widgets/window.rs:636
+#, fuzzy
+msgid "Saved"
+msgstr "Zapisz"
+
+#: src/widgets/window.rs:953
+#, fuzzy
+msgid "Open document has been moved or deleted"
+msgstr "Projekt mógł zostać przeniesiony lub usunięty."
+
+#: src/widgets/window_title.rs:72
+#, fuzzy
+msgid " (Focus Mode)"
+msgstr "Tryb skupienia"
+
 #~ msgid "Customize font size and typeface"
 #~ msgstr "Dostosuj czcionkę i jej rozmiar"
 
 #~ msgid "Name..."
 #~ msgstr "Nazwa..."
-
-#~ msgid "Create Subfolder"
-#~ msgstr "Utwórz podkatalog"
 
 #~ msgid "New"
 #~ msgstr "Nowy"
