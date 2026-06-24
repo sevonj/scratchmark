@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:38+0300\n"
-"PO-Revision-Date: 2026-06-04 08:07+0000\n"
+"PO-Revision-Date: 2026-06-25 12:07+0000\n"
 "Last-Translator: Priit Jõerüüt <jrtcdbrg@noreply.codeberg.org>\n"
 "Language-Team: Estonian <https://translate.codeberg.org/projects/scratchmark/"
 "app/et/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.5\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
@@ -675,84 +675,71 @@ msgid "First Accessed"
 msgstr "Varem avatud"
 
 #: src/error.rs:25
-#, fuzzy
 msgid "Couldn't create file"
-msgstr "Viska prügikasti"
+msgstr "Faili loomine ei õnnestunud"
 
 #: src/error.rs:26
-#, fuzzy
 msgid "Couldn't access file"
-msgstr "Viska prügikasti"
+msgstr "Ligipääs failile polnud võimalik"
 
 #: src/error.rs:27
-#, fuzzy
 msgid "Couldn't create folder"
-msgstr "Dokument"
+msgstr "Kausta loomine ei õnnestunud"
 
 #: src/error.rs:28
-#, fuzzy
 msgid "Couldn't move item"
-msgstr "Viska prügikasti"
+msgstr "Objekti liigutamine ei õnnestunud"
 
 #: src/error.rs:29
 msgid "File contains invalid characters"
-msgstr ""
+msgstr "Failis leidub vigaseid tähemärke"
 
 #: src/error.rs:30
-#, fuzzy
 msgid "File has changed on disk"
-msgstr "Fail on andmekandjal muutunud."
+msgstr "Fail on andmekandjal muutunud"
 
 #: src/error.rs:31
 msgid "Invalid path"
-msgstr ""
+msgstr "Vigane asukoht"
 
 #: src/widgets/library/library_view.rs:426
 #: src/widgets/library/library_view.rs:446
-#, fuzzy
 msgid "Couldn't move to trash"
-msgstr "Viska prügikasti"
+msgstr "Prügikasti viskamine ei õnnestunud"
 
 #: src/widgets/library/library_view.rs:429
 #: src/widgets/library/library_view.rs:449
-#, fuzzy
 msgid "Moved to trash"
-msgstr "Viska prügikasti"
+msgstr "Viskasin prügikasti"
 
 #: src/widgets/library/library_view.rs:477
 msgid "Couldn't delete document"
-msgstr ""
+msgstr "Dokumendi kustutamine ei õnnestunud"
 
 #: src/widgets/library/library_view.rs:483
-#, fuzzy
 msgid "Document deleted"
-msgstr "Dokument"
+msgstr "Dokument on kustutatud"
 
 #: src/widgets/library/library_view.rs:517
-#, fuzzy
 msgid "Couldn't delete folder"
-msgstr "Dokument"
+msgstr "Kausta kustutamine ei õnnestunud"
 
 #: src/widgets/library/library_view.rs:523
 msgid "Folder deleted"
-msgstr ""
+msgstr "Kaust on kustutatud"
 
 #: src/widgets/window.rs:429
-#, fuzzy
 msgid "Couldn't move file"
-msgstr "Viska prügikasti"
+msgstr "Faili teisaldamine ei õnnestunud"
 
 #: src/widgets/window.rs:636
-#, fuzzy
 msgid "Saved"
-msgstr "Salvesta"
+msgstr "Salvestatud"
 
 #: src/widgets/window.rs:953
-#, fuzzy
 msgid "Open document has been moved or deleted"
-msgstr "Projekt võib olla tõstetud teise kohta või kustutatud."
+msgstr "Avatud dokument on kas tõstetud teise kohta või kustutatud"
 
 #: src/widgets/window_title.rs:72
-#, fuzzy
 msgid " (Focus Mode)"
-msgstr "Fookusrežiim"
+msgstr " (Fookusrežiim)"
