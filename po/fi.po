@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:38+0300\n"
-"PO-Revision-Date: 2026-05-28 11:41+0000\n"
+"PO-Revision-Date: 2026-06-25 12:07+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/scratchmark/"
 "app/fi/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.5\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
@@ -678,89 +678,74 @@ msgid "First Accessed"
 msgstr "Ensin avattu"
 
 #: src/error.rs:25
-#, fuzzy
 msgid "Couldn't create file"
-msgstr "Luo alikansio"
+msgstr "Tiedoston luonti epäonnistui"
 
 #: src/error.rs:26
-#, fuzzy
 msgid "Couldn't access file"
-msgstr "Luo alikansio"
+msgstr "Tietoston avaaminen epäonnistui"
 
 #: src/error.rs:27
-#, fuzzy
 msgid "Couldn't create folder"
-msgstr "Luo alikansio"
+msgstr "Kansion luonti epäonnistui"
 
 #: src/error.rs:28
-#, fuzzy
 msgid "Couldn't move item"
-msgstr "Luo alikansio"
+msgstr "Siirto epäonnistui"
 
 #: src/error.rs:29
 msgid "File contains invalid characters"
-msgstr ""
+msgstr "Tiedosto sisältää virheellisiä merkkejä"
 
 #: src/error.rs:30
-#, fuzzy
 msgid "File has changed on disk"
-msgstr "Tiedosto on muuttunut levyllä."
+msgstr "Tiedosto on muuttunut levyllä"
 
 #: src/error.rs:31
 msgid "Invalid path"
-msgstr ""
+msgstr "Virheellinen polku"
 
 #: src/widgets/library/library_view.rs:426
 #: src/widgets/library/library_view.rs:446
-#, fuzzy
 msgid "Couldn't move to trash"
-msgstr "Siirrä roskakoriin"
+msgstr "Roskakoriin siirto epäonnistui"
 
 #: src/widgets/library/library_view.rs:429
 #: src/widgets/library/library_view.rs:449
-#, fuzzy
 msgid "Moved to trash"
-msgstr "Siirrä roskakoriin"
+msgstr "Siirretty roskakoriin"
 
 #: src/widgets/library/library_view.rs:477
-#, fuzzy
 msgid "Couldn't delete document"
-msgstr "Luo alikansio"
+msgstr "Tiedoston poistaminen epäonnistui"
 
 #: src/widgets/library/library_view.rs:483
-#, fuzzy
 msgid "Document deleted"
-msgstr "\"{filename}\" poistetaan lopullisesti."
+msgstr "Tiedosto poistettu"
 
 #: src/widgets/library/library_view.rs:517
-#, fuzzy
 msgid "Couldn't delete folder"
-msgstr "Luo alikansio"
+msgstr "Kansion poisto epäonnistui"
 
 #: src/widgets/library/library_view.rs:523
-#, fuzzy
 msgid "Folder deleted"
-msgstr "\"{filename}\" poistetaan lopullisesti."
+msgstr "Kansio poistettu"
 
 #: src/widgets/window.rs:429
-#, fuzzy
 msgid "Couldn't move file"
-msgstr "Luo alikansio"
+msgstr "Tiedoston siirtäminen epäonnistui"
 
 #: src/widgets/window.rs:636
-#, fuzzy
 msgid "Saved"
-msgstr "Tallenna"
+msgstr "Tallennettu"
 
 #: src/widgets/window.rs:953
-#, fuzzy
 msgid "Open document has been moved or deleted"
-msgstr "Projekti voi olla siirretty tai poistettu."
+msgstr "Avoin tiedosto on siirretty tai poistettu"
 
 #: src/widgets/window_title.rs:72
-#, fuzzy
 msgid " (Focus Mode)"
-msgstr "Fokustila"
+msgstr " (Fokustila)"
 
 #~ msgid "Customize font size and typeface"
 #~ msgstr "Muokkaa fontin kokoa ja kirjasinta"
