@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:38+0300\n"
-"PO-Revision-Date: 2026-05-29 22:07+0000\n"
+"PO-Revision-Date: 2026-06-25 12:07+0000\n"
 "Last-Translator: Outbreak2096 <outbreak2096@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.codeberg.org/projects/scratchmark/app/zh_Hans/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.5\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
@@ -246,7 +246,7 @@ msgstr "复制"
 #: data/resources/ui/library/document_context_menu.ui:18
 #: data/resources/ui/library/folder_context_menu.ui:22
 msgid "Move to Trash"
-msgstr "移至回收站"
+msgstr "移动到回收站"
 
 #: data/resources/ui/library/document_context_menu.ui:22
 #: data/resources/ui/library/folder_context_menu.ui:26
@@ -665,88 +665,74 @@ msgid "First Accessed"
 msgstr "首次访问"
 
 #: src/error.rs:25
-#, fuzzy
 msgid "Couldn't create file"
-msgstr "创建子文件夹"
+msgstr "无法创建文件"
 
 #: src/error.rs:26
-#, fuzzy
 msgid "Couldn't access file"
-msgstr "创建子文件夹"
+msgstr "无法访问文件"
 
 #: src/error.rs:27
-#, fuzzy
 msgid "Couldn't create folder"
-msgstr "创建子文件夹"
+msgstr "无法创建文件夹"
 
 #: src/error.rs:28
-#, fuzzy
 msgid "Couldn't move item"
-msgstr "创建子文件夹"
+msgstr "无法移动项目"
 
 #: src/error.rs:29
 msgid "File contains invalid characters"
-msgstr ""
+msgstr "文件包含无效字符"
 
 #: src/error.rs:30
-#, fuzzy
 msgid "File has changed on disk"
-msgstr "磁盘上的文件已更改。"
+msgstr "文件在磁盘上已更改"
 
 #: src/error.rs:31
 msgid "Invalid path"
-msgstr ""
+msgstr "路径无效"
 
 #: src/widgets/library/library_view.rs:426
 #: src/widgets/library/library_view.rs:446
-#, fuzzy
 msgid "Couldn't move to trash"
-msgstr "移至回收站"
+msgstr "无法移动到回收站"
 
 #: src/widgets/library/library_view.rs:429
 #: src/widgets/library/library_view.rs:449
-#, fuzzy
 msgid "Moved to trash"
-msgstr "移至回收站"
+msgstr "已移动到回收站"
 
 #: src/widgets/library/library_view.rs:477
-#, fuzzy
 msgid "Couldn't delete document"
-msgstr "创建子文件夹"
+msgstr "无法删除文档"
 
 #: src/widgets/library/library_view.rs:483
-#, fuzzy
 msgid "Document deleted"
-msgstr "文档"
+msgstr "文档已删除"
 
 #: src/widgets/library/library_view.rs:517
-#, fuzzy
 msgid "Couldn't delete folder"
-msgstr "创建子文件夹"
+msgstr "无法删除文件夹"
 
 #: src/widgets/library/library_view.rs:523
 msgid "Folder deleted"
-msgstr ""
+msgstr "文件夹已删除"
 
 #: src/widgets/window.rs:429
-#, fuzzy
 msgid "Couldn't move file"
-msgstr "创建子文件夹"
+msgstr "无法移动文件"
 
 #: src/widgets/window.rs:636
-#, fuzzy
 msgid "Saved"
-msgstr "保存"
+msgstr "已保存"
 
 #: src/widgets/window.rs:953
-#, fuzzy
 msgid "Open document has been moved or deleted"
-msgstr "项目可能已被移动或删除。"
+msgstr "打开的文档已被移动或删除"
 
 #: src/widgets/window_title.rs:72
-#, fuzzy
 msgid " (Focus Mode)"
-msgstr "专注模式"
+msgstr " (专注模式)"
 
 #~ msgid "Customize font size and typeface"
 #~ msgstr "自定义字体大小和类型"
