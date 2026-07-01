@@ -56,6 +56,8 @@ You're also welcome to improve the website, which is currently rather barebones.
 
 Scratchmark is written in Rust and uses GTK4 and Libadwaita for UI.
 
+To avoid wasted work, it's generally a good idea to announce your intentions early, and to file an issue if there isn't one already.
+
 ### License
 
 Scratchmark is licensed GPL-3.0-or-later. Some parts may additionally be available under other licenses, such as MIT.
