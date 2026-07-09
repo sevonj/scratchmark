@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:38+0300\n"
-"PO-Revision-Date: 2026-05-28 11:41+0000\n"
+"PO-Revision-Date: 2026-07-10 16:07+0000\n"
 "Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
 "app/es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.5\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
@@ -49,21 +49,21 @@ msgid ""
 "handle large projects with lots of files. You can add any folder on your "
 "computer to the library, and move files around by dragging and dropping."
 msgstr ""
-"** Scratchmark ** es un editor de texto agradable para escribir. Te ofrece "
-"todo lo que necesitas sin interferir en tu trabajo, para que puedas "
-"concentrarte en el texto. La aplicación sirve tanto para escribir ensayos "
-"como para tomar notas rápidas. Su sistema de gestión de archivos se basa en "
-"una estructura de carpetas que permite manejar proyectos grandes con muchos "
-"archivos. Puedes añadir cualquier carpeta de tu ordenador a la biblioteca y "
-"mover archivos arrastrándolos y soltándolos."
+"**Scratchmark** es un editor de texto muy agradable para escribir. Su "
+"objetivo es ofrecerte todo lo que necesitas y, por lo demás, no entorpecerte "
+"para que puedas centrarte únicamente en el texto. La aplicación sirve tanto "
+"para escribir ensayos como para tomar notas rápidas. Su gestión de archivos "
+"se basa en una estructura de carpetas capaz de gestionar proyectos de gran "
+"envergadura con muchos archivos. Puedes añadir cualquier carpeta de tu "
+"ordenador a la biblioteca y mover archivos arrastrándolos y soltándolos."
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:18
 msgid ""
 "It uses Markdown, which means that ==all text formatting can be done by "
 "typing.=="
 msgstr ""
-"Utiliza Markdown, significa que ==se le puede dar formato al texto "
-"escribiendo.=="
+"Utiliza Markdown, lo que significa que ==todo el formato del texto se puede "
+"aplicar simplemente escribiendo=="
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:19
 msgid ""
@@ -71,10 +71,10 @@ msgid ""
 "up and start writing. It can display simple writing statistics, and has "
 "features, such as focus mode and fullscreen support to reduce distractions."
 msgstr ""
-"El editor es simple e intuitivo, así que cualquier persona podría tomarlo y "
-"comenzar a escribir. Muestra estadísticas simples de escritura, y tiene "
-"características como el modo concentración y soporte de pantalla completa "
-"para reducir distracciones."
+"El editor es sencillo e intuitivo, por lo que cualquiera debería poder "
+"empezar a utilizarlo y a escribir de inmediato. Muestra estadísticas básicas "
+"de escritura y cuenta con funciones como el modo de concentración y la "
+"opción de pantalla completa para reducir las distracciones."
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:20
 msgid ""
@@ -84,12 +84,12 @@ msgid ""
 "the folder to Scratchmark's library. This also goes the other way: if you've "
 "had enough of Scratchmark, it's easy to switch to something else."
 msgstr ""
-"Markdown es un lenguaje de enmarcado abierto muy usado. Los documentos "
+"Markdown es un lenguaje de marcado abierto y muy utilizado. Los documentos "
 "creados con Scratchmark son más o menos compatibles con otras aplicaciones "
-"similares. Si ya tiene un \"cuaderno\" o un proyecto de otra aplicación, "
-"puede simplemente añadirlo a la librería de Scratchmark. Esto también "
-"funciona al revés: si ya tuvo suficiente de Scratchmark, puede cambiarse "
-"fácilmente a algo diferente."
+"similares. Si ya tienes un «cuaderno» o un proyecto de otra aplicación, solo "
+"tienes que añadir la carpeta a la biblioteca de Scratchmark. Lo mismo ocurre "
+"a la inversa: si te has cansado de Scratchmark, es fácil cambiar a otra "
+"aplicación."
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:26
 msgid "Editor interface"
@@ -580,7 +580,7 @@ msgstr "Menú principal"
 
 #: data/resources/ui/window.ui:71
 msgid "Toggle Sidebar (F9)"
-msgstr "Mostrar barra lateral (F9)"
+msgstr "Mostrar/ocultar la barra lateral (F9)"
 
 #: data/resources/ui/window.ui:77
 msgid "New Document (Ctrl+N)"
@@ -596,7 +596,7 @@ msgstr "Información del documento"
 
 #: data/resources/ui/window.ui:98
 msgid "Formatting Toolbar"
-msgstr "Barra de herramientas"
+msgstr "Barra de herramientas del formato"
 
 #: data/resources/ui/window.ui:130
 msgid "Add Project"
@@ -620,7 +620,7 @@ msgstr "Alejar"
 
 #: data/resources/ui/window.ui:154
 msgid "Reset Zoom"
-msgstr "Restablecer amplicación"
+msgstr "Restablecer el zum"
 
 #: data/resources/ui/window.ui:160
 msgid "Search Text"
@@ -632,15 +632,15 @@ msgstr "Buscar y reemplazar"
 
 #: data/resources/ui/window.ui:170
 msgid "Toggle Fullscreen"
-msgstr "Alternar pantalla completa"
+msgstr "Activar/desactivar pantalla completa"
 
 #: data/resources/ui/window.ui:174
 msgid "Toggle Focus Mode"
-msgstr "Alternar modo de concentración"
+msgstr "Activar/desactivar el modo concentración"
 
 #: data/resources/ui/window.ui:180
 msgid "Preferences"
-msgstr "Preferencias"
+msgstr "Ajustes"
 
 #: data/resources/ui/window.ui:184
 msgid "Keyboard Shortcuts"
@@ -668,91 +668,78 @@ msgstr "Primera modificación"
 
 #: data/resources/ui/window.ui:218
 msgid "Last Accessed"
-msgstr "Último acceso"
+msgstr "Última consulta"
 
 #: data/resources/ui/window.ui:223
 msgid "First Accessed"
-msgstr "Primer acceso"
+msgstr "Primera consulta"
 
 #: src/error.rs:25
-#, fuzzy
 msgid "Couldn't create file"
-msgstr "Mover a la papelera"
+msgstr "No se ha podido crear el archivo"
 
 #: src/error.rs:26
-#, fuzzy
 msgid "Couldn't access file"
-msgstr "Mover a la papelera"
+msgstr "No se ha podido acceder al archivo"
 
 #: src/error.rs:27
-#, fuzzy
 msgid "Couldn't create folder"
-msgstr "Documento"
+msgstr "No se pudo crear la carpeta"
 
 #: src/error.rs:28
-#, fuzzy
 msgid "Couldn't move item"
-msgstr "Mover a la papelera"
+msgstr "No se pudo mover el elemento"
 
 #: src/error.rs:29
 msgid "File contains invalid characters"
-msgstr ""
+msgstr "El archivo contiene caracteres no válidos"
 
 #: src/error.rs:30
-#, fuzzy
 msgid "File has changed on disk"
-msgstr "El archivo ha cambiado en el disco."
+msgstr "El archivo ha cambiado en el disco"
 
 #: src/error.rs:31
 msgid "Invalid path"
-msgstr ""
+msgstr "Ruta no válida"
 
 #: src/widgets/library/library_view.rs:426
 #: src/widgets/library/library_view.rs:446
-#, fuzzy
 msgid "Couldn't move to trash"
-msgstr "Mover a la papelera"
+msgstr "No se pudo mover a la papelera"
 
 #: src/widgets/library/library_view.rs:429
 #: src/widgets/library/library_view.rs:449
-#, fuzzy
 msgid "Moved to trash"
-msgstr "Mover a la papelera"
+msgstr "Se ha enviado a la papelera"
 
 #: src/widgets/library/library_view.rs:477
 msgid "Couldn't delete document"
-msgstr ""
+msgstr "No se ha podido eliminar el documento"
 
 #: src/widgets/library/library_view.rs:483
-#, fuzzy
 msgid "Document deleted"
-msgstr "Documento"
+msgstr "Documento eliminado"
 
 #: src/widgets/library/library_view.rs:517
-#, fuzzy
 msgid "Couldn't delete folder"
-msgstr "Documento"
+msgstr "No se ha podido eliminar la carpeta"
 
 #: src/widgets/library/library_view.rs:523
 msgid "Folder deleted"
-msgstr ""
+msgstr "Carpeta eliminada"
 
 #: src/widgets/window.rs:429
-#, fuzzy
 msgid "Couldn't move file"
-msgstr "Mover a la papelera"
+msgstr "No se ha podido mover el archivo"
 
 #: src/widgets/window.rs:636
-#, fuzzy
 msgid "Saved"
-msgstr "Guardar"
+msgstr "Guardado"
 
 #: src/widgets/window.rs:953
-#, fuzzy
 msgid "Open document has been moved or deleted"
-msgstr "Es posible que el proyecto se haya trasladado o eliminado."
+msgstr "El documento abierto se ha movido o eliminado"
 
 #: src/widgets/window_title.rs:72
-#, fuzzy
 msgid " (Focus Mode)"
-msgstr "Modo focus"
+msgstr " (modo concentración)"
