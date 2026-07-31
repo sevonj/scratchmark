@@ -356,6 +356,8 @@ mod imp {
             ));
             actions.add_action(&action);
 
+            self.setup_height_watcher();
+
             self.parent_constructed();
         }
 
@@ -434,6 +436,29 @@ mod imp {
                 imp.source_view_clamp.set_maximum_size(i32::MAX);
                 imp.source_view_clamp.set_tightening_threshold(i32::MAX);
             }
+        }
+
+        fn refresh_bottom_margin(&self, available_height: i32) {
+            let line_h = {
+                let mut end_iter = self.source_view.buffer().end_iter();
+                end_iter.backward_line();
+                self.source_view.line_yrange(&end_iter).1
+            };
+            self.source_view
+                .set_bottom_margin(available_height - line_h);
+        }
+
+        fn setup_height_watcher(&self) {
+            let obj = self.obj();
+            let last = Cell::new(0);
+            obj.add_tick_callback(move |widget, _clock| {
+                let height = widget.height();
+                if height != last.get() {
+                    last.set(height);
+                    widget.imp().refresh_bottom_margin(height);
+                }
+                glib::ControlFlow::Continue
+            });
         }
     }
 }
