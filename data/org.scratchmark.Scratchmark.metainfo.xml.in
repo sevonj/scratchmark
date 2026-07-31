@@ -48,6 +48,15 @@
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <url type="translate">https://translate.codeberg.org/projects/scratchmark/app/</url>
   <releases>
+    <release version="v1.9.1" date="2026-07-31">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.9.1</url>
+      <description translate="no">
+        <ul>
+          <li>Feature: Dynamic bottom margin</li>
+          <li>i18n: Translated previously hardcoded English strings</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.9.0" date="2026-06-09">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.9.0</url>
       <description translate="no">
