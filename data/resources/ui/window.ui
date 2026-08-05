@@ -174,6 +174,10 @@
         <attribute name="label" translatable="yes">Toggle Focus Mode</attribute>
         <attribute name="action">win.toggle-focus</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">Typewriter Mode</attribute>
+        <attribute name="action">win.typewriter-mode</attribute>
+      </item>
     </section>
     <section>
       <item>

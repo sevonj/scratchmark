@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-23 14:38+0300\n"
+"POT-Creation-Date: 2026-08-05 13:28+0300\n"
 "PO-Revision-Date: 2026-07-10 16:07+0000\n"
 "Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
@@ -20,7 +20,6 @@ msgstr ""
 "X-Generator: Weblate 2026.6.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
@@ -442,135 +441,140 @@ msgstr "Alternar modo de concentración"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
+msgid "Typewriter Mode"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:32
+msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: data/resources/ui/shortcuts.ui:32
+#: data/resources/ui/shortcuts.ui:38
 msgctxt "shortcut window"
 msgid "Show Shortcuts"
 msgstr "Mostrar los atajos del teclado"
 
-#: data/resources/ui/shortcuts.ui:40
+#: data/resources/ui/shortcuts.ui:46
 msgctxt "shortcut window"
 msgid "Document"
 msgstr "Documento"
 
-#: data/resources/ui/shortcuts.ui:43
+#: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "New Document"
 msgstr "Nuevo documento"
 
-#: data/resources/ui/shortcuts.ui:49
+#: data/resources/ui/shortcuts.ui:55
 msgctxt "shortcut window"
 msgid "Add Project"
 msgstr "Añadir proyecto"
 
-#: data/resources/ui/shortcuts.ui:55
+#: data/resources/ui/shortcuts.ui:61
 msgctxt "shortcut window"
 msgid "Save Document"
 msgstr "Guardar documento"
 
-#: data/resources/ui/shortcuts.ui:61
+#: data/resources/ui/shortcuts.ui:67
 msgctxt "shortcut window"
 msgid "Rename"
 msgstr "Renombrar"
 
-#: data/resources/ui/shortcuts.ui:67
+#: data/resources/ui/shortcuts.ui:73
 msgctxt "shortcut window"
 msgid "Close Document"
 msgstr "Cerrar documento"
 
-#: data/resources/ui/shortcuts.ui:75
+#: data/resources/ui/shortcuts.ui:81
 msgctxt "shortcut window"
 msgid "Editor"
 msgstr "Editor"
 
-#: data/resources/ui/shortcuts.ui:78
+#: data/resources/ui/shortcuts.ui:84
 msgctxt "shortcut window"
 msgid "Search Text"
 msgstr "Buscar texto"
 
-#: data/resources/ui/shortcuts.ui:84
+#: data/resources/ui/shortcuts.ui:90
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr "Buscar y reemplazar texto"
 
-#: data/resources/ui/shortcuts.ui:90
+#: data/resources/ui/shortcuts.ui:96
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "Acercar"
 
-#: data/resources/ui/shortcuts.ui:96
+#: data/resources/ui/shortcuts.ui:102
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Alejar"
 
-#: data/resources/ui/shortcuts.ui:102
+#: data/resources/ui/shortcuts.ui:108
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Restablecer ampliación"
 
-#: data/resources/ui/shortcuts.ui:110
+#: data/resources/ui/shortcuts.ui:116
 msgctxt "shortcut window"
 msgid "Formatting"
 msgstr "Formato del texto"
 
-#: data/resources/ui/shortcuts.ui:113
+#: data/resources/ui/shortcuts.ui:119
 msgctxt "shortcut window"
 msgid "Bold"
 msgstr "Negrita"
 
-#: data/resources/ui/shortcuts.ui:119
+#: data/resources/ui/shortcuts.ui:125
 msgctxt "shortcut window"
 msgid "Italic"
 msgstr "Cursiva"
 
-#: data/resources/ui/shortcuts.ui:125
+#: data/resources/ui/shortcuts.ui:131
 msgctxt "shortcut window"
 msgid "Insert Link"
 msgstr "Insertar enlace"
 
-#: data/resources/ui/shortcuts.ui:131
+#: data/resources/ui/shortcuts.ui:137
 msgctxt "shortcut window"
 msgid "Heading 1"
 msgstr "Cabecera 1"
 
-#: data/resources/ui/shortcuts.ui:137
+#: data/resources/ui/shortcuts.ui:143
 msgctxt "shortcut window"
 msgid "Heading 2"
 msgstr "Cabecera 2"
 
-#: data/resources/ui/shortcuts.ui:143
+#: data/resources/ui/shortcuts.ui:149
 msgctxt "shortcut window"
 msgid "Heading 3"
 msgstr "Cabecera 3"
 
-#: data/resources/ui/shortcuts.ui:149
+#: data/resources/ui/shortcuts.ui:155
 msgctxt "shortcut window"
 msgid "Heading 4"
 msgstr "Cabecera 4"
 
-#: data/resources/ui/shortcuts.ui:155
+#: data/resources/ui/shortcuts.ui:161
 msgctxt "shortcut window"
 msgid "Heading 5"
 msgstr "Cabecera 5"
 
-#: data/resources/ui/shortcuts.ui:161
+#: data/resources/ui/shortcuts.ui:167
 msgctxt "shortcut window"
 msgid "Heading 6"
 msgstr "Cabecera 6"
 
-#: data/resources/ui/shortcuts.ui:169
+#: data/resources/ui/shortcuts.ui:175
 msgctxt "shortcut window"
 msgid "Library"
 msgstr "Librería"
 
-#: data/resources/ui/shortcuts.ui:172
+#: data/resources/ui/shortcuts.ui:178
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Recargar manualmente"
 
-#: data/resources/ui/window.ui:28 data/resources/ui/window.ui:195
+#: data/resources/ui/window.ui:28 data/resources/ui/window.ui:199
 msgid "Sort"
 msgstr "Ordenar"
 
@@ -638,39 +642,43 @@ msgstr "Activar/desactivar pantalla completa"
 msgid "Toggle Focus Mode"
 msgstr "Activar/desactivar el modo concentración"
 
-#: data/resources/ui/window.ui:180
+#: data/resources/ui/window.ui:178
+msgid "Typewriter Mode"
+msgstr ""
+
+#: data/resources/ui/window.ui:184
 msgid "Preferences"
 msgstr "Ajustes"
 
-#: data/resources/ui/window.ui:184
+#: data/resources/ui/window.ui:188
 msgid "Keyboard Shortcuts"
 msgstr "Atajos del teclado"
 
-#: data/resources/ui/window.ui:188
+#: data/resources/ui/window.ui:192
 msgid "About Scratchmark"
 msgstr "Acerca de Scratchmark"
 
-#: data/resources/ui/window.ui:198
+#: data/resources/ui/window.ui:202
 msgid "A-Z"
 msgstr "A-Z"
 
-#: data/resources/ui/window.ui:203
+#: data/resources/ui/window.ui:207
 msgid "Z-A"
 msgstr "Z-A"
 
-#: data/resources/ui/window.ui:208
+#: data/resources/ui/window.ui:212
 msgid "Last Modified"
 msgstr "Última modificación"
 
-#: data/resources/ui/window.ui:213
+#: data/resources/ui/window.ui:217
 msgid "First Modified"
 msgstr "Primera modificación"
 
-#: data/resources/ui/window.ui:218
+#: data/resources/ui/window.ui:222
 msgid "Last Accessed"
 msgstr "Última consulta"
 
-#: data/resources/ui/window.ui:223
+#: data/resources/ui/window.ui:227
 msgid "First Accessed"
 msgstr "Primera consulta"
 
@@ -732,11 +740,11 @@ msgstr "Carpeta eliminada"
 msgid "Couldn't move file"
 msgstr "No se ha podido mover el archivo"
 
-#: src/widgets/window.rs:636
+#: src/widgets/window.rs:656
 msgid "Saved"
 msgstr "Guardado"
 
-#: src/widgets/window.rs:953
+#: src/widgets/window.rs:973
 msgid "Open document has been moved or deleted"
 msgstr "El documento abierto se ha movido o eliminado"
 
