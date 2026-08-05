@@ -42,6 +42,8 @@ mod imp {
     use crate::widgets::editor::search_bar::EditorSearchBar;
     use crate::widgets::editor::text_view::EditorTextView;
 
+    const DEFAULT_TOP_MARGIN: i32 = 96;
+
     #[derive(Debug, Properties, CompositeTemplate, Default)]
     #[properties(wrapper_type = super::EditorView)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/editor/editor_view.ui")]
@@ -494,13 +496,18 @@ mod imp {
         }
 
         fn refresh_vertical_margins(&self) {
+            let old_top_margin = self.source_view.top_margin();
             let scroll_margin = self.scroll_margin();
             self.source_view.set_bottom_margin(scroll_margin);
             self.source_view
                 .set_top_margin(match self.obj().typewriter_mode() {
                     true => scroll_margin,
-                    false => 96,
+                    false => DEFAULT_TOP_MARGIN,
                 });
+            let top_margin_delta = self.source_view.top_margin() - old_top_margin;
+            let vadjustment = self.scrolled_window.vadjustment();
+            let scroll_value = vadjustment.value();
+            vadjustment.set_value(scroll_value + top_margin_delta as f64);
         }
 
         fn setup_height_watcher(&self) {
