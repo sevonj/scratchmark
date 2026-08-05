@@ -6,6 +6,7 @@ mod imp {
 
     use adw::AboutDialog;
     use adw::ApplicationWindow;
+    use adw::Breakpoint;
     use adw::HeaderBar;
     use adw::NavigationPage;
     use adw::OverlaySplitView;
@@ -58,6 +59,10 @@ mod imp {
         sidebar_toolbar_view: TemplateChild<ToolbarView>,
         #[template_child]
         sidebar_toggle: TemplateChild<ToggleButton>,
+        #[template_child]
+        sidebar_collapse_breakpoint: TemplateChild<Breakpoint>,
+        #[property(get, set)]
+        sidebar_must_collapse: Cell<bool>,
         /// Bound to setting. Does not directly map to sidebar visibility, because even when this
         /// is true, the sidebar can be hidden by focus mode or too narrow window.
         #[property(get, set)]
@@ -93,9 +98,6 @@ mod imp {
 
         #[property(get, set)]
         focus_mode: Cell<bool>,
-        #[property(get, set)]
-        focus_mode_active: Cell<bool>,
-        focus_mode_cursor_position: Cell<(f64, f64)>,
 
         settings: OnceCell<Settings>,
     }
@@ -209,7 +211,6 @@ mod imp {
                                 );
                                 sidebar_toggle.set_active(true);
                                 obj.set_show_sidebar(true);
-                                obj.set_focus_mode_active(false);
                                 obj.set_focus_mode(false);
                                 editor_sidebar_toggle.set_active(false);
                                 format_bar.set_visible(false);
@@ -226,7 +227,6 @@ mod imp {
                                 );
                                 sidebar_toggle.set_active(false);
                                 obj.set_show_sidebar(false);
-                                obj.set_focus_mode_active(true);
                                 obj.set_focus_mode(true);
                                 editor_sidebar_toggle.set_active(false);
                                 format_bar.set_visible(false);
@@ -243,7 +243,6 @@ mod imp {
                                     settings.default_value("win-height").unwrap().get().unwrap(),
                                 );
                                 sidebar_toggle.set_active(true);
-                                obj.set_focus_mode_active(false);
                                 obj.set_show_sidebar(true);
                                 obj.set_focus_mode(false);
                                 editor_sidebar_toggle.set_active(true);
@@ -284,38 +283,13 @@ mod imp {
                 let enabled = obj.focus_mode();
                 obj.action_set_enabled("win.enable-focus", !enabled);
                 obj.action_set_enabled("win.disable-focus", enabled);
-                obj.imp().set_focus_mode_active(enabled)
+            });
+
+            obj.connect_focus_mode_notify(move |obj| {
+                obj.imp().update_sidebar_collapse();
             });
 
             obj.add_controller(self.motion_controller.clone());
-
-            self.motion_controller.connect_motion(clone!(
-                #[weak(rename_to = imp)]
-                self,
-                move |_controller, x, y| {
-                    if imp.obj().focus_mode_active() {
-                        // Exit focus mode if cursor moved
-                        const THRESHOLD: f64 = 100.;
-                        let (start_x, start_y) = imp.focus_mode_cursor_position.get();
-                        let (delta_x, delta_y) = (x - start_x, y - start_y);
-                        if (delta_x * delta_x + delta_y * delta_y).sqrt() > THRESHOLD {
-                            imp.set_focus_mode_active(false);
-                        }
-                    } else {
-                        imp.focus_mode_cursor_position.replace((x, y));
-                    }
-                }
-            ));
-            self.motion_controller.connect_enter(clone!(
-                #[weak(rename_to = imp)]
-                self,
-                move |_controller, _x, _y| imp.set_focus_mode_active(false)
-            ));
-            self.motion_controller.connect_leave(clone!(
-                #[weak(rename_to = imp)]
-                self,
-                move |_controller| imp.set_focus_mode_active(false)
-            ));
 
             let unfullscreen_button: &Button = self.unfullscreen_button.as_ref();
             obj.bind_property("fullscreened", unfullscreen_button, "visible")
@@ -324,12 +298,6 @@ mod imp {
 
             let main_header_bar: &HeaderBar = self.main_header_bar.as_ref();
             obj.bind_property("fullscreened", main_header_bar, "show-end-title-buttons")
-                .invert_boolean()
-                .sync_create()
-                .build();
-
-            let main_toolbar_view: &ToolbarView = self.main_toolbar_view.as_ref();
-            obj.bind_property("focus-mode-active", main_toolbar_view, "reveal-top-bars")
                 .invert_boolean()
                 .sync_create()
                 .build();
@@ -511,12 +479,25 @@ mod imp {
                         // Window is narrow, sidebar is an overlay. Do not change the setting.
                         return;
                     }
-                    if obj.focus_mode_active() {
-                        return;
-                    }
                     obj.set_show_sidebar(sidebar_toggle.is_active())
                 }
             ));
+
+            self.sidebar_collapse_breakpoint.connect_apply(clone!(
+                #[weak]
+                obj,
+                move |_| obj.set_sidebar_must_collapse(true)
+            ));
+
+            self.sidebar_collapse_breakpoint.connect_unapply(clone!(
+                #[weak]
+                obj,
+                move |_| obj.set_sidebar_must_collapse(false)
+            ));
+
+            obj.connect_sidebar_must_collapse_notify(move |obj| {
+                obj.imp().update_sidebar_collapse()
+            });
 
             self.top_split.connect_collapsed_notify(clone!(
                 #[weak]
@@ -632,7 +613,7 @@ mod imp {
                 move |_| imp.update_toolbar_visibility()
             ));
             self.update_toolbar_visibility();
-            self.setup_fullscreen_headerbar();
+            self.setup_motion_revealers();
 
             let action = SimpleAction::new("file-new", None);
             action.connect_activate(clone!(
@@ -922,27 +903,26 @@ mod imp {
             self.main_toolbar_view.set_top_bar_style(style);
         }
 
-        fn set_focus_mode_active(&self, mut active: bool) {
-            let obj = self.obj();
-            if !obj.focus_mode() {
-                active = false;
-            }
-            if let Some(editor) = self.editor.borrow().as_ref() {
-                editor.set_show_sidebar(self.editor_sidebar_toggle.is_active() && !active);
+        fn update_toolbar_visibility(&self) {
+            let focus_mode = self.obj().focus_mode();
+            let is_fullscreen = self.obj().is_fullscreen();
+            if focus_mode {
+                self.main_header_revealer.set_reveal_child(true);
+                self.main_toolbar_view.set_reveal_top_bars(false);
             } else {
-                active = false;
+                self.main_header_revealer.set_reveal_child(!is_fullscreen);
+                self.main_toolbar_view.set_reveal_top_bars(true);
             }
-            obj.set_focus_mode_active(active);
-            self.top_split
-                .set_show_sidebar(obj.show_sidebar() && !active);
-            self.update_toolbar_visibility();
             self.update_toolbar_style();
         }
 
-        fn update_toolbar_visibility(&self) {
-            let is_fullscreen = self.obj().is_fullscreen();
-            self.main_header_revealer.set_reveal_child(!is_fullscreen);
-            self.update_toolbar_style();
+        fn update_sidebar_collapse(&self) {
+            if self.obj().sidebar_must_collapse() {
+                self.top_split.set_collapsed(true);
+                return;
+            }
+            let focus_mode = self.obj().focus_mode();
+            self.top_split.set_collapsed(focus_mode);
         }
 
         fn toast(&self, title: &str) {
@@ -1078,18 +1058,6 @@ mod imp {
                 ),
             );
 
-            editor.connect_closure(
-                "touched",
-                false,
-                closure_local!(
-                    #[weak(rename_to = imp)]
-                    self,
-                    move |_: EditorView| {
-                        imp.set_focus_mode_active(true);
-                    }
-                ),
-            );
-
             let window_title: &WindowTitle = self.window_title.as_ref();
             editor
                 .bind_property("unsaved-changes", window_title, "unsaved-changes")
@@ -1147,7 +1115,6 @@ mod imp {
             self.format_bar.bind_editor(None);
             self.editor_sidebar_toggle.set_sensitive(false);
             self.editor_actions_set_enabled(false);
-            self.set_focus_mode_active(false);
             self.update_toolbar_style();
         }
 
@@ -1177,12 +1144,17 @@ mod imp {
             glib::Propagation::Proceed
         }
 
-        fn setup_fullscreen_headerbar(&self) {
+        fn setup_motion_revealers(&self) {
             self.motion_controller.connect_motion(clone!(
                 #[weak(rename_to = imp)]
                 self,
                 move |_controller, x, y| {
-                    if !imp.obj().is_fullscreen() {
+                    let fullscreen = imp.obj().is_fullscreen();
+                    let focus_mode = imp.obj().focus_mode();
+
+                    if !fullscreen && !focus_mode {
+                        imp.main_header_revealer.set_reveal_child(true);
+                        imp.main_toolbar_view.set_reveal_top_bars(true);
                         return;
                     }
 
@@ -1191,19 +1163,42 @@ mod imp {
                     let x_start = bounds.x() as f64;
                     let x_end = (bounds.x() + bounds.width()) as f64;
 
-                    if x < x_start || x_end < x {
-                        imp.main_header_revealer.set_reveal_child(false);
+                    // Whichever level we're _not_ hiding should be visible
+                    if focus_mode {
+                        imp.main_header_revealer.set_reveal_child(true);
+                    } else {
+                        imp.main_toolbar_view.set_reveal_top_bars(true);
+                    }
+
+                    // Hide when out of bounds
+                    if (x < x_start || x_end < x) && bounds.width() > 0.0 {
+                        if focus_mode {
+                            imp.main_toolbar_view.set_reveal_top_bars(false);
+                        } else {
+                            imp.main_header_revealer.set_reveal_child(false);
+                        }
                         return;
                     }
 
                     const REVEAL_THRESHOLD: f64 = 50.0;
                     const HIDE_THRESHOLD: f64 = 120.0;
-                    let revealed = imp.main_header_revealer.reveals_child();
 
-                    if revealed && y > HIDE_THRESHOLD {
-                        imp.main_header_revealer.set_reveal_child(false);
-                    } else if !revealed && y < REVEAL_THRESHOLD {
-                        imp.main_header_revealer.set_reveal_child(true);
+                    if focus_mode {
+                        // hide all bars
+                        let revealed = imp.main_toolbar_view.reveals_top_bars();
+                        if revealed && y > HIDE_THRESHOLD {
+                            imp.main_toolbar_view.set_reveal_top_bars(false);
+                        } else if !revealed && y < REVEAL_THRESHOLD {
+                            imp.main_toolbar_view.set_reveal_top_bars(true);
+                        }
+                    } else {
+                        // hide header bar only
+                        let revealed = imp.main_header_revealer.reveals_child();
+                        if revealed && y > HIDE_THRESHOLD {
+                            imp.main_header_revealer.set_reveal_child(false);
+                        } else if !revealed && y < REVEAL_THRESHOLD {
+                            imp.main_header_revealer.set_reveal_child(true);
+                        }
                     }
                 }
             ));
