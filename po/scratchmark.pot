@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the scratchmark package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-23 14:38+0300\n"
+"POT-Creation-Date: 2026-08-05 13:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr ""
 
@@ -420,135 +419,140 @@ msgstr ""
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
-msgid "Preferences"
+msgid "Typewriter Mode"
 msgstr ""
 
 #: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
+msgid "Preferences"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:38
+msgctxt "shortcut window"
 msgid "Show Shortcuts"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:40
+#: data/resources/ui/shortcuts.ui:46
 msgctxt "shortcut window"
 msgid "Document"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:43
+#: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "New Document"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:49
+#: data/resources/ui/shortcuts.ui:55
 msgctxt "shortcut window"
 msgid "Add Project"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:55
+#: data/resources/ui/shortcuts.ui:61
 msgctxt "shortcut window"
 msgid "Save Document"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:61
+#: data/resources/ui/shortcuts.ui:67
 msgctxt "shortcut window"
 msgid "Rename"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:67
+#: data/resources/ui/shortcuts.ui:73
 msgctxt "shortcut window"
 msgid "Close Document"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:75
+#: data/resources/ui/shortcuts.ui:81
 msgctxt "shortcut window"
 msgid "Editor"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:78
+#: data/resources/ui/shortcuts.ui:84
 msgctxt "shortcut window"
 msgid "Search Text"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:84
+#: data/resources/ui/shortcuts.ui:90
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:90
+#: data/resources/ui/shortcuts.ui:96
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:96
+#: data/resources/ui/shortcuts.ui:102
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:102
+#: data/resources/ui/shortcuts.ui:108
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:110
+#: data/resources/ui/shortcuts.ui:116
 msgctxt "shortcut window"
 msgid "Formatting"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:113
+#: data/resources/ui/shortcuts.ui:119
 msgctxt "shortcut window"
 msgid "Bold"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:119
+#: data/resources/ui/shortcuts.ui:125
 msgctxt "shortcut window"
 msgid "Italic"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:125
+#: data/resources/ui/shortcuts.ui:131
 msgctxt "shortcut window"
 msgid "Insert Link"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:131
+#: data/resources/ui/shortcuts.ui:137
 msgctxt "shortcut window"
 msgid "Heading 1"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:137
+#: data/resources/ui/shortcuts.ui:143
 msgctxt "shortcut window"
 msgid "Heading 2"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:143
+#: data/resources/ui/shortcuts.ui:149
 msgctxt "shortcut window"
 msgid "Heading 3"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:149
+#: data/resources/ui/shortcuts.ui:155
 msgctxt "shortcut window"
 msgid "Heading 4"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:155
+#: data/resources/ui/shortcuts.ui:161
 msgctxt "shortcut window"
 msgid "Heading 5"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:161
+#: data/resources/ui/shortcuts.ui:167
 msgctxt "shortcut window"
 msgid "Heading 6"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:169
+#: data/resources/ui/shortcuts.ui:175
 msgctxt "shortcut window"
 msgid "Library"
 msgstr ""
 
-#: data/resources/ui/shortcuts.ui:172
+#: data/resources/ui/shortcuts.ui:178
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr ""
 
-#: data/resources/ui/window.ui:28 data/resources/ui/window.ui:195
+#: data/resources/ui/window.ui:28 data/resources/ui/window.ui:199
 msgid "Sort"
 msgstr ""
 
@@ -616,39 +620,43 @@ msgstr ""
 msgid "Toggle Focus Mode"
 msgstr ""
 
-#: data/resources/ui/window.ui:180
-msgid "Preferences"
+#: data/resources/ui/window.ui:178
+msgid "Typewriter Mode"
 msgstr ""
 
 #: data/resources/ui/window.ui:184
-msgid "Keyboard Shortcuts"
+msgid "Preferences"
 msgstr ""
 
 #: data/resources/ui/window.ui:188
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: data/resources/ui/window.ui:192
 msgid "About Scratchmark"
 msgstr ""
 
-#: data/resources/ui/window.ui:198
+#: data/resources/ui/window.ui:202
 msgid "A-Z"
 msgstr ""
 
-#: data/resources/ui/window.ui:203
+#: data/resources/ui/window.ui:207
 msgid "Z-A"
 msgstr ""
 
-#: data/resources/ui/window.ui:208
+#: data/resources/ui/window.ui:212
 msgid "Last Modified"
 msgstr ""
 
-#: data/resources/ui/window.ui:213
+#: data/resources/ui/window.ui:217
 msgid "First Modified"
 msgstr ""
 
-#: data/resources/ui/window.ui:218
+#: data/resources/ui/window.ui:222
 msgid "Last Accessed"
 msgstr ""
 
-#: data/resources/ui/window.ui:223
+#: data/resources/ui/window.ui:227
 msgid "First Accessed"
 msgstr ""
 
@@ -710,11 +718,11 @@ msgstr ""
 msgid "Couldn't move file"
 msgstr ""
 
-#: src/widgets/window.rs:636
+#: src/widgets/window.rs:656
 msgid "Saved"
 msgstr ""
 
-#: src/widgets/window.rs:953
+#: src/widgets/window.rs:973
 msgid "Open document has been moved or deleted"
 msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-23 14:38+0300\n"
+"POT-Creation-Date: 2026-08-05 13:28+0300\n"
 "PO-Revision-Date: 2026-06-04 08:07+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/scratchmark/"
@@ -21,7 +21,6 @@ msgstr ""
 "X-Generator: Weblate 2026.5\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
@@ -447,136 +446,141 @@ msgstr "Переключиться на режим фокусирования"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
+msgid "Typewriter Mode"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:32
+msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Настройки"
 
-#: data/resources/ui/shortcuts.ui:32
+#: data/resources/ui/shortcuts.ui:38
 msgctxt "shortcut window"
 msgid "Show Shortcuts"
 msgstr "Показать клавиатурные сокращения"
 
-#: data/resources/ui/shortcuts.ui:40
+#: data/resources/ui/shortcuts.ui:46
 msgctxt "shortcut window"
 msgid "Document"
 msgstr "Документ"
 
-#: data/resources/ui/shortcuts.ui:43
+#: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "New Document"
 msgstr "Новый документ"
 
-#: data/resources/ui/shortcuts.ui:49
+#: data/resources/ui/shortcuts.ui:55
 msgctxt "shortcut window"
 msgid "Add Project"
 msgstr "Добавить проект"
 
-#: data/resources/ui/shortcuts.ui:55
+#: data/resources/ui/shortcuts.ui:61
 msgctxt "shortcut window"
 msgid "Save Document"
 msgstr "Сохранить документ"
 
-#: data/resources/ui/shortcuts.ui:61
+#: data/resources/ui/shortcuts.ui:67
 msgctxt "shortcut window"
 msgid "Rename"
 msgstr "Переименовать"
 
-#: data/resources/ui/shortcuts.ui:67
+#: data/resources/ui/shortcuts.ui:73
 msgctxt "shortcut window"
 msgid "Close Document"
 msgstr "Закрыть документ"
 
-#: data/resources/ui/shortcuts.ui:75
+#: data/resources/ui/shortcuts.ui:81
 msgctxt "shortcut window"
 msgid "Editor"
 msgstr "Редактор"
 
-#: data/resources/ui/shortcuts.ui:78
+#: data/resources/ui/shortcuts.ui:84
 msgctxt "shortcut window"
 msgid "Search Text"
 msgstr "Поиск текста"
 
-#: data/resources/ui/shortcuts.ui:84
+#: data/resources/ui/shortcuts.ui:90
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
 msgstr "Найти и заменить текст"
 
-#: data/resources/ui/shortcuts.ui:90
+#: data/resources/ui/shortcuts.ui:96
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "Приблизить"
 
-#: data/resources/ui/shortcuts.ui:96
+#: data/resources/ui/shortcuts.ui:102
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "Отдалить"
 
-#: data/resources/ui/shortcuts.ui:102
+#: data/resources/ui/shortcuts.ui:108
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "Сбросить приближение до значений по умолчанию"
 
-#: data/resources/ui/shortcuts.ui:110
+#: data/resources/ui/shortcuts.ui:116
 msgctxt "shortcut window"
 msgid "Formatting"
 msgstr "Форматирование"
 
-#: data/resources/ui/shortcuts.ui:113
+#: data/resources/ui/shortcuts.ui:119
 msgctxt "shortcut window"
 msgid "Bold"
 msgstr "Жирный"
 
-#: data/resources/ui/shortcuts.ui:119
+#: data/resources/ui/shortcuts.ui:125
 msgctxt "shortcut window"
 msgid "Italic"
 msgstr "Курсив"
 
-#: data/resources/ui/shortcuts.ui:125
+#: data/resources/ui/shortcuts.ui:131
 #, fuzzy
 msgctxt "shortcut window"
 msgid "Insert Link"
 msgstr "Курсив (Ctrl +I)"
 
-#: data/resources/ui/shortcuts.ui:131
+#: data/resources/ui/shortcuts.ui:137
 msgctxt "shortcut window"
 msgid "Heading 1"
 msgstr "Заголовок 1"
 
-#: data/resources/ui/shortcuts.ui:137
+#: data/resources/ui/shortcuts.ui:143
 msgctxt "shortcut window"
 msgid "Heading 2"
 msgstr "Заголовок 2"
 
-#: data/resources/ui/shortcuts.ui:143
+#: data/resources/ui/shortcuts.ui:149
 msgctxt "shortcut window"
 msgid "Heading 3"
 msgstr "Заголовок 3"
 
-#: data/resources/ui/shortcuts.ui:149
+#: data/resources/ui/shortcuts.ui:155
 msgctxt "shortcut window"
 msgid "Heading 4"
 msgstr "Заголовок 4"
 
-#: data/resources/ui/shortcuts.ui:155
+#: data/resources/ui/shortcuts.ui:161
 msgctxt "shortcut window"
 msgid "Heading 5"
 msgstr "Заголовок 5"
 
-#: data/resources/ui/shortcuts.ui:161
+#: data/resources/ui/shortcuts.ui:167
 msgctxt "shortcut window"
 msgid "Heading 6"
 msgstr "Заголовок 6"
 
-#: data/resources/ui/shortcuts.ui:169
+#: data/resources/ui/shortcuts.ui:175
 msgctxt "shortcut window"
 msgid "Library"
 msgstr "Библиотека"
 
-#: data/resources/ui/shortcuts.ui:172
+#: data/resources/ui/shortcuts.ui:178
 msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Обновление вручную"
 
-#: data/resources/ui/window.ui:28 data/resources/ui/window.ui:195
+#: data/resources/ui/window.ui:28 data/resources/ui/window.ui:199
 msgid "Sort"
 msgstr "Отсортировать"
 
@@ -644,39 +648,43 @@ msgstr "Переключиться на полноэкранный режим"
 msgid "Toggle Focus Mode"
 msgstr "Переключиться на режим фокусирования"
 
-#: data/resources/ui/window.ui:180
+#: data/resources/ui/window.ui:178
+msgid "Typewriter Mode"
+msgstr ""
+
+#: data/resources/ui/window.ui:184
 msgid "Preferences"
 msgstr "Настройки"
 
-#: data/resources/ui/window.ui:184
+#: data/resources/ui/window.ui:188
 msgid "Keyboard Shortcuts"
 msgstr "Клавиатурные сокращения"
 
-#: data/resources/ui/window.ui:188
+#: data/resources/ui/window.ui:192
 msgid "About Scratchmark"
 msgstr "О Scratchmark"
 
-#: data/resources/ui/window.ui:198
+#: data/resources/ui/window.ui:202
 msgid "A-Z"
 msgstr ""
 
-#: data/resources/ui/window.ui:203
+#: data/resources/ui/window.ui:207
 msgid "Z-A"
 msgstr "Z-a"
 
-#: data/resources/ui/window.ui:208
+#: data/resources/ui/window.ui:212
 msgid "Last Modified"
 msgstr "Последний изменённый"
 
-#: data/resources/ui/window.ui:213
+#: data/resources/ui/window.ui:217
 msgid "First Modified"
 msgstr "Первый изменённый"
 
-#: data/resources/ui/window.ui:218
+#: data/resources/ui/window.ui:222
 msgid "Last Accessed"
 msgstr ""
 
-#: data/resources/ui/window.ui:223
+#: data/resources/ui/window.ui:227
 msgid "First Accessed"
 msgstr ""
 
@@ -748,12 +756,12 @@ msgstr ""
 msgid "Couldn't move file"
 msgstr "Переместить в корзину"
 
-#: src/widgets/window.rs:636
+#: src/widgets/window.rs:656
 #, fuzzy
 msgid "Saved"
 msgstr "Сохранить"
 
-#: src/widgets/window.rs:953
+#: src/widgets/window.rs:973
 #, fuzzy
 msgid "Open document has been moved or deleted"
 msgstr "Возможно проект перемещён или удалён."
