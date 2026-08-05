@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-05 13:28+0300\n"
+"POT-Creation-Date: 2026-08-05 14:55+0300\n"
 "PO-Revision-Date: 2026-06-04 08:07+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Turkish <https://translate.codeberg.org/projects/scratchmark/"
@@ -428,14 +428,16 @@ msgid "General"
 msgstr "Genel"
 
 #: data/resources/ui/shortcuts.ui:14
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Toggle Fullscreen"
-msgstr "Tam Ekranı Aç/Kapat"
+msgid "Fullscreen"
+msgstr "Tam Ekrandan Çık"
 
 #: data/resources/ui/shortcuts.ui:20
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Toggle Focus Mode"
-msgstr "Odaklanma Kipini Aç/Kapat"
+msgid "Focus Mode"
+msgstr "Odak kipi"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
@@ -634,12 +636,14 @@ msgid "Search and Replace"
 msgstr "Ara ve Değiştir"
 
 #: data/resources/ui/window.ui:170
-msgid "Toggle Fullscreen"
-msgstr "Tam Ekranı Aç/Kapat"
+#, fuzzy
+msgid "Fullscreen"
+msgstr "Tam Ekrandan Çık"
 
 #: data/resources/ui/window.ui:174
-msgid "Toggle Focus Mode"
-msgstr "Odaklanma Kipini Aç/Kapat"
+#, fuzzy
+msgid "Focus Mode"
+msgstr "Odak kipi"
 
 #: data/resources/ui/window.ui:178
 msgid "Typewriter Mode"
@@ -745,17 +749,17 @@ msgstr "Alt Klasör Oluştur"
 msgid "Folder deleted"
 msgstr ""
 
-#: src/widgets/window.rs:429
+#: src/widgets/window.rs:446
 #, fuzzy
 msgid "Couldn't move file"
 msgstr "Alt Klasör Oluştur"
 
-#: src/widgets/window.rs:656
+#: src/widgets/window.rs:679
 #, fuzzy
 msgid "Saved"
 msgstr "Kaydet"
 
-#: src/widgets/window.rs:973
+#: src/widgets/window.rs:979
 #, fuzzy
 msgid "Open document has been moved or deleted"
 msgstr "Proje taşınmış ya da silinmiş olabilir."
@@ -764,6 +768,20 @@ msgstr "Proje taşınmış ya da silinmiş olabilir."
 #, fuzzy
 msgid " (Focus Mode)"
 msgstr "Odak kipi"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Tam Ekranı Aç/Kapat"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Toggle Focus Mode"
+#~ msgstr "Odaklanma Kipini Aç/Kapat"
+
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Tam Ekranı Aç/Kapat"
+
+#~ msgid "Toggle Focus Mode"
+#~ msgstr "Odaklanma Kipini Aç/Kapat"
 
 #~ msgid "Customize font size and typeface"
 #~ msgstr "Yazı tipini ve boyutunu özelleştir"
