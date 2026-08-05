@@ -11,14 +11,14 @@
             <property name="title" translatable="yes" context="shortcut window">General</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Toggle Fullscreen</property>
-                <property name="action-name">win.toggle-fullscreen</property>
+                <property name="title" translatable="yes" context="shortcut window">Fullscreen</property>
+                <property name="action-name">win.fullscreen</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Toggle Focus Mode</property>
-                <property name="action-name">win.toggle-focus</property>
+                <property name="title" translatable="yes" context="shortcut window">Focus Mode</property>
+                <property name="action-name">win.focus-mode</property>
               </object>
             </child>
             <child>

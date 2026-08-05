@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-05 13:28+0300\n"
+"POT-Creation-Date: 2026-08-05 14:55+0300\n"
 "PO-Revision-Date: 2026-06-06 11:07+0000\n"
 "Last-Translator: Emilly MS <emilly_msh_msh@noreply.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
@@ -432,14 +432,16 @@ msgid "General"
 msgstr "Geral"
 
 #: data/resources/ui/shortcuts.ui:14
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Toggle Fullscreen"
-msgstr "Ativar/Desativar tela cheia"
+msgid "Fullscreen"
+msgstr "Sair da tela cheia"
 
 #: data/resources/ui/shortcuts.ui:20
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Toggle Focus Mode"
-msgstr "Ativar/Desativar Modo Foco"
+msgid "Focus Mode"
+msgstr "Modo foco"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
@@ -637,12 +639,14 @@ msgid "Search and Replace"
 msgstr "Pesquisar e substituir"
 
 #: data/resources/ui/window.ui:170
-msgid "Toggle Fullscreen"
-msgstr "Ativar/Desativar tela cheia"
+#, fuzzy
+msgid "Fullscreen"
+msgstr "Sair da tela cheia"
 
 #: data/resources/ui/window.ui:174
-msgid "Toggle Focus Mode"
-msgstr "Ativar/Desativar Modo Foco"
+#, fuzzy
+msgid "Focus Mode"
+msgstr "Modo foco"
 
 #: data/resources/ui/window.ui:178
 msgid "Typewriter Mode"
@@ -748,17 +752,17 @@ msgstr "Criar subpasta"
 msgid "Folder deleted"
 msgstr ""
 
-#: src/widgets/window.rs:429
+#: src/widgets/window.rs:446
 #, fuzzy
 msgid "Couldn't move file"
 msgstr "Criar subpasta"
 
-#: src/widgets/window.rs:656
+#: src/widgets/window.rs:679
 #, fuzzy
 msgid "Saved"
 msgstr "Salvar"
 
-#: src/widgets/window.rs:973
+#: src/widgets/window.rs:979
 #, fuzzy
 msgid "Open document has been moved or deleted"
 msgstr "Projeto pode ter sido movido ou excluído."
@@ -767,6 +771,20 @@ msgstr "Projeto pode ter sido movido ou excluído."
 #, fuzzy
 msgid " (Focus Mode)"
 msgstr "Modo foco"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Ativar/Desativar tela cheia"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Toggle Focus Mode"
+#~ msgstr "Ativar/Desativar Modo Foco"
+
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Ativar/Desativar tela cheia"
+
+#~ msgid "Toggle Focus Mode"
+#~ msgstr "Ativar/Desativar Modo Foco"
 
 #~ msgid "Customize font size and typeface"
 #~ msgstr "Personalizar tamanho e fonte a ser usada"

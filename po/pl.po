@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-05 13:28+0300\n"
+"POT-Creation-Date: 2026-08-05 14:55+0300\n"
 "PO-Revision-Date: 2026-06-29 08:07+0000\n"
 "Last-Translator: Łukasz Horodecki <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
@@ -436,14 +436,16 @@ msgid "General"
 msgstr "Ogólne"
 
 #: data/resources/ui/shortcuts.ui:14
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Toggle Fullscreen"
-msgstr "Przełączenie pełnego ekranu"
+msgid "Fullscreen"
+msgstr "Opuszcza pełny ekran"
 
 #: data/resources/ui/shortcuts.ui:20
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Toggle Focus Mode"
-msgstr "Przełączenie trybu skupienia"
+msgid "Focus Mode"
+msgstr "Tryb skupienia"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
@@ -641,12 +643,14 @@ msgid "Search and Replace"
 msgstr "Szukaj i zastąp"
 
 #: data/resources/ui/window.ui:170
-msgid "Toggle Fullscreen"
-msgstr "Przełącz pełny ekran"
+#, fuzzy
+msgid "Fullscreen"
+msgstr "Opuszcza pełny ekran"
 
 #: data/resources/ui/window.ui:174
-msgid "Toggle Focus Mode"
-msgstr "Przełącz tryb skupienia"
+#, fuzzy
+msgid "Focus Mode"
+msgstr "Tryb skupienia"
 
 #: data/resources/ui/window.ui:178
 msgid "Typewriter Mode"
@@ -742,21 +746,35 @@ msgstr "Nie powiodło się usunięcie katalogu"
 msgid "Folder deleted"
 msgstr "Usunięto katalog"
 
-#: src/widgets/window.rs:429
+#: src/widgets/window.rs:446
 msgid "Couldn't move file"
 msgstr "Nie powiodło się przeniesienie pliku"
 
-#: src/widgets/window.rs:656
+#: src/widgets/window.rs:679
 msgid "Saved"
 msgstr "Zapisano"
 
-#: src/widgets/window.rs:973
+#: src/widgets/window.rs:979
 msgid "Open document has been moved or deleted"
 msgstr "Otwarty dokument został przeniesiony lub usunięty"
 
 #: src/widgets/window_title.rs:72
 msgid " (Focus Mode)"
 msgstr " (Tryb skupienia)"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Przełączenie pełnego ekranu"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Toggle Focus Mode"
+#~ msgstr "Przełączenie trybu skupienia"
+
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Przełącz pełny ekran"
+
+#~ msgid "Toggle Focus Mode"
+#~ msgstr "Przełącz tryb skupienia"
 
 #~ msgid "Customize font size and typeface"
 #~ msgstr "Dostosuj czcionkę i jej rozmiar"

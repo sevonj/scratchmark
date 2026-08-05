@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-05 13:28+0300\n"
+"POT-Creation-Date: 2026-08-05 14:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -409,12 +409,12 @@ msgstr ""
 
 #: data/resources/ui/shortcuts.ui:14
 msgctxt "shortcut window"
-msgid "Toggle Fullscreen"
+msgid "Fullscreen"
 msgstr ""
 
 #: data/resources/ui/shortcuts.ui:20
 msgctxt "shortcut window"
-msgid "Toggle Focus Mode"
+msgid "Focus Mode"
 msgstr ""
 
 #: data/resources/ui/shortcuts.ui:26
@@ -613,11 +613,11 @@ msgid "Search and Replace"
 msgstr ""
 
 #: data/resources/ui/window.ui:170
-msgid "Toggle Fullscreen"
+msgid "Fullscreen"
 msgstr ""
 
 #: data/resources/ui/window.ui:174
-msgid "Toggle Focus Mode"
+msgid "Focus Mode"
 msgstr ""
 
 #: data/resources/ui/window.ui:178
@@ -714,15 +714,15 @@ msgstr ""
 msgid "Folder deleted"
 msgstr ""
 
-#: src/widgets/window.rs:429
+#: src/widgets/window.rs:446
 msgid "Couldn't move file"
 msgstr ""
 
-#: src/widgets/window.rs:656
+#: src/widgets/window.rs:679
 msgid "Saved"
 msgstr ""
 
-#: src/widgets/window.rs:973
+#: src/widgets/window.rs:979
 msgid "Open document has been moved or deleted"
 msgstr ""
 
