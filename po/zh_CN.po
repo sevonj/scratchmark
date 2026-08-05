@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-05 14:55+0300\n"
+"POT-Creation-Date: 2026-08-05 13:28+0300\n"
 "PO-Revision-Date: 2026-06-25 12:07+0000\n"
 "Last-Translator: Outbreak2096 <outbreak2096@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
@@ -20,6 +20,7 @@ msgstr ""
 "X-Generator: Weblate 2026.6.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
@@ -420,16 +421,14 @@ msgid "General"
 msgstr "常规"
 
 #: data/resources/ui/shortcuts.ui:14
-#, fuzzy
 msgctxt "shortcut window"
-msgid "Fullscreen"
-msgstr "退出全屏"
+msgid "Toggle Fullscreen"
+msgstr "切换全屏模式"
 
 #: data/resources/ui/shortcuts.ui:20
-#, fuzzy
 msgctxt "shortcut window"
-msgid "Focus Mode"
-msgstr "专注模式"
+msgid "Toggle Focus Mode"
+msgstr "切换专注模式"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
@@ -627,14 +626,12 @@ msgid "Search and Replace"
 msgstr "查找与替换"
 
 #: data/resources/ui/window.ui:170
-#, fuzzy
-msgid "Fullscreen"
-msgstr "退出全屏"
+msgid "Toggle Fullscreen"
+msgstr "切换全屏模式"
 
 #: data/resources/ui/window.ui:174
-#, fuzzy
-msgid "Focus Mode"
-msgstr "专注模式"
+msgid "Toggle Focus Mode"
+msgstr "切换专注模式"
 
 #: data/resources/ui/window.ui:178
 msgid "Typewriter Mode"
@@ -730,35 +727,21 @@ msgstr "无法删除文件夹"
 msgid "Folder deleted"
 msgstr "文件夹已删除"
 
-#: src/widgets/window.rs:446
+#: src/widgets/window.rs:429
 msgid "Couldn't move file"
 msgstr "无法移动文件"
 
-#: src/widgets/window.rs:679
+#: src/widgets/window.rs:656
 msgid "Saved"
 msgstr "已保存"
 
-#: src/widgets/window.rs:979
+#: src/widgets/window.rs:973
 msgid "Open document has been moved or deleted"
 msgstr "打开的文档已被移动或删除"
 
 #: src/widgets/window_title.rs:72
 msgid " (Focus Mode)"
 msgstr " (专注模式)"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle Fullscreen"
-#~ msgstr "切换全屏模式"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle Focus Mode"
-#~ msgstr "切换专注模式"
-
-#~ msgid "Toggle Fullscreen"
-#~ msgstr "切换全屏模式"
-
-#~ msgid "Toggle Focus Mode"
-#~ msgstr "切换专注模式"
 
 #~ msgid "Customize font size and typeface"
 #~ msgstr "自定义字体大小和类型"

@@ -22,6 +22,7 @@ msgstr ""
 "X-Generator: Weblate 2026.5\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
+#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
@@ -428,16 +429,14 @@ msgid "General"
 msgstr "Genel"
 
 #: data/resources/ui/shortcuts.ui:14
-#, fuzzy
 msgctxt "shortcut window"
-msgid "Fullscreen"
-msgstr "Tam Ekrandan Çık"
+msgid "Toggle Fullscreen"
+msgstr "Tam Ekranı Aç/Kapat"
 
 #: data/resources/ui/shortcuts.ui:20
-#, fuzzy
 msgctxt "shortcut window"
-msgid "Focus Mode"
-msgstr "Odak kipi"
+msgid "Toggle Focus Mode"
+msgstr "Odaklanma Kipini Aç/Kapat"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
@@ -636,14 +635,12 @@ msgid "Search and Replace"
 msgstr "Ara ve Değiştir"
 
 #: data/resources/ui/window.ui:170
-#, fuzzy
-msgid "Fullscreen"
-msgstr "Tam Ekrandan Çık"
+msgid "Toggle Fullscreen"
+msgstr "Tam Ekranı Aç/Kapat"
 
 #: data/resources/ui/window.ui:174
-#, fuzzy
-msgid "Focus Mode"
-msgstr "Odak kipi"
+msgid "Toggle Focus Mode"
+msgstr "Odaklanma Kipini Aç/Kapat"
 
 #: data/resources/ui/window.ui:178
 msgid "Typewriter Mode"
@@ -749,17 +746,17 @@ msgstr "Alt Klasör Oluştur"
 msgid "Folder deleted"
 msgstr ""
 
-#: src/widgets/window.rs:446
+#: src/widgets/window.rs:429
 #, fuzzy
 msgid "Couldn't move file"
 msgstr "Alt Klasör Oluştur"
 
-#: src/widgets/window.rs:679
+#: src/widgets/window.rs:656
 #, fuzzy
 msgid "Saved"
 msgstr "Kaydet"
 
-#: src/widgets/window.rs:979
+#: src/widgets/window.rs:973
 #, fuzzy
 msgid "Open document has been moved or deleted"
 msgstr "Proje taşınmış ya da silinmiş olabilir."
@@ -768,20 +765,6 @@ msgstr "Proje taşınmış ya da silinmiş olabilir."
 #, fuzzy
 msgid " (Focus Mode)"
 msgstr "Odak kipi"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle Fullscreen"
-#~ msgstr "Tam Ekranı Aç/Kapat"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle Focus Mode"
-#~ msgstr "Odaklanma Kipini Aç/Kapat"
-
-#~ msgid "Toggle Fullscreen"
-#~ msgstr "Tam Ekranı Aç/Kapat"
-
-#~ msgid "Toggle Focus Mode"
-#~ msgstr "Odaklanma Kipini Aç/Kapat"
 
 #~ msgid "Customize font size and typeface"
 #~ msgstr "Yazı tipini ve boyutunu özelleştir"
