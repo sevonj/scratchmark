@@ -103,7 +103,7 @@ Generating a Flatpak
 You need Flatpak w/ Flathub and the following packages:
 
 ```
-org.gnome.Sdk//49
+org.gnome.Sdk//50
 ```
 
 #### Building
