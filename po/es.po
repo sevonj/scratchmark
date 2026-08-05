@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 14:55+0300\n"
 "PO-Revision-Date: 2026-08-05 12:35+0000\n"
-"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
 "app/es/>\n"
 "Language: es\n"
@@ -442,7 +442,7 @@ msgstr "Alternar modo de concentración"
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
 msgid "Typewriter Mode"
-msgstr ""
+msgstr "Modo máquina de escribir"
 
 #: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
@@ -644,7 +644,7 @@ msgstr "Activar/desactivar el modo concentración"
 
 #: data/resources/ui/window.ui:178
 msgid "Typewriter Mode"
-msgstr ""
+msgstr "Modo máquina de escribir"
 
 #: data/resources/ui/window.ui:184
 msgid "Preferences"
