@@ -3,6 +3,8 @@
   <author>sevonj</author>
   <_description>Default Theme for Scratchmark</_description>
 
+  <style name="cursor" foreground="#20b2aa"  bold="true"/>
+
   <!--style name="selection" foreground="#" background="#" /-->
   <style name="search-match" foreground="#000000" background="#e5a50a77" />
 
