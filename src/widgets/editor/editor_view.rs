@@ -241,11 +241,12 @@ mod imp {
             }));
 
             self.source_view.connect_move_cursor(clone!(
-                #[weak(rename_to = imp)]
-                self,
+                #[weak]
+                obj,
                 move |_, _, _, _| {
                     glib::idle_add_local_once(move || {
-                        imp.refresh_typewriter_scrolling();
+                        obj.imp().refresh_typewriter_scrolling();
+                        obj.emit_by_name::<()>("touched", &[]);
                     });
                 }
             ));
@@ -253,10 +254,11 @@ mod imp {
             let source_click_gesture = gtk::GestureClick::new();
             source_click_gesture.set_button(gtk::gdk::ffi::GDK_BUTTON_PRIMARY as u32);
             source_click_gesture.connect_released(clone!(
-                #[weak(rename_to = imp)]
-                self,
+                #[weak]
+                obj,
                 move |_, _, _, _| {
-                    imp.refresh_typewriter_scrolling();
+                    obj.imp().refresh_typewriter_scrolling();
+                    obj.emit_by_name::<()>("touched", &[]);
                 }
             ));
             obj.add_controller(source_click_gesture);
@@ -403,7 +405,7 @@ mod imp {
                     Signal::builder("saved").build(),
                     Signal::builder("saved-as").build(),
                     Signal::builder("stats-changed").build(),
-                    Signal::builder("buffer-changed").build(),
+                    Signal::builder("touched").build(),
                     Signal::builder("toast")
                         .param_types([String::static_type()])
                         .build(),
@@ -691,6 +693,6 @@ impl EditorView {
     fn on_buffer_changed(&self, buffer: &MarkdownBuffer) {
         self.refresh_document_stats(buffer);
         self.set_unsaved_changes(true);
-        self.emit_by_name::<()>("buffer-changed", &[]);
+        self.emit_by_name::<()>("touched", &[]);
     }
 }

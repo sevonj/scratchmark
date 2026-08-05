@@ -1079,7 +1079,7 @@ mod imp {
             );
 
             editor.connect_closure(
-                "buffer-changed",
+                "touched",
                 false,
                 closure_local!(
                     #[weak(rename_to = imp)]
