@@ -7,9 +7,8 @@
     <property name="width-request">650</property>
     <property name="height-request">400</property>
     <child>
-      <object class="AdwBreakpoint">
+      <object class="AdwBreakpoint" id="sidebar_collapse_breakpoint">
         <condition>max-width: 900sp</condition>
-        <setter object="top_split" property="collapsed">True</setter>
       </object>
     </child>
     <child>
