@@ -317,6 +317,23 @@ mod imp {
                 move |_controller| imp.set_focus_mode_active(false)
             ));
 
+            let unfullscreen_button: &Button = self.unfullscreen_button.as_ref();
+            obj.bind_property("fullscreened", unfullscreen_button, "visible")
+                .sync_create()
+                .build();
+
+            let main_header_bar: &HeaderBar = self.main_header_bar.as_ref();
+            obj.bind_property("fullscreened", main_header_bar, "show-end-title-buttons")
+                .invert_boolean()
+                .sync_create()
+                .build();
+
+            let main_toolbar_view: &ToolbarView = self.main_toolbar_view.as_ref();
+            obj.bind_property("focus-mode-active", main_toolbar_view, "reveal-top-bars")
+                .invert_boolean()
+                .sync_create()
+                .build();
+
             self.editor_sidebar_toggle.set_sensitive(false);
 
             let builder = Builder::from_resource("/org/scratchmark/Scratchmark/ui/shortcuts.ui");
@@ -559,19 +576,18 @@ mod imp {
                 move |_| imp.on_close_request()
             ));
 
-            let action = SimpleAction::new("toggle-fullscreen", None);
-            action.connect_activate(clone!(
+            let action =
+                SimpleAction::new_stateful("fullscreen", None, &obj.is_fullscreen().to_variant());
+            action.connect_change_state(clone!(
                 #[weak]
                 obj,
-                move |_, _| obj.set_fullscreened(!obj.is_fullscreen())
-            ));
-            obj.add_action(&action);
-
-            let action = SimpleAction::new("unfullscreen", None);
-            action.connect_activate(clone!(
-                #[weak]
-                obj,
-                move |_, _| obj.unfullscreen()
+                move |action, state| {
+                    if let Some(state) = state {
+                        let enabled = state.get::<bool>().unwrap();
+                        obj.set_fullscreened(enabled);
+                        action.set_state(state);
+                    }
+                }
             ));
             obj.add_action(&action);
 
@@ -924,25 +940,8 @@ mod imp {
         }
 
         fn update_toolbar_visibility(&self) {
-            let obj = self.obj();
-            let focus_mode_active = obj.focus_mode_active();
-            let is_fullscreen = obj.is_fullscreen();
-
-            self.main_toolbar_view
-                .set_reveal_top_bars(!focus_mode_active);
+            let is_fullscreen = self.obj().is_fullscreen();
             self.main_header_revealer.set_reveal_child(!is_fullscreen);
-
-            if is_fullscreen {
-                self.unfullscreen_button.set_visible(true);
-                self.main_header_bar.set_show_end_title_buttons(false);
-                obj.action_set_enabled("win.fullscreen", false);
-                obj.action_set_enabled("win.unfullscreen", true);
-            } else {
-                self.unfullscreen_button.set_visible(false);
-                self.main_header_bar.set_show_end_title_buttons(true);
-                obj.action_set_enabled("win.fullscreen", true);
-                obj.action_set_enabled("win.unfullscreen", false);
-            }
             self.update_toolbar_style();
         }
 

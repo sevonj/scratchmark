@@ -82,7 +82,7 @@
                               <object class="GtkButton" id="unfullscreen_button">
                                 <property name="icon-name">smk-view-restore-symbolic</property>
                                 <property name="tooltip-text" translatable="yes">Exit Fullscreen</property>
-                                <property name="action-name">win.unfullscreen</property>
+                                <property name="action-name">win.fullscreen</property>
                                 <property name="visible">False</property>
                               </object>
                             </child>
@@ -167,8 +167,8 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Toggle Fullscreen</attribute>
-        <attribute name="action">win.toggle-fullscreen</attribute>
+        <attribute name="label" translatable="yes">Fullscreen</attribute>
+        <attribute name="action">win.fullscreen</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Focus Mode</attribute>

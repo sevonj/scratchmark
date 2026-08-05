@@ -11,8 +11,8 @@
             <property name="title" translatable="yes" context="shortcut window">General</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Toggle Fullscreen</property>
-                <property name="action-name">win.toggle-fullscreen</property>
+                <property name="title" translatable="yes" context="shortcut window">Fullscreen</property>
+                <property name="action-name">win.fullscreen</property>
               </object>
             </child>
             <child>
