@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-05 13:28+0300\n"
+"POT-Creation-Date: 2026-08-05 15:17+0300\n"
 "PO-Revision-Date: 2026-08-05 12:35+0000\n"
 "Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
@@ -20,7 +20,6 @@ msgstr ""
 "X-Generator: Weblate 2026.7.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
@@ -431,14 +430,16 @@ msgid "General"
 msgstr "General"
 
 #: data/resources/ui/shortcuts.ui:14
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Toggle Fullscreen"
-msgstr "Alternar pantalla completa"
+msgid "Fullscreen"
+msgstr "Salir de la pantalla completa"
 
 #: data/resources/ui/shortcuts.ui:20
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Toggle Focus Mode"
-msgstr "Alternar modo de concentración"
+msgid "Focus Mode"
+msgstr "Modo focus"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
@@ -636,12 +637,14 @@ msgid "Search and Replace"
 msgstr "Buscar y reemplazar"
 
 #: data/resources/ui/window.ui:170
-msgid "Toggle Fullscreen"
-msgstr "Activar/desactivar pantalla completa"
+#, fuzzy
+msgid "Fullscreen"
+msgstr "Salir de la pantalla completa"
 
 #: data/resources/ui/window.ui:174
-msgid "Toggle Focus Mode"
-msgstr "Activar/desactivar el modo concentración"
+#, fuzzy
+msgid "Focus Mode"
+msgstr "Modo focus"
 
 #: data/resources/ui/window.ui:178
 msgid "Typewriter Mode"
@@ -737,18 +740,32 @@ msgstr "No se ha podido eliminar la carpeta"
 msgid "Folder deleted"
 msgstr "Carpeta eliminada"
 
-#: src/widgets/window.rs:429
+#: src/widgets/window.rs:446
 msgid "Couldn't move file"
 msgstr "No se ha podido mover el archivo"
 
-#: src/widgets/window.rs:656
+#: src/widgets/window.rs:679
 msgid "Saved"
 msgstr "Guardado"
 
-#: src/widgets/window.rs:973
+#: src/widgets/window.rs:979
 msgid "Open document has been moved or deleted"
 msgstr "El documento abierto se ha movido o eliminado"
 
 #: src/widgets/window_title.rs:72
 msgid " (Focus Mode)"
 msgstr " (modo concentración)"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Alternar pantalla completa"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Toggle Focus Mode"
+#~ msgstr "Alternar modo de concentración"
+
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Activar/desactivar pantalla completa"
+
+#~ msgid "Toggle Focus Mode"
+#~ msgstr "Activar/desactivar el modo concentración"

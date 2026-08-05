@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-05 13:28+0300\n"
+"POT-Creation-Date: 2026-08-05 15:17+0300\n"
 "PO-Revision-Date: 2026-08-05 12:35+0000\n"
 "Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
 "Language-Team: Estonian <https://translate.codeberg.org/projects/scratchmark/"
@@ -20,7 +20,6 @@ msgstr ""
 "X-Generator: Weblate 2026.7.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr "Scratchmark"
 
@@ -431,14 +430,16 @@ msgid "General"
 msgstr "Üldised"
 
 #: data/resources/ui/shortcuts.ui:14
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Toggle Fullscreen"
-msgstr "Lülita täisekraanivaade sisse/välja"
+msgid "Fullscreen"
+msgstr "Välju täisekraanivaatest"
 
 #: data/resources/ui/shortcuts.ui:20
+#, fuzzy
 msgctxt "shortcut window"
-msgid "Toggle Focus Mode"
-msgstr "Lülita fookuse režiim sisse/välja"
+msgid "Focus Mode"
+msgstr "Fookusrežiim"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
@@ -636,12 +637,14 @@ msgid "Search and Replace"
 msgstr "Otsi ja asenda"
 
 #: data/resources/ui/window.ui:170
-msgid "Toggle Fullscreen"
-msgstr "Lülita täisekraanivaade sisse/välja"
+#, fuzzy
+msgid "Fullscreen"
+msgstr "Välju täisekraanivaatest"
 
 #: data/resources/ui/window.ui:174
-msgid "Toggle Focus Mode"
-msgstr "Lülita fookuse režiim sisse/välja"
+#, fuzzy
+msgid "Focus Mode"
+msgstr "Fookusrežiim"
 
 #: data/resources/ui/window.ui:178
 msgid "Typewriter Mode"
@@ -737,18 +740,32 @@ msgstr "Kausta kustutamine ei õnnestunud"
 msgid "Folder deleted"
 msgstr "Kaust on kustutatud"
 
-#: src/widgets/window.rs:429
+#: src/widgets/window.rs:446
 msgid "Couldn't move file"
 msgstr "Faili teisaldamine ei õnnestunud"
 
-#: src/widgets/window.rs:656
+#: src/widgets/window.rs:679
 msgid "Saved"
 msgstr "Salvestatud"
 
-#: src/widgets/window.rs:973
+#: src/widgets/window.rs:979
 msgid "Open document has been moved or deleted"
 msgstr "Avatud dokument on kas tõstetud teise kohta või kustutatud"
 
 #: src/widgets/window_title.rs:72
 msgid " (Focus Mode)"
 msgstr " (Fookusrežiim)"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Lülita täisekraanivaade sisse/välja"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Toggle Focus Mode"
+#~ msgstr "Lülita fookuse režiim sisse/välja"
+
+#~ msgid "Toggle Fullscreen"
+#~ msgstr "Lülita täisekraanivaade sisse/välja"
+
+#~ msgid "Toggle Focus Mode"
+#~ msgstr "Lülita fookuse režiim sisse/välja"
