@@ -17,8 +17,8 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Toggle Focus Mode</property>
-                <property name="action-name">win.toggle-focus</property>
+                <property name="title" translatable="yes" context="shortcut window">Focus Mode</property>
+                <property name="action-name">win.focus-mode</property>
               </object>
             </child>
             <child>

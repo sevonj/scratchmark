@@ -92,7 +92,7 @@ mod imp {
         motion_controller: EventControllerMotion,
 
         #[property(get, set)]
-        focus_mode_enabled: Cell<bool>,
+        focus_mode: Cell<bool>,
         #[property(get, set)]
         focus_mode_active: Cell<bool>,
         focus_mode_cursor_position: Cell<(f64, f64)>,
@@ -163,11 +163,11 @@ mod imp {
                     .bind("editor-show-formatbar", format_bar, "visible")
                     .build();
                 settings
-                    .bind("focus-mode-enabled", obj.as_ref(), "focus-mode-enabled")
+                    .bind("focus-mode", obj.as_ref(), "focus-mode")
                     .build();
                 let window_title: &WindowTitle = self.window_title.as_ref();
                 settings
-                    .bind("focus-mode-enabled", window_title, "focus-mode")
+                    .bind("focus-mode", window_title, "focus-mode")
                     .build();
                 settings
                     .bind(
@@ -210,7 +210,7 @@ mod imp {
                                 sidebar_toggle.set_active(true);
                                 obj.set_show_sidebar(true);
                                 obj.set_focus_mode_active(false);
-                                obj.set_focus_mode_enabled(false);
+                                obj.set_focus_mode(false);
                                 editor_sidebar_toggle.set_active(false);
                                 format_bar.set_visible(false);
                                 if let Some(editor) = imp.editor.borrow().as_ref() {
@@ -227,7 +227,7 @@ mod imp {
                                 sidebar_toggle.set_active(false);
                                 obj.set_show_sidebar(false);
                                 obj.set_focus_mode_active(true);
-                                obj.set_focus_mode_enabled(true);
+                                obj.set_focus_mode(true);
                                 editor_sidebar_toggle.set_active(false);
                                 format_bar.set_visible(false);
                                 if let Some(editor) = imp.editor.borrow().as_ref() {
@@ -245,7 +245,7 @@ mod imp {
                                 sidebar_toggle.set_active(true);
                                 obj.set_focus_mode_active(false);
                                 obj.set_show_sidebar(true);
-                                obj.set_focus_mode_enabled(false);
+                                obj.set_focus_mode(false);
                                 editor_sidebar_toggle.set_active(true);
                                 format_bar.set_visible(true);
                                 if let Some(editor) = imp.editor.borrow().as_ref() {
@@ -280,11 +280,11 @@ mod imp {
                 )
                 .build();
 
-            obj.connect_notify(Some("focus-mode-enabled"), move |obj, _| {
-                let focus_mode_enabled = obj.focus_mode_enabled();
-                obj.action_set_enabled("win.enable-focus", !focus_mode_enabled);
-                obj.action_set_enabled("win.disable-focus", focus_mode_enabled);
-                obj.imp().set_focus_mode_active(focus_mode_enabled)
+            obj.connect_focus_mode_notify(move |obj| {
+                let enabled = obj.focus_mode();
+                obj.action_set_enabled("win.enable-focus", !enabled);
+                obj.action_set_enabled("win.disable-focus", enabled);
+                obj.imp().set_focus_mode_active(enabled)
             });
 
             obj.add_controller(self.motion_controller.clone());
@@ -575,11 +575,18 @@ mod imp {
             ));
             obj.add_action(&action);
 
-            let action = SimpleAction::new("toggle-focus", None);
-            action.connect_activate(clone!(
+            let action =
+                SimpleAction::new_stateful("focus-mode", None, &obj.focus_mode().to_variant());
+            action.connect_change_state(clone!(
                 #[weak]
                 obj,
-                move |_, _| obj.set_focus_mode_enabled(!obj.focus_mode_enabled())
+                move |action, state| {
+                    if let Some(state) = state {
+                        let enabled = state.get::<bool>().unwrap();
+                        obj.set_focus_mode(enabled);
+                        action.set_state(state);
+                    }
+                }
             ));
             obj.add_action(&action);
 
@@ -901,7 +908,7 @@ mod imp {
 
         fn set_focus_mode_active(&self, mut active: bool) {
             let obj = self.obj();
-            if !obj.focus_mode_enabled() {
+            if !obj.focus_mode() {
                 active = false;
             }
             if let Some(editor) = self.editor.borrow().as_ref() {

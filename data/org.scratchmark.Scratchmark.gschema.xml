@@ -55,6 +55,9 @@
     <key name="editor-use-spellcheck" type="b">
       <default>false</default>
     </key>
+    <key name="focus-mode" type="b">
+      <default>false</default>
+    </key>
     <key name="typewriter-mode" type="b">
       <default>false</default>
     </key>
@@ -65,9 +68,6 @@
       <default>800</default>
     </key>
     <key name="win-is-maximized" type="b">
-      <default>false</default>
-    </key>
-    <key name="focus-mode-enabled" type="b">
       <default>false</default>
     </key>
   </schema>

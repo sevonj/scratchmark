@@ -171,8 +171,8 @@
         <attribute name="action">win.toggle-fullscreen</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Toggle Focus Mode</attribute>
-        <attribute name="action">win.toggle-focus</attribute>
+        <attribute name="label" translatable="yes">Focus Mode</attribute>
+        <attribute name="action">win.focus-mode</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Typewriter Mode</attribute>
