@@ -100,6 +100,7 @@ fn setup_accels(app: &adw::Application) {
     app.set_accels_for_action("win.toggle-sidebar", &["F9"]);
     app.set_accels_for_action("win.toggle-fullscreen", &["F11"]);
     app.set_accels_for_action("win.toggle-focus", &["F8"]);
+    app.set_accels_for_action("win.typewriter-mode", &["<Control><Alt>T"]);
     app.set_accels_for_action("win.show-help-overlay", &["<Control>question"]);
     app.set_accels_for_action("win.preferences", &["<ctrl>comma"]);
 

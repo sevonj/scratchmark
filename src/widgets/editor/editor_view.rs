@@ -66,6 +66,8 @@ mod imp {
         max_width: Cell<u32>,
         #[property(get, set)]
         use_spellcheck: Cell<bool>,
+        #[property(get, set)]
+        typewriter_mode: Cell<bool>,
 
         #[template_child]
         pub(super) source_view: TemplateChild<EditorTextView>,
@@ -225,6 +227,37 @@ mod imp {
             obj.connect_max_width_notify(clone!(move |obj| {
                 obj.imp().refresh_max_width();
             }));
+
+            obj.connect_typewriter_mode_notify(clone!(move |obj| {
+                let imp = obj.imp();
+                imp.refresh_vertical_margins();
+                glib::idle_add_local_once(clone!(
+                    #[weak]
+                    imp,
+                    move || imp.refresh_typewriter_scrolling()
+                ));
+            }));
+
+            self.source_view.connect_move_cursor(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _, _, _| {
+                    glib::idle_add_local_once(move || {
+                        imp.refresh_typewriter_scrolling();
+                    });
+                }
+            ));
+
+            let source_click_gesture = gtk::GestureClick::new();
+            source_click_gesture.set_button(gtk::gdk::ffi::GDK_BUTTON_PRIMARY as u32);
+            source_click_gesture.connect_released(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, _, _, _| {
+                    imp.refresh_typewriter_scrolling();
+                }
+            ));
+            obj.add_controller(source_click_gesture);
 
             let actions = SimpleActionGroup::new();
             obj.insert_action_group("editor", Some(&actions));
@@ -407,6 +440,10 @@ mod imp {
             self.file_monitor.take().map(|fm| fm.cancel());
         }
 
+        fn scroll_margin(&self) -> i32 {
+            self.obj().height() - self.obj().font_size() as i32 * 2
+        }
+
         fn refresh_font(&self) {
             let obj = self.obj();
             self.source_view
@@ -438,14 +475,32 @@ mod imp {
             }
         }
 
-        fn refresh_bottom_margin(&self, available_height: i32) {
-            let line_h = {
-                let mut end_iter = self.source_view.buffer().end_iter();
-                end_iter.backward_line();
-                self.source_view.line_yrange(&end_iter).1
-            };
+        pub(super) fn refresh_typewriter_scrolling(&self) {
+            if !self.obj().typewriter_mode() {
+                return;
+            }
+            let (rect, _) = self.source_view.cursor_locations(None);
+            let line_y = (rect.y() + rect.height() / 2) as f64;
+
+            let scroll_margin = self.scroll_margin() as f64;
+            let source_height = self.source_view.height() as f64;
+            let view_height = self.obj().height() as f64;
+
+            let top_offset = scroll_margin - self.obj().height() as f64 / 2.0;
+            let line_progress = line_y / 2.0 / source_height;
+            let scroll_value =
+                top_offset + (source_height + view_height) * line_progress + view_height * 0.1;
+            self.scrolled_window.vadjustment().set_value(scroll_value);
+        }
+
+        fn refresh_vertical_margins(&self) {
+            let scroll_margin = self.scroll_margin();
+            self.source_view.set_bottom_margin(scroll_margin);
             self.source_view
-                .set_bottom_margin(available_height - line_h);
+                .set_top_margin(match self.obj().typewriter_mode() {
+                    true => scroll_margin,
+                    false => 96,
+                });
         }
 
         fn setup_height_watcher(&self) {
@@ -453,9 +508,8 @@ mod imp {
             let last = Cell::new(0);
             obj.add_tick_callback(move |widget, _clock| {
                 let height = widget.height();
-                if height != last.get() {
-                    last.set(height);
-                    widget.imp().refresh_bottom_margin(height);
+                if height != last.replace(height) {
+                    widget.imp().refresh_vertical_margins();
                 }
                 glib::ControlFlow::Continue
             });
@@ -528,6 +582,9 @@ impl EditorView {
             obj,
             move |buffer: &MarkdownBuffer| {
                 obj.on_buffer_changed(buffer);
+                glib::idle_add_local_once(move || {
+                    obj.imp().refresh_typewriter_scrolling();
+                });
             }
         ));
         imp.source_view.connect_paste_clipboard(clone!(

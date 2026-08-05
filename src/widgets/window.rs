@@ -583,6 +583,26 @@ mod imp {
             ));
             obj.add_action(&action);
 
+            let action = SimpleAction::new_stateful(
+                "typewriter-mode",
+                None,
+                &self.settings().boolean("typewriter-mode").to_variant(),
+            );
+            action.connect_change_state(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |action, state| {
+                    if let Some(state) = state {
+                        let enabled = state.get::<bool>().unwrap();
+                        imp.settings()
+                            .set_boolean("typewriter-mode", enabled)
+                            .unwrap();
+                        action.set_state(state);
+                    }
+                }
+            ));
+            obj.add_action(&action);
+
             obj.connect_fullscreened_notify(clone!(
                 #[weak (rename_to = imp)]
                 self,
@@ -1090,6 +1110,9 @@ mod imp {
                 .build();
             settings
                 .bind("editor-use-spellcheck", &editor, "use_spellcheck")
+                .build();
+            settings
+                .bind("typewriter-mode", &editor, "typewriter_mode")
                 .build();
 
             self.main_toolbar_view.set_content(Some(&editor));
