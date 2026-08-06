@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-06 13:23+0300\n"
-"PO-Revision-Date: 2026-08-05 12:35+0000\n"
+"PO-Revision-Date: 2026-08-06 10:24+0000\n"
 "Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
 "app/es/>\n"
@@ -440,13 +440,11 @@ msgid "General"
 msgstr "General"
 
 #: data/resources/ui/shortcuts.ui:14
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Salir de la pantalla completa"
 
 #: data/resources/ui/shortcuts.ui:20
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Focus Mode"
 msgstr "Modo focus"
@@ -647,12 +645,10 @@ msgid "Search and Replace"
 msgstr "Buscar y reemplazar"
 
 #: data/resources/ui/window.ui:169
-#, fuzzy
 msgid "Fullscreen"
 msgstr "Salir de la pantalla completa"
 
 #: data/resources/ui/window.ui:173
-#, fuzzy
 msgid "Focus Mode"
 msgstr "Modo focus"
 
