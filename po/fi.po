@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-06 13:23+0300\n"
-"PO-Revision-Date: 2026-08-05 12:50+0000\n"
+"PO-Revision-Date: 2026-08-06 13:08+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/scratchmark/"
 "app/fi/>\n"
@@ -362,14 +362,12 @@ msgid "Use default font"
 msgstr "Käytä oletusfonttia"
 
 #: data/resources/ui/preferences/dialog.ui:38
-#, fuzzy
 msgid "Font Size"
-msgstr "Fontti"
+msgstr "Fontin koko"
 
 #: data/resources/ui/preferences/dialog.ui:45
-#, fuzzy
 msgid "Reset"
-msgstr "Palauta oletuskoko"
+msgstr "Palauta"
 
 #: data/resources/ui/preferences/dialog.ui:65
 msgid "Editor"
