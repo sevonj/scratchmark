@@ -137,7 +137,7 @@ mod imp {
             let buffer = TextViewExt::buffer(self.obj().upcast_ref::<TextView>());
             let tag_table = buffer.tag_table();
 
-            let dim_color = gtk::gdk::RGBA::new(0.57, 0.57, 0.57, 1.0);
+            let dim_color = gtk::gdk::RGBA::new(0.5, 0.5, 0.5, 1.0);
 
             let dim_tag = gtk::TextTag::builder()
                 .name(TYPEWRITER_DIM_TAG)
