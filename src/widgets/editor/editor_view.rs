@@ -240,6 +240,11 @@ mod imp {
                 ));
             }));
 
+            let source_view: &EditorTextView = self.source_view.as_ref();
+            obj.bind_property("typewriter_mode", source_view, "typewriter_mode")
+                .sync_create()
+                .build();
+
             self.source_view.connect_move_cursor(clone!(
                 #[weak]
                 obj,
