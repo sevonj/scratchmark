@@ -4,24 +4,27 @@ mod imp {
     use std::collections::HashMap;
     use std::sync::OnceLock;
 
+    use crate::settings::EDITOR_FONT_SIZES;
+    use crate::util;
+    use crate::widgets::PreferencesFileExtItem;
+    use crate::widgets::preferences::file_ext_add_popover::FileExtAddPopover;
     use adw::ActionRow;
     use adw::SpinRow;
     use adw::SwitchRow;
     use adw::prelude::*;
     use adw::subclass::prelude::*;
+    use gtk::Button;
     use gtk::CompositeTemplate;
     use gtk::FlowBox;
     use gtk::FontDialog;
     use gtk::MenuButton;
+    use gtk::PositionType;
+    use gtk::Scale;
     use gtk::gio::Cancellable;
     use gtk::gio::Settings;
     use gtk::glib;
     use gtk::glib::clone;
     use gtk::glib::closure_local;
-
-    use crate::util;
-    use crate::widgets::PreferencesFileExtItem;
-    use crate::widgets::preferences::file_ext_add_popover::FileExtAddPopover;
 
     #[derive(CompositeTemplate, Default)]
     #[template(resource = "/org/scratchmark/Scratchmark/ui/preferences/dialog.ui")]
@@ -32,6 +35,10 @@ mod imp {
         editor_font_button: TemplateChild<ActionRow>,
         #[template_child]
         editor_font_reset_button: TemplateChild<ActionRow>,
+        #[template_child]
+        editor_font_scale: TemplateChild<Scale>,
+        #[template_child]
+        editor_font_scale_reset: TemplateChild<Button>,
         #[template_child]
         editor_minimap_toggle: TemplateChild<SwitchRow>,
         #[template_child]
@@ -89,7 +96,26 @@ mod imp {
             self.editor_font_reset_button.connect_activated(clone!(
                 #[weak(rename_to = imp)]
                 self,
-                move |_| imp.reset_font()
+                move |_| imp.reset_font_family()
+            ));
+
+            let min_font_size = *EDITOR_FONT_SIZES.first().unwrap() as f64;
+            let max_font_size = *EDITOR_FONT_SIZES.last().unwrap() as f64;
+            self.editor_font_scale
+                .set_range(min_font_size, max_font_size);
+            for step in EDITOR_FONT_SIZES {
+                self.editor_font_scale
+                    .add_mark(step as f64, PositionType::Bottom, None);
+            }
+            let font_scale_adjustment = self.editor_font_scale.adjustment();
+            settings
+                .bind("editor-font-size", &font_scale_adjustment, "value")
+                .build();
+
+            self.editor_font_scale_reset.connect_clicked(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_| imp.reset_font_size()
             ));
 
             let editor_minimap_toggle: &SwitchRow = &self.editor_minimap_toggle;
@@ -289,9 +315,13 @@ mod imp {
             );
         }
 
-        fn reset_font(&self) {
+        fn reset_font_family(&self) {
             let settings = self.settings.get().unwrap();
             settings.reset("editor-font-family");
+        }
+
+        fn reset_font_size(&self) {
+            let settings = self.settings.get().unwrap();
             settings.reset("editor-font-size");
         }
     }
