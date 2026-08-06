@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-06 13:23+0300\n"
-"PO-Revision-Date: 2026-08-06 10:24+0000\n"
+"PO-Revision-Date: 2026-08-06 13:08+0000\n"
 "Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
 "app/es/>\n"
@@ -48,21 +48,21 @@ msgid ""
 "handle large projects with lots of files. You can add any folder on your "
 "computer to the library, and move files around by dragging and dropping."
 msgstr ""
-"**Scratchmark** es un editor de texto muy agradable para escribir. Su "
-"objetivo es ofrecerte todo lo que necesitas y, por lo demás, no entorpecerte "
-"para que puedas centrarte únicamente en el texto. La aplicación sirve tanto "
-"para escribir ensayos como para tomar notas rápidas. Su gestión de archivos "
-"se basa en una estructura de carpetas capaz de gestionar proyectos de gran "
-"envergadura con muchos archivos. Puedes añadir cualquier carpeta de tu "
-"ordenador a la biblioteca y mover archivos arrastrándolos y soltándolos."
+"**Scratchmark** es una aplicación muy cómoda para escribir. Te da solo las "
+"herramientas necesarias y oculta el resto para que no te distraigas y te "
+"concentres en tu texto.Sirve tanto para apuntar notas rápidas como para "
+"escribir trabajos largos. Organiza tus textos en carpetas, lo que te permite "
+"gestionar proyectos grandes con muchos archivos. Además, puedes añadir "
+"cualquier carpeta de tu ordenador a la aplicación y ordenar tus notas "
+"simplemente arrastrándolas con el ratón."
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:18
 msgid ""
 "It uses Markdown, which means that ==all text formatting can be done by "
 "typing.=="
 msgstr ""
-"Utiliza Markdown, lo que significa que ==todo el formato del texto se puede "
-"aplicar simplemente escribiendo=="
+"Funciona con Markdown: esto significa que ==puedes cambiar el diseño del "
+"texto usando solo tu teclado.=="
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:19
 msgid ""
@@ -70,10 +70,10 @@ msgid ""
 "up and start writing. It can display simple writing statistics, and has "
 "features, such as focus mode and fullscreen support to reduce distractions."
 msgstr ""
-"El editor es sencillo e intuitivo, por lo que cualquiera debería poder "
-"empezar a utilizarlo y a escribir de inmediato. Muestra estadísticas básicas "
-"de escritura y cuenta con funciones como el modo de concentración y la "
-"opción de pantalla completa para reducir las distracciones."
+"El editor es tan sencillo e intuitivo que cualquiera puede empezar a "
+"escribir al instante. Muestra estadísticas básicas de tus textos y cuenta "
+"con herramientas como el modo enfoque y la pantalla completa para evitar "
+"cualquier distracción."
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:20
 msgid ""
@@ -83,12 +83,12 @@ msgid ""
 "the folder to Scratchmark's library. This also goes the other way: if you've "
 "had enough of Scratchmark, it's easy to switch to something else."
 msgstr ""
-"Markdown es un lenguaje de marcado abierto y muy utilizado. Los documentos "
-"creados con Scratchmark son más o menos compatibles con otras aplicaciones "
-"similares. Si ya tienes un «cuaderno» o un proyecto de otra aplicación, solo "
-"tienes que añadir la carpeta a la biblioteca de Scratchmark. Lo mismo ocurre "
-"a la inversa: si te has cansado de Scratchmark, es fácil cambiar a otra "
-"aplicación."
+"Al basarse en Markdown (un lenguaje abierto y muy popular), tus documentos "
+"de Scratchmark funcionarán en casi cualquier otra aplicación parecida. Si "
+"vienes de otro programa y ya tienes un proyecto o cuaderno guardado, basta "
+"con que importes esa carpeta a la biblioteca. Y si en algún momento decides "
+"dejar de usar Scratchmark, podrás llevarte tus textos a otra herramienta sin "
+"ninguna complicación."
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:26
 msgid "Editor interface"
@@ -131,7 +131,7 @@ msgstr "Líneas"
 
 #: data/resources/ui/editor/editor_view.ui:16
 msgid "File changed on disk"
-msgstr "El archivo se ha modificado en el disco"
+msgstr "Archivo modificado en el disco"
 
 #: data/resources/ui/editor/editor_view.ui:17
 msgid "Resolve"
@@ -359,14 +359,12 @@ msgid "Use default font"
 msgstr "Usar la tipografía por defecto"
 
 #: data/resources/ui/preferences/dialog.ui:38
-#, fuzzy
 msgid "Font Size"
-msgstr "Fuente"
+msgstr "Tamaño de letra"
 
 #: data/resources/ui/preferences/dialog.ui:45
-#, fuzzy
 msgid "Reset"
-msgstr "Restablecer el zum"
+msgstr "Restablecer"
 
 #: data/resources/ui/preferences/dialog.ui:65
 msgid "Editor"
