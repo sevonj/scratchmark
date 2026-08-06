@@ -73,12 +73,29 @@ fn main() -> glib::ExitCode {
 }
 
 fn setup_accels(app: &adw::Application) {
+    app.set_accels_for_action("win.fullscreen", &["F11"]);
+    app.set_accels_for_action("win.focus-mode", &["F8"]);
+    app.set_accels_for_action("win.typewriter-mode", &["<Control><Alt>T"]);
+    app.set_accels_for_action("win.toggle-sidebar", &["F9"]);
+    app.set_accels_for_action("editor.zoom-in", &["<Ctrl>plus"]);
+    app.set_accels_for_action("editor.zoom-out", &["<Ctrl>minus"]);
+    app.set_accels_for_action("editor.zoom-reset", &["<Ctrl>0"]);
+
+    app.set_accels_for_action("win.preferences", &["<ctrl>comma"]);
+    app.set_accels_for_action("win.show-help-overlay", &["<Control>question"]);
+    app.set_accels_for_action("app.quit", &["<ctrl>comma"]);
+
     app.set_accels_for_action("win.file-new", &["<Ctrl>N"]);
     app.set_accels_for_action("win.folder-new", &["<Shift><Ctrl>N"]);
     app.set_accels_for_action("win.project-add", &["<Ctrl><Shift>O"]);
     app.set_accels_for_action("win.file-save", &["<Ctrl>S"]);
     app.set_accels_for_action("win.file-rename-selected", &["F2"]);
     app.set_accels_for_action("win.file-close", &["<Ctrl>W"]);
+
+    app.set_accels_for_action("editor.show-search", &["<Ctrl>F"]);
+    app.set_accels_for_action("editor.show-search-replace", &["<Ctrl>R"]);
+    app.set_accels_for_action("editor.hide-search", &["Escape"]);
+
     app.set_accels_for_action("editor.format-bold", &["<Ctrl>B"]);
     app.set_accels_for_action("editor.format-italic", &["<Ctrl>I"]);
     app.set_accels_for_action("editor.format-link", &["<Ctrl>K"]);
@@ -88,22 +105,10 @@ fn setup_accels(app: &adw::Application) {
     app.set_accels_for_action("editor.format-h4", &["<Ctrl>4"]);
     app.set_accels_for_action("editor.format-h5", &["<Ctrl>5"]);
     app.set_accels_for_action("editor.format-h6", &["<Ctrl>6"]);
-    app.set_accels_for_action("editor.zoom-in", &["<Ctrl>plus"]);
-    app.set_accels_for_action("editor.zoom-out", &["<Ctrl>minus"]);
-    app.set_accels_for_action("editor.zoom-reset", &["<Ctrl>0"]);
-    app.set_accels_for_action("editor.show-search", &["<Ctrl>F"]);
-    app.set_accels_for_action("editor.show-search-replace", &["<Ctrl>R"]);
-    app.set_accels_for_action("editor.hide-search", &["Escape"]);
-    app.set_accels_for_action("editor.shiftreturn", &["<Shift>Return"]);
+
     app.set_accels_for_action("win.library-refresh", &["F5"]);
 
-    app.set_accels_for_action("win.toggle-sidebar", &["F9"]);
-    app.set_accels_for_action("win.fullscreen", &["F11"]);
-    app.set_accels_for_action("win.focus-mode", &["F8"]);
-    app.set_accels_for_action("win.typewriter-mode", &["<Control><Alt>T"]);
-    app.set_accels_for_action("win.show-help-overlay", &["<Control>question"]);
-    app.set_accels_for_action("win.preferences", &["<ctrl>comma"]);
-
+    app.set_accels_for_action("editor.shiftreturn", &["<Shift>Return"]);
     app.set_accels_for_action("win.eat-inspector", &["<ctrl><Shift>I"]);
     app.set_accels_for_action("win.eat-adaptive-preview", &["<ctrl><Shift>M"]);
 }
