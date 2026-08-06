@@ -1,184 +1,196 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="GtkShortcutsWindow" id="help_overlay">
-    <property name="modal">True</property>
+  <object class="AdwShortcutsDialog" id="dialog">
     <child>
-      <object class="GtkShortcutsSection">
-        <property name="section-name">shortcuts</property>
-        <property name="max-height">10</property>
+      <object class="AdwShortcutsSection">
+        <property name="title" translatable="yes" context="shortcut window">General</property>
         <child>
-          <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes" context="shortcut window">General</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Fullscreen</property>
-                <property name="action-name">win.fullscreen</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Focus Mode</property>
-                <property name="action-name">win.focus-mode</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Typewriter Mode</property>
-                <property name="action-name">win.typewriter-mode</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Preferences</property>
-                <property name="action-name">win.preferences</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Show Shortcuts</property>
-                <property name="action-name">win.show-help-overlay</property>
-              </object>
-            </child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Preferences</property>
+            <property name="action-name">win.preferences</property>
           </object>
         </child>
         <child>
-          <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes" context="shortcut window">Document</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">New Document</property>
-                <property name="action-name">win.file-new</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Add Project</property>
-                <property name="action-name">win.project-add</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Save Document</property>
-                <property name="action-name">win.file-save</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Rename</property>
-                <property name="action-name">win.file-rename-selected</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Close Document</property>
-                <property name="action-name">win.file-close</property>
-              </object>
-            </child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Keyboard Shortcuts</property>
+            <property name="action-name">win.show-help-overlay</property>
           </object>
         </child>
         <child>
-          <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes" context="shortcut window">Editor</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Search Text</property>
-                <property name="action-name">editor.show-search</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Search and Replace Text</property>
-                <property name="action-name">editor.show-search-replace</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Zoom In</property>
-                <property name="action-name">editor.zoom-in</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Zoom Out</property>
-                <property name="action-name">editor.zoom-out</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Reset Zoom</property>
-                <property name="action-name">editor.zoom-reset</property>
-              </object>
-            </child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Quit</property>
+            <property name="action-name">app.quit</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+    <object class="AdwShortcutsSection">
+      <property name="title" translatable="yes" context="shortcut window">View</property>
+      <child>
+        <object class="AdwShortcutsItem">
+          <property name="title" translatable="yes" context="shortcut window">Fullscreen</property>
+          <property name="action-name">win.fullscreen</property>
+        </object>
+      </child>
+      <child>
+        <object class="AdwShortcutsItem">
+          <property name="title" translatable="yes" context="shortcut window">Focus Mode</property>
+          <property name="action-name">win.focus-mode</property>
+        </object>
+      </child>
+      <child>
+        <object class="AdwShortcutsItem">
+          <property name="title" translatable="yes" context="shortcut window">Typewriter Mode</property>
+          <property name="action-name">win.typewriter-mode</property>
+        </object>
+      </child>
+      <child>
+        <object class="AdwShortcutsItem">
+          <property name="title" translatable="yes" context="shortcut window">Zoom In</property>
+          <property name="subtitle" translatable="yes" context="shortcut window">Increase font size</property>
+          <property name="action-name">editor.zoom-in</property>
+        </object>
+      </child>
+      <child>
+        <object class="AdwShortcutsItem">
+          <property name="title" translatable="yes" context="shortcut window">Zoom Out</property>
+          <property name="subtitle" translatable="yes" context="shortcut window">Decrease font size</property>
+          <property name="action-name">editor.zoom-out</property>
+        </object>
+      </child>
+      <child>
+        <object class="AdwShortcutsItem">
+          <property name="title" translatable="yes" context="shortcut window">Reset Zoom</property>
+          <property name="action-name">editor.zoom-reset</property>
+        </object>
+      </child>
+    </object>
+  </child>
+    <child>
+      <object class="AdwShortcutsSection">
+        <property name="title" translatable="yes" context="shortcut window">File</property>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">New Document</property>
+            <property name="action-name">win.file-new</property>
           </object>
         </child>
         <child>
-          <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes" context="shortcut window">Formatting</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Bold</property>
-                <property name="action-name">editor.format-bold</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Italic</property>
-                <property name="action-name">editor.format-italic</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Insert Link</property>
-                <property name="action-name">editor.format-link</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Heading 1</property>
-                <property name="action-name">editor.format-h1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Heading 2</property>
-                <property name="action-name">editor.format-h2</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Heading 3</property>
-                <property name="action-name">editor.format-h3</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Heading 4</property>
-                <property name="action-name">editor.format-h4</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Heading 5</property>
-                <property name="action-name">editor.format-h5</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Heading 6</property>
-                <property name="action-name">editor.format-h6</property>
-              </object>
-            </child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">New Folder</property>
+            <property name="action-name">win.folder-new</property>
           </object>
         </child>
         <child>
-          <object class="GtkShortcutsGroup">
-            <property name="title" translatable="yes" context="shortcut window">Library</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="title" translatable="yes" context="shortcut window">Manual Refresh</property>
-                <property name="action-name">win.library-refresh</property>
-              </object>
-            </child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Add Project</property>
+            <property name="action-name">win.project-add</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Save Document</property>
+            <property name="action-name">win.file-save</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Rename</property>
+            <property name="action-name">win.file-rename-selected</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Close Document</property>
+            <property name="action-name">win.file-close</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwShortcutsSection">
+        <property name="title" translatable="yes" context="shortcut window">Editor</property>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Search Text</property>
+            <property name="action-name">editor.show-search</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Search and Replace Text</property>
+            <property name="action-name">editor.show-search-replace</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwShortcutsSection">
+        <property name="title" translatable="yes" context="shortcut window">Formatting</property>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Bold</property>
+            <property name="action-name">editor.format-bold</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Italic</property>
+            <property name="action-name">editor.format-italic</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Insert Link</property>
+            <property name="action-name">editor.format-link</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Heading 1</property>
+            <property name="action-name">editor.format-h1</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Heading 2</property>
+            <property name="action-name">editor.format-h2</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Heading 3</property>
+            <property name="action-name">editor.format-h3</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Heading 4</property>
+            <property name="action-name">editor.format-h4</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Heading 5</property>
+            <property name="action-name">editor.format-h5</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Heading 6</property>
+            <property name="action-name">editor.format-h6</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwShortcutsSection">
+        <property name="title" translatable="yes" context="shortcut window">Library</property>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Refresh Library Contents</property>
+            <property name="action-name">win.library-refresh</property>
           </object>
         </child>
       </object>

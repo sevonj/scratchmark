@@ -10,6 +10,7 @@ mod imp {
     use adw::HeaderBar;
     use adw::NavigationPage;
     use adw::OverlaySplitView;
+    use adw::ShortcutsDialog;
     use adw::Toast;
     use adw::ToastOverlay;
     use adw::ToolbarStyle;
@@ -303,10 +304,6 @@ mod imp {
                 .build();
 
             self.editor_sidebar_toggle.set_sensitive(false);
-
-            let builder = Builder::from_resource("/org/scratchmark/Scratchmark/ui/shortcuts.ui");
-            let shortcuts = builder.object("help_overlay").unwrap();
-            obj.set_help_overlay(Some(&shortcuts));
 
             let top_split = self.top_split.get();
 
@@ -715,6 +712,19 @@ mod imp {
                         Builder::from_resource("/org/scratchmark/Scratchmark/ui/about_dialog.ui");
                     let dialog: AboutDialog = builder.object("dialog").unwrap();
                     dialog.set_version(config::VERSION);
+                    dialog.present(Some(&obj));
+                }
+            ));
+            obj.add_action(&action);
+
+            let action = SimpleAction::new("show-help-overlay", None);
+            action.connect_activate(clone!(
+                #[weak]
+                obj,
+                move |_, _| {
+                    let builder =
+                        Builder::from_resource("/org/scratchmark/Scratchmark/ui/shortcuts.ui");
+                    let dialog: ShortcutsDialog = builder.object("dialog").unwrap();
                     dialog.present(Some(&obj));
                 }
             ));
