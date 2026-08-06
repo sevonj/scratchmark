@@ -65,9 +65,9 @@ src/widgets/library/project_list_box.rs
 src/widgets/library/project_view.rs
 src/widgets/markdown_format_bar.rs
 src/widgets/mod.rs
-src/widgets/preferences.rs
 src/widgets/preferences/dialog.rs
 src/widgets/preferences/file_ext_add_popover.rs
 src/widgets/preferences/file_ext_item.rs
+src/widgets/preferences/mod.rs
 src/widgets/window.rs
 src/widgets/window_title.rs

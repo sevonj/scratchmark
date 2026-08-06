@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-05 15:17+0300\n"
+"POT-Creation-Date: 2026-08-06 13:23+0300\n"
 "PO-Revision-Date: 2026-08-05 12:35+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Turkish <https://translate.codeberg.org/projects/scratchmark/"
@@ -264,7 +264,7 @@ msgstr "Kalıcı Olarak Sil"
 #: data/resources/ui/library/drafts_context_menu.ui:6
 #: data/resources/ui/library/folder_context_menu.ui:6
 #: data/resources/ui/library/root_context_menu.ui:6
-#: data/resources/ui/window.ui:122
+#: data/resources/ui/window.ui:121
 msgid "New Document"
 msgstr "Yeni Belge"
 
@@ -284,7 +284,7 @@ msgstr "Oluştur"
 #: data/resources/ui/library/folder_context_menu.ui:10
 #: data/resources/ui/library/folder_create_popover.ui:11
 #: data/resources/ui/library/root_context_menu.ui:10
-#: data/resources/ui/window.ui:126
+#: data/resources/ui/window.ui:125
 msgid "New Folder"
 msgstr "Yeni Klasör"
 
@@ -357,63 +357,72 @@ msgstr "Öntanımlı Değerlere Sıfırla"
 msgid "Use default font"
 msgstr "Öntanımlı yazı tipini kullan"
 
-#: data/resources/ui/preferences/dialog.ui:28
+#: data/resources/ui/preferences/dialog.ui:38
+#, fuzzy
+msgid "Font Size"
+msgstr "Yazı Tipi"
+
+#: data/resources/ui/preferences/dialog.ui:45
+msgid "Reset"
+msgstr ""
+
+#: data/resources/ui/preferences/dialog.ui:65
 msgid "Editor"
 msgstr "Düzenleyici"
 
-#: data/resources/ui/preferences/dialog.ui:31
+#: data/resources/ui/preferences/dialog.ui:68
 msgid "Show Minimap"
 msgstr "Küçük Haritayı Göster"
 
-#: data/resources/ui/preferences/dialog.ui:32
+#: data/resources/ui/preferences/dialog.ui:69
 msgid "Show overview of the document on the right side"
 msgstr "Belgenin genel görünümünü sağ kenarda göster"
 
-#: data/resources/ui/preferences/dialog.ui:37
+#: data/resources/ui/preferences/dialog.ui:74
 msgid "Insert Tabs As Spaces"
 msgstr ""
 
-#: data/resources/ui/preferences/dialog.ui:38
+#: data/resources/ui/preferences/dialog.ui:75
 msgid "Pressing the tab key will insert 4 spaces"
 msgstr ""
 
-#: data/resources/ui/preferences/dialog.ui:43
+#: data/resources/ui/preferences/dialog.ui:80
 msgid "Clamp Editor Width"
 msgstr ""
 
-#: data/resources/ui/preferences/dialog.ui:48
+#: data/resources/ui/preferences/dialog.ui:85
 msgid "Max Editor Width"
 msgstr ""
 
-#: data/resources/ui/preferences/dialog.ui:58
+#: data/resources/ui/preferences/dialog.ui:95
 msgid "Check Spelling"
 msgstr ""
 
-#: data/resources/ui/preferences/dialog.ui:65 data/resources/ui/window.ui:19
+#: data/resources/ui/preferences/dialog.ui:102 data/resources/ui/window.ui:18
 msgid "Library"
 msgstr "Kitaplık"
 
-#: data/resources/ui/preferences/dialog.ui:68
+#: data/resources/ui/preferences/dialog.ui:105
 msgid "Ignore Hidden Files"
 msgstr "Gizli Dosyaları Görmezden Gel"
 
-#: data/resources/ui/preferences/dialog.ui:69
+#: data/resources/ui/preferences/dialog.ui:106
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr "Önünde \".\" bulunan dosyalar ve klasörler kitaplıkta görünmez"
 
-#: data/resources/ui/preferences/dialog.ui:74
+#: data/resources/ui/preferences/dialog.ui:111
 msgid "Show File Extensions"
 msgstr ""
 
-#: data/resources/ui/preferences/dialog.ui:79
+#: data/resources/ui/preferences/dialog.ui:116
 msgid "Custom File Extensions"
 msgstr ""
 
-#: data/resources/ui/preferences/dialog.ui:80
+#: data/resources/ui/preferences/dialog.ui:117
 msgid "Include additional file types in library"
 msgstr ""
 
-#: data/resources/ui/preferences/dialog.ui:88
+#: data/resources/ui/preferences/dialog.ui:125
 #: data/resources/ui/preferences/file_ext_add_popover.ui:16
 msgid "Add"
 msgstr ""
@@ -575,113 +584,113 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Elle Yenile"
 
-#: data/resources/ui/window.ui:28 data/resources/ui/window.ui:199
+#: data/resources/ui/window.ui:27 data/resources/ui/window.ui:198
 msgid "Sort"
 msgstr "Sırala"
 
-#: data/resources/ui/window.ui:41
+#: data/resources/ui/window.ui:40
 msgid "Menu"
 msgstr "Menü"
 
-#: data/resources/ui/window.ui:71
+#: data/resources/ui/window.ui:70
 msgid "Toggle Sidebar (F9)"
 msgstr "Kenar Çubuğunu Aç/Kapat (F9)"
 
-#: data/resources/ui/window.ui:77
+#: data/resources/ui/window.ui:76
 msgid "New Document (Ctrl+N)"
 msgstr "Yeni Belge (Ctrl+N)"
 
-#: data/resources/ui/window.ui:84
+#: data/resources/ui/window.ui:83
 msgid "Exit Fullscreen"
 msgstr "Tam Ekrandan Çık"
 
-#: data/resources/ui/window.ui:92
+#: data/resources/ui/window.ui:91
 msgid "Document Info"
 msgstr "Belge Bilgisi"
 
-#: data/resources/ui/window.ui:98
+#: data/resources/ui/window.ui:97
 msgid "Formatting Toolbar"
 msgstr "Biçimlendirme Araç Çubuğu"
 
-#: data/resources/ui/window.ui:130
+#: data/resources/ui/window.ui:129
 msgid "Add Project"
 msgstr "Proje Ekle"
 
-#: data/resources/ui/window.ui:136
+#: data/resources/ui/window.ui:135
 msgid "Save"
 msgstr "Kaydet"
 
-#: data/resources/ui/window.ui:140
+#: data/resources/ui/window.ui:139
 msgid "Close"
 msgstr "Kapat"
 
-#: data/resources/ui/window.ui:146
+#: data/resources/ui/window.ui:145
 msgid "Zoom In"
 msgstr ""
 
-#: data/resources/ui/window.ui:150
+#: data/resources/ui/window.ui:149
 msgid "Zoom Out"
 msgstr ""
 
-#: data/resources/ui/window.ui:154
+#: data/resources/ui/window.ui:153
 msgid "Reset Zoom"
 msgstr ""
 
-#: data/resources/ui/window.ui:160
+#: data/resources/ui/window.ui:159
 msgid "Search Text"
 msgstr "Metin Ara"
 
-#: data/resources/ui/window.ui:164
+#: data/resources/ui/window.ui:163
 msgid "Search and Replace"
 msgstr "Ara ve Değiştir"
 
-#: data/resources/ui/window.ui:170
+#: data/resources/ui/window.ui:169
 #, fuzzy
 msgid "Fullscreen"
 msgstr "Tam Ekrandan Çık"
 
-#: data/resources/ui/window.ui:174
+#: data/resources/ui/window.ui:173
 #, fuzzy
 msgid "Focus Mode"
 msgstr "Odak kipi"
 
-#: data/resources/ui/window.ui:178
+#: data/resources/ui/window.ui:177
 msgid "Typewriter Mode"
 msgstr ""
 
-#: data/resources/ui/window.ui:184
+#: data/resources/ui/window.ui:183
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: data/resources/ui/window.ui:188
+#: data/resources/ui/window.ui:187
 msgid "Keyboard Shortcuts"
 msgstr "Klavye Kısayolları"
 
-#: data/resources/ui/window.ui:192
+#: data/resources/ui/window.ui:191
 msgid "About Scratchmark"
 msgstr "Scratchmark Hakkında"
 
-#: data/resources/ui/window.ui:202
+#: data/resources/ui/window.ui:201
 msgid "A-Z"
 msgstr "A-Z"
 
-#: data/resources/ui/window.ui:207
+#: data/resources/ui/window.ui:206
 msgid "Z-A"
 msgstr "Z-A"
 
-#: data/resources/ui/window.ui:212
+#: data/resources/ui/window.ui:211
 msgid "Last Modified"
 msgstr "Son Değiştirilme"
 
-#: data/resources/ui/window.ui:217
+#: data/resources/ui/window.ui:216
 msgid "First Modified"
 msgstr "İlk Değiştirilme"
 
-#: data/resources/ui/window.ui:222
+#: data/resources/ui/window.ui:221
 msgid "Last Accessed"
 msgstr ""
 
-#: data/resources/ui/window.ui:227
+#: data/resources/ui/window.ui:226
 msgid "First Accessed"
 msgstr ""
 
@@ -749,17 +758,17 @@ msgstr "Alt Klasör Oluştur"
 msgid "Folder deleted"
 msgstr ""
 
-#: src/widgets/window.rs:446
+#: src/widgets/window.rs:414
 #, fuzzy
 msgid "Couldn't move file"
 msgstr "Alt Klasör Oluştur"
 
-#: src/widgets/window.rs:679
+#: src/widgets/window.rs:660
 #, fuzzy
 msgid "Saved"
 msgstr "Kaydet"
 
-#: src/widgets/window.rs:979
+#: src/widgets/window.rs:959
 #, fuzzy
 msgid "Open document has been moved or deleted"
 msgstr "Proje taşınmış ya da silinmiş olabilir."
