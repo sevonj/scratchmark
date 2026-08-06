@@ -60,9 +60,9 @@ mod imp {
         #[template_child]
         sidebar_toggle: TemplateChild<ToggleButton>,
         #[template_child]
-        sidebar_collapse_breakpoint: TemplateChild<Breakpoint>,
+        narrow_layout_breakpoint: TemplateChild<Breakpoint>,
         #[property(get, set)]
-        sidebar_must_collapse: Cell<bool>,
+        too_narrow_for_sidebar: Cell<bool>,
         /// Bound to setting. Does not directly map to sidebar visibility, because even when this
         /// is true, the sidebar can be hidden by focus mode or too narrow window.
         #[property(get, set)]
@@ -483,19 +483,19 @@ mod imp {
                 }
             ));
 
-            self.sidebar_collapse_breakpoint.connect_apply(clone!(
+            self.narrow_layout_breakpoint.connect_apply(clone!(
                 #[weak]
                 obj,
-                move |_| obj.set_sidebar_must_collapse(true)
+                move |_| obj.set_too_narrow_for_sidebar(true)
             ));
 
-            self.sidebar_collapse_breakpoint.connect_unapply(clone!(
+            self.narrow_layout_breakpoint.connect_unapply(clone!(
                 #[weak]
                 obj,
-                move |_| obj.set_sidebar_must_collapse(false)
+                move |_| obj.set_too_narrow_for_sidebar(false)
             ));
 
-            obj.connect_sidebar_must_collapse_notify(move |obj| {
+            obj.connect_too_narrow_for_sidebar_notify(move |obj| {
                 obj.imp().update_sidebar_collapse()
             });
 
@@ -613,7 +613,7 @@ mod imp {
                 move |_| imp.update_toolbar_visibility()
             ));
             self.update_toolbar_visibility();
-            self.setup_motion_revealers();
+            self.setup_toolbar_revealers();
 
             let action = SimpleAction::new("file-new", None);
             action.connect_activate(clone!(
@@ -860,7 +860,7 @@ mod imp {
 
             obj.connect_map(|obj| {
                 obj.imp()
-                    .editor_actions_set_enabled(obj.imp().editor.borrow().is_some());
+                    .set_editor_actions_enabled(obj.imp().editor.borrow().is_some());
             });
 
             self.load_state();
@@ -894,8 +894,8 @@ mod imp {
             let format_bar_open = self.format_bar_toggle.is_active();
             let editor_sidebar_open =
                 self.editor.borrow().is_some() && self.editor_sidebar_toggle.is_active();
-            let is_fullscreen = self.obj().is_fullscreen();
-            let style = if format_bar_open || editor_sidebar_open || is_fullscreen {
+            let fullscreen = self.obj().is_fullscreen();
+            let style = if format_bar_open || editor_sidebar_open || fullscreen {
                 ToolbarStyle::Raised
             } else {
                 ToolbarStyle::Flat
@@ -917,7 +917,7 @@ mod imp {
         }
 
         fn update_sidebar_collapse(&self) {
-            if self.obj().sidebar_must_collapse() {
+            if self.obj().too_narrow_for_sidebar() {
                 self.top_split.set_collapsed(true);
                 return;
             }
@@ -1093,7 +1093,7 @@ mod imp {
             self.format_bar.bind_editor(Some(editor.clone()));
             self.editor.replace(Some(editor));
             self.library_view.set_open_document_path(Some(path));
-            self.editor_actions_set_enabled(true);
+            self.set_editor_actions_enabled(true);
             self.update_window_title();
             self.update_toolbar_style();
         }
@@ -1114,11 +1114,11 @@ mod imp {
             self.library_view.set_open_document_path(None::<PathBuf>);
             self.format_bar.bind_editor(None);
             self.editor_sidebar_toggle.set_sensitive(false);
-            self.editor_actions_set_enabled(false);
+            self.set_editor_actions_enabled(false);
             self.update_toolbar_style();
         }
 
-        fn editor_actions_set_enabled(&self, enabled: bool) {
+        fn set_editor_actions_enabled(&self, enabled: bool) {
             let obj = self.obj();
             obj.action_set_enabled("win.file-save", enabled);
             obj.action_set_enabled("win.file-rename-selected", enabled);
@@ -1134,7 +1134,6 @@ mod imp {
             obj.action_set_enabled("editor.shiftreturn", enabled);
         }
 
-        /// App quit
         fn on_close_request(&self) -> glib::Propagation {
             self.save_state().expect("Failed to save app state");
             if let Err(e) = self.close_editor() {
@@ -1144,7 +1143,7 @@ mod imp {
             glib::Propagation::Proceed
         }
 
-        fn setup_motion_revealers(&self) {
+        fn setup_toolbar_revealers(&self) {
             self.motion_controller.connect_motion(clone!(
                 #[weak(rename_to = imp)]
                 self,
