@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
     <template class="DocumentRow" parent="GtkListBoxRow">
-
         <child>
             <object class="GtkBox">
                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
