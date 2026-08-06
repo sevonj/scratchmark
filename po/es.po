@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-06 13:23+0300\n"
-"PO-Revision-Date: 2026-08-06 13:08+0000\n"
+"PO-Revision-Date: 2026-08-07 13:25+0000\n"
 "Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
 "app/es/>\n"
@@ -440,12 +440,12 @@ msgstr "General"
 #: data/resources/ui/shortcuts.ui:14
 msgctxt "shortcut window"
 msgid "Fullscreen"
-msgstr "Salir de la pantalla completa"
+msgstr "Pantalla completa"
 
 #: data/resources/ui/shortcuts.ui:20
 msgctxt "shortcut window"
 msgid "Focus Mode"
-msgstr "Modo focus"
+msgstr "Diseño limpio"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
@@ -644,11 +644,11 @@ msgstr "Buscar y reemplazar"
 
 #: data/resources/ui/window.ui:169
 msgid "Fullscreen"
-msgstr "Salir de la pantalla completa"
+msgstr "Pantalla completa"
 
 #: data/resources/ui/window.ui:173
 msgid "Focus Mode"
-msgstr "Modo focus"
+msgstr "Diseño limpio"
 
 #: data/resources/ui/window.ui:177
 msgid "Typewriter Mode"
@@ -692,7 +692,7 @@ msgstr "Primera consulta"
 
 #: src/error.rs:25
 msgid "Couldn't create file"
-msgstr "No se ha podido crear el archivo"
+msgstr "Error al crear el archivo"
 
 #: src/error.rs:26
 msgid "Couldn't access file"
