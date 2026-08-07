@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-06 13:23+0300\n"
-"PO-Revision-Date: 2026-08-05 12:35+0000\n"
+"PO-Revision-Date: 2026-08-08 20:25+0000\n"
 "Last-Translator: Łukasz Horodecki <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
 "app/pl/>\n"
@@ -365,14 +365,12 @@ msgid "Use default font"
 msgstr "Używa domyślnej czcionki"
 
 #: data/resources/ui/preferences/dialog.ui:38
-#, fuzzy
 msgid "Font Size"
-msgstr "Czcionka"
+msgstr "Rozmiar czcionki"
 
 #: data/resources/ui/preferences/dialog.ui:45
-#, fuzzy
 msgid "Reset"
-msgstr "Przywróć powiększenie"
+msgstr "Przywróć"
 
 #: data/resources/ui/preferences/dialog.ui:65
 msgid "Editor"
@@ -446,13 +444,11 @@ msgid "General"
 msgstr "Ogólne"
 
 #: data/resources/ui/shortcuts.ui:14
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Fullscreen"
-msgstr "Opuszcza pełny ekran"
+msgstr "Pełny ekran"
 
 #: data/resources/ui/shortcuts.ui:20
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Focus Mode"
 msgstr "Tryb skupienia"
@@ -460,7 +456,7 @@ msgstr "Tryb skupienia"
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
 msgid "Typewriter Mode"
-msgstr ""
+msgstr "Tryb maszyny do pisania"
 
 #: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
@@ -653,18 +649,16 @@ msgid "Search and Replace"
 msgstr "Szukaj i zastąp"
 
 #: data/resources/ui/window.ui:169
-#, fuzzy
 msgid "Fullscreen"
-msgstr "Opuszcza pełny ekran"
+msgstr "Pełny ekran"
 
 #: data/resources/ui/window.ui:173
-#, fuzzy
 msgid "Focus Mode"
 msgstr "Tryb skupienia"
 
 #: data/resources/ui/window.ui:177
 msgid "Typewriter Mode"
-msgstr ""
+msgstr "Tryb maszyny do pisania"
 
 #: data/resources/ui/window.ui:183
 msgid "Preferences"
