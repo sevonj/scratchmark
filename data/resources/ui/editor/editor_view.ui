@@ -6,8 +6,31 @@
         <child>
             <object class="AdwOverlaySplitView" id="editor_split">
                 <property name="sidebar-position">end</property>
+                <property name="min-sidebar-width">256</property>
                 <property name="sidebar">
-                    <object class="DocumentStatsView" id="stats_view" />
+                    <object class="AdwBin">
+                        <property name="margin-start">1</property>
+                        <style>
+                            <class name="background"/>
+                        </style>
+                        <child>
+                            <object class="GtkBox">
+                                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                                <property name="margin-start">16</property>
+                                <property name="margin-top">12</property>
+                                <property name="margin-bottom">12</property>
+                                <property name="spacing">16</property>
+                                <child>
+                                    <object class="DocumentStatsView" id="stats_view"/>
+                                </child>
+                                <child>
+                                    <object class="TocView" id="toc_view">
+                                        <property name="vexpand">true</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
                 </property>
                 <property name="content">
                     <object class="AdwToolbarView">

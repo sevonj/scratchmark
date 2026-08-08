@@ -1,10 +1,13 @@
 mod imp {
-    use std::cell::Cell;
-    use std::cell::OnceCell;
-    use std::cell::RefCell;
-    use std::path::PathBuf;
-    use std::sync::OnceLock;
-
+    use crate::data::DocumentStats;
+    use crate::data::MarkdownBuffer;
+    use crate::util::file_actions;
+    use crate::widgets::editor::document_stats_view::DocumentStatsView;
+    use crate::widgets::editor::file_changed_on_disk_dialog::FileChangedOnDiskDialog;
+    use crate::widgets::editor::minimap::Minimap;
+    use crate::widgets::editor::search_bar::EditorSearchBar;
+    use crate::widgets::editor::text_view::EditorTextView;
+    use crate::widgets::editor::toc_view::TocView;
     use adw::AlertDialog;
     use adw::Banner;
     use adw::ClampScrollable;
@@ -32,15 +35,11 @@ mod imp {
     use libspelling::Checker;
     use libspelling::TextBufferAdapter;
     use sourceview5::prelude::ViewExt;
-
-    use crate::data::DocumentStats;
-    use crate::data::MarkdownBuffer;
-    use crate::util::file_actions;
-    use crate::widgets::editor::document_stats_view::DocumentStatsView;
-    use crate::widgets::editor::file_changed_on_disk_dialog::FileChangedOnDiskDialog;
-    use crate::widgets::editor::minimap::Minimap;
-    use crate::widgets::editor::search_bar::EditorSearchBar;
-    use crate::widgets::editor::text_view::EditorTextView;
+    use std::cell::Cell;
+    use std::cell::OnceCell;
+    use std::cell::RefCell;
+    use std::path::PathBuf;
+    use std::sync::OnceLock;
 
     const DEFAULT_TOP_MARGIN: i32 = 96;
 
@@ -77,6 +76,8 @@ mod imp {
         pub(super) source_view_clamp: TemplateChild<ClampScrollable>,
         #[template_child]
         pub(super) stats_view: TemplateChild<DocumentStatsView>,
+        #[template_child]
+        pub(super) toc_view: TemplateChild<TocView>,
 
         #[template_child]
         pub(super) search_bar: TemplateChild<EditorSearchBar>,
@@ -110,6 +111,7 @@ mod imp {
             EditorTextView::ensure_type();
             DocumentStatsView::ensure_type();
             Minimap::ensure_type();
+            TocView::ensure_type();
 
             klass.bind_template();
         }
@@ -137,6 +139,19 @@ mod imp {
                     self,
                     move |_: EditorSearchBar, mark: TextMark| {
                         imp.source_view.scroll_to_mark(&mark, 0.0, false, 0.5, 0.5);
+                    }
+                ),
+            );
+
+            self.toc_view.connect_closure(
+                "activated",
+                true,
+                closure_local!(
+                    #[weak(rename_to = imp)]
+                    self,
+                    move |_: TocView| {
+                        imp.scroll_to_cursor();
+                        imp.source_view.grab_focus();
                     }
                 ),
             );
@@ -423,6 +438,10 @@ mod imp {
     impl BinImpl for EditorView {}
 
     impl EditorView {
+        fn scroll_margin(&self) -> i32 {
+            self.obj().height() - self.obj().font_size() as i32 * 2
+        }
+
         pub(super) fn start_file_monitor(&self) {
             self.stop_file_monitor();
 
@@ -449,8 +468,19 @@ mod imp {
             self.file_monitor.take().map(|fm| fm.cancel());
         }
 
-        fn scroll_margin(&self) -> i32 {
-            self.obj().height() - self.obj().font_size() as i32 * 2
+        fn scroll_to_cursor(&self) {
+            let (rect, _) = self.source_view.cursor_locations(None);
+            let line_y = (rect.y() + rect.height() / 2) as f64;
+
+            let top_margin = self.source_view.top_margin() as f64;
+            let source_height = self.source_view.height() as f64;
+            let view_height = self.obj().height() as f64;
+
+            let top_offset = top_margin - self.obj().height() as f64 / 2.0;
+            let line_progress = line_y / 2.0 / source_height;
+            let scroll_value =
+                top_offset + (source_height + view_height) * line_progress + view_height * 0.1;
+            self.scrolled_window.vadjustment().set_value(scroll_value);
         }
 
         fn refresh_font(&self) {
@@ -488,18 +518,7 @@ mod imp {
             if !self.obj().typewriter_mode() {
                 return;
             }
-            let (rect, _) = self.source_view.cursor_locations(None);
-            let line_y = (rect.y() + rect.height() / 2) as f64;
-
-            let scroll_margin = self.scroll_margin() as f64;
-            let source_height = self.source_view.height() as f64;
-            let view_height = self.obj().height() as f64;
-
-            let top_offset = scroll_margin - self.obj().height() as f64 / 2.0;
-            let line_progress = line_y / 2.0 / source_height;
-            let scroll_value =
-                top_offset + (source_height + view_height) * line_progress + view_height * 0.1;
-            self.scrolled_window.vadjustment().set_value(scroll_value);
+            self.scroll_to_cursor()
         }
 
         fn refresh_vertical_margins(&self) {
@@ -577,6 +596,7 @@ impl EditorView {
         let adapter = TextBufferAdapter::new(&buffer.clone().upcast::<Buffer>(), &checker);
         imp.adapter.set(adapter.clone()).unwrap();
         imp.checker.set(checker).unwrap();
+        imp.toc_view.bind(buffer.clone());
         imp.file.replace(Some(file));
         imp.path.replace(Some(path));
         imp.source_view.set_monospace(true);

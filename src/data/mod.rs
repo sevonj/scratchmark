@@ -5,17 +5,17 @@ mod markdown_buffer;
 mod project;
 mod sort;
 
-use std::path::PathBuf;
-use std::time::SystemTime;
-
 pub use document::Document;
 pub use document_stats::DocumentStats;
 pub use folder::Folder;
 pub use folder::FolderType;
 pub use markdown_buffer::MarkdownBuffer;
+pub use markdown_buffer::MarkdownHeading;
 pub use project::Project;
 pub use sort::ProjectSorter;
 pub use sort::SortMethod;
+use std::path::PathBuf;
+use std::time::SystemTime;
 
 use gtk::glib::CollationKey;
 
