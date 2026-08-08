@@ -5,7 +5,7 @@ license = "GPL-3.0-or-later"
 edition = "2024"
 
 [dependencies]
-adw = { version = "0.8.1", package = "libadwaita", features = ["v1_5"] }
+adw = { version = "0.8.1", package = "libadwaita", features = ["v1_9"] }
 async-channel = "2.5.0"
 gtk = { version = "0.10.3", package = "gtk4", features = ["v4_14"] }
 sourceview5 = "0.10.0"
