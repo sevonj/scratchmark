@@ -9,7 +9,7 @@ adw = { version = "0.8.1", package = "libadwaita", features = ["v1_5"] }
 async-channel = "2.5.0"
 gtk = { version = "0.10.3", package = "gtk4", features = ["v4_14"] }
 sourceview5 = "0.10.0"
-gettext-rs = { version = "0.7", features = ["gettext-system"] }
+gettext-rs = { version = "0.8", features = ["gettext-system"] }
 regex = "1.12.2"
 libspelling = "0.4.1"
 
