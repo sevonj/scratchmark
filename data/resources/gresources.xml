@@ -7,6 +7,8 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/file_changed_on_disk_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/minimap.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/editor/search_bar.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/editor/toc_row.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/editor/toc_view.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/delete_confirm_dialog.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/document_context_menu.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/library/document_row.ui</file>

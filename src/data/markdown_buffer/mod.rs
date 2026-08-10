@@ -1,8 +1,9 @@
 mod formatting;
 
 mod imp {
-    use std::cell::Cell;
-
+    use super::MarkdownHeading;
+    use crate::util::regex;
+    use adw::glib::subclass::Signal;
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use gtk::TextIter;
@@ -10,6 +11,9 @@ mod imp {
     use gtk::glib::Properties;
     use sourceview5::prelude::*;
     use sourceview5::subclass::prelude::*;
+    use std::cell::Cell;
+    use std::cell::RefCell;
+    use std::sync::OnceLock;
 
     #[derive(Debug, Properties, Default)]
     #[properties(wrapper_type = super::MarkdownBuffer)]
@@ -17,6 +21,7 @@ mod imp {
         #[property(get, set)]
         pub(super) paste_in_progress: Cell<bool>,
         pub(super) formatting_action_in_progress: Cell<bool>,
+        pub(super) table_of_contents: RefCell<Vec<MarkdownHeading>>,
     }
 
     #[glib::object_subclass]
@@ -28,9 +33,17 @@ mod imp {
 
     #[glib::derived_properties]
     impl ObjectImpl for MarkdownBuffer {
+        fn signals() -> &'static [Signal] {
+            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
+            SIGNALS.get_or_init(|| vec![Signal::builder("toc-changed").build()])
+        }
+
         fn constructed(&self) {
             let obj = self.obj();
             obj.set_highlight_matching_brackets(false);
+
+            obj.connect_changed(move |obj| obj.imp().refresh_toc());
+
             self.parent_constructed();
         }
     }
@@ -175,19 +188,79 @@ mod imp {
             let obj = self.obj();
             obj.text(&obj.iter_at_offset(iter.offset() - 2), iter, false)
         }
+
+        fn refresh_toc(&self) {
+            let obj = self.obj();
+            let mut toc = self.table_of_contents.borrow_mut();
+
+            for h in toc.drain(..) {
+                obj.delete_mark(&h.mark);
+            }
+
+            let mut line_start = obj.start_iter();
+            loop {
+                let mut line_end = line_start;
+                line_end.forward_to_line_end();
+                let text = obj.text(&line_start, &line_end, false).to_string();
+
+                if regex::ATX_H_OPENING.is_match(&text) {
+                    let level = text.chars().take_while(|c| *c == '#').count();
+                    let mark = obj.create_mark(None, &line_start, true);
+                    let line = obj.iter_at_mark(&mark).line();
+                    toc.push(MarkdownHeading {
+                        level,
+                        line,
+                        text,
+                        mark,
+                    });
+                }
+
+                if !line_start.forward_line() {
+                    break;
+                }
+            }
+
+            obj.emit_by_name::<()>("toc-changed", &[]);
+        }
     }
 }
 
+#[cfg(feature = "installed")]
+use crate::config::PKGDATADIR;
+use crate::data::DocumentStats;
 use adw::subclass::prelude::*;
+use gtk::TextMark;
 use gtk::glib;
 use gtk::glib::Object;
 use sourceview5::LanguageManager;
 use sourceview5::StyleSchemeManager;
 use sourceview5::prelude::*;
 
-#[cfg(feature = "installed")]
-use crate::config::PKGDATADIR;
-use crate::data::DocumentStats;
+#[derive(Debug, Clone)]
+pub struct MarkdownHeading {
+    level: usize,
+    line: i32,
+    text: String,
+    mark: TextMark,
+}
+
+impl MarkdownHeading {
+    pub fn level(&self) -> usize {
+        self.level
+    }
+
+    pub fn line(&self) -> i32 {
+        self.line
+    }
+
+    pub fn text(&self) -> &str {
+        &self.text
+    }
+
+    pub fn mark(&self) -> &TextMark {
+        &self.mark
+    }
+}
 
 glib::wrapper! {
     pub struct MarkdownBuffer(ObjectSubclass<imp::MarkdownBuffer>)
@@ -239,6 +312,10 @@ impl MarkdownBuffer {
             num_spaces,
             num_words,
         }
+    }
+
+    pub fn table_of_contents(&self) -> std::cell::Ref<'_, Vec<MarkdownHeading>> {
+        self.imp().table_of_contents.borrow()
     }
 
     /// Tell the buffer that a paste has been started
