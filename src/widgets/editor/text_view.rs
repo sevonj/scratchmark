@@ -52,7 +52,6 @@ mod imp {
             obj.connect_typewriter_mode_notify(move |obj| {
                 obj.imp().update_typewriter_dimming();
             });
-            obj.imp().setup_typewriter_dimming();
         }
     }
 
