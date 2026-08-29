@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-06 13:23+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-08-30 14:25+0000\n"
+"Last-Translator: Poulopeau <poulopeau@noreply.codeberg.org>\n"
+"Language-Team: French <https://translate.codeberg.org/projects/scratchmark/"
+"app/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
 msgid "Scratchmark"
@@ -23,7 +25,7 @@ msgstr ""
 
 #: data/org.scratchmark.Scratchmark.desktop.in:3
 msgid "Markdown editor"
-msgstr ""
+msgstr "Éditeur markdown"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:9
 msgid "Scratchmark Markdown editor"
@@ -75,7 +77,7 @@ msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:30
 msgid "Focus mode"
-msgstr ""
+msgstr "Mode concentration"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:34
 msgid "All panels open"
@@ -83,11 +85,11 @@ msgstr ""
 
 #: data/resources/ui/editor/document_stats_view.ui:18
 msgid "Statistics"
-msgstr ""
+msgstr "Statistiques"
 
 #: data/resources/ui/editor/document_stats_view.ui:32
 msgid "Characters"
-msgstr ""
+msgstr "Caractères"
 
 #: data/resources/ui/editor/document_stats_view.ui:45
 #: data/resources/ui/editor/document_stats_view.ui:73
@@ -102,11 +104,11 @@ msgstr ""
 
 #: data/resources/ui/editor/document_stats_view.ui:88
 msgid "Words"
-msgstr ""
+msgstr "Mots"
 
 #: data/resources/ui/editor/document_stats_view.ui:116
 msgid "Lines"
-msgstr ""
+msgstr "Lignes"
 
 #: data/resources/ui/editor/editor_view.ui:16
 msgid "File changed on disk"
@@ -130,20 +132,20 @@ msgstr ""
 
 #: data/resources/ui/editor/file_changed_on_disk_dialog.ui:9
 msgid "Overwrite file"
-msgstr ""
+msgstr "Remplacer le fichier"
 
 #: data/resources/ui/editor/file_changed_on_disk_dialog.ui:10
 msgid "Keep both"
-msgstr ""
+msgstr "Conserver les deux"
 
 #: data/resources/ui/editor/search_bar.ui:26
 msgid "Search"
-msgstr ""
+msgstr "Rechercher"
 
 #: data/resources/ui/editor/search_bar.ui:39
 #: data/resources/ui/editor/search_bar.ui:136
 msgid "Replace"
-msgstr ""
+msgstr "Remplacer"
 
 #: data/resources/ui/editor/search_bar.ui:63
 msgid "Match Case"
@@ -159,7 +161,7 @@ msgstr ""
 
 #: data/resources/ui/editor/search_bar.ui:85
 msgid "?"
-msgstr ""
+msgstr "?"
 
 #: data/resources/ui/editor/search_bar.ui:98
 msgid "Previous Match (Shift + Return)"
@@ -171,74 +173,76 @@ msgstr ""
 
 #: data/resources/ui/editor/search_bar.ui:113
 msgid "Search and Replace (Ctrl+F)"
-msgstr ""
+msgstr "Rechercher et remplacer (Ctrl + F)"
 
 #: data/resources/ui/editor/search_bar.ui:119
 msgid "Close Search"
-msgstr ""
+msgstr "Fermer la recherche"
 
 #: data/resources/ui/editor/search_bar.ui:137
 msgid "Replace (Return)"
-msgstr ""
+msgstr "Remplacer (Entrée)"
 
 #: data/resources/ui/editor/search_bar.ui:143
 msgid "Replace All"
-msgstr ""
+msgstr "Remplacer tout"
 
 #: data/resources/ui/editor/search_bar.ui:144
 msgid "Replace All (Shift + Return)"
-msgstr ""
+msgstr "Remplacer tout (Màj + Entrée)"
 
 #: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
-msgstr ""
+msgstr "Rien d'ouvert"
 
 #: data/resources/ui/editor_placeholder.ui:11
 msgid "Create a new document or open an existing one from the sidebar"
 msgstr ""
+"Créer un nouveau document ou ouvrir un document existant depuis la barre "
+"latérale"
 
 #: data/resources/ui/library/delete_confirm_dialog.ui:4
 msgid "Delete permanently?"
-msgstr ""
+msgstr "Supprimer définitivement ?"
 
 #: data/resources/ui/library/delete_confirm_dialog.ui:5
 msgid "\"{{filename}}\" will be permanently deleted."
-msgstr ""
+msgstr "\"{{filename}}\" sera supprimer définitivement."
 
 #: data/resources/ui/library/delete_confirm_dialog.ui:9
 msgid "_Cancel"
-msgstr ""
+msgstr "_Annuler"
 
 #: data/resources/ui/library/delete_confirm_dialog.ui:10
 msgid "_Delete"
-msgstr ""
+msgstr "_Supprimer"
 
 #: data/resources/ui/library/document_context_menu.ui:6
 #: data/resources/ui/library/drafts_context_menu.ui:14
 #: data/resources/ui/library/folder_context_menu.ui:14
 #: data/resources/ui/library/root_context_menu.ui:14
 msgid "Show in File Manager"
-msgstr ""
+msgstr "Montrer dans l'explorateur de fichier"
 
 #: data/resources/ui/library/document_context_menu.ui:10
 #: data/resources/ui/library/folder_context_menu.ui:18
 #: data/resources/ui/library/item_rename_popover.ui:16
 msgid "Rename"
-msgstr ""
+msgstr "Renommer"
 
 #: data/resources/ui/library/document_context_menu.ui:14
 msgid "Duplicate"
-msgstr ""
+msgstr "Dupliquer"
 
 #: data/resources/ui/library/document_context_menu.ui:18
 #: data/resources/ui/library/folder_context_menu.ui:22
 msgid "Move to Trash"
-msgstr ""
+msgstr "Déplacer vers la corbeille"
 
 #: data/resources/ui/library/document_context_menu.ui:22
 #: data/resources/ui/library/folder_context_menu.ui:26
 msgid "Delete Permanently"
-msgstr ""
+msgstr "Supprimer définitivement"
 
 #: data/resources/ui/library/document_create_popover.ui:11
 #: data/resources/ui/library/drafts_context_menu.ui:6
@@ -246,19 +250,19 @@ msgstr ""
 #: data/resources/ui/library/root_context_menu.ui:6
 #: data/resources/ui/window.ui:121
 msgid "New Document"
-msgstr ""
+msgstr "Nouveau document"
 
 #: data/resources/ui/library/document_create_popover.ui:16
 #: data/resources/ui/library/folder_create_popover.ui:16
 #: data/resources/ui/library/item_rename_popover.ui:11
 #: data/resources/ui/preferences/file_ext_add_popover.ui:11
 msgid "Name…"
-msgstr ""
+msgstr "Nom…"
 
 #: data/resources/ui/library/document_create_popover.ui:21
 #: data/resources/ui/library/folder_create_popover.ui:21
 msgid "Create"
-msgstr ""
+msgstr "Créer"
 
 #: data/resources/ui/library/drafts_context_menu.ui:10
 #: data/resources/ui/library/folder_context_menu.ui:10
@@ -266,92 +270,95 @@ msgstr ""
 #: data/resources/ui/library/root_context_menu.ui:10
 #: data/resources/ui/window.ui:125
 msgid "New Folder"
-msgstr ""
+msgstr "Nouveau dossier"
 
 #: data/resources/ui/library/project_err_placeholder.ui:23
 msgid "Project may have been moved or deleted."
-msgstr ""
+msgstr "Le projet a peut-être été déplacé ou supprimé."
 
 #: data/resources/ui/library/project_err_placeholder_context_menu.ui:6
 #: data/resources/ui/library/root_context_menu.ui:18
 msgid "Close Project"
-msgstr ""
+msgstr "Fermer le projet"
 
 #: data/resources/ui/markdown_format_bar.ui:16
 msgid "Bold (Ctrl+B)"
-msgstr ""
+msgstr "Gras (Ctrl+B)"
 
 #: data/resources/ui/markdown_format_bar.ui:23
 msgid "Italic (Ctrl+I)"
-msgstr ""
+msgstr "Italique (Ctrl+I)"
 
 #: data/resources/ui/markdown_format_bar.ui:30
 msgid "Strikethrough"
-msgstr ""
+msgstr "Barré"
 
 #: data/resources/ui/markdown_format_bar.ui:37
+#, fuzzy
 msgid "Highlight"
-msgstr ""
+msgstr "Surligné"
 
 #: data/resources/ui/markdown_format_bar.ui:49
 msgid "Heading 1 (Ctrl+1)"
-msgstr ""
+msgstr "Titre 1 (Ctrl+1)"
 
 #: data/resources/ui/markdown_format_bar.ui:57
 msgid "Heading 2 (Ctrl+2)"
-msgstr ""
+msgstr "Titre 2 (Ctrl+2)"
 
 #: data/resources/ui/markdown_format_bar.ui:70
 msgid "Insert Link (Ctrl+K)"
-msgstr ""
+msgstr "Insérer lien (Ctrl+K)"
 
 #: data/resources/ui/markdown_format_bar.ui:85
 msgid "Blockquote"
-msgstr ""
+msgstr "Citation"
 
 #: data/resources/ui/markdown_format_bar.ui:118
 msgid "Code"
-msgstr ""
+msgstr "Code"
 
 #: data/resources/ui/preferences/dialog.ui:6
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 #: data/resources/ui/preferences/dialog.ui:9
 msgid "Font"
-msgstr ""
+msgstr "Police"
 
 #: data/resources/ui/preferences/dialog.ui:13
 msgid "Change Font"
-msgstr ""
+msgstr "Changer la police"
 
 #: data/resources/ui/preferences/dialog.ui:14
 msgid "Use a different font family"
-msgstr ""
+msgstr "Utiliser une famille de police différente"
 
 #: data/resources/ui/preferences/dialog.ui:20
+#, fuzzy
 msgid "Reset to Default"
-msgstr ""
+msgstr "Rétablir par défaut"
 
 #: data/resources/ui/preferences/dialog.ui:21
 msgid "Use default font"
-msgstr ""
+msgstr "Utiliser la police par défaut"
 
 #: data/resources/ui/preferences/dialog.ui:38
 msgid "Font Size"
-msgstr ""
+msgstr "Taille de police"
 
 #: data/resources/ui/preferences/dialog.ui:45
 msgid "Reset"
-msgstr ""
+msgstr "Réinitialiser"
 
 #: data/resources/ui/preferences/dialog.ui:65
 msgid "Editor"
 msgstr ""
 
 #: data/resources/ui/preferences/dialog.ui:68
+#, fuzzy
 msgid "Show Minimap"
-msgstr ""
+msgstr "Montrer la mini-carte"
 
 #: data/resources/ui/preferences/dialog.ui:69
 msgid "Show overview of the document on the right side"
@@ -362,8 +369,9 @@ msgid "Insert Tabs As Spaces"
 msgstr ""
 
 #: data/resources/ui/preferences/dialog.ui:75
+#, fuzzy
 msgid "Pressing the tab key will insert 4 spaces"
-msgstr ""
+msgstr "Appuyer sur la touche tabulation insérera 4 espaces"
 
 #: data/resources/ui/preferences/dialog.ui:80
 msgid "Clamp Editor Width"
@@ -374,28 +382,32 @@ msgid "Max Editor Width"
 msgstr ""
 
 #: data/resources/ui/preferences/dialog.ui:95
+#, fuzzy
 msgid "Check Spelling"
-msgstr ""
+msgstr "Vérification de l'orthographe"
 
 #: data/resources/ui/preferences/dialog.ui:102 data/resources/ui/window.ui:18
 msgid "Library"
-msgstr ""
+msgstr "Bibliothèque"
 
 #: data/resources/ui/preferences/dialog.ui:105
 msgid "Ignore Hidden Files"
-msgstr ""
+msgstr "Ignorer les fichiers cachés"
 
 #: data/resources/ui/preferences/dialog.ui:106
 msgid "Files and folders with a preceding \".\" won't show up in the library"
 msgstr ""
+"Les fichiers et les dossier précédés par \".\" ne s'afficheront pas dans la "
+"bibliothèque"
 
 #: data/resources/ui/preferences/dialog.ui:111
 msgid "Show File Extensions"
-msgstr ""
+msgstr "Afficher les extensions de fichier"
 
 #: data/resources/ui/preferences/dialog.ui:116
+#, fuzzy
 msgid "Custom File Extensions"
-msgstr ""
+msgstr "Extensions de fichier personnalisées"
 
 #: data/resources/ui/preferences/dialog.ui:117
 msgid "Include additional file types in library"
@@ -403,27 +415,29 @@ msgstr ""
 
 #: data/resources/ui/preferences/dialog.ui:125
 #: data/resources/ui/preferences/file_ext_add_popover.ui:16
+#, fuzzy
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 #: data/resources/ui/preferences/file_ext_item.ui:13
+#, fuzzy
 msgid "Remove"
-msgstr ""
+msgstr "Supprimer"
 
 #: data/resources/ui/shortcuts.ui:11
 msgctxt "shortcut window"
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 #: data/resources/ui/shortcuts.ui:14
 msgctxt "shortcut window"
 msgid "Fullscreen"
-msgstr ""
+msgstr "Plein écran"
 
 #: data/resources/ui/shortcuts.ui:20
 msgctxt "shortcut window"
 msgid "Focus Mode"
-msgstr ""
+msgstr "Mode concentration"
 
 #: data/resources/ui/shortcuts.ui:26
 msgctxt "shortcut window"
@@ -433,42 +447,42 @@ msgstr ""
 #: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
 msgid "Preferences"
-msgstr ""
+msgstr "Préférences"
 
 #: data/resources/ui/shortcuts.ui:38
 msgctxt "shortcut window"
 msgid "Show Shortcuts"
-msgstr ""
+msgstr "Afficher les raccourcis"
 
 #: data/resources/ui/shortcuts.ui:46
 msgctxt "shortcut window"
 msgid "Document"
-msgstr ""
+msgstr "Document"
 
 #: data/resources/ui/shortcuts.ui:49
 msgctxt "shortcut window"
 msgid "New Document"
-msgstr ""
+msgstr "Nouveau document"
 
 #: data/resources/ui/shortcuts.ui:55
 msgctxt "shortcut window"
 msgid "Add Project"
-msgstr ""
+msgstr "Ajouterun projet"
 
 #: data/resources/ui/shortcuts.ui:61
 msgctxt "shortcut window"
 msgid "Save Document"
-msgstr ""
+msgstr "Enregistrer le document"
 
 #: data/resources/ui/shortcuts.ui:67
 msgctxt "shortcut window"
 msgid "Rename"
-msgstr ""
+msgstr "Renommer"
 
 #: data/resources/ui/shortcuts.ui:73
 msgctxt "shortcut window"
 msgid "Close Document"
-msgstr ""
+msgstr "Fermer le document"
 
 #: data/resources/ui/shortcuts.ui:81
 msgctxt "shortcut window"
@@ -476,29 +490,34 @@ msgid "Editor"
 msgstr ""
 
 #: data/resources/ui/shortcuts.ui:84
+#, fuzzy
 msgctxt "shortcut window"
 msgid "Search Text"
-msgstr ""
+msgstr "Rechercher du texte"
 
 #: data/resources/ui/shortcuts.ui:90
+#, fuzzy
 msgctxt "shortcut window"
 msgid "Search and Replace Text"
-msgstr ""
+msgstr "Rechercher et remplacer du texte"
 
 #: data/resources/ui/shortcuts.ui:96
+#, fuzzy
 msgctxt "shortcut window"
 msgid "Zoom In"
-msgstr ""
+msgstr "Agrandir"
 
 #: data/resources/ui/shortcuts.ui:102
+#, fuzzy
 msgctxt "shortcut window"
 msgid "Zoom Out"
-msgstr ""
+msgstr "Rétrécir"
 
 #: data/resources/ui/shortcuts.ui:108
+#, fuzzy
 msgctxt "shortcut window"
 msgid "Reset Zoom"
-msgstr ""
+msgstr "Réinitialiser la vue"
 
 #: data/resources/ui/shortcuts.ui:116
 msgctxt "shortcut window"
@@ -508,52 +527,52 @@ msgstr ""
 #: data/resources/ui/shortcuts.ui:119
 msgctxt "shortcut window"
 msgid "Bold"
-msgstr ""
+msgstr "Gras"
 
 #: data/resources/ui/shortcuts.ui:125
 msgctxt "shortcut window"
 msgid "Italic"
-msgstr ""
+msgstr "Italique"
 
 #: data/resources/ui/shortcuts.ui:131
 msgctxt "shortcut window"
 msgid "Insert Link"
-msgstr ""
+msgstr "Insérer un lien"
 
 #: data/resources/ui/shortcuts.ui:137
 msgctxt "shortcut window"
 msgid "Heading 1"
-msgstr ""
+msgstr "Titre 1"
 
 #: data/resources/ui/shortcuts.ui:143
 msgctxt "shortcut window"
 msgid "Heading 2"
-msgstr ""
+msgstr "Titre 2"
 
 #: data/resources/ui/shortcuts.ui:149
 msgctxt "shortcut window"
 msgid "Heading 3"
-msgstr ""
+msgstr "Titre 3"
 
 #: data/resources/ui/shortcuts.ui:155
 msgctxt "shortcut window"
 msgid "Heading 4"
-msgstr ""
+msgstr "Titre 4"
 
 #: data/resources/ui/shortcuts.ui:161
 msgctxt "shortcut window"
 msgid "Heading 5"
-msgstr ""
+msgstr "Titre 5"
 
 #: data/resources/ui/shortcuts.ui:167
 msgctxt "shortcut window"
 msgid "Heading 6"
-msgstr ""
+msgstr "Titre 6"
 
 #: data/resources/ui/shortcuts.ui:175
 msgctxt "shortcut window"
 msgid "Library"
-msgstr ""
+msgstr "Bibliothèque"
 
 #: data/resources/ui/shortcuts.ui:178
 msgctxt "shortcut window"
@@ -561,12 +580,13 @@ msgid "Manual Refresh"
 msgstr ""
 
 #: data/resources/ui/window.ui:27 data/resources/ui/window.ui:198
+#, fuzzy
 msgid "Sort"
-msgstr ""
+msgstr "Trier"
 
 #: data/resources/ui/window.ui:40
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: data/resources/ui/window.ui:70
 msgid "Toggle Sidebar (F9)"
@@ -574,15 +594,16 @@ msgstr ""
 
 #: data/resources/ui/window.ui:76
 msgid "New Document (Ctrl+N)"
-msgstr ""
+msgstr "Nouveau document (Ctrl+N)"
 
 #: data/resources/ui/window.ui:83
 msgid "Exit Fullscreen"
-msgstr ""
+msgstr "Quitter le plein écran"
 
 #: data/resources/ui/window.ui:91
+#, fuzzy
 msgid "Document Info"
-msgstr ""
+msgstr "Information du document"
 
 #: data/resources/ui/window.ui:97
 msgid "Formatting Toolbar"
@@ -590,43 +611,46 @@ msgstr ""
 
 #: data/resources/ui/window.ui:129
 msgid "Add Project"
-msgstr ""
+msgstr "Ajouter un projet"
 
 #: data/resources/ui/window.ui:135
 msgid "Save"
-msgstr ""
+msgstr "Enregistrer"
 
 #: data/resources/ui/window.ui:139
 msgid "Close"
-msgstr ""
+msgstr "Fermer"
 
 #: data/resources/ui/window.ui:145
+#, fuzzy
 msgid "Zoom In"
-msgstr ""
+msgstr "Agrandir"
 
 #: data/resources/ui/window.ui:149
+#, fuzzy
 msgid "Zoom Out"
-msgstr ""
+msgstr "Rétrécir"
 
 #: data/resources/ui/window.ui:153
+#, fuzzy
 msgid "Reset Zoom"
-msgstr ""
+msgstr "Réinitialiser la vue"
 
 #: data/resources/ui/window.ui:159
 msgid "Search Text"
-msgstr ""
+msgstr "Rechercher du texte"
 
 #: data/resources/ui/window.ui:163
 msgid "Search and Replace"
-msgstr ""
+msgstr "Rechercher et remplacer"
 
 #: data/resources/ui/window.ui:169
 msgid "Fullscreen"
-msgstr ""
+msgstr "Plein écran"
 
 #: data/resources/ui/window.ui:173
 msgid "Focus Mode"
-msgstr ""
+msgstr "Mode concentration"
 
 #: data/resources/ui/window.ui:177
 msgid "Typewriter Mode"
@@ -634,11 +658,11 @@ msgstr ""
 
 #: data/resources/ui/window.ui:183
 msgid "Preferences"
-msgstr ""
+msgstr "Préférences"
 
 #: data/resources/ui/window.ui:187
 msgid "Keyboard Shortcuts"
-msgstr ""
+msgstr "Raccourcis clavier"
 
 #: data/resources/ui/window.ui:191
 msgid "About Scratchmark"
@@ -646,15 +670,16 @@ msgstr ""
 
 #: data/resources/ui/window.ui:201
 msgid "A-Z"
-msgstr ""
+msgstr "A-Z"
 
 #: data/resources/ui/window.ui:206
 msgid "Z-A"
-msgstr ""
+msgstr "Z-A"
 
 #: data/resources/ui/window.ui:211
+#, fuzzy
 msgid "Last Modified"
-msgstr ""
+msgstr "Dernière modification"
 
 #: data/resources/ui/window.ui:216
 msgid "First Modified"
@@ -669,70 +694,79 @@ msgid "First Accessed"
 msgstr ""
 
 #: src/error.rs:25
+#, fuzzy
 msgid "Couldn't create file"
-msgstr ""
+msgstr "Impossible de créer le fichier"
 
 #: src/error.rs:26
 msgid "Couldn't access file"
 msgstr ""
 
 #: src/error.rs:27
+#, fuzzy
 msgid "Couldn't create folder"
-msgstr ""
+msgstr "Impossible de créer le dossier"
 
 #: src/error.rs:28
+#, fuzzy
 msgid "Couldn't move item"
-msgstr ""
+msgstr "Impossible de déplacement l'élément"
 
 #: src/error.rs:29
+#, fuzzy
 msgid "File contains invalid characters"
-msgstr ""
+msgstr "Le fichier contient des caractères invalides"
 
 #: src/error.rs:30
 msgid "File has changed on disk"
 msgstr ""
 
 #: src/error.rs:31
+#, fuzzy
 msgid "Invalid path"
-msgstr ""
+msgstr "Emplacement invalide"
 
 #: src/widgets/library/library_view.rs:426
 #: src/widgets/library/library_view.rs:446
+#, fuzzy
 msgid "Couldn't move to trash"
-msgstr ""
+msgstr "Impossible de dépacer vers la corbeille"
 
 #: src/widgets/library/library_view.rs:429
 #: src/widgets/library/library_view.rs:449
+#, fuzzy
 msgid "Moved to trash"
-msgstr ""
+msgstr "Déplacer vers la corbeille"
 
 #: src/widgets/library/library_view.rs:477
 msgid "Couldn't delete document"
-msgstr ""
+msgstr "Impossible de supprimer le document"
 
 #: src/widgets/library/library_view.rs:483
 msgid "Document deleted"
-msgstr ""
+msgstr "Document supprimé"
 
 #: src/widgets/library/library_view.rs:517
 msgid "Couldn't delete folder"
-msgstr ""
+msgstr "Impossible de supprimer le dossier"
 
 #: src/widgets/library/library_view.rs:523
 msgid "Folder deleted"
-msgstr ""
+msgstr "Dossier supprimé"
 
 #: src/widgets/window.rs:414
+#, fuzzy
 msgid "Couldn't move file"
-msgstr ""
+msgstr "Impossible de déplacer le fichier"
 
 #: src/widgets/window.rs:660
 msgid "Saved"
-msgstr ""
+msgstr "Enregistré"
 
 #: src/widgets/window.rs:959
+#, fuzzy
 msgid "Open document has been moved or deleted"
-msgstr ""
+msgstr "Le coument ouvert a été déplacé ou supprimé"
 
 #: src/widgets/window_title.rs:72
 msgid " (Focus Mode)"
