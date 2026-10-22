@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the scratchmark package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-05 09:34+0000\n"
+"POT-Creation-Date: 2026-10-22 17:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
-#: data/org.scratchmark.Scratchmark.metainfo.xml.in:5
 msgid "Scratchmark"
 msgstr ""
 
@@ -75,45 +74,45 @@ msgid "Editor interface"
 msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:30
-msgid "Focus mode"
+msgid "Focus mode, typewriter mode"
 msgstr ""
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:34
 msgid "All panels open"
 msgstr ""
 
-#: data/resources/ui/editor/document_stats_view.ui:18
+#: data/resources/ui/editor/document_stats_view.ui:11
 msgid "Statistics"
 msgstr ""
 
-#: data/resources/ui/editor/document_stats_view.ui:32
+#: data/resources/ui/editor/document_stats_view.ui:25
 msgid "Characters"
 msgstr ""
 
-#: data/resources/ui/editor/document_stats_view.ui:45
-#: data/resources/ui/editor/document_stats_view.ui:73
-#: data/resources/ui/editor/document_stats_view.ui:101
-#: data/resources/ui/editor/document_stats_view.ui:129
+#: data/resources/ui/editor/document_stats_view.ui:38
+#: data/resources/ui/editor/document_stats_view.ui:66
+#: data/resources/ui/editor/document_stats_view.ui:94
+#: data/resources/ui/editor/document_stats_view.ui:122
 msgid "N/A"
 msgstr ""
 
-#: data/resources/ui/editor/document_stats_view.ui:60
+#: data/resources/ui/editor/document_stats_view.ui:53
 msgid "Excluding Spaces"
 msgstr ""
 
-#: data/resources/ui/editor/document_stats_view.ui:88
+#: data/resources/ui/editor/document_stats_view.ui:81
 msgid "Words"
 msgstr ""
 
-#: data/resources/ui/editor/document_stats_view.ui:116
+#: data/resources/ui/editor/document_stats_view.ui:109
 msgid "Lines"
 msgstr ""
 
-#: data/resources/ui/editor/editor_view.ui:16
+#: data/resources/ui/editor/editor_view.ui:39
 msgid "File changed on disk"
 msgstr ""
 
-#: data/resources/ui/editor/editor_view.ui:17
+#: data/resources/ui/editor/editor_view.ui:40
 msgid "Resolve"
 msgstr ""
 
