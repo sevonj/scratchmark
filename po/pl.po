@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 17:17+0300\n"
+"POT-Creation-Date: 2026-10-22 17:49+0300\n"
 "PO-Revision-Date: 2026-08-25 08:26+0000\n"
 "Last-Translator: Łukasz Horodecki <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
@@ -216,6 +216,15 @@ msgstr "Zastąp wszystkie"
 #: data/resources/ui/editor/search_bar.ui:144
 msgid "Replace All (Shift + Return)"
 msgstr "Zastępuje wszystkie (Shift+Enter)"
+
+#: data/resources/ui/editor/toc_view.ui:9
+msgid "Overview"
+msgstr ""
+
+#: data/resources/ui/editor/toc_view.ui:19
+#, fuzzy
+msgid "No headings"
+msgstr "Nagłówek 1"
 
 #: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
@@ -792,9 +801,6 @@ msgstr " (Tryb skupienia)"
 
 #~ msgid "New"
 #~ msgstr "Nowy"
-
-#~ msgid "Heading 1"
-#~ msgstr "Nagłówek 1"
 
 #~ msgid "Heading 2"
 #~ msgstr "Nagłówek 2"

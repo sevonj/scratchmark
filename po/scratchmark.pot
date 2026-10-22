@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 17:17+0300\n"
+"POT-Creation-Date: 2026-10-22 17:49+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -187,6 +187,14 @@ msgstr ""
 
 #: data/resources/ui/editor/search_bar.ui:144
 msgid "Replace All (Shift + Return)"
+msgstr ""
+
+#: data/resources/ui/editor/toc_view.ui:9
+msgid "Overview"
+msgstr ""
+
+#: data/resources/ui/editor/toc_view.ui:19
+msgid "No headings"
 msgstr ""
 
 #: data/resources/ui/editor_placeholder.ui:10

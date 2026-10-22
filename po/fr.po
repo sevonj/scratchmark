@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 17:17+0300\n"
+"POT-Creation-Date: 2026-10-22 17:49+0300\n"
 "PO-Revision-Date: 2026-08-30 14:25+0000\n"
 "Last-Translator: Poulopeau <poulopeau@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/scratchmark/"
@@ -190,6 +190,14 @@ msgstr "Remplacer tout"
 #: data/resources/ui/editor/search_bar.ui:144
 msgid "Replace All (Shift + Return)"
 msgstr "Remplacer tout (Màj + Entrée)"
+
+#: data/resources/ui/editor/toc_view.ui:9
+msgid "Overview"
+msgstr ""
+
+#: data/resources/ui/editor/toc_view.ui:19
+msgid "No headings"
+msgstr ""
 
 #: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"

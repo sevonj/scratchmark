@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 17:17+0300\n"
+"POT-Creation-Date: 2026-10-22 17:49+0300\n"
 "PO-Revision-Date: 2026-08-05 12:35+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Turkish <https://translate.codeberg.org/projects/scratchmark/"
@@ -208,6 +208,15 @@ msgstr "Tümünü Değiştir"
 #: data/resources/ui/editor/search_bar.ui:144
 msgid "Replace All (Shift + Return)"
 msgstr "Tümünü Değiştir (Shift + Enter)"
+
+#: data/resources/ui/editor/toc_view.ui:9
+msgid "Overview"
+msgstr ""
+
+#: data/resources/ui/editor/toc_view.ui:19
+#, fuzzy
+msgid "No headings"
+msgstr "Başlık 1"
 
 #: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
@@ -803,9 +812,6 @@ msgstr "Odak kipi"
 
 #~ msgid "New"
 #~ msgstr "Yeni"
-
-#~ msgid "Heading 1"
-#~ msgstr "Başlık 1"
 
 #~ msgid "Heading 2"
 #~ msgstr "Başlık 2"
