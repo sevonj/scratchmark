@@ -7,6 +7,7 @@ mod imp {
     use gtk::TemplateChild;
     use gtk::glib;
     use gtk::glib::Properties;
+    use gtk::prelude::WidgetExt;
     use std::cell::RefCell;
 
     #[derive(CompositeTemplate, Default, Properties)]
@@ -53,6 +54,8 @@ mod imp {
             if self.line.text() != line_str {
                 self.line.set_text(&line_str);
             }
+            self.label
+                .set_margin_start(12 * (heading.level() as i32 - 1));
             self.heading.replace(Some(heading));
         }
     }

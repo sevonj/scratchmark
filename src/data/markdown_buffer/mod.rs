@@ -2,7 +2,6 @@ mod formatting;
 
 mod imp {
     use super::MarkdownHeading;
-    use crate::util::regex;
     use adw::glib::subclass::Signal;
     use adw::prelude::*;
     use adw::subclass::prelude::*;
@@ -233,18 +232,26 @@ mod imp {
 
             let mut line_start = obj.start_iter();
             loop {
+                let first_char = line_start.char();
+                if first_char != '#' && first_char != ' ' {
+                    if !line_start.forward_line() {
+                        break;
+                    }
+                    continue;
+                }
+
                 let mut line_end = line_start;
                 line_end.forward_to_line_end();
-                let text = obj.text(&line_start, &line_end, false).to_string();
 
-                if regex::ATX_H_OPENING.is_match(&text) {
-                    let level = text.chars().take_while(|c| *c == '#').count();
+                if let Some((level, title)) =
+                    parse_atx_heading(&obj.text(&line_start, &line_end, false))
+                {
                     let mark = obj.create_mark(None, &line_start, true);
                     let line = obj.iter_at_mark(&mark).line();
                     toc.push(MarkdownHeading {
                         level,
                         line,
-                        text,
+                        text: title.to_owned(),
                         mark,
                     });
                 }
@@ -256,6 +263,30 @@ mod imp {
             drop(toc);
 
             obj.emit_by_name::<()>("toc-changed", &[]);
+        }
+    }
+
+    fn parse_atx_heading(line: &str) -> Option<(usize, &str)> {
+        let trimmed = line.trim_start();
+        // max 3 spaces indent
+        if line.len() - trimmed.len() > 3 {
+            return None;
+        }
+
+        let level = trimmed.chars().take_while(|&c| c == '#').count();
+        if !(1..=6).contains(&level) {
+            return None;
+        }
+
+        let after_level = &trimmed[level..];
+        if after_level.is_empty() // No title is a valid heading
+            || after_level.starts_with(' ') // else must have space or tab
+            || after_level.starts_with('\t')
+        {
+            let title = after_level.trim().trim_end_matches('#').trim();
+            Some((level, title))
+        } else {
+            None
         }
     }
 }
