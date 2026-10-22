@@ -224,11 +224,7 @@ mod imp {
             }
 
             let obj = self.obj();
-            let mut toc = self.table_of_contents.borrow_mut();
-
-            for h in toc.drain(..) {
-                obj.delete_mark(&h.mark);
-            }
+            let mut new_toc = Vec::new();
 
             let mut line_start = obj.start_iter();
             let mut fenced_backtick = false;
@@ -272,7 +268,7 @@ mod imp {
                 if let Some((level, title)) = parse_atx_heading(trimmed) {
                     let mark = obj.create_mark(None, &line_start, true);
                     let line = obj.iter_at_mark(&mark).line();
-                    toc.push(MarkdownHeading {
+                    new_toc.push(MarkdownHeading {
                         level,
                         line,
                         text: title.to_owned(),
@@ -284,9 +280,21 @@ mod imp {
                     break;
                 }
             }
+
+            let mut toc = self.table_of_contents.borrow_mut();
+            let toc_changed = toc.len() != new_toc.len()
+                || toc.iter().zip(new_toc.iter()).any(|(old, new)| old != new);
+
+            for h in toc.drain(..) {
+                obj.delete_mark(&h.mark);
+            }
+
+            *toc = new_toc;
             drop(toc);
 
-            obj.emit_by_name::<()>("toc-changed", &[]);
+            if toc_changed {
+                obj.emit_by_name::<()>("toc-changed", &[]);
+            }
         }
     }
 
@@ -344,6 +352,12 @@ impl MarkdownHeading {
 
     pub fn mark(&self) -> &TextMark {
         &self.mark
+    }
+}
+
+impl PartialEq for MarkdownHeading {
+    fn eq(&self, other: &Self) -> bool {
+        self.level == other.level && self.line == other.line && self.text == other.text
     }
 }
 
