@@ -121,6 +121,7 @@ mod imp {
 }
 
 use crate::data::MarkdownBuffer;
+use adw::glib::closure_local;
 use adw::subclass::prelude::*;
 use gtk::glib;
 use gtk::glib::Object;
@@ -141,11 +142,16 @@ impl Default for TocView {
 
 impl TocView {
     pub fn bind(&self, buffer: MarkdownBuffer) {
-        buffer.connect_changed(clone!(
-            #[weak(rename_to = obj)]
-            self,
-            move |_| obj.imp().refresh()
-        ));
+        buffer.connect_closure(
+            "toc-changed",
+            true,
+            closure_local!(
+                #[weak(rename_to = obj)]
+                self,
+                move |_: MarkdownBuffer| obj.imp().refresh()
+            ),
+        );
+
         buffer.connect_cursor_moved(clone!(
             #[weak(rename_to = obj)]
             self,

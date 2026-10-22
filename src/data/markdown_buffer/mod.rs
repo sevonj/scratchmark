@@ -9,11 +9,13 @@ mod imp {
     use gtk::TextIter;
     use gtk::glib;
     use gtk::glib::Properties;
+    use gtk::glib::clone;
     use sourceview5::prelude::*;
     use sourceview5::subclass::prelude::*;
     use std::cell::Cell;
     use std::cell::RefCell;
     use std::sync::OnceLock;
+    use std::time::Duration;
 
     #[derive(Debug, Properties, Default)]
     #[properties(wrapper_type = super::MarkdownBuffer)]
@@ -22,6 +24,7 @@ mod imp {
         pub(super) paste_in_progress: Cell<bool>,
         pub(super) formatting_action_in_progress: Cell<bool>,
         pub(super) table_of_contents: RefCell<Vec<MarkdownHeading>>,
+        pub(super) toc_refresh_source_id: RefCell<Option<glib::SourceId>>,
     }
 
     #[glib::object_subclass]
@@ -42,9 +45,15 @@ mod imp {
             let obj = self.obj();
             obj.set_highlight_matching_brackets(false);
 
-            obj.connect_changed(move |obj| obj.imp().refresh_toc());
+            obj.connect_changed(move |obj| obj.imp().schedule_refresh_toc());
 
             self.parent_constructed();
+        }
+
+        fn dispose(&self) {
+            if let Some(source_id) = self.toc_refresh_source_id.take() {
+                source_id.remove();
+            }
         }
     }
 
@@ -189,7 +198,32 @@ mod imp {
             obj.text(&obj.iter_at_offset(iter.offset() - 2), iter, false)
         }
 
+        fn schedule_refresh_toc(&self) {
+            let obj = self.obj();
+            if let Some(source_id) = self.toc_refresh_source_id.take() {
+                source_id.remove();
+            }
+
+            let source_id = glib::timeout_add_local_once(
+                Duration::from_millis(250),
+                clone!(
+                    #[weak]
+                    obj,
+                    move || {
+                        let imp = obj.imp();
+                        imp.toc_refresh_source_id.take();
+                        imp.refresh_toc();
+                    }
+                ),
+            );
+            self.toc_refresh_source_id.replace(Some(source_id));
+        }
+
         fn refresh_toc(&self) {
+            if let Some(source_id) = self.toc_refresh_source_id.take() {
+                source_id.remove();
+            }
+
             let obj = self.obj();
             let mut toc = self.table_of_contents.borrow_mut();
 
@@ -219,6 +253,7 @@ mod imp {
                     break;
                 }
             }
+            drop(toc);
 
             obj.emit_by_name::<()>("toc-changed", &[]);
         }
