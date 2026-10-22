@@ -4,6 +4,7 @@ mod imp {
     use adw::glib::subclass::Signal;
     use adw::subclass::prelude::*;
     use gtk::CompositeTemplate;
+    use gtk::Label;
     use gtk::ListBox;
     use gtk::glib;
     use gtk::glib::clone;
@@ -17,6 +18,8 @@ mod imp {
     pub struct TocView {
         #[template_child]
         listbox: TemplateChild<ListBox>,
+        #[template_child]
+        placeholder: TemplateChild<Label>,
 
         rows: RefCell<Vec<TocRow>>,
 
@@ -94,6 +97,7 @@ mod imp {
             }
 
             self.listbox.invalidate_sort();
+            self.placeholder.set_visible(rows.is_empty());
             drop(rows);
             drop(toc);
             self.refresh_selection();
