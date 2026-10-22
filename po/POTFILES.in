@@ -7,6 +7,8 @@ data/resources/ui/editor/editor_view.ui
 data/resources/ui/editor/file_changed_on_disk_dialog.ui
 data/resources/ui/editor/minimap.ui
 data/resources/ui/editor/search_bar.ui
+data/resources/ui/editor/toc_row.ui
+data/resources/ui/editor/toc_view.ui
 data/resources/ui/editor_placeholder.ui
 data/resources/ui/library/delete_confirm_dialog.ui
 data/resources/ui/library/document_context_menu.ui
@@ -51,6 +53,8 @@ src/widgets/editor/minimap.rs
 src/widgets/editor/mod.rs
 src/widgets/editor/search_bar.rs
 src/widgets/editor/text_view.rs
+src/widgets/editor/toc_row.rs
+src/widgets/editor/toc_view.rs
 src/widgets/editor_placeholder.rs
 src/widgets/library/delete_confirm_dialog.rs
 src/widgets/library/document_create_popover.rs
