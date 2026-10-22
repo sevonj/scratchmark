@@ -12,7 +12,7 @@ pub static ATX_H_OPENING: LazyLock<Regex> =
 
 // https://spec.commonmark.org/0.31.2/#links
 pub static INLINE_LINK: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r#"\[(?P<text>.*)]\((?P<url>[^\s)(]*)\)"#).unwrap());
+    LazyLock::new(|| Regex::new(r#"\[(?P<text>.*)]\((?P<url>[^\s)(\[\]]*)\)"#).unwrap());
 
 #[cfg(test)]
 mod tests {
@@ -149,7 +149,7 @@ mod langspec_tests {
     use regex::Regex;
 
     static THEMATIC_BREAK: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"(?m)^ {0,3}((-( |\t)*){3,}|(_( |\t)*){3,}|(\*( |\t)*){3,})$").unwrap()
+        Regex::new(r"(?m)^ {0,3}((-([ \t])*){3,}|(_([ \t])*){3,}|(\*([ \t])*){3,})$").unwrap()
     });
 
     static ATX_H1_WHOLELINE: LazyLock<Regex> =
