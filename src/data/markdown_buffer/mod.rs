@@ -231,9 +231,11 @@ mod imp {
             }
 
             let mut line_start = obj.start_iter();
+            let mut fenced_backtick = false;
+            let mut fenced_tilde = false;
             loop {
                 let first_char = line_start.char();
-                if first_char != '#' && first_char != ' ' {
+                if !&['#', ' ', '`', '~'].contains(&first_char) {
                     if !line_start.forward_line() {
                         break;
                     }
@@ -242,10 +244,32 @@ mod imp {
 
                 let mut line_end = line_start;
                 line_end.forward_to_line_end();
+                let line_text = obj.text(&line_start, &line_end, false);
 
-                if let Some((level, title)) =
-                    parse_atx_heading(&obj.text(&line_start, &line_end, false))
-                {
+                let indent = line_text.chars().take_while(|&c| c == ' ').count();
+                if indent > 3 {
+                    if !line_start.forward_line() {
+                        break;
+                    }
+                    continue;
+                }
+
+                let trimmed = line_text.trim_start();
+
+                if !fenced_tilde && trimmed.starts_with("```") {
+                    fenced_backtick = !fenced_backtick;
+                }
+                if !fenced_backtick && trimmed.starts_with("~~~") {
+                    fenced_tilde = !fenced_tilde;
+                }
+                if fenced_backtick || fenced_tilde {
+                    if !line_start.forward_line() {
+                        break;
+                    }
+                    continue;
+                }
+
+                if let Some((level, title)) = parse_atx_heading(trimmed) {
                     let mark = obj.create_mark(None, &line_start, true);
                     let line = obj.iter_at_mark(&mark).line();
                     toc.push(MarkdownHeading {
@@ -266,19 +290,14 @@ mod imp {
         }
     }
 
+    /// Start must be trimmed
     fn parse_atx_heading(line: &str) -> Option<(usize, &str)> {
-        let trimmed = line.trim_start();
-        // max 3 spaces indent
-        if line.len() - trimmed.len() > 3 {
-            return None;
-        }
-
-        let level = trimmed.chars().take_while(|&c| c == '#').count();
+        let level = line.chars().take_while(|&c| c == '#').count();
         if !(1..=6).contains(&level) {
             return None;
         }
 
-        let after_level = &trimmed[level..];
+        let after_level = &line[level..];
         if after_level.is_empty() // No title is a valid heading
             || after_level.starts_with(' ') // else must have space or tab
             || after_level.starts_with('\t')
