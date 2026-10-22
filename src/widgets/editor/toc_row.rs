@@ -7,7 +7,7 @@ mod imp {
     use gtk::TemplateChild;
     use gtk::glib;
     use gtk::glib::Properties;
-    use std::cell::OnceCell;
+    use std::cell::RefCell;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::TocRow)]
@@ -18,7 +18,7 @@ mod imp {
         #[template_child]
         pub(super) line: TemplateChild<Label>,
 
-        pub(super) heading: OnceCell<MarkdownHeading>,
+        pub(super) heading: RefCell<Option<MarkdownHeading>>,
     }
 
     #[glib::object_subclass]
@@ -43,10 +43,17 @@ mod imp {
     impl ListBoxRowImpl for TocRow {}
 
     impl TocRow {
-        pub(super) fn bind(&self, heading: MarkdownHeading) {
-            self.label.set_text(heading.text());
-            self.line.set_text(&(heading.line() + 1).to_string());
-            self.heading.set(heading).unwrap();
+        pub(super) fn update(&self, heading: MarkdownHeading) {
+            let heading_text = heading.text();
+            let line_str = (heading.line() + 1).to_string();
+
+            if self.label.text() != heading_text {
+                self.label.set_text(heading_text);
+            }
+            if self.line.text() != line_str {
+                self.line.set_text(&line_str);
+            }
+            self.heading.replace(Some(heading));
         }
     }
 }
@@ -56,6 +63,7 @@ use adw::subclass::prelude::*;
 use gtk::ListBoxRow;
 use gtk::glib;
 use gtk::glib::Object;
+use std::cell::Ref;
 
 glib::wrapper! {
     pub struct TocRow(ObjectSubclass<imp::TocRow>)
@@ -66,12 +74,18 @@ glib::wrapper! {
 impl TocRow {
     pub fn new(heading: MarkdownHeading) -> Self {
         let obj: Self = Object::builder().build();
-        let imp = obj.imp();
-        imp.bind(heading);
+        obj.update(heading);
         obj
     }
 
-    pub fn heading(&self) -> &MarkdownHeading {
-        self.imp().heading.get().unwrap()
+    pub fn update(&self, heading: MarkdownHeading) {
+        self.imp().update(heading);
+    }
+
+    pub fn heading(&self) -> Ref<'_, MarkdownHeading> {
+        Ref::map(self.imp().heading.borrow(), |opt| {
+            opt.as_ref()
+                .expect("TocRow: heading is unset, this should be impossible.")
+        })
     }
 }

@@ -70,15 +70,32 @@ mod imp {
     impl TocView {
         pub(super) fn refresh(&self) {
             let mut rows = self.rows.borrow_mut();
-            self.listbox.remove_all();
-            rows.clear();
             let buffer = self.buffer.get().unwrap();
-            for heading in buffer.table_of_contents().iter() {
-                let row = TocRow::new(heading.clone());
-                self.listbox.append(&row);
-                rows.push(row);
+            let toc = buffer.table_of_contents();
+
+            let old_len = rows.len();
+            let new_len = toc.len();
+
+            let min_len = old_len.min(new_len);
+            for i in 0..min_len {
+                rows[i].update(toc[i].clone());
             }
+
+            if new_len > old_len {
+                for heading in toc.iter().skip(old_len) {
+                    let row = TocRow::new(heading.clone());
+                    self.listbox.append(&row);
+                    rows.push(row);
+                }
+            } else if old_len > new_len {
+                for row in rows.drain(new_len..) {
+                    self.listbox.remove(&row);
+                }
+            }
+
+            self.listbox.invalidate_sort();
             drop(rows);
+            drop(toc);
             self.refresh_selection();
         }
 
