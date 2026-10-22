@@ -101,15 +101,16 @@ mod imp {
 
         pub(super) fn refresh_selection(&self) {
             let rows = self.rows.borrow();
-            let buffer = self.buffer.get().unwrap();
-            self.listbox.unselect_all();
+            let Some(buffer) = self.buffer.get() else {
+                return;
+            };
             let line = buffer.iter_at_offset(buffer.cursor_position()).line();
-            for row in rows.iter() {
-                if row.heading().line() > line {
-                    break;
-                }
-                self.listbox.select_row(Some(row));
-            }
+            let target_idx = rows.partition_point(|row| row.heading().line() <= line);
+            if target_idx > 0 {
+                self.listbox.select_row(Some(&rows[target_idx - 1]));
+            } else {
+                self.listbox.unselect_all();
+            };
         }
 
         fn on_click(&self, row: &TocRow) {
