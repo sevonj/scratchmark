@@ -10,6 +10,10 @@ use regex::Regex;
 pub static ATX_H_OPENING: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^ {0,3}#{1,6}($| +)").unwrap());
 
+// https://spec.commonmark.org/0.31.2/#links
+pub static INLINE_LINK: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r#"\[(?P<text>.*)]\((?P<url>[^\s)(\[\]]*)\)"#).unwrap());
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -125,6 +129,17 @@ mod tests {
         assert_eq!(ATX_H_OPENING.find(empty_h2).unwrap().as_str(), "## ");
         assert_eq!(ATX_H_OPENING.find(empty_h3).unwrap().as_str(), "### ");
     }
+
+    #[test]
+    fn test_valid_markdown_links() {
+        assert_eq!(INLINE_LINK.find("[]()").unwrap().as_str(), "[]()");
+        assert_eq!(INLINE_LINK.find("[link]()").unwrap().as_str(), "[link]()");
+        assert_eq!(INLINE_LINK.find("[](uri)").unwrap().as_str(), "[](uri)");
+        assert_eq!(
+            INLINE_LINK.find("[link](uri)").unwrap().as_str(),
+            "[link](uri)"
+        );
+    }
 }
 
 #[cfg(test)]
@@ -134,7 +149,7 @@ mod langspec_tests {
     use regex::Regex;
 
     static THEMATIC_BREAK: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"(?m)^ {0,3}((-( |\t)*){3,}|(_( |\t)*){3,}|(\*( |\t)*){3,})$").unwrap()
+        Regex::new(r"(?m)^ {0,3}((-([ \t])*){3,}|(_([ \t])*){3,}|(\*([ \t])*){3,})$").unwrap()
     });
 
     static ATX_H1_WHOLELINE: LazyLock<Regex> =

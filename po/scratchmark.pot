@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 17:49+0300\n"
+"POT-Creation-Date: 2026-10-22 23:01+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -702,6 +702,10 @@ msgstr ""
 
 #: src/error.rs:31
 msgid "Invalid path"
+msgstr ""
+
+#: src/widgets/editor/text_view.rs:324
+msgid "Ctrl+Click"
 msgstr ""
 
 #: src/widgets/library/library_view.rs:426
