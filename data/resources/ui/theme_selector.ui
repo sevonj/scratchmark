@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="ThemeSelector" parent="AdwBin">
+        <child>
+            <object class="GtkBox">
+                <child>
+                    <object class="AdwToggleGroup" id="toggle_group">
+                        <property name="hexpand">true</property>
+                        <style>
+                            <class name="flat"/>
+                        </style>
+                        <child>
+                            <object class="AdwToggle">
+                                <property name="icon-name">auto-symbolic</property>
+                                <property name="tooltip" translatable="yes">Follow System</property>
+                                <property name="name">auto</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="AdwToggle">
+                                <property name="icon-name">sun-symbolic</property>
+                                <property name="tooltip" translatable="yes">Light</property>
+                                <property name="name">light</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="AdwToggle">
+                                <property name="icon-name">moon-symbolic</property>
+                                <property name="tooltip" translatable="yes">Dark</property>
+                                <property name="name">dark</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>
