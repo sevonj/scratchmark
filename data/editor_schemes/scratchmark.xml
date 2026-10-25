@@ -30,6 +30,9 @@
   <style name="markdown:blockquote" foreground="#gray" />
   <style name="markdown:list" foreground="#gray" />
   <style name="markdown:horizontal-rule" foreground="#gray" />
+  <style name="markdown:link" foreground="#gray" />
+  <style name="markdown:link-text" foreground="#23928b" />
+  <style name="markdown:link-url" foreground="#23928b" />
   <style name="markdown:escape" foreground="#gray" />
 
   <!-- Old, TODO -->

@@ -19,8 +19,9 @@
     <style id="list" _name="List" />
     <style id="code" _name="Code" />
     <style id="horizontal-rule" _name="Horizontal Rule" />
-    <!-- TODO style id="link" _name="Link" /-->
-    <!-- TODO link title tooltip /-->
+    <style id="link" _name="Link" />
+    <style id="link-text" _name="Link Text" />
+    <style id="link-url" _name="Link URL" />
     <!-- TODO <urls and email addresses>  /-->
     <!-- TODO reference  /-->
     <style id="escape" _name="Escape Character" />
@@ -97,7 +98,14 @@
       <match>(?&lt;!\`)\`\`\`(?!\`).*(?&lt;!\`)\`\`\`(?!\`)</match>
     </context>
     <context id="horizontal-rule" style-ref="horizontal-rule">
-      <match>(?m)^ {0,3}((-( |\t)*){3,}|(_( |\t)*){3,}|(\*( |\t)*){3,})$</match>
+      <match>(?m)^ {0,3}((-([ \t])*){3,}|(_([ \t])*){3,}|(\*([ \t])*){3,})$</match>
+    </context>
+    <context id="link" style-ref="link">
+      <match>\[(?P&lt;text&gt;.*?)\]\((?P&lt;url&gt;.*?)\)</match>
+      <include>
+        <context sub-pattern="text" style-ref="link-text" />
+        <context sub-pattern="url" style-ref="link-url"/>
+      </include>
     </context>
     <context id="escape" style-ref="escape">
       <match>\\(?=[\\\`\*\_\{\}\[\]\&lt;\&gt;\(\)\#\+\-\.\!\|])</match>
@@ -138,6 +146,7 @@
         <context ref="code2" />
         <context ref="code3" />
         <context ref="horizontal-rule" />
+        <context ref="link" />
         <context ref="escape" />
 
         <context ref="strikethrough" />
