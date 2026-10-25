@@ -101,7 +101,7 @@
       <match>(?m)^ {0,3}((-([ \t])*){3,}|(_([ \t])*){3,}|(\*([ \t])*){3,})$</match>
     </context>
     <context id="link" style-ref="link">
-      <match>\[(?P&lt;text&gt;.*)]\((?P&lt;url&gt;[^\s)(\[\]]*)\)</match>
+      <match>\[(?P&lt;text&gt;.*?)\]\((?P&lt;url&gt;.*?)\)</match>
       <include>
         <context sub-pattern="text" style-ref="link-text" />
         <context sub-pattern="url" style-ref="link-url"/>

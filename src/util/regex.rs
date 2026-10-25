@@ -12,7 +12,7 @@ pub static ATX_H_OPENING: LazyLock<Regex> =
 
 // https://spec.commonmark.org/0.31.2/#links
 pub static INLINE_LINK: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r#"\[(?P<text>.*)]\((?P<url>[^\s)(\[\]]*)\)"#).unwrap());
+    LazyLock::new(|| Regex::new(r"\[(?P<text>.*?)]\((?P<url>.*?)\)").unwrap());
 
 #[cfg(test)]
 mod tests {
