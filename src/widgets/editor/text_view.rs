@@ -8,7 +8,10 @@ mod imp {
     use gtk::GestureClick;
     use gtk::TextIter;
     use gtk::TextView;
-    use gtk::gdk::{Key, ModifierType};
+    use gtk::gdk::Key;
+    use gtk::gdk::ModifierType;
+    use gtk::gdk::RGBA;
+    use gtk::gdk::pango::Underline;
     use gtk::gio::Cancellable;
     use gtk::glib;
     use gtk::glib::Properties;
@@ -18,6 +21,7 @@ mod imp {
     use std::cell::Cell;
 
     const TYPEWRITER_DIM_TAG: &str = "typewriter-dim";
+    const LINK_HOVER_TAG: &str = "link-hover";
 
     #[derive(Debug, Default, Properties)]
     #[properties(wrapper_type = super::EditorTextView)]
@@ -57,6 +61,7 @@ mod imp {
             );
 
             obj.connect_buffer_notify(move |obj| {
+                obj.imp().setup_tag_table();
                 obj.imp().setup_typewriter_dimming();
             });
             obj.connect_typewriter_mode_notify(move |obj| {
@@ -137,12 +142,12 @@ mod imp {
 
             let line_text = buffer.text(&line_start, &line_end, false);
             let byte_index = iter.line_index() as usize;
-            let link = find_link(&line_text, byte_index)?;
+            let link_line = find_link(&line_text, byte_index)?;
 
             let mut link_start = line_start;
-            link_start.set_line_index(link.start as i32);
+            link_start.set_line_index(link_line.start as i32);
             let mut link_end = line_start;
-            link_end.set_line_index(link.end as i32);
+            link_end.set_line_index(link_line.end as i32);
 
             let start_rect = obj.iter_location(&link_start);
             let end_rect = obj.iter_location(&link_end);
@@ -156,7 +161,13 @@ mod imp {
                 return None;
             }
 
-            Some(link)
+            let line_off = buffer.iter_at_line(line).unwrap().offset() as usize;
+            let link_absolute = MarkdownLink {
+                start: link_line.start + line_off,
+                end: link_line.end + line_off,
+                url: link_line.url,
+            };
+            Some(link_absolute)
         }
 
         fn update_typewriter_dimming(&self) {
@@ -182,34 +193,53 @@ mod imp {
             }
         }
 
-        fn update_pointer(&self) {
+        fn update_link_hover(&self) {
             let view = self.obj();
-            let in_control = self.is_ctrl_held_l.get() || self.is_ctrl_held_r.get();
-            if in_control
-                && let Some((x, y)) = self.last_mouse_pos.get()
-                && self.link_at_pos(x, y).is_some()
-            {
+            let buffer = TextViewExt::buffer(self.obj().upcast_ref::<TextView>());
+            let (start, end) = buffer.bounds();
+            buffer.remove_tag_by_name(LINK_HOVER_TAG, &start, &end);
+
+            let Some((x, y)) = self.last_mouse_pos.get() else {
+                view.set_cursor_from_name(None);
+                return;
+            };
+            let Some(link) = self.link_at_pos(x, y) else {
+                view.set_cursor_from_name(None);
+                return;
+            };
+
+            let link_start = buffer.iter_at_offset(link.start as i32);
+            let link_end = buffer.iter_at_offset(link.end as i32);
+            buffer.apply_tag_by_name(LINK_HOVER_TAG, &link_start, &link_end);
+
+            if self.is_ctrl_held_l.get() || self.is_ctrl_held_r.get() {
                 view.set_cursor_from_name(Some("pointer"));
             } else {
                 view.set_cursor_from_name(None);
             }
         }
 
-        fn setup_typewriter_dimming(&self) {
-            let buffer = TextViewExt::buffer(self.obj().upcast_ref::<TextView>());
+        fn setup_tag_table(&self) {
+            let buffer = self.obj().upcast_ref::<TextView>().buffer();
             let tag_table = buffer.tag_table();
 
-            let dim_color = gtk::gdk::RGBA::new(0.57, 0.57, 0.57, 1.0);
+            tag_table.add(
+                &gtk::TextTag::builder()
+                    .name(TYPEWRITER_DIM_TAG)
+                    .foreground_rgba(&RGBA::new(0.57, 0.57, 0.57, 1.0))
+                    .build(),
+            );
 
-            let dim_tag = gtk::TextTag::builder()
-                .name(TYPEWRITER_DIM_TAG)
-                .foreground_rgba(&dim_color)
-                .build();
-            tag_table.add(&dim_tag);
+            tag_table.add(
+                &gtk::TextTag::builder()
+                    .name(LINK_HOVER_TAG)
+                    .underline(Underline::Single)
+                    .build(),
+            );
+        }
 
-            let (start, end) = buffer.bounds();
-            buffer.apply_tag(&dim_tag, &start, &end);
-
+        fn setup_typewriter_dimming(&self) {
+            let buffer = TextViewExt::buffer(self.obj().upcast_ref::<TextView>());
             buffer.connect_cursor_position_notify(clone!(
                 #[weak(rename_to = imp)]
                 self,
@@ -229,7 +259,7 @@ mod imp {
                 self,
                 move |_controller, x, y| {
                     imp.last_mouse_pos.set(Some((x, y)));
-                    imp.update_pointer();
+                    imp.update_link_hover();
                 }
             ));
             motion.connect_leave(clone!(
@@ -237,7 +267,7 @@ mod imp {
                 self,
                 move |_| {
                     imp.last_mouse_pos.set(None);
-                    imp.update_pointer();
+                    imp.update_link_hover();
                 }
             ));
             obj.add_controller(motion);
@@ -273,7 +303,7 @@ mod imp {
                     } else if keyval == Key::Control_R {
                         imp.is_ctrl_held_r.set(true);
                     }
-                    imp.update_pointer();
+                    imp.update_link_hover();
                     glib::Propagation::Proceed
                 }
             ));
@@ -286,7 +316,7 @@ mod imp {
                     } else if keyval == Key::Control_R {
                         imp.is_ctrl_held_r.set(false);
                     }
-                    imp.update_pointer();
+                    imp.update_link_hover();
                 }
             ));
             obj.add_controller(key_controller);
@@ -333,7 +363,7 @@ mod imp {
         }
 
         fn on_link_clicked(&self, url: &str) {
-            let launcher = gtk::UriLauncher::new(&process_url(&url));
+            let launcher = gtk::UriLauncher::new(&process_url(url));
             let root = self.obj().root();
             let window = root.and_downcast_ref::<gtk::Window>();
             launcher.launch(window, None::<&Cancellable>, move |result| {
