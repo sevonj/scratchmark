@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-26 17:47+0200\n"
 "PO-Revision-Date: 2026-10-26 16:07+0000\n"
-"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
 "app/es/>\n"
 "Language: es\n"
@@ -95,9 +95,8 @@ msgid "Editor interface"
 msgstr "Interfaz del editor"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:30
-#, fuzzy
 msgid "Focus mode, typewriter mode"
-msgstr "Modo máquina de escribir"
+msgstr "Enfoque, Máquina de escribir"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:34
 msgid "All panels open"
@@ -213,11 +212,11 @@ msgstr "Reemplazar todo (Shift + Enter)"
 
 #: data/resources/ui/editor/toc_view.ui:9
 msgid "Overview"
-msgstr ""
+msgstr "Resumen"
 
 #: data/resources/ui/editor/toc_view.ui:19
 msgid "No headings"
-msgstr ""
+msgstr "Sin títulos"
 
 #: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
