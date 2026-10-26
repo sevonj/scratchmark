@@ -6,7 +6,7 @@ name: Flatpak
 jobs:
   metainfo:
     name: "Validate metainfo"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - name: Install flatpak
         run: |
@@ -19,7 +19,7 @@ jobs:
         run: flatpak run --command=flatpak-builder-lint org.flatpak.Builder appstream  data/org.scratchmark.Scratchmark.metainfo.xml.in
   flatpak:
     name: "Generate Flatpak"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
       image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
       options: --privileged
@@ -45,7 +45,7 @@ jobs:
       - "flatpak"
       - "metainfo"
     if: github.ref_type == 'tag'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: write
     steps:
