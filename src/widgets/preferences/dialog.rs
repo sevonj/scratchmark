@@ -8,6 +8,7 @@ mod imp {
     use crate::util;
     use crate::widgets::PreferencesFileExtItem;
     use crate::widgets::preferences::file_ext_add_popover::FileExtAddPopover;
+    use crate::widgets::preferences::preview_text_view::PreviewTextView;
     use adw::ActionRow;
     use adw::SpinRow;
     use adw::SwitchRow;
@@ -70,6 +71,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             klass.bind_template();
+            PreviewTextView::ensure_type();
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self>) {

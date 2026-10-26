@@ -6,7 +6,16 @@
         <property name="title" translatable="yes">General</property>
         <child>
           <object class="AdwPreferencesGroup">
-            <property name="title" translatable="yes">Font</property>
+            <property name="title" translatable="yes">Appearance</property>
+            <child>
+              <object class="GtkListBoxRow">
+                <child>
+                  <object class="PreviewTextView" id="preview_text_view">
+                    <property name="height-request">72</property>
+                  </object>
+                </child>
+              </object>
+            </child>
             <child>
               <object class="AdwActionRow" id="editor_font_button">
                 <property name="activatable">true</property>
