@@ -30,8 +30,9 @@
     <file preprocess="xml-stripblanks" compressed="true">ui/editor_placeholder.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/markdown_format_bar.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/shortcuts.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true">ui/window_title.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/theme_selector.ui</file>
     <file preprocess="xml-stripblanks" compressed="true">ui/window.ui</file>
+    <file preprocess="xml-stripblanks" compressed="true">ui/window_title.ui</file>
   </gresource>
   <gresource prefix="/org/scratchmark/Scratchmark">
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-case-sensitive-symbolic.svg</file>
@@ -68,6 +69,9 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-search-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-sidebar-left-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-sort-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/smk-theme-dark-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/smk-theme-light-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/smk-theme-system-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-view-restore-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-whole-words-symbolic.svg</file>
   </gresource>

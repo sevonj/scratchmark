@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="ThemeSelector" parent="AdwBin">
+        <child>
+            <object class="AdwToggleGroup" id="toggle_group">
+                <property name="hexpand">true</property>
+                <style>
+                    <class name="flat"/>
+                </style>
+                <child>
+                    <object class="AdwToggle">
+                        <property name="icon-name">smk-theme-system-symbolic</property>
+                        <property name="tooltip" translatable="yes">Follow System Style</property>
+                        <property name="name">system</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="AdwToggle">
+                        <property name="icon-name">smk-theme-light-symbolic</property>
+                        <property name="tooltip" translatable="yes">Light Style</property>
+                        <property name="name">light</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="AdwToggle">
+                        <property name="icon-name">smk-theme-dark-symbolic</property>
+                        <property name="tooltip" translatable="yes">Dark Style</property>
+                        <property name="name">dark</property>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>
