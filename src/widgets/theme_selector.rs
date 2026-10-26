@@ -1,4 +1,7 @@
 mod imp {
+    use adw::ColorScheme;
+    use adw::StyleManager;
+    use adw::ToggleGroup;
     use adw::subclass::prelude::*;
     use gtk::CompositeTemplate;
     use gtk::glib;
@@ -12,6 +15,9 @@ mod imp {
     pub struct ThemeSelector {
         #[property(get, set)]
         theme: RefCell<String>,
+
+        #[template_child]
+        toggle_group: TemplateChild<ToggleGroup>,
     }
 
     #[glib::object_subclass]
@@ -33,8 +39,51 @@ mod imp {
     #[glib::derived_properties]
     impl ObjectImpl for ThemeSelector {
         fn constructed(&self) {
-            let obj = self.obj();
             self.parent_constructed();
+
+            let obj = self.obj();
+            let style_manager = StyleManager::default();
+
+            let initial_theme = match style_manager.color_scheme() {
+                ColorScheme::ForceLight | ColorScheme::PreferLight => "light",
+                ColorScheme::ForceDark | ColorScheme::PreferDark => "dark",
+                _ => "system",
+            };
+            obj.set_theme(initial_theme);
+
+            let toggle_group: &ToggleGroup = &self.toggle_group;
+            obj.bind_property("theme", toggle_group, "active-name")
+                .bidirectional()
+                .sync_create()
+                .build();
+
+            obj.connect_theme_notify(move |obj| {
+                let theme = obj.theme();
+                let style_manager = StyleManager::default();
+                let target_scheme = match theme.as_str() {
+                    "light" => ColorScheme::ForceLight,
+                    "dark" => ColorScheme::ForceDark,
+                    _ => ColorScheme::Default,
+                };
+                if style_manager.color_scheme() != target_scheme {
+                    style_manager.set_color_scheme(target_scheme);
+                }
+            });
+
+            style_manager.connect_color_scheme_notify(glib::clone!(
+                #[weak]
+                obj,
+                move |sm| {
+                    let current_theme = match sm.color_scheme() {
+                        ColorScheme::ForceLight | ColorScheme::PreferLight => "light",
+                        ColorScheme::ForceDark | ColorScheme::PreferDark => "dark",
+                        _ => "system",
+                    };
+                    if obj.theme() != current_theme {
+                        obj.set_theme(current_theme);
+                    }
+                }
+            ));
         }
     }
 
