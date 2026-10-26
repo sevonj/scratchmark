@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg gpa:rendering="symbolic" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state="0" gpa:state-names="outline empty">
+<path d="M 13.9575968 8.66983986 C 12.7841835 9.88485241, 11.0420656 10.3641596, 9.41227245 9.92039013 C 7.78247976 9.47662067, 6.5238533 8.18025303, 6.12841702 6.53806448 C 5.73298073 4.89587593, 6.26353741 3.16867614, 7.51268053 2.03166437 M 13.968976 8.60936165 C 13.6472588 11.7607346, 10.9311228 14.1190825, 7.76578522 13.9954271 C 4.60044765 13.8717718, 2.07656956 11.3087196, 2.00167704 8.14185333 C 1.92678428 4.97498655, 4.32668304 2.29549336, 7.48263693 2.02234697" id="moon" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:states="outline" gpa:stroke="foreground" gpa:stroke-minwidth="25%" gpa:stroke-maxwidth="150%" >
+    </path>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>moon weather-clear-night</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Jakub Steiner</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

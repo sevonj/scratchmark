@@ -1,9 +1,17 @@
 mod imp {
-    use std::cell::Cell;
-    use std::cell::OnceCell;
-    use std::cell::RefCell;
-    use std::path::PathBuf;
-
+    use crate::APP_ID;
+    use crate::config;
+    use crate::data::Document;
+    use crate::data::Folder;
+    use crate::error::ScratchmarkError;
+    use crate::util::file_actions;
+    use crate::widgets::EditorPlaceholder;
+    use crate::widgets::EditorView;
+    use crate::widgets::LibraryView;
+    use crate::widgets::MarkdownFormatBar;
+    use crate::widgets::PreferencesDialog;
+    use crate::widgets::ThemeSelector;
+    use crate::widgets::WindowTitle;
     use adw::AboutDialog;
     use adw::ApplicationWindow;
     use adw::Breakpoint;
@@ -18,7 +26,6 @@ mod imp {
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use gettextrs::gettext;
-    use gtk::Builder;
     use gtk::Button;
     use gtk::CompositeTemplate;
     use gtk::EventControllerMotion;
@@ -32,20 +39,11 @@ mod imp {
     use gtk::glib::VariantTy;
     use gtk::glib::clone;
     use gtk::glib::closure_local;
-
-    use crate::APP_ID;
-    use crate::config;
-    use crate::data::Document;
-    use crate::data::Folder;
-    use crate::error::ScratchmarkError;
-    use crate::util::file_actions;
-
-    use crate::widgets::EditorPlaceholder;
-    use crate::widgets::EditorView;
-    use crate::widgets::LibraryView;
-    use crate::widgets::MarkdownFormatBar;
-    use crate::widgets::PreferencesDialog;
-    use crate::widgets::WindowTitle;
+    use gtk::{Builder, MenuButton, PopoverMenu};
+    use std::cell::Cell;
+    use std::cell::OnceCell;
+    use std::cell::RefCell;
+    use std::path::PathBuf;
 
     #[derive(CompositeTemplate, Default, Properties)]
     #[properties(wrapper_type = super::Window)]
@@ -53,6 +51,9 @@ mod imp {
     pub struct Window {
         #[template_child]
         top_split: TemplateChild<OverlaySplitView>,
+
+        #[template_child]
+        primary_menu_button: TemplateChild<MenuButton>,
 
         #[template_child]
         sidebar_page: TemplateChild<NavigationPage>,
@@ -279,6 +280,14 @@ mod imp {
                     "custom_file_extensions",
                 )
                 .build();
+
+            let primary_popover = self
+                .primary_menu_button
+                .popover()
+                .unwrap()
+                .downcast::<PopoverMenu>()
+                .unwrap();
+            primary_popover.add_child(&ThemeSelector::default(), "theme");
 
             obj.connect_focus_mode_notify(move |obj| {
                 let enabled = obj.focus_mode();

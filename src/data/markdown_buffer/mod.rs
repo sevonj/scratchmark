@@ -1,15 +1,20 @@
 mod formatting;
 
 mod imp {
-    use std::cell::Cell;
-
+    use super::MarkdownHeading;
+    use adw::glib::subclass::Signal;
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use gtk::TextIter;
     use gtk::glib;
     use gtk::glib::Properties;
+    use gtk::glib::clone;
     use sourceview5::prelude::*;
     use sourceview5::subclass::prelude::*;
+    use std::cell::Cell;
+    use std::cell::RefCell;
+    use std::sync::OnceLock;
+    use std::time::Duration;
 
     #[derive(Debug, Properties, Default)]
     #[properties(wrapper_type = super::MarkdownBuffer)]
@@ -17,6 +22,8 @@ mod imp {
         #[property(get, set)]
         pub(super) paste_in_progress: Cell<bool>,
         pub(super) formatting_action_in_progress: Cell<bool>,
+        pub(super) table_of_contents: RefCell<Vec<MarkdownHeading>>,
+        pub(super) toc_refresh_source_id: RefCell<Option<glib::SourceId>>,
     }
 
     #[glib::object_subclass]
@@ -28,10 +35,24 @@ mod imp {
 
     #[glib::derived_properties]
     impl ObjectImpl for MarkdownBuffer {
+        fn signals() -> &'static [Signal] {
+            static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
+            SIGNALS.get_or_init(|| vec![Signal::builder("toc-changed").build()])
+        }
+
         fn constructed(&self) {
             let obj = self.obj();
             obj.set_highlight_matching_brackets(false);
+
+            obj.connect_changed(move |obj| obj.imp().schedule_refresh_toc());
+
             self.parent_constructed();
+        }
+
+        fn dispose(&self) {
+            if let Some(source_id) = self.toc_refresh_source_id.take() {
+                source_id.remove();
+            }
         }
     }
 
@@ -175,19 +196,170 @@ mod imp {
             let obj = self.obj();
             obj.text(&obj.iter_at_offset(iter.offset() - 2), iter, false)
         }
+
+        fn schedule_refresh_toc(&self) {
+            let obj = self.obj();
+            if let Some(source_id) = self.toc_refresh_source_id.take() {
+                source_id.remove();
+            }
+
+            let source_id = glib::timeout_add_local_once(
+                Duration::from_millis(250),
+                clone!(
+                    #[weak]
+                    obj,
+                    move || {
+                        let imp = obj.imp();
+                        imp.toc_refresh_source_id.take();
+                        imp.refresh_toc();
+                    }
+                ),
+            );
+            self.toc_refresh_source_id.replace(Some(source_id));
+        }
+
+        fn refresh_toc(&self) {
+            if let Some(source_id) = self.toc_refresh_source_id.take() {
+                source_id.remove();
+            }
+
+            let obj = self.obj();
+            let mut new_toc = Vec::new();
+
+            let mut line_start = obj.start_iter();
+            let mut fenced_backtick = false;
+            let mut fenced_tilde = false;
+            loop {
+                let first_char = line_start.char();
+                if !&['#', ' ', '`', '~'].contains(&first_char) {
+                    if !line_start.forward_line() {
+                        break;
+                    }
+                    continue;
+                }
+
+                let mut line_end = line_start;
+                line_end.forward_to_line_end();
+                let line_text = obj.text(&line_start, &line_end, false);
+
+                let indent = line_text.chars().take_while(|&c| c == ' ').count();
+                if indent > 3 {
+                    if !line_start.forward_line() {
+                        break;
+                    }
+                    continue;
+                }
+
+                let trimmed = line_text.trim_start();
+
+                if !fenced_tilde && trimmed.starts_with("```") {
+                    fenced_backtick = !fenced_backtick;
+                }
+                if !fenced_backtick && trimmed.starts_with("~~~") {
+                    fenced_tilde = !fenced_tilde;
+                }
+                if fenced_backtick || fenced_tilde {
+                    if !line_start.forward_line() {
+                        break;
+                    }
+                    continue;
+                }
+
+                if let Some((level, title)) = parse_atx_heading(trimmed) {
+                    let mark = obj.create_mark(None, &line_start, true);
+                    let line = obj.iter_at_mark(&mark).line();
+                    new_toc.push(MarkdownHeading {
+                        level,
+                        line,
+                        text: title.to_owned(),
+                        mark,
+                    });
+                }
+
+                if !line_start.forward_line() {
+                    break;
+                }
+            }
+
+            let mut toc = self.table_of_contents.borrow_mut();
+            let toc_changed = toc.len() != new_toc.len()
+                || toc.iter().zip(new_toc.iter()).any(|(old, new)| old != new);
+
+            for h in toc.drain(..) {
+                obj.delete_mark(&h.mark);
+            }
+
+            *toc = new_toc;
+            drop(toc);
+
+            if toc_changed {
+                obj.emit_by_name::<()>("toc-changed", &[]);
+            }
+        }
+    }
+
+    /// Start must be trimmed
+    fn parse_atx_heading(line: &str) -> Option<(usize, &str)> {
+        let level = line.chars().take_while(|&c| c == '#').count();
+        if !(1..=6).contains(&level) {
+            return None;
+        }
+
+        let after_level = &line[level..];
+        if after_level.is_empty() // No title is a valid heading
+            || after_level.starts_with(' ') // else must have space or tab
+            || after_level.starts_with('\t')
+        {
+            let title = after_level.trim().trim_end_matches('#').trim();
+            Some((level, title))
+        } else {
+            None
+        }
     }
 }
 
+#[cfg(feature = "installed")]
+use crate::config::PKGDATADIR;
+use crate::data::DocumentStats;
 use adw::subclass::prelude::*;
+use gtk::TextMark;
 use gtk::glib;
 use gtk::glib::Object;
 use sourceview5::LanguageManager;
 use sourceview5::StyleSchemeManager;
 use sourceview5::prelude::*;
 
-#[cfg(feature = "installed")]
-use crate::config::PKGDATADIR;
-use crate::data::DocumentStats;
+#[derive(Debug, Clone)]
+pub struct MarkdownHeading {
+    level: usize,
+    line: i32,
+    text: String,
+    mark: TextMark,
+}
+
+impl MarkdownHeading {
+    pub fn level(&self) -> usize {
+        self.level
+    }
+
+    pub fn line(&self) -> i32 {
+        self.line
+    }
+
+    pub fn text(&self) -> &str {
+        &self.text
+    }
+
+    pub fn mark(&self) -> &TextMark {
+        &self.mark
+    }
+}
+
+impl PartialEq for MarkdownHeading {
+    fn eq(&self, other: &Self) -> bool {
+        self.level == other.level && self.line == other.line && self.text == other.text
+    }
+}
 
 glib::wrapper! {
     pub struct MarkdownBuffer(ObjectSubclass<imp::MarkdownBuffer>)
@@ -239,6 +411,10 @@ impl MarkdownBuffer {
             num_spaces,
             num_words,
         }
+    }
+
+    pub fn table_of_contents(&self) -> std::cell::Ref<'_, Vec<MarkdownHeading>> {
+        self.imp().table_of_contents.borrow()
     }
 
     /// Tell the buffer that a paste has been started

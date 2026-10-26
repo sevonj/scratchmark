@@ -1,8 +1,18 @@
 mod imp {
+    use crate::util::regex;
     use adw::subclass::prelude::*;
+    use gettextrs::gettext;
     use gtk::CssProvider;
+    use gtk::EventControllerKey;
+    use gtk::EventControllerMotion;
+    use gtk::GestureClick;
     use gtk::TextIter;
     use gtk::TextView;
+    use gtk::gdk::Key;
+    use gtk::gdk::ModifierType;
+    use gtk::gdk::RGBA;
+    use gtk::gdk::pango::Underline;
+    use gtk::gio::Cancellable;
     use gtk::glib;
     use gtk::glib::Properties;
     use gtk::glib::clone;
@@ -11,6 +21,7 @@ mod imp {
     use std::cell::Cell;
 
     const TYPEWRITER_DIM_TAG: &str = "typewriter-dim";
+    const LINK_HOVER_TAG: &str = "link-hover";
 
     #[derive(Debug, Default, Properties)]
     #[properties(wrapper_type = super::EditorTextView)]
@@ -19,6 +30,9 @@ mod imp {
         typewriter_mode: Cell<bool>,
 
         pub(super) source_view_css_provider: CssProvider,
+        last_mouse_pos: Cell<Option<(f64, f64)>>,
+        is_ctrl_held_l: Cell<bool>,
+        is_ctrl_held_r: Cell<bool>,
     }
 
     #[glib::object_subclass]
@@ -47,12 +61,14 @@ mod imp {
             );
 
             obj.connect_buffer_notify(move |obj| {
+                obj.imp().setup_tag_table();
                 obj.imp().setup_typewriter_dimming();
             });
             obj.connect_typewriter_mode_notify(move |obj| {
                 obj.imp().update_typewriter_dimming();
             });
-            obj.imp().setup_typewriter_dimming();
+
+            self.setup_clickable_links();
         }
     }
 
@@ -110,6 +126,50 @@ mod imp {
     impl ViewImpl for EditorTextView {}
 
     impl EditorTextView {
+        fn link_at_pos(&self, x: f64, y: f64) -> Option<MarkdownLink> {
+            let obj = self.obj();
+
+            let (x, y) =
+                obj.window_to_buffer_coords(gtk::TextWindowType::Widget, x as i32, y as i32);
+
+            let iter = obj.iter_at_location(x, y)?;
+            let buffer = obj.buffer();
+            let line = iter.line();
+
+            let line_start = buffer.iter_at_line(line)?;
+            let mut line_end = line_start;
+            line_end.forward_to_line_end();
+
+            let line_text = buffer.text(&line_start, &line_end, false);
+            let byte_index = iter.line_index() as usize;
+            let link_line = find_link(&line_text, byte_index)?;
+
+            let mut link_start = line_start;
+            link_start.set_line_index(link_line.start as i32);
+            let mut link_end = line_start;
+            link_end.set_line_index(link_line.end as i32);
+
+            let start_rect = obj.iter_location(&link_start);
+            let end_rect = obj.iter_location(&link_end);
+
+            if y < start_rect.y() || y > end_rect.y() + end_rect.height() {
+                return None;
+            }
+            if start_rect.y() == end_rect.y()
+                && (x < start_rect.x() || x > end_rect.x() + end_rect.width())
+            {
+                return None;
+            }
+
+            let line_off = buffer.iter_at_line(line).unwrap().offset() as usize;
+            let link_absolute = MarkdownLink {
+                start: link_line.start + line_off,
+                end: link_line.end + line_off,
+                url: link_line.url,
+            };
+            Some(link_absolute)
+        }
+
         fn update_typewriter_dimming(&self) {
             let buffer = TextViewExt::buffer(self.obj().upcast_ref::<TextView>());
 
@@ -133,21 +193,53 @@ mod imp {
             }
         }
 
-        fn setup_typewriter_dimming(&self) {
+        fn update_link_hover(&self) {
+            let view = self.obj();
             let buffer = TextViewExt::buffer(self.obj().upcast_ref::<TextView>());
+            let (start, end) = buffer.bounds();
+            buffer.remove_tag_by_name(LINK_HOVER_TAG, &start, &end);
+
+            let Some((x, y)) = self.last_mouse_pos.get() else {
+                view.set_cursor_from_name(None);
+                return;
+            };
+            let Some(link) = self.link_at_pos(x, y) else {
+                view.set_cursor_from_name(None);
+                return;
+            };
+
+            let link_start = buffer.iter_at_offset(link.start as i32);
+            let link_end = buffer.iter_at_offset(link.end as i32);
+            buffer.apply_tag_by_name(LINK_HOVER_TAG, &link_start, &link_end);
+
+            if self.is_ctrl_held_l.get() || self.is_ctrl_held_r.get() {
+                view.set_cursor_from_name(Some("pointer"));
+            } else {
+                view.set_cursor_from_name(None);
+            }
+        }
+
+        fn setup_tag_table(&self) {
+            let buffer = self.obj().upcast_ref::<TextView>().buffer();
             let tag_table = buffer.tag_table();
 
-            let dim_color = gtk::gdk::RGBA::new(0.57, 0.57, 0.57, 1.0);
+            tag_table.add(
+                &gtk::TextTag::builder()
+                    .name(TYPEWRITER_DIM_TAG)
+                    .foreground_rgba(&RGBA::new(0.57, 0.57, 0.57, 1.0))
+                    .build(),
+            );
 
-            let dim_tag = gtk::TextTag::builder()
-                .name(TYPEWRITER_DIM_TAG)
-                .foreground_rgba(&dim_color)
-                .build();
-            tag_table.add(&dim_tag);
+            tag_table.add(
+                &gtk::TextTag::builder()
+                    .name(LINK_HOVER_TAG)
+                    .underline(Underline::Single)
+                    .build(),
+            );
+        }
 
-            let (start, end) = buffer.bounds();
-            buffer.apply_tag(&dim_tag, &start, &end);
-
+        fn setup_typewriter_dimming(&self) {
+            let buffer = TextViewExt::buffer(self.obj().upcast_ref::<TextView>());
             buffer.connect_cursor_position_notify(clone!(
                 #[weak(rename_to = imp)]
                 self,
@@ -157,6 +249,136 @@ mod imp {
             ));
             self.update_typewriter_dimming();
         }
+
+        fn setup_clickable_links(&self) {
+            let obj = self.obj();
+
+            let motion = EventControllerMotion::new();
+            motion.connect_motion(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_controller, x, y| {
+                    imp.last_mouse_pos.set(Some((x, y)));
+                    imp.update_link_hover();
+                }
+            ));
+            motion.connect_leave(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_| {
+                    imp.last_mouse_pos.set(None);
+                    imp.update_link_hover();
+                }
+            ));
+            obj.add_controller(motion);
+
+            let key_controller = EventControllerKey::new();
+            /* FIXME: Find out why this seems to return the previous event and then get rid of
+                separate key states
+            key_controller.connect_modifiers(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                #[upgrade_or]
+                glib::Propagation::Proceed,
+                move |_controller, state| {
+                    print!("modified");
+                    print!(" before={} ", imp.is_ctrl_held.get());
+                    imp.is_ctrl_held
+                        .set(state.contains(ModifierType::CONTROL_MASK ));
+                    print!(" after={} ", imp.is_ctrl_held.get());
+                    imp.update_pointer();
+                    println!("");
+                    glib::Propagation::Proceed
+                }
+            ));
+            */
+            key_controller.connect_key_pressed(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                #[upgrade_or]
+                glib::Propagation::Proceed,
+                move |_, keyval, _, _| {
+                    if keyval == Key::Control_L {
+                        imp.is_ctrl_held_l.set(true);
+                    } else if keyval == Key::Control_R {
+                        imp.is_ctrl_held_r.set(true);
+                    }
+                    imp.update_link_hover();
+                    glib::Propagation::Proceed
+                }
+            ));
+            key_controller.connect_key_released(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |_, keyval, _, _| {
+                    if keyval == Key::Control_L {
+                        imp.is_ctrl_held_l.set(false);
+                    } else if keyval == Key::Control_R {
+                        imp.is_ctrl_held_r.set(false);
+                    }
+                    imp.update_link_hover();
+                }
+            ));
+            obj.add_controller(key_controller);
+
+            let click_gesture = GestureClick::new();
+            click_gesture.set_button(gtk::gdk::ffi::GDK_BUTTON_PRIMARY as u32);
+            click_gesture.set_propagation_phase(gtk::PropagationPhase::Capture);
+            click_gesture.connect_pressed(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                move |gesture, n_press, x, y| {
+                    if n_press == 1
+                        && gesture
+                            .current_event_state()
+                            .contains(ModifierType::CONTROL_MASK)
+                        && let Some(link) = imp.link_at_pos(x, y)
+                    {
+                        imp.on_link_clicked(&link.url);
+                        gesture.set_state(gtk::EventSequenceState::Claimed);
+                    }
+                }
+            ));
+            obj.add_controller(click_gesture);
+
+            obj.set_has_tooltip(true);
+            obj.connect_query_tooltip(clone!(
+                #[weak(rename_to = imp)]
+                self,
+                #[upgrade_or]
+                false,
+                move |_view, x, y, _keyboard_mode, tooltip| {
+                    if let Some(link) = imp.link_at_pos(x as f64, y as f64) {
+                        tooltip.set_text(Some(&format!(
+                            "{} ➜ {}",
+                            gettext("Ctrl+Click"),
+                            link.url
+                        )));
+                        true
+                    } else {
+                        false
+                    }
+                }
+            ));
+        }
+
+        fn on_link_clicked(&self, url: &str) {
+            let launcher = gtk::UriLauncher::new(&process_url(url));
+            let root = self.obj().root();
+            let window = root.and_downcast_ref::<gtk::Window>();
+            launcher.launch(window, None::<&Cancellable>, move |result| {
+                if let Err(e) = result {
+                    eprintln!("Couldn't open url. {e}");
+                }
+            });
+        }
+    }
+
+    #[derive(Debug, PartialEq, Eq, Clone)]
+    struct MarkdownLink {
+        pub start: usize,
+        pub end: usize,
+        pub url: String,
     }
 
     fn line_bounds(buf: &gtk::TextBuffer, line: i32) -> Option<(TextIter, TextIter)> {
@@ -166,6 +388,38 @@ mod imp {
             end.backward_char();
         }
         Some((start, end))
+    }
+
+    fn process_url(url: &str) -> String {
+        let trimmed = url.trim();
+        if trimmed.starts_with("http://") || trimmed.starts_with("https://") {
+            return trimmed.to_string();
+        }
+        format!("http://{trimmed}")
+    }
+
+    fn find_link(line: &str, byte_offset: usize) -> Option<MarkdownLink> {
+        let mut links = Vec::new();
+
+        for caps in regex::INLINE_LINK.captures_iter(line) {
+            let whole_match = caps.get(0).unwrap();
+
+            let url = if let Some(url_bare) = caps.name("url") {
+                url_bare.as_str().to_string()
+            } else {
+                continue;
+            };
+
+            links.push(MarkdownLink {
+                start: whole_match.start(),
+                end: whole_match.end(),
+                url,
+            });
+        }
+
+        links
+            .into_iter()
+            .find(|link| byte_offset >= link.start && byte_offset < link.end)
     }
 }
 

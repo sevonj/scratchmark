@@ -4,5 +4,7 @@ mod file_changed_on_disk_dialog;
 mod minimap;
 mod search_bar;
 mod text_view;
+mod toc_row;
+mod toc_view;
 
 pub use editor_view::EditorView;

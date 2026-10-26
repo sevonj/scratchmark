@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-06 13:23+0300\n"
+"POT-Creation-Date: 2026-10-26 17:36+0200\n"
 "PO-Revision-Date: 2026-08-07 13:25+0000\n"
 "Last-Translator: Priit Jõerüüt <jrtcdbrg@noreply.codeberg.org>\n"
 "Language-Team: Estonian <https://translate.codeberg.org/projects/scratchmark/"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.1\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
 msgid "Scratchmark"
@@ -95,45 +95,46 @@ msgid "Editor interface"
 msgstr "Tekstitoimeti kasutajaliides"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:30
-msgid "Focus mode"
-msgstr "Fookusrežiim"
+#, fuzzy
+msgid "Focus mode, typewriter mode"
+msgstr "Kirjutusmasina režiim"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:34
 msgid "All panels open"
 msgstr "Kõik ribad on avatud"
 
-#: data/resources/ui/editor/document_stats_view.ui:18
+#: data/resources/ui/editor/document_stats_view.ui:11
 msgid "Statistics"
 msgstr "Statistika"
 
-#: data/resources/ui/editor/document_stats_view.ui:32
+#: data/resources/ui/editor/document_stats_view.ui:25
 msgid "Characters"
 msgstr "Tähemärke"
 
-#: data/resources/ui/editor/document_stats_view.ui:45
-#: data/resources/ui/editor/document_stats_view.ui:73
-#: data/resources/ui/editor/document_stats_view.ui:101
-#: data/resources/ui/editor/document_stats_view.ui:129
+#: data/resources/ui/editor/document_stats_view.ui:38
+#: data/resources/ui/editor/document_stats_view.ui:66
+#: data/resources/ui/editor/document_stats_view.ui:94
+#: data/resources/ui/editor/document_stats_view.ui:122
 msgid "N/A"
 msgstr "pole teada"
 
-#: data/resources/ui/editor/document_stats_view.ui:60
+#: data/resources/ui/editor/document_stats_view.ui:53
 msgid "Excluding Spaces"
 msgstr "Välja arvatud tühikud"
 
-#: data/resources/ui/editor/document_stats_view.ui:88
+#: data/resources/ui/editor/document_stats_view.ui:81
 msgid "Words"
 msgstr "Sõnu"
 
-#: data/resources/ui/editor/document_stats_view.ui:116
+#: data/resources/ui/editor/document_stats_view.ui:109
 msgid "Lines"
 msgstr "Ridu"
 
-#: data/resources/ui/editor/editor_view.ui:16
+#: data/resources/ui/editor/editor_view.ui:39
 msgid "File changed on disk"
 msgstr "Fail on andmekandjal muutunud"
 
-#: data/resources/ui/editor/editor_view.ui:17
+#: data/resources/ui/editor/editor_view.ui:40
 msgid "Resolve"
 msgstr "Lahenda"
 
@@ -210,6 +211,14 @@ msgstr "Asenda kõik"
 msgid "Replace All (Shift + Return)"
 msgstr "Asenda kõik (Shift + Sisestusklahv)"
 
+#: data/resources/ui/editor/toc_view.ui:9
+msgid "Overview"
+msgstr ""
+
+#: data/resources/ui/editor/toc_view.ui:19
+msgid "No headings"
+msgstr ""
+
 #: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
 msgstr "Mitte midagi pole avatud"
@@ -265,7 +274,7 @@ msgstr "Kustuta jäädavalt"
 #: data/resources/ui/library/drafts_context_menu.ui:6
 #: data/resources/ui/library/folder_context_menu.ui:6
 #: data/resources/ui/library/root_context_menu.ui:6
-#: data/resources/ui/window.ui:121
+#: data/resources/ui/window.ui:124
 msgid "New Document"
 msgstr "Uus dokument"
 
@@ -285,7 +294,7 @@ msgstr "Loo"
 #: data/resources/ui/library/folder_context_menu.ui:10
 #: data/resources/ui/library/folder_create_popover.ui:11
 #: data/resources/ui/library/root_context_menu.ui:10
-#: data/resources/ui/window.ui:125
+#: data/resources/ui/window.ui:128
 msgid "New Folder"
 msgstr "Uus kaust"
 
@@ -582,7 +591,19 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Uuenda failid käsitsi"
 
-#: data/resources/ui/window.ui:27 data/resources/ui/window.ui:198
+#: data/resources/ui/theme_selector.ui:13
+msgid "Follow System Style"
+msgstr ""
+
+#: data/resources/ui/theme_selector.ui:20
+msgid "Light Style"
+msgstr ""
+
+#: data/resources/ui/theme_selector.ui:27
+msgid "Dark Style"
+msgstr ""
+
+#: data/resources/ui/window.ui:27 data/resources/ui/window.ui:201
 msgid "Sort"
 msgstr "Järjesta"
 
@@ -610,83 +631,83 @@ msgstr "Dokumendi teave"
 msgid "Formatting Toolbar"
 msgstr "Vorminduse tööriistariba"
 
-#: data/resources/ui/window.ui:129
+#: data/resources/ui/window.ui:132
 msgid "Add Project"
 msgstr "Lisa projekt"
 
-#: data/resources/ui/window.ui:135
+#: data/resources/ui/window.ui:138
 msgid "Save"
 msgstr "Salvesta"
 
-#: data/resources/ui/window.ui:139
+#: data/resources/ui/window.ui:142
 msgid "Close"
 msgstr "Sulge"
 
-#: data/resources/ui/window.ui:145
+#: data/resources/ui/window.ui:148
 msgid "Zoom In"
 msgstr "Suumi sisse"
 
-#: data/resources/ui/window.ui:149
+#: data/resources/ui/window.ui:152
 msgid "Zoom Out"
 msgstr "Suumi välja"
 
-#: data/resources/ui/window.ui:153
+#: data/resources/ui/window.ui:156
 msgid "Reset Zoom"
 msgstr "Lähtesta suum"
 
-#: data/resources/ui/window.ui:159
+#: data/resources/ui/window.ui:162
 msgid "Search Text"
 msgstr "Otsi teksti"
 
-#: data/resources/ui/window.ui:163
+#: data/resources/ui/window.ui:166
 msgid "Search and Replace"
 msgstr "Otsi ja asenda"
 
-#: data/resources/ui/window.ui:169
+#: data/resources/ui/window.ui:172
 msgid "Fullscreen"
 msgstr "Täisekraanivaade"
 
-#: data/resources/ui/window.ui:173
+#: data/resources/ui/window.ui:176
 msgid "Focus Mode"
 msgstr "Fookusrežiim"
 
-#: data/resources/ui/window.ui:177
+#: data/resources/ui/window.ui:180
 msgid "Typewriter Mode"
 msgstr "Kirjutusmasina režiim"
 
-#: data/resources/ui/window.ui:183
+#: data/resources/ui/window.ui:186
 msgid "Preferences"
 msgstr "Eelistused"
 
-#: data/resources/ui/window.ui:187
+#: data/resources/ui/window.ui:190
 msgid "Keyboard Shortcuts"
 msgstr "Klaviatuuri kiirklahvid"
 
-#: data/resources/ui/window.ui:191
+#: data/resources/ui/window.ui:194
 msgid "About Scratchmark"
 msgstr "Rakenduse teave: Scratchmark"
 
-#: data/resources/ui/window.ui:201
+#: data/resources/ui/window.ui:204
 msgid "A-Z"
 msgstr "A→Z"
 
-#: data/resources/ui/window.ui:206
+#: data/resources/ui/window.ui:209
 msgid "Z-A"
 msgstr "Z→A"
 
-#: data/resources/ui/window.ui:211
+#: data/resources/ui/window.ui:214
 msgid "Last Modified"
 msgstr "Viimati muudetud"
 
-#: data/resources/ui/window.ui:216
+#: data/resources/ui/window.ui:219
 msgid "First Modified"
 msgstr "Varem muudetud"
 
-#: data/resources/ui/window.ui:221
+#: data/resources/ui/window.ui:224
 msgid "Last Accessed"
 msgstr "Viimati avatud"
 
-#: data/resources/ui/window.ui:226
+#: data/resources/ui/window.ui:229
 msgid "First Accessed"
 msgstr "Varem avatud"
 
@@ -718,6 +739,10 @@ msgstr "Fail on andmekandjal muutunud"
 msgid "Invalid path"
 msgstr "Vigane asukoht"
 
+#: src/widgets/editor/text_view.rs:354
+msgid "Ctrl+Click"
+msgstr ""
+
 #: src/widgets/library/library_view.rs:426
 #: src/widgets/library/library_view.rs:446
 msgid "Couldn't move to trash"
@@ -744,21 +769,24 @@ msgstr "Kausta kustutamine ei õnnestunud"
 msgid "Folder deleted"
 msgstr "Kaust on kustutatud"
 
-#: src/widgets/window.rs:414
+#: src/widgets/window.rs:423
 msgid "Couldn't move file"
 msgstr "Faili teisaldamine ei õnnestunud"
 
-#: src/widgets/window.rs:660
+#: src/widgets/window.rs:669
 msgid "Saved"
 msgstr "Salvestatud"
 
-#: src/widgets/window.rs:959
+#: src/widgets/window.rs:968
 msgid "Open document has been moved or deleted"
 msgstr "Avatud dokument on kas tõstetud teise kohta või kustutatud"
 
 #: src/widgets/window_title.rs:72
 msgid " (Focus Mode)"
 msgstr " (Fookusrežiim)"
+
+#~ msgid "Focus mode"
+#~ msgstr "Fookusrežiim"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Toggle Fullscreen"

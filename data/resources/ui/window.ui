@@ -34,7 +34,7 @@
                       </object>
                     </child>
                     <child type="end">
-                      <object class="GtkMenuButton">
+                      <object class="GtkMenuButton" id="primary_menu_button">
                         <property name="primary">True</property>
                         <property name="icon-name">smk-open-menu-symbolic</property>
                         <property name="tooltip-text" translatable="yes">Menu</property>
@@ -116,6 +116,9 @@
     </child>
   </template>
   <menu id="primary_menu">
+    <item>
+      <attribute name="custom">theme</attribute>
+    </item>
     <section>
       <item>
         <attribute name="label" translatable="yes">New Document</attribute>
