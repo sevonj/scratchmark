@@ -287,7 +287,9 @@ mod imp {
                 .unwrap()
                 .downcast::<PopoverMenu>()
                 .unwrap();
-            primary_popover.add_child(&ThemeSelector::default(), "theme");
+            let theme_selector = ThemeSelector::default();
+            settings.bind("theme", &theme_selector, "theme").build();
+            primary_popover.add_child(&theme_selector, "theme");
 
             obj.connect_focus_mode_notify(move |obj| {
                 let enabled = obj.focus_mode();

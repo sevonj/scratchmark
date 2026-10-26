@@ -70,5 +70,8 @@
     <key name="win-is-maximized" type="b">
       <default>false</default>
     </key>
+    <key name="theme" type="s">
+      <default>"system"</default>
+    </key>
   </schema>
 </schemalist>
