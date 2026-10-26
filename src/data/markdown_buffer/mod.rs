@@ -385,6 +385,14 @@ impl MarkdownBuffer {
         self
     }
 
+    pub fn set_theme(&self, scheme_id: &str) {
+        if let Some(style_scheme) = StyleSchemeManager::default().scheme(scheme_id) {
+            self.set_style_scheme(Some(&style_scheme));
+        } else {
+            println!("MarkdownBuffer: Failed to load scheme with id '{scheme_id}'.")
+        }
+    }
+
     pub fn stats(&self) -> DocumentStats {
         let num_lines = self.line_count();
         let num_chars = self.char_count();
