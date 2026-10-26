@@ -2,34 +2,30 @@
 <interface>
     <template class="ThemeSelector" parent="AdwBin">
         <child>
-            <object class="GtkBox">
+            <object class="AdwToggleGroup" id="toggle_group">
+                <property name="hexpand">true</property>
+                <style>
+                    <class name="flat"/>
+                </style>
                 <child>
-                    <object class="AdwToggleGroup" id="toggle_group">
-                        <property name="hexpand">true</property>
-                        <style>
-                            <class name="flat"/>
-                        </style>
-                        <child>
-                            <object class="AdwToggle">
-                                <property name="icon-name">auto-symbolic</property>
-                                <property name="tooltip" translatable="yes">Follow System Theme</property>
-                                <property name="name">system</property>
-                            </object>
-                        </child>
-                        <child>
-                            <object class="AdwToggle">
-                                <property name="icon-name">sun-symbolic</property>
-                                <property name="tooltip" translatable="yes">Light Theme</property>
-                                <property name="name">light</property>
-                            </object>
-                        </child>
-                        <child>
-                            <object class="AdwToggle">
-                                <property name="icon-name">moon-symbolic</property>
-                                <property name="tooltip" translatable="yes">Dark Theme</property>
-                                <property name="name">dark</property>
-                            </object>
-                        </child>
+                    <object class="AdwToggle">
+                        <property name="icon-name">smk-theme-system-symbolic</property>
+                        <property name="tooltip" translatable="yes">Follow System Style</property>
+                        <property name="name">system</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="AdwToggle">
+                        <property name="icon-name">smk-theme-light-symbolic</property>
+                        <property name="tooltip" translatable="yes">Light Style</property>
+                        <property name="name">light</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="AdwToggle">
+                        <property name="icon-name">smk-theme-dark-symbolic</property>
+                        <property name="tooltip" translatable="yes">Dark Style</property>
+                        <property name="name">dark</property>
                     </object>
                 </child>
             </object>

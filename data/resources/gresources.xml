@@ -69,6 +69,9 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-search-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-sidebar-left-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-sort-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/smk-theme-dark-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/smk-theme-light-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/smk-theme-system-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-view-restore-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-whole-words-symbolic.svg</file>
   </gresource>
