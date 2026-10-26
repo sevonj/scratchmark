@@ -29,6 +29,7 @@ data/resources/ui/preferences/dialog.ui
 data/resources/ui/preferences/file_ext_add_popover.ui
 data/resources/ui/preferences/file_ext_item.ui
 data/resources/ui/shortcuts.ui
+data/resources/ui/theme_selector.ui
 data/resources/ui/window.ui
 data/resources/ui/window_title.ui
 src/config.rs
@@ -73,5 +74,6 @@ src/widgets/preferences/dialog.rs
 src/widgets/preferences/file_ext_add_popover.rs
 src/widgets/preferences/file_ext_item.rs
 src/widgets/preferences/mod.rs
+src/widgets/theme_selector.rs
 src/widgets/window.rs
 src/widgets/window_title.rs

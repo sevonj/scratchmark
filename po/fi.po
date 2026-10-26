@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 23:01+0300\n"
-"PO-Revision-Date: 2026-10-26 13:30+0000\n"
+"POT-Creation-Date: 2026-10-26 17:36+0200\n"
+"PO-Revision-Date: 2026-08-06 13:08+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/scratchmark/"
 "app/fi/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1\n"
+"X-Generator: Weblate 2026.7.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
 msgid "Scratchmark"
@@ -98,8 +98,9 @@ msgid "Editor interface"
 msgstr "Editori"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:30
+#, fuzzy
 msgid "Focus mode, typewriter mode"
-msgstr "Fokustila. kirjoituskonetila"
+msgstr "Kirjoituskonetila"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:34
 msgid "All panels open"
@@ -215,11 +216,12 @@ msgstr "Korvaa kaikki (Shift + Enter)"
 
 #: data/resources/ui/editor/toc_view.ui:9
 msgid "Overview"
-msgstr "Yleiskatsaus"
+msgstr ""
 
 #: data/resources/ui/editor/toc_view.ui:19
+#, fuzzy
 msgid "No headings"
-msgstr "Ei otsikoita"
+msgstr "Otsikko 1"
 
 #: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
@@ -276,7 +278,7 @@ msgstr "Poista pysyvästi"
 #: data/resources/ui/library/drafts_context_menu.ui:6
 #: data/resources/ui/library/folder_context_menu.ui:6
 #: data/resources/ui/library/root_context_menu.ui:6
-#: data/resources/ui/window.ui:121
+#: data/resources/ui/window.ui:124
 msgid "New Document"
 msgstr "Uusi tiedosto"
 
@@ -296,7 +298,7 @@ msgstr "Luo"
 #: data/resources/ui/library/folder_context_menu.ui:10
 #: data/resources/ui/library/folder_create_popover.ui:11
 #: data/resources/ui/library/root_context_menu.ui:10
-#: data/resources/ui/window.ui:125
+#: data/resources/ui/window.ui:128
 msgid "New Folder"
 msgstr "Uusi kansio"
 
@@ -593,7 +595,19 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Päivitä kirjasto"
 
-#: data/resources/ui/window.ui:27 data/resources/ui/window.ui:198
+#: data/resources/ui/theme_selector.ui:13
+msgid "Follow System Style"
+msgstr ""
+
+#: data/resources/ui/theme_selector.ui:20
+msgid "Light Style"
+msgstr ""
+
+#: data/resources/ui/theme_selector.ui:27
+msgid "Dark Style"
+msgstr ""
+
+#: data/resources/ui/window.ui:27 data/resources/ui/window.ui:201
 msgid "Sort"
 msgstr "Järjestä"
 
@@ -621,83 +635,83 @@ msgstr "Tiedoston tiedot"
 msgid "Formatting Toolbar"
 msgstr "Muotoilupalkki"
 
-#: data/resources/ui/window.ui:129
+#: data/resources/ui/window.ui:132
 msgid "Add Project"
 msgstr "Lisää projekti"
 
-#: data/resources/ui/window.ui:135
+#: data/resources/ui/window.ui:138
 msgid "Save"
 msgstr "Tallenna"
 
-#: data/resources/ui/window.ui:139
+#: data/resources/ui/window.ui:142
 msgid "Close"
 msgstr "Sulje"
 
-#: data/resources/ui/window.ui:145
+#: data/resources/ui/window.ui:148
 msgid "Zoom In"
 msgstr "Suurenna tekstiä"
 
-#: data/resources/ui/window.ui:149
+#: data/resources/ui/window.ui:152
 msgid "Zoom Out"
 msgstr "Pienennä tekstiä"
 
-#: data/resources/ui/window.ui:153
+#: data/resources/ui/window.ui:156
 msgid "Reset Zoom"
 msgstr "Palauta oletuskoko"
 
-#: data/resources/ui/window.ui:159
+#: data/resources/ui/window.ui:162
 msgid "Search Text"
 msgstr "Etsi tekstiä"
 
-#: data/resources/ui/window.ui:163
+#: data/resources/ui/window.ui:166
 msgid "Search and Replace"
 msgstr "Etsi ja korvaa"
 
-#: data/resources/ui/window.ui:169
+#: data/resources/ui/window.ui:172
 msgid "Fullscreen"
 msgstr "Koko näytön tila"
 
-#: data/resources/ui/window.ui:173
+#: data/resources/ui/window.ui:176
 msgid "Focus Mode"
 msgstr "Fokustila"
 
-#: data/resources/ui/window.ui:177
+#: data/resources/ui/window.ui:180
 msgid "Typewriter Mode"
 msgstr "Kirjoituskonetila"
 
-#: data/resources/ui/window.ui:183
+#: data/resources/ui/window.ui:186
 msgid "Preferences"
 msgstr "Asetukset"
 
-#: data/resources/ui/window.ui:187
+#: data/resources/ui/window.ui:190
 msgid "Keyboard Shortcuts"
 msgstr "Pikanäppäimet"
 
-#: data/resources/ui/window.ui:191
+#: data/resources/ui/window.ui:194
 msgid "About Scratchmark"
 msgstr "Tietoja - Scratchmark"
 
-#: data/resources/ui/window.ui:201
+#: data/resources/ui/window.ui:204
 msgid "A-Z"
 msgstr "A-Ö"
 
-#: data/resources/ui/window.ui:206
+#: data/resources/ui/window.ui:209
 msgid "Z-A"
 msgstr "Ö-A"
 
-#: data/resources/ui/window.ui:211
+#: data/resources/ui/window.ui:214
 msgid "Last Modified"
 msgstr "Viimeksi muokattu"
 
-#: data/resources/ui/window.ui:216
+#: data/resources/ui/window.ui:219
 msgid "First Modified"
 msgstr "Ensin muokattu"
 
-#: data/resources/ui/window.ui:221
+#: data/resources/ui/window.ui:224
 msgid "Last Accessed"
 msgstr "Viimeksi avattu"
 
-#: data/resources/ui/window.ui:226
+#: data/resources/ui/window.ui:229
 msgid "First Accessed"
 msgstr "Ensin avattu"
 
@@ -729,7 +743,7 @@ msgstr "Tiedosto on muuttunut levyllä"
 msgid "Invalid path"
 msgstr "Virheellinen polku"
 
-#: src/widgets/editor/text_view.rs:324
+#: src/widgets/editor/text_view.rs:354
 msgid "Ctrl+Click"
 msgstr ""
 
@@ -759,15 +773,15 @@ msgstr "Kansion poisto epäonnistui"
 msgid "Folder deleted"
 msgstr "Kansio poistettu"
 
-#: src/widgets/window.rs:414
+#: src/widgets/window.rs:423
 msgid "Couldn't move file"
 msgstr "Tiedoston siirtäminen epäonnistui"
 
-#: src/widgets/window.rs:660
+#: src/widgets/window.rs:669
 msgid "Saved"
 msgstr "Tallennettu"
 
-#: src/widgets/window.rs:959
+#: src/widgets/window.rs:968
 msgid "Open document has been moved or deleted"
 msgstr "Avoin tiedosto on siirretty tai poistettu"
 

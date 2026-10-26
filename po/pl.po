@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 23:01+0300\n"
-"PO-Revision-Date: 2026-10-26 13:30+0000\n"
+"POT-Creation-Date: 2026-10-26 17:36+0200\n"
+"PO-Revision-Date: 2026-08-25 08:26+0000\n"
 "Last-Translator: Łukasz Horodecki <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
 "app/pl/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2026.10.1\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
 msgid "Scratchmark"
@@ -101,8 +101,9 @@ msgid "Editor interface"
 msgstr "Interfejs edytora"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:30
+#, fuzzy
 msgid "Focus mode, typewriter mode"
-msgstr "Tryb skupienia, tryb maszyny do pisania"
+msgstr "Tryb maszyny do pisania"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:34
 msgid "All panels open"
@@ -218,11 +219,12 @@ msgstr "Zastępuje wszystkie (Shift+Enter)"
 
 #: data/resources/ui/editor/toc_view.ui:9
 msgid "Overview"
-msgstr "Przegląd"
+msgstr ""
 
 #: data/resources/ui/editor/toc_view.ui:19
+#, fuzzy
 msgid "No headings"
-msgstr "Bez nagłówków"
+msgstr "Nagłówek 1"
 
 #: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
@@ -279,7 +281,7 @@ msgstr "Usuń trwale"
 #: data/resources/ui/library/drafts_context_menu.ui:6
 #: data/resources/ui/library/folder_context_menu.ui:6
 #: data/resources/ui/library/root_context_menu.ui:6
-#: data/resources/ui/window.ui:121
+#: data/resources/ui/window.ui:124
 msgid "New Document"
 msgstr "Nowy dokument"
 
@@ -299,7 +301,7 @@ msgstr "Utwórz"
 #: data/resources/ui/library/folder_context_menu.ui:10
 #: data/resources/ui/library/folder_create_popover.ui:11
 #: data/resources/ui/library/root_context_menu.ui:10
-#: data/resources/ui/window.ui:125
+#: data/resources/ui/window.ui:128
 msgid "New Folder"
 msgstr "Nowy katalog"
 
@@ -596,7 +598,19 @@ msgctxt "shortcut window"
 msgid "Manual Refresh"
 msgstr "Ręczne odświeżenie"
 
-#: data/resources/ui/window.ui:27 data/resources/ui/window.ui:198
+#: data/resources/ui/theme_selector.ui:13
+msgid "Follow System Style"
+msgstr ""
+
+#: data/resources/ui/theme_selector.ui:20
+msgid "Light Style"
+msgstr ""
+
+#: data/resources/ui/theme_selector.ui:27
+msgid "Dark Style"
+msgstr ""
+
+#: data/resources/ui/window.ui:27 data/resources/ui/window.ui:201
 msgid "Sort"
 msgstr "Sortowanie"
 
@@ -624,83 +638,83 @@ msgstr "Informacje o dokumencie"
 msgid "Formatting Toolbar"
 msgstr "Pasek formatowania"
 
-#: data/resources/ui/window.ui:129
+#: data/resources/ui/window.ui:132
 msgid "Add Project"
 msgstr "Dodaj projekt"
 
-#: data/resources/ui/window.ui:135
+#: data/resources/ui/window.ui:138
 msgid "Save"
 msgstr "Zapisz"
 
-#: data/resources/ui/window.ui:139
+#: data/resources/ui/window.ui:142
 msgid "Close"
 msgstr "Zamknij"
 
-#: data/resources/ui/window.ui:145
+#: data/resources/ui/window.ui:148
 msgid "Zoom In"
 msgstr "Powiększ tekst"
 
-#: data/resources/ui/window.ui:149
+#: data/resources/ui/window.ui:152
 msgid "Zoom Out"
 msgstr "Pomniejsz tekst"
 
-#: data/resources/ui/window.ui:153
+#: data/resources/ui/window.ui:156
 msgid "Reset Zoom"
 msgstr "Przywróć powiększenie"
 
-#: data/resources/ui/window.ui:159
+#: data/resources/ui/window.ui:162
 msgid "Search Text"
 msgstr "Szukaj tekstu"
 
-#: data/resources/ui/window.ui:163
+#: data/resources/ui/window.ui:166
 msgid "Search and Replace"
 msgstr "Szukaj i zastąp"
 
-#: data/resources/ui/window.ui:169
+#: data/resources/ui/window.ui:172
 msgid "Fullscreen"
 msgstr "Pełny ekran"
 
-#: data/resources/ui/window.ui:173
+#: data/resources/ui/window.ui:176
 msgid "Focus Mode"
 msgstr "Tryb skupienia"
 
-#: data/resources/ui/window.ui:177
+#: data/resources/ui/window.ui:180
 msgid "Typewriter Mode"
 msgstr "Tryb maszyny do pisania"
 
-#: data/resources/ui/window.ui:183
+#: data/resources/ui/window.ui:186
 msgid "Preferences"
 msgstr "Preferencje"
 
-#: data/resources/ui/window.ui:187
+#: data/resources/ui/window.ui:190
 msgid "Keyboard Shortcuts"
 msgstr "Skróty klawiszowe"
 
-#: data/resources/ui/window.ui:191
+#: data/resources/ui/window.ui:194
 msgid "About Scratchmark"
 msgstr "O aplikacji"
 
-#: data/resources/ui/window.ui:201
+#: data/resources/ui/window.ui:204
 msgid "A-Z"
 msgstr "A-Z"
 
-#: data/resources/ui/window.ui:206
+#: data/resources/ui/window.ui:209
 msgid "Z-A"
 msgstr "Z-A"
 
-#: data/resources/ui/window.ui:211
+#: data/resources/ui/window.ui:214
 msgid "Last Modified"
 msgstr "Od ostatnio zmienionego"
 
-#: data/resources/ui/window.ui:216
+#: data/resources/ui/window.ui:219
 msgid "First Modified"
 msgstr "Od najdawniej zmienionego"
 
-#: data/resources/ui/window.ui:221
+#: data/resources/ui/window.ui:224
 msgid "Last Accessed"
 msgstr "Od ostatnio otwieranego"
 
-#: data/resources/ui/window.ui:226
+#: data/resources/ui/window.ui:229
 msgid "First Accessed"
 msgstr "Od najdawniej otwieranego"
 
@@ -732,7 +746,7 @@ msgstr "Plik na dysku został zmieniony"
 msgid "Invalid path"
 msgstr "Nieprawidłowa ścieżka"
 
-#: src/widgets/editor/text_view.rs:324
+#: src/widgets/editor/text_view.rs:354
 msgid "Ctrl+Click"
 msgstr ""
 
@@ -762,15 +776,15 @@ msgstr "Nie powiodło się usunięcie katalogu"
 msgid "Folder deleted"
 msgstr "Usunięto katalog"
 
-#: src/widgets/window.rs:414
+#: src/widgets/window.rs:423
 msgid "Couldn't move file"
 msgstr "Nie powiodło się przeniesienie pliku"
 
-#: src/widgets/window.rs:660
+#: src/widgets/window.rs:669
 msgid "Saved"
 msgstr "Zapisano"
 
-#: src/widgets/window.rs:959
+#: src/widgets/window.rs:968
 msgid "Open document has been moved or deleted"
 msgstr "Otwarty dokument został przeniesiony lub usunięty"
 
