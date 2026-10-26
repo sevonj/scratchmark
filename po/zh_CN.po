@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 17:36+0200\n"
+"POT-Creation-Date: 2026-10-26 17:47+0200\n"
 "PO-Revision-Date: 2026-08-06 13:08+0000\n"
 "Last-Translator: Outbreak2096 <outbreak2096@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
@@ -432,155 +432,182 @@ msgstr "添加"
 msgid "Remove"
 msgstr "移除"
 
-#: data/resources/ui/shortcuts.ui:11
+#: data/resources/ui/shortcuts.ui:6
 msgctxt "shortcut window"
 msgid "General"
 msgstr "常规"
 
-#: data/resources/ui/shortcuts.ui:14
-msgctxt "shortcut window"
-msgid "Fullscreen"
-msgstr "全屏"
-
-#: data/resources/ui/shortcuts.ui:20
-msgctxt "shortcut window"
-msgid "Focus Mode"
-msgstr "专注模式"
-
-#: data/resources/ui/shortcuts.ui:26
-msgctxt "shortcut window"
-msgid "Typewriter Mode"
-msgstr "打字机模式"
-
-#: data/resources/ui/shortcuts.ui:32
+#: data/resources/ui/shortcuts.ui:9
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "首选项"
 
+#: data/resources/ui/shortcuts.ui:15
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Keyboard Shortcuts"
+msgstr "键盘快捷键"
+
+#: data/resources/ui/shortcuts.ui:21
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:29
+msgctxt "shortcut window"
+msgid "View"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:32
+msgctxt "shortcut window"
+msgid "Fullscreen"
+msgstr "全屏"
+
 #: data/resources/ui/shortcuts.ui:38
 msgctxt "shortcut window"
-msgid "Show Shortcuts"
-msgstr "显示快捷键"
+msgid "Focus Mode"
+msgstr "专注模式"
 
-#: data/resources/ui/shortcuts.ui:46
+#: data/resources/ui/shortcuts.ui:44
 msgctxt "shortcut window"
-msgid "Document"
-msgstr "文档"
+msgid "Typewriter Mode"
+msgstr "打字机模式"
 
-#: data/resources/ui/shortcuts.ui:49
-msgctxt "shortcut window"
-msgid "New Document"
-msgstr "新文档"
-
-#: data/resources/ui/shortcuts.ui:55
-msgctxt "shortcut window"
-msgid "Add Project"
-msgstr "添加项目"
-
-#: data/resources/ui/shortcuts.ui:61
-msgctxt "shortcut window"
-msgid "Save Document"
-msgstr "保存文档"
-
-#: data/resources/ui/shortcuts.ui:67
-msgctxt "shortcut window"
-msgid "Rename"
-msgstr "重命名"
-
-#: data/resources/ui/shortcuts.ui:73
-msgctxt "shortcut window"
-msgid "Close Document"
-msgstr "关闭文档"
-
-#: data/resources/ui/shortcuts.ui:81
-msgctxt "shortcut window"
-msgid "Editor"
-msgstr "编辑器"
-
-#: data/resources/ui/shortcuts.ui:84
-msgctxt "shortcut window"
-msgid "Search Text"
-msgstr "查找文本"
-
-#: data/resources/ui/shortcuts.ui:90
-msgctxt "shortcut window"
-msgid "Search and Replace Text"
-msgstr "查找并替换文本"
-
-#: data/resources/ui/shortcuts.ui:96
+#: data/resources/ui/shortcuts.ui:50
 msgctxt "shortcut window"
 msgid "Zoom In"
 msgstr "放大"
 
-#: data/resources/ui/shortcuts.ui:102
+#: data/resources/ui/shortcuts.ui:51
+msgctxt "shortcut window"
+msgid "Increase font size"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:57
 msgctxt "shortcut window"
 msgid "Zoom Out"
 msgstr "缩小"
 
-#: data/resources/ui/shortcuts.ui:108
+#: data/resources/ui/shortcuts.ui:58
+msgctxt "shortcut window"
+msgid "Decrease font size"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:64
 msgctxt "shortcut window"
 msgid "Reset Zoom"
 msgstr "重置缩放"
 
+#: data/resources/ui/shortcuts.ui:72
+msgctxt "shortcut window"
+msgid "File"
+msgstr ""
+
+#: data/resources/ui/shortcuts.ui:75
+msgctxt "shortcut window"
+msgid "New Document"
+msgstr "新文档"
+
+#: data/resources/ui/shortcuts.ui:81
+#, fuzzy
+msgctxt "shortcut window"
+msgid "New Folder"
+msgstr "新文件夹"
+
+#: data/resources/ui/shortcuts.ui:87
+msgctxt "shortcut window"
+msgid "Add Project"
+msgstr "添加项目"
+
+#: data/resources/ui/shortcuts.ui:93
+msgctxt "shortcut window"
+msgid "Save Document"
+msgstr "保存文档"
+
+#: data/resources/ui/shortcuts.ui:99
+msgctxt "shortcut window"
+msgid "Rename"
+msgstr "重命名"
+
+#: data/resources/ui/shortcuts.ui:105
+msgctxt "shortcut window"
+msgid "Close Document"
+msgstr "关闭文档"
+
+#: data/resources/ui/shortcuts.ui:113
+msgctxt "shortcut window"
+msgid "Editor"
+msgstr "编辑器"
+
 #: data/resources/ui/shortcuts.ui:116
+msgctxt "shortcut window"
+msgid "Search Text"
+msgstr "查找文本"
+
+#: data/resources/ui/shortcuts.ui:122
+msgctxt "shortcut window"
+msgid "Search and Replace Text"
+msgstr "查找并替换文本"
+
+#: data/resources/ui/shortcuts.ui:130
 msgctxt "shortcut window"
 msgid "Formatting"
 msgstr "格式设置"
 
-#: data/resources/ui/shortcuts.ui:119
+#: data/resources/ui/shortcuts.ui:133
 msgctxt "shortcut window"
 msgid "Bold"
 msgstr "粗体"
 
-#: data/resources/ui/shortcuts.ui:125
+#: data/resources/ui/shortcuts.ui:139
 msgctxt "shortcut window"
 msgid "Italic"
 msgstr "斜体"
 
-#: data/resources/ui/shortcuts.ui:131
+#: data/resources/ui/shortcuts.ui:145
 msgctxt "shortcut window"
 msgid "Insert Link"
 msgstr "插入链接"
 
-#: data/resources/ui/shortcuts.ui:137
+#: data/resources/ui/shortcuts.ui:151
 msgctxt "shortcut window"
 msgid "Heading 1"
 msgstr "标题 1"
 
-#: data/resources/ui/shortcuts.ui:143
+#: data/resources/ui/shortcuts.ui:157
 msgctxt "shortcut window"
 msgid "Heading 2"
 msgstr "标题 2"
 
-#: data/resources/ui/shortcuts.ui:149
+#: data/resources/ui/shortcuts.ui:163
 msgctxt "shortcut window"
 msgid "Heading 3"
 msgstr "标题 3"
 
-#: data/resources/ui/shortcuts.ui:155
+#: data/resources/ui/shortcuts.ui:169
 msgctxt "shortcut window"
 msgid "Heading 4"
 msgstr "标题 4"
 
-#: data/resources/ui/shortcuts.ui:161
+#: data/resources/ui/shortcuts.ui:175
 msgctxt "shortcut window"
 msgid "Heading 5"
 msgstr "标题 5"
 
-#: data/resources/ui/shortcuts.ui:167
+#: data/resources/ui/shortcuts.ui:181
 msgctxt "shortcut window"
 msgid "Heading 6"
 msgstr "标题 6"
 
-#: data/resources/ui/shortcuts.ui:175
+#: data/resources/ui/shortcuts.ui:189
 msgctxt "shortcut window"
 msgid "Library"
 msgstr "库"
 
-#: data/resources/ui/shortcuts.ui:178
+#: data/resources/ui/shortcuts.ui:192
 msgctxt "shortcut window"
-msgid "Manual Refresh"
-msgstr "手动刷新"
+msgid "Refresh Library Contents"
+msgstr ""
 
 #: data/resources/ui/theme_selector.ui:13
 msgid "Follow System Style"
@@ -760,21 +787,33 @@ msgstr "无法删除文件夹"
 msgid "Folder deleted"
 msgstr "文件夹已删除"
 
-#: src/widgets/window.rs:423
+#: src/widgets/window.rs:420
 msgid "Couldn't move file"
 msgstr "无法移动文件"
 
-#: src/widgets/window.rs:669
+#: src/widgets/window.rs:666
 msgid "Saved"
 msgstr "已保存"
 
-#: src/widgets/window.rs:968
+#: src/widgets/window.rs:978
 msgid "Open document has been moved or deleted"
 msgstr "打开的文档已被移动或删除"
 
 #: src/widgets/window_title.rs:72
 msgid " (Focus Mode)"
 msgstr " (专注模式)"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Show Shortcuts"
+#~ msgstr "显示快捷键"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Document"
+#~ msgstr "文档"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Manual Refresh"
+#~ msgstr "手动刷新"
 
 #~ msgid "Focus mode"
 #~ msgstr "专注模式"
