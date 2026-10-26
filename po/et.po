@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-26 17:47+0200\n"
-"PO-Revision-Date: 2026-08-07 13:25+0000\n"
+"PO-Revision-Date: 2026-10-26 16:08+0000\n"
 "Last-Translator: Priit Jõerüüt <jrtcdbrg@noreply.codeberg.org>\n"
 "Language-Team: Estonian <https://translate.codeberg.org/projects/scratchmark/"
 "app/et/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.1\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #: data/org.scratchmark.Scratchmark.desktop.in:2
 msgid "Scratchmark"
@@ -95,9 +95,8 @@ msgid "Editor interface"
 msgstr "Tekstitoimeti kasutajaliides"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:30
-#, fuzzy
 msgid "Focus mode, typewriter mode"
-msgstr "Kirjutusmasina režiim"
+msgstr "Fookusrežiim, kirjutusmasina režiim"
 
 #: data/org.scratchmark.Scratchmark.metainfo.xml.in:34
 msgid "All panels open"
@@ -213,11 +212,11 @@ msgstr "Asenda kõik (Shift + Sisestusklahv)"
 
 #: data/resources/ui/editor/toc_view.ui:9
 msgid "Overview"
-msgstr ""
+msgstr "Ülevaade"
 
 #: data/resources/ui/editor/toc_view.ui:19
 msgid "No headings"
-msgstr ""
+msgstr "Pealkirju pole"
 
 #: data/resources/ui/editor_placeholder.ui:10
 msgid "Nothing Open"
