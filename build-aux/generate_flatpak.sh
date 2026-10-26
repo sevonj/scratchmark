@@ -7,3 +7,4 @@ set -e
 
 flatpak run org.flatpak.Builder --repo=flatpakrepo flatpak org.scratchmark.Scratchmark.yml --force-clean
 flatpak build-bundle flatpakrepo/ Scratchmark.flatpak org.scratchmark.Scratchmark
+flatpak build-bundle --runtime flatpakrepo/ Scratchmark.Locale.flatpak org.scratchmark.Scratchmark.Locale
