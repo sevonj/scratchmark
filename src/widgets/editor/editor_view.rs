@@ -550,8 +550,7 @@ mod imp {
     }
 }
 
-use std::path::PathBuf;
-
+use adw::StyleManager;
 use adw::subclass::prelude::*;
 use gtk::gio::Cancellable;
 use gtk::gio::FileCreateFlags;
@@ -565,6 +564,7 @@ use sourceview5::Buffer;
 use sourceview5::SearchContext;
 use sourceview5::SearchSettings;
 use sourceview5::prelude::*;
+use std::path::PathBuf;
 
 use crate::data::DocumentStats;
 use crate::data::MarkdownBuffer;
@@ -582,7 +582,7 @@ impl EditorView {
     pub fn new(path: PathBuf) -> Result<Self, ScratchmarkError> {
         let file = gtk::gio::File::for_path(&path);
         let text = file_actions::read_file_to_string(&file)?;
-        let buffer = MarkdownBuffer::default().with_style_scheme("scratchmark");
+        let buffer = MarkdownBuffer::default();
         buffer.set_text(&text);
 
         let search_settings = SearchSettings::default();
@@ -628,6 +628,25 @@ impl EditorView {
                 buffer.open_paste();
             }
         ));
+
+        let sm = StyleManager::default();
+        sm.connect_color_scheme_notify(glib::clone!(
+            #[weak]
+            obj,
+            move |sm| {
+                obj.imp().buffer.get().unwrap().set_theme(if sm.is_dark() {
+                    "scratchmark_dark"
+                } else {
+                    "scratchmark_light"
+                });
+            }
+        ));
+        obj.imp().buffer.get().unwrap().set_theme(if sm.is_dark() {
+            "scratchmark_dark"
+        } else {
+            "scratchmark_light"
+        });
+
         obj.refresh_document_stats(&buffer);
         Ok(obj)
     }
