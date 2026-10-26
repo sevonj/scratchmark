@@ -12,21 +12,21 @@
                         <child>
                             <object class="AdwToggle">
                                 <property name="icon-name">auto-symbolic</property>
-                                <property name="tooltip" translatable="yes">Follow System</property>
-                                <property name="name">auto</property>
+                                <property name="tooltip" translatable="yes">Follow System Theme</property>
+                                <property name="name">system</property>
                             </object>
                         </child>
                         <child>
                             <object class="AdwToggle">
                                 <property name="icon-name">sun-symbolic</property>
-                                <property name="tooltip" translatable="yes">Light</property>
+                                <property name="tooltip" translatable="yes">Light Theme</property>
                                 <property name="name">light</property>
                             </object>
                         </child>
                         <child>
                             <object class="AdwToggle">
                                 <property name="icon-name">moon-symbolic</property>
-                                <property name="tooltip" translatable="yes">Dark</property>
+                                <property name="tooltip" translatable="yes">Dark Theme</property>
                                 <property name="name">dark</property>
                             </object>
                         </child>
