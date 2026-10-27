@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-27 16:20+0200\n"
-"PO-Revision-Date: 2026-10-26 16:08+0000\n"
+"PO-Revision-Date: 2026-10-27 15:04+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/scratchmark/"
 "app/fi/>\n"
@@ -454,7 +454,6 @@ msgid "Preferences"
 msgstr "Asetukset"
 
 #: data/resources/ui/shortcuts.ui:15
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Pikanäppäimet"
@@ -462,12 +461,12 @@ msgstr "Pikanäppäimet"
 #: data/resources/ui/shortcuts.ui:21
 msgctxt "shortcut window"
 msgid "Quit"
-msgstr ""
+msgstr "Sulje sovellus"
 
 #: data/resources/ui/shortcuts.ui:29
 msgctxt "shortcut window"
 msgid "View"
-msgstr ""
+msgstr "Näkymä"
 
 #: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
@@ -492,7 +491,7 @@ msgstr "Suurenna tekstiä"
 #: data/resources/ui/shortcuts.ui:51
 msgctxt "shortcut window"
 msgid "Increase font size"
-msgstr ""
+msgstr "Suurenna fonttikokoa"
 
 #: data/resources/ui/shortcuts.ui:57
 msgctxt "shortcut window"
@@ -502,7 +501,7 @@ msgstr "Pienennä tekstiä"
 #: data/resources/ui/shortcuts.ui:58
 msgctxt "shortcut window"
 msgid "Decrease font size"
-msgstr ""
+msgstr "Pienennä fonttikokoa"
 
 #: data/resources/ui/shortcuts.ui:64
 msgctxt "shortcut window"
@@ -512,7 +511,7 @@ msgstr "Palauta oletuskoko"
 #: data/resources/ui/shortcuts.ui:72
 msgctxt "shortcut window"
 msgid "File"
-msgstr ""
+msgstr "Tiedosto"
 
 #: data/resources/ui/shortcuts.ui:75
 msgctxt "shortcut window"
@@ -520,7 +519,6 @@ msgid "New Document"
 msgstr "Uusi tiedosto"
 
 #: data/resources/ui/shortcuts.ui:81
-#, fuzzy
 msgctxt "shortcut window"
 msgid "New Folder"
 msgstr "Uusi kansio"
@@ -618,19 +616,19 @@ msgstr "Kirjasto"
 #: data/resources/ui/shortcuts.ui:192
 msgctxt "shortcut window"
 msgid "Refresh Library Contents"
-msgstr ""
+msgstr "Päivitä kirjaston sisältö"
 
 #: data/resources/ui/theme_selector.ui:13
 msgid "Follow System Style"
-msgstr ""
+msgstr "Seuraa järjestelmän tyyliä"
 
 #: data/resources/ui/theme_selector.ui:20
 msgid "Light Style"
-msgstr ""
+msgstr "Vaalea tyyli"
 
 #: data/resources/ui/theme_selector.ui:27
 msgid "Dark Style"
-msgstr ""
+msgstr "Tumma tyyli"
 
 #: data/resources/ui/window.ui:27 data/resources/ui/window.ui:201
 msgid "Sort"
