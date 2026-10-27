@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-27 16:20+0200\n"
-"PO-Revision-Date: 2026-10-26 16:08+0000\n"
+"PO-Revision-Date: 2026-10-27 15:04+0000\n"
 "Last-Translator: Priit Jõerüüt <jrtcdbrg@noreply.codeberg.org>\n"
 "Language-Team: Estonian <https://translate.codeberg.org/projects/scratchmark/"
 "app/et/>\n"
@@ -451,7 +451,6 @@ msgid "Preferences"
 msgstr "Eelistused"
 
 #: data/resources/ui/shortcuts.ui:15
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Klaviatuuri kiirklahvid"
@@ -459,12 +458,12 @@ msgstr "Klaviatuuri kiirklahvid"
 #: data/resources/ui/shortcuts.ui:21
 msgctxt "shortcut window"
 msgid "Quit"
-msgstr ""
+msgstr "Välju"
 
 #: data/resources/ui/shortcuts.ui:29
 msgctxt "shortcut window"
 msgid "View"
-msgstr ""
+msgstr "Vaade"
 
 #: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
@@ -489,7 +488,7 @@ msgstr "Suumi sisse"
 #: data/resources/ui/shortcuts.ui:51
 msgctxt "shortcut window"
 msgid "Increase font size"
-msgstr ""
+msgstr "Suurenda kirjatüübi suurust"
 
 #: data/resources/ui/shortcuts.ui:57
 msgctxt "shortcut window"
@@ -499,7 +498,7 @@ msgstr "Suumi välja"
 #: data/resources/ui/shortcuts.ui:58
 msgctxt "shortcut window"
 msgid "Decrease font size"
-msgstr ""
+msgstr "Vähenda kirjatüübi suurust"
 
 #: data/resources/ui/shortcuts.ui:64
 msgctxt "shortcut window"
@@ -509,7 +508,7 @@ msgstr "Lähtesta suum"
 #: data/resources/ui/shortcuts.ui:72
 msgctxt "shortcut window"
 msgid "File"
-msgstr ""
+msgstr "Fail"
 
 #: data/resources/ui/shortcuts.ui:75
 msgctxt "shortcut window"
@@ -517,7 +516,6 @@ msgid "New Document"
 msgstr "Uus dokument"
 
 #: data/resources/ui/shortcuts.ui:81
-#, fuzzy
 msgctxt "shortcut window"
 msgid "New Folder"
 msgstr "Uus kaust"
@@ -615,19 +613,19 @@ msgstr "Kogu"
 #: data/resources/ui/shortcuts.ui:192
 msgctxt "shortcut window"
 msgid "Refresh Library Contents"
-msgstr ""
+msgstr "Laadi oma kogu sisu uuesti"
 
 #: data/resources/ui/theme_selector.ui:13
 msgid "Follow System Style"
-msgstr ""
+msgstr "Järgi süsteemi kujundust"
 
 #: data/resources/ui/theme_selector.ui:20
 msgid "Light Style"
-msgstr ""
+msgstr "Hele kujundus"
 
 #: data/resources/ui/theme_selector.ui:27
 msgid "Dark Style"
-msgstr ""
+msgstr "Tume kujundus"
 
 #: data/resources/ui/window.ui:27 data/resources/ui/window.ui:201
 msgid "Sort"
@@ -767,7 +765,7 @@ msgstr "Vigane asukoht"
 
 #: src/widgets/editor/text_view.rs:362
 msgid "Ctrl+Click"
-msgstr ""
+msgstr "Control + Klõps"
 
 #: src/widgets/editor/text_view.rs:370
 msgid "Uncheck"
