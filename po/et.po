@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-27 16:20+0200\n"
-"PO-Revision-Date: 2026-10-27 15:04+0000\n"
+"PO-Revision-Date: 2026-10-28 15:27+0000\n"
 "Last-Translator: Priit Jõerüüt <jrtcdbrg@noreply.codeberg.org>\n"
 "Language-Team: Estonian <https://translate.codeberg.org/projects/scratchmark/"
 "app/et/>\n"
@@ -769,11 +769,11 @@ msgstr "Control + Klõps"
 
 #: src/widgets/editor/text_view.rs:370
 msgid "Uncheck"
-msgstr ""
+msgstr "Klõpsa märkeruut tühjaks"
 
 #: src/widgets/editor/text_view.rs:372
 msgid "Check"
-msgstr ""
+msgstr "Klõpsa märkeruut märgituks"
 
 #: src/widgets/library/library_view.rs:426
 #: src/widgets/library/library_view.rs:446
