@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-27 16:20+0200\n"
-"PO-Revision-Date: 2026-10-27 15:04+0000\n"
+"PO-Revision-Date: 2026-10-28 15:27+0000\n"
 "Last-Translator: Łukasz Horodecki <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
 "app/pl/>\n"
@@ -775,11 +775,11 @@ msgstr "Ctrl+klik"
 
 #: src/widgets/editor/text_view.rs:370
 msgid "Uncheck"
-msgstr ""
+msgstr "Odznacz"
 
 #: src/widgets/editor/text_view.rs:372
 msgid "Check"
-msgstr ""
+msgstr "Zaznacz"
 
 #: src/widgets/library/library_view.rs:426
 #: src/widgets/library/library_view.rs:446
