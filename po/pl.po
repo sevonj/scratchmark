@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-27 16:20+0200\n"
 "PO-Revision-Date: 2026-10-27 15:04+0000\n"
-"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"Last-Translator: Łukasz Horodecki <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
 "app/pl/>\n"
 "Language: pl\n"
@@ -457,7 +457,6 @@ msgid "Preferences"
 msgstr "Preferencje"
 
 #: data/resources/ui/shortcuts.ui:15
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Skróty klawiszowe"
@@ -465,12 +464,12 @@ msgstr "Skróty klawiszowe"
 #: data/resources/ui/shortcuts.ui:21
 msgctxt "shortcut window"
 msgid "Quit"
-msgstr ""
+msgstr "Zakończenie działania"
 
 #: data/resources/ui/shortcuts.ui:29
 msgctxt "shortcut window"
 msgid "View"
-msgstr ""
+msgstr "Widok"
 
 #: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
@@ -495,7 +494,7 @@ msgstr "Powiększanie tekstu"
 #: data/resources/ui/shortcuts.ui:51
 msgctxt "shortcut window"
 msgid "Increase font size"
-msgstr ""
+msgstr "Zwiększa rozmiar czcionki"
 
 #: data/resources/ui/shortcuts.ui:57
 msgctxt "shortcut window"
@@ -505,7 +504,7 @@ msgstr "Pomniejszanie tekstu"
 #: data/resources/ui/shortcuts.ui:58
 msgctxt "shortcut window"
 msgid "Decrease font size"
-msgstr ""
+msgstr "Zmniejsza rozmiar czcionki"
 
 #: data/resources/ui/shortcuts.ui:64
 msgctxt "shortcut window"
@@ -515,7 +514,7 @@ msgstr "Przywracanie powiększenia"
 #: data/resources/ui/shortcuts.ui:72
 msgctxt "shortcut window"
 msgid "File"
-msgstr ""
+msgstr "Plik"
 
 #: data/resources/ui/shortcuts.ui:75
 msgctxt "shortcut window"
@@ -523,7 +522,6 @@ msgid "New Document"
 msgstr "Nowy dokument"
 
 #: data/resources/ui/shortcuts.ui:81
-#, fuzzy
 msgctxt "shortcut window"
 msgid "New Folder"
 msgstr "Nowy katalog"
@@ -621,19 +619,19 @@ msgstr "Biblioteka"
 #: data/resources/ui/shortcuts.ui:192
 msgctxt "shortcut window"
 msgid "Refresh Library Contents"
-msgstr ""
+msgstr "Odświeżenie zawartości biblioteki"
 
 #: data/resources/ui/theme_selector.ui:13
 msgid "Follow System Style"
-msgstr ""
+msgstr "Styl systemu"
 
 #: data/resources/ui/theme_selector.ui:20
 msgid "Light Style"
-msgstr ""
+msgstr "Styl jasny"
 
 #: data/resources/ui/theme_selector.ui:27
 msgid "Dark Style"
-msgstr ""
+msgstr "Styl ciemny"
 
 #: data/resources/ui/window.ui:27 data/resources/ui/window.ui:201
 msgid "Sort"
