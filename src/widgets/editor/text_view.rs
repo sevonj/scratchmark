@@ -78,14 +78,8 @@ mod imp {
             let buf = self.obj().buffer();
             let cursor = buf.iter_at_offset(buf.cursor_position());
             if !buf.has_selection()
-                && let Some((mut start, end)) = line_bounds(&buf, cursor.line())
+                && let Some((start, end)) = line_bounds(&buf, cursor.line())
             {
-                let mut before = start;
-                before.backward_cursor_position();
-                if buf.text(&before, &start, true) == "\n" {
-                    start = before;
-                }
-
                 buf.select_range(&start, &end);
                 self.parent_copy_clipboard();
                 buf.place_cursor(&cursor);
@@ -98,14 +92,8 @@ mod imp {
             let buf = self.obj().buffer();
             let cursor = buf.iter_at_offset(buf.cursor_position());
             if !buf.has_selection()
-                && let Some((mut start, end)) = line_bounds(&buf, cursor.line())
+                && let Some((start, end)) = line_bounds(&buf, cursor.line())
             {
-                let mut before = start;
-                before.backward_cursor_position();
-                if buf.text(&before, &start, true) == "\n" {
-                    start = before;
-                }
-
                 buf.select_range(&start, &end);
                 self.parent_cut_clipboard();
                 return;
@@ -422,10 +410,7 @@ mod imp {
 
     fn line_bounds(buf: &gtk::TextBuffer, line: i32) -> Option<(TextIter, TextIter)> {
         let start = buf.iter_at_line(line)?;
-        let mut end = buf.iter_at_line(line + 1).unwrap_or_else(|| buf.end_iter());
-        if end.line() != line {
-            end.backward_char();
-        }
+        let end = buf.iter_at_line(line + 1).unwrap_or_else(|| buf.end_iter());
         Some((start, end))
     }
 
