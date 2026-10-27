@@ -23,6 +23,8 @@
   <style name="markdown:bold-italic" bold="true" italic="true" />
   <style name="markdown:code" foreground="#gray" />
   <style name="markdown:strikethrough" strikethrough="true" foreground="#CadetBlue" />
+  <style name="markdown:task-box" foreground="#5baaa5" />
+  <style name="markdown:task-check" foreground="#000a" />
   <style name="markdown:highlight" background="#e5a50a33" />
   <!-- TODO style name="markdown:subscript" /-->
   <!-- TODO style name="markdown:superscript" /-->

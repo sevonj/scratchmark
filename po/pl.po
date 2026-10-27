@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 17:47+0200\n"
+"POT-Creation-Date: 2026-10-27 16:20+0200\n"
 "PO-Revision-Date: 2026-10-26 16:08+0000\n"
 "Last-Translator: Łukasz Horodecki <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
@@ -771,9 +771,17 @@ msgstr "Plik na dysku został zmieniony"
 msgid "Invalid path"
 msgstr "Nieprawidłowa ścieżka"
 
-#: src/widgets/editor/text_view.rs:354
+#: src/widgets/editor/text_view.rs:362
 msgid "Ctrl+Click"
 msgstr "Ctrl+klik"
+
+#: src/widgets/editor/text_view.rs:370
+msgid "Uncheck"
+msgstr ""
+
+#: src/widgets/editor/text_view.rs:372
+msgid "Check"
+msgstr ""
 
 #: src/widgets/library/library_view.rs:426
 #: src/widgets/library/library_view.rs:446
@@ -801,15 +809,15 @@ msgstr "Nie powiodło się usunięcie katalogu"
 msgid "Folder deleted"
 msgstr "Usunięto katalog"
 
-#: src/widgets/window.rs:420
+#: src/widgets/window.rs:422
 msgid "Couldn't move file"
 msgstr "Nie powiodło się przeniesienie pliku"
 
-#: src/widgets/window.rs:666
+#: src/widgets/window.rs:668
 msgid "Saved"
 msgstr "Zapisano"
 
-#: src/widgets/window.rs:978
+#: src/widgets/window.rs:980
 msgid "Open document has been moved or deleted"
 msgstr "Otwarty dokument został przeniesiony lub usunięty"
 

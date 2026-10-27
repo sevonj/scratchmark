@@ -43,6 +43,7 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-error-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-expander-down-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-expander-right-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/smk-external-link-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-folder-open-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-folder-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/smk-format-bold-symbolic.svg</file>

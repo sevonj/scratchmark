@@ -10,9 +10,15 @@ use regex::Regex;
 pub static ATX_H_OPENING: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^ {0,3}#{1,6}($| +)").unwrap());
 
-// https://spec.commonmark.org/0.31.2/#links
 pub static INLINE_LINK: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"\[(?P<text>.*?)]\((?P<url>.*?)\)").unwrap());
+
+pub static TASK_LIST: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(
+        r"^( {0,3})(?P<task_list>-) (?P<task_box>\[(?P<task_check>[ xX])]) +(?P<task_text>\S.*)$",
+    )
+    .unwrap()
+});
 
 #[cfg(test)]
 mod tests {
@@ -138,6 +144,60 @@ mod tests {
         assert_eq!(
             INLINE_LINK.find("[link](uri)").unwrap().as_str(),
             "[link](uri)"
+        );
+    }
+
+    #[test]
+    fn test_task_list() {
+        let unchecked = "- [ ] Task list unchecked";
+        let small_x = "- [x] Task list small x";
+        let big_x = "- [X] Task list big x";
+        let asterisk = "- [*] Task list *";
+        assert_eq!(TASK_LIST.find(unchecked).unwrap().as_str(), unchecked);
+        assert_eq!(TASK_LIST.find(small_x).unwrap().as_str(), small_x);
+        assert_eq!(TASK_LIST.find(big_x).unwrap().as_str(), big_x);
+        assert!(TASK_LIST.find(asterisk).is_none());
+
+        let space0 = "- [x]Task list - no space";
+        let space1 = "- [x] Task list - 1 space";
+        let space2 = "- [x]  Task list - 2";
+        let space3 = "- [x]   Task list - 3";
+        let space4 = "- [x]    Task list - 4";
+        let space5 = "- [x]     Task list - 5";
+        let space44 = "- [x]                                            Task list - 44 spaces";
+        assert!(TASK_LIST.find(space0).is_none());
+        assert_eq!(TASK_LIST.find(space1).unwrap().as_str(), space1);
+        assert_eq!(TASK_LIST.find(space2).unwrap().as_str(), space2);
+        assert_eq!(TASK_LIST.find(space3).unwrap().as_str(), space3);
+        assert_eq!(TASK_LIST.find(space4).unwrap().as_str(), space4);
+        assert_eq!(TASK_LIST.find(space5).unwrap().as_str(), space5);
+        assert_eq!(TASK_LIST.find(space44).unwrap().as_str(), space44);
+
+        let indent1 = " - [x] indent 1";
+        let indent2 = "  - [x] indent 2";
+        let indent3 = "   - [x] indent 3";
+        let indent4 = "    - [x] indent 4";
+        let indent5 = "     - [x] indent 5";
+        let indent6 = "      - [x] indent 6";
+        assert_eq!(TASK_LIST.find(indent1).unwrap().as_str(), indent1);
+        assert_eq!(TASK_LIST.find(indent2).unwrap().as_str(), indent2);
+        assert_eq!(TASK_LIST.find(indent3).unwrap().as_str(), indent3);
+        assert!(TASK_LIST.find(indent4).is_none());
+        assert!(TASK_LIST.find(indent5).is_none());
+        assert!(TASK_LIST.find(indent6).is_none());
+
+        let no_space_no_text = "- [x]";
+        let no_space_text = "- [x]text";
+        let space_no_text = "- [x] ";
+        let repeats = "- [x] Task list - [x] Task list - [x] Task list";
+        assert!(TASK_LIST.find(no_space_no_text).is_none());
+        assert!(TASK_LIST.find(no_space_text).is_none());
+        assert!(TASK_LIST.find(space_no_text).is_none());
+        assert_eq!(TASK_LIST.find(repeats).unwrap().as_str(), repeats);
+        let repeats_caps = TASK_LIST.captures(repeats).unwrap();
+        assert_eq!(
+            repeats_caps.name("task_text").unwrap().as_str(),
+            "Task list - [x] Task list - [x] Task list"
         );
     }
 }
