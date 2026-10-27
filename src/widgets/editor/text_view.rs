@@ -21,7 +21,7 @@ mod imp {
     use std::cell::Cell;
 
     const TYPEWRITER_DIM_TAG: &str = "typewriter-dim";
-    const LINK_HOVER_TAG: &str = "link-hover";
+    const CLICKABLE_HOVER_TAG: &str = "link-hover";
 
     #[derive(Debug, Default, Properties)]
     #[properties(wrapper_type = super::EditorTextView)]
@@ -68,7 +68,7 @@ mod imp {
                 obj.imp().update_typewriter_dimming();
             });
 
-            self.setup_clickable_links();
+            self.setup_clickables();
         }
     }
 
@@ -126,7 +126,7 @@ mod imp {
     impl ViewImpl for EditorTextView {}
 
     impl EditorTextView {
-        fn link_at_pos(&self, x: f64, y: f64) -> Option<MarkdownLink> {
+        fn link_at_pos(&self, x: f64, y: f64) -> Option<Clickable> {
             let obj = self.obj();
 
             let (x, y) =
@@ -142,12 +142,12 @@ mod imp {
 
             let line_text = buffer.text(&line_start, &line_end, false);
             let byte_index = iter.line_index() as usize;
-            let link_line = find_link(&line_text, byte_index)?;
+            let clickable = find_clickable(&line_text, byte_index)?;
 
             let mut link_start = line_start;
-            link_start.set_line_index(link_line.start as i32);
+            link_start.set_line_index(clickable.start as i32);
             let mut link_end = line_start;
-            link_end.set_line_index(link_line.end as i32);
+            link_end.set_line_index(clickable.end as i32);
 
             let start_rect = obj.iter_location(&link_start);
             let end_rect = obj.iter_location(&link_end);
@@ -162,12 +162,12 @@ mod imp {
             }
 
             let line_off = buffer.iter_at_line(line).unwrap().offset() as usize;
-            let link_absolute = MarkdownLink {
-                start: link_line.start + line_off,
-                end: link_line.end + line_off,
-                url: link_line.url,
+            let clickable_absolute = Clickable {
+                start: clickable.start + line_off,
+                end: clickable.end + line_off,
+                data: clickable.data,
             };
-            Some(link_absolute)
+            Some(clickable_absolute)
         }
 
         fn update_typewriter_dimming(&self) {
@@ -193,11 +193,11 @@ mod imp {
             }
         }
 
-        fn update_link_hover(&self) {
+        fn update_clickable_hover(&self) {
             let view = self.obj();
             let buffer = TextViewExt::buffer(self.obj().upcast_ref::<TextView>());
             let (start, end) = buffer.bounds();
-            buffer.remove_tag_by_name(LINK_HOVER_TAG, &start, &end);
+            buffer.remove_tag_by_name(CLICKABLE_HOVER_TAG, &start, &end);
 
             let Some((x, y)) = self.last_mouse_pos.get() else {
                 view.set_cursor_from_name(None);
@@ -210,7 +210,7 @@ mod imp {
 
             let link_start = buffer.iter_at_offset(link.start as i32);
             let link_end = buffer.iter_at_offset(link.end as i32);
-            buffer.apply_tag_by_name(LINK_HOVER_TAG, &link_start, &link_end);
+            buffer.apply_tag_by_name(CLICKABLE_HOVER_TAG, &link_start, &link_end);
 
             if self.is_ctrl_held_l.get() || self.is_ctrl_held_r.get() {
                 view.set_cursor_from_name(Some("pointer"));
@@ -232,7 +232,7 @@ mod imp {
 
             tag_table.add(
                 &gtk::TextTag::builder()
-                    .name(LINK_HOVER_TAG)
+                    .name(CLICKABLE_HOVER_TAG)
                     .underline(Underline::Single)
                     .build(),
             );
@@ -250,7 +250,7 @@ mod imp {
             self.update_typewriter_dimming();
         }
 
-        fn setup_clickable_links(&self) {
+        fn setup_clickables(&self) {
             let obj = self.obj();
 
             let motion = EventControllerMotion::new();
@@ -259,7 +259,7 @@ mod imp {
                 self,
                 move |_controller, x, y| {
                     imp.last_mouse_pos.set(Some((x, y)));
-                    imp.update_link_hover();
+                    imp.update_clickable_hover();
                 }
             ));
             motion.connect_leave(clone!(
@@ -267,7 +267,7 @@ mod imp {
                 self,
                 move |_| {
                     imp.last_mouse_pos.set(None);
-                    imp.update_link_hover();
+                    imp.update_clickable_hover();
                 }
             ));
             obj.add_controller(motion);
@@ -303,7 +303,7 @@ mod imp {
                     } else if keyval == Key::Control_R {
                         imp.is_ctrl_held_r.set(true);
                     }
-                    imp.update_link_hover();
+                    imp.update_clickable_hover();
                     glib::Propagation::Proceed
                 }
             ));
@@ -316,7 +316,7 @@ mod imp {
                     } else if keyval == Key::Control_R {
                         imp.is_ctrl_held_r.set(false);
                     }
-                    imp.update_link_hover();
+                    imp.update_clickable_hover();
                 }
             ));
             obj.add_controller(key_controller);
@@ -328,15 +328,23 @@ mod imp {
                 #[weak(rename_to = imp)]
                 self,
                 move |gesture, n_press, x, y| {
-                    if n_press == 1
-                        && gesture
+                    if n_press != 1
+                        || !gesture
                             .current_event_state()
                             .contains(ModifierType::CONTROL_MASK)
-                        && let Some(link) = imp.link_at_pos(x, y)
                     {
-                        imp.on_link_clicked(&link.url);
-                        gesture.set_state(gtk::EventSequenceState::Claimed);
+                        return;
                     }
+                    let Some(clickable) = imp.link_at_pos(x, y) else {
+                        return;
+                    };
+                    match clickable.data {
+                        ClickableData::Link { url } => imp.on_link_clicked(&url),
+                        ClickableData::TaskBox { checked } => {
+                            imp.on_taskbox_clicked(checked, clickable.start as i32 + 1)
+                        }
+                    }
+                    gesture.set_state(gtk::EventSequenceState::Claimed);
                 }
             ));
             obj.add_controller(click_gesture);
@@ -348,16 +356,25 @@ mod imp {
                 #[upgrade_or]
                 false,
                 move |_view, x, y, _keyboard_mode, tooltip| {
-                    if let Some(link) = imp.link_at_pos(x as f64, y as f64) {
-                        tooltip.set_text(Some(&format!(
-                            "{} ➜ {}",
-                            gettext("Ctrl+Click"),
-                            link.url
-                        )));
-                        true
-                    } else {
-                        false
+                    let Some(clickable) = imp.link_at_pos(x as f64, y as f64) else {
+                        return false;
+                    };
+                    let key_string = gettext("Ctrl+Click");
+                    match clickable.data {
+                        ClickableData::Link { url } => {
+                            tooltip.set_text(Some(&format!("{}\n({key_string})", url)));
+                            tooltip.set_icon_from_icon_name(Some("smk-external-link-symbolic"));
+                        }
+                        ClickableData::TaskBox { checked, .. } => {
+                            let check_str = if checked {
+                                gettext("Uncheck")
+                            } else {
+                                gettext("Check")
+                            };
+                            tooltip.set_text(Some(&format!("{check_str} ({key_string})")));
+                        }
                     }
+                    true
                 }
             ));
         }
@@ -372,13 +389,35 @@ mod imp {
                 }
             });
         }
+
+        fn on_taskbox_clicked(&self, checked: bool, check_off: i32) {
+            let buf = self.obj().buffer();
+            let new_char = if checked { " " } else { "x" };
+
+            buf.begin_user_action();
+            buf.delete(
+                &mut buf.iter_at_offset(check_off),
+                &mut buf.iter_at_offset(check_off + 1),
+            );
+            buf.insert(&mut buf.iter_at_offset(check_off), new_char);
+            let mut end_of_line = buf.iter_at_offset(check_off);
+            end_of_line.forward_to_line_end();
+            buf.place_cursor(&end_of_line);
+            buf.end_user_action();
+        }
     }
 
     #[derive(Debug, PartialEq, Eq, Clone)]
-    struct MarkdownLink {
+    struct Clickable {
         pub start: usize,
         pub end: usize,
-        pub url: String,
+        pub data: ClickableData,
+    }
+
+    #[derive(Debug, PartialEq, Eq, Clone)]
+    enum ClickableData {
+        Link { url: String },
+        TaskBox { checked: bool },
     }
 
     fn line_bounds(buf: &gtk::TextBuffer, line: i32) -> Option<(TextIter, TextIter)> {
@@ -398,22 +437,50 @@ mod imp {
         format!("http://{trimmed}")
     }
 
-    fn find_link(line: &str, byte_offset: usize) -> Option<MarkdownLink> {
+    fn find_clickable(line: &str, byte_offset: usize) -> Option<Clickable> {
+        if let Some(task) = find_task_box(line, byte_offset) {
+            return Some(task);
+        }
+        find_link(line, byte_offset)
+    }
+
+    fn find_task_box(line: &str, byte_offset: usize) -> Option<Clickable> {
+        let caps = regex::TASK_LIST.captures(line)?;
+        let box_match = caps
+            .name("task_box")
+            .expect("task exists so task_box must too");
+        let box_start = box_match.start();
+        let box_end = box_match.end();
+        if !(box_start..=box_end).contains(&byte_offset) {
+            return None;
+        }
+        let check = caps
+            .name("task_check")
+            .expect("task exists so task_check must too")
+            .as_str();
+        Some(Clickable {
+            start: box_start,
+            end: box_end,
+            data: ClickableData::TaskBox {
+                checked: check != " ",
+            },
+        })
+    }
+
+    fn find_link(line: &str, byte_offset: usize) -> Option<Clickable> {
         let mut links = Vec::new();
 
         for caps in regex::INLINE_LINK.captures_iter(line) {
             let whole_match = caps.get(0).unwrap();
 
-            let url = if let Some(url_bare) = caps.name("url") {
-                url_bare.as_str().to_string()
-            } else {
+            let Some(url) = caps.name("url").map(|m| m.as_str().to_string()) else {
                 continue;
             };
 
-            links.push(MarkdownLink {
+            links.push(Clickable {
                 start: whole_match.start(),
                 end: whole_match.end(),
-                url,
+                data: ClickableData::Link { url },
             });
         }
 

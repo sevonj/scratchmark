@@ -33,7 +33,9 @@
     <!-- TODO style id="heading-id" _name="Heading ID" / -->
     <!-- TODO style id="definition-list" _name="Definition List" / -->
     <style id="strikethrough" _name="Strikethrough" />
-    <!-- TODO style id="task-list" _name="Task List" / -->
+    <style id="task-list" _name="Task List" />
+    <style id="task-box" _name="Task Box" />
+    <style id="task-check" _name="Task Check" />
     <!-- TODO style id="emoji" _name="Emoji Shortcode" / -->
     <style id="highlight" _name="Highlight" />
     <style id="subscript" _name="Subscript" />
@@ -115,6 +117,14 @@
     <context id="strikethrough" style-ref="strikethrough">
       <match>(?&lt;!~)~~(?!\\|~| |\t).*?(?&lt;!\\|~| |\t)~~(?!~)</match>
     </context>
+    <context id="task-list" style-ref="task-list">
+      <match>^( {0,3})(?P&lt;task_list&gt;-) (?P&lt;task_box&gt;\[(?P&lt;task_check&gt;[ xX])]) +(?P&lt;task_text&gt;\S.*)$</match>
+       <include>
+         <context sub-pattern="task_list" style-ref="list" />
+         <context sub-pattern="task_check" style-ref="task-check" />
+         <context sub-pattern="task_box" style-ref="task-box" />
+       </include>
+    </context>
     <context id="highlight" style-ref="highlight">
       <match>(?&lt;!=)==(?!\\|=| |\t).*?(?&lt;!\\|=| |\t)==(?!=)</match>
     </context>
@@ -127,6 +137,9 @@
 
     <context id="markdown">
       <include>
+        <!-- Order by priority; first match is what you get. -->
+        <context ref="task-list" />
+
         <context ref="h1" />
         <context ref="h2" />
         <context ref="h3" />
