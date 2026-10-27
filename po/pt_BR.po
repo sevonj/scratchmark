@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 17:47+0200\n"
+"POT-Creation-Date: 2026-10-27 16:20+0200\n"
 "PO-Revision-Date: 2026-08-05 12:35+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
@@ -779,8 +779,16 @@ msgstr "O arquivo for modificado no disco."
 msgid "Invalid path"
 msgstr ""
 
-#: src/widgets/editor/text_view.rs:354
+#: src/widgets/editor/text_view.rs:362
 msgid "Ctrl+Click"
+msgstr ""
+
+#: src/widgets/editor/text_view.rs:370
+msgid "Uncheck"
+msgstr ""
+
+#: src/widgets/editor/text_view.rs:372
+msgid "Check"
 msgstr ""
 
 #: src/widgets/library/library_view.rs:426
@@ -814,17 +822,17 @@ msgstr "Criar subpasta"
 msgid "Folder deleted"
 msgstr ""
 
-#: src/widgets/window.rs:420
+#: src/widgets/window.rs:422
 #, fuzzy
 msgid "Couldn't move file"
 msgstr "Criar subpasta"
 
-#: src/widgets/window.rs:666
+#: src/widgets/window.rs:668
 #, fuzzy
 msgid "Saved"
 msgstr "Salvar"
 
-#: src/widgets/window.rs:978
+#: src/widgets/window.rs:980
 #, fuzzy
 msgid "Open document has been moved or deleted"
 msgstr "Projeto pode ter sido movido ou excluído."
