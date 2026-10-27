@@ -60,19 +60,57 @@ mod imp {
         // Inserted text passes through here
         // We can modify or cancel it here, and do other things, like move the cursor
         fn insert_text(&self, iter: &mut TextIter, new_text: &str) {
-            let mut process_text = Some(new_text.to_owned());
-            let cursor_move;
+            let obj = self.obj();
 
-            (process_text, cursor_move) = self.process_auto_close_formatting(iter, process_text);
+            if self.paste_in_progress.get() {
+                /* FIXME: Paste delivery may be split into multiple calls, at least when there's syntax highlighting
+                text: ' '
+                nah
+                text: '-'
+                nah
+                text: ' '
+                nah
+                text: '['
+                nah
+                text: 'x'
+                nah
+                text: ']'
+                nah
+                text: ' Click detect'
+                nah
+                text: '
+                '
+                yes
+                */
+                println!("text: '{new_text}'");
 
-            if let Some(new_text) = process_text {
-                self.parent_insert_text(iter, &new_text)
+                if !obj.has_selection()
+                    && new_text.ends_with('\n')
+                    && let Some(line_start) = obj.iter_at_line(iter.line())
+                {
+                    obj.place_cursor(&line_start);
+                    *iter = line_start;
+                    println!("yes");
+                } else {
+                    println!("nah");
+                }
+
+                self.parent_insert_text(iter, new_text);
+                return;
             }
 
-            let obj = self.obj();
-            let mut cursor = obj.iter_at_offset(obj.cursor_position());
-            cursor.forward_cursor_positions(cursor_move);
-            obj.place_cursor(&cursor);
+            if !self.formatting_action_in_progress.get()
+                && let (Some(auto_formatted_text), cursor_move) =
+                    self.process_auto_close_formatting(iter, new_text.to_owned())
+            {
+                self.parent_insert_text(iter, &auto_formatted_text);
+                let mut cursor = obj.iter_at_offset(obj.cursor_position());
+                cursor.forward_cursor_positions(cursor_move);
+                obj.place_cursor(&cursor);
+                return;
+            }
+
+            self.parent_insert_text(iter, new_text);
         }
 
         fn paste_done(&self, clipboard: &gtk::gdk::Clipboard) {
@@ -88,15 +126,8 @@ mod imp {
         pub(super) fn process_auto_close_formatting(
             &self,
             iter: &mut TextIter,
-            process_text: Option<String>,
+            process_text: String,
         ) -> (Option<String>, i32) {
-            if self.paste_in_progress.get() || self.formatting_action_in_progress.get() {
-                return (process_text, 0);
-            }
-            let Some(process_text) = process_text else {
-                return (process_text, 0);
-            };
-
             let obj = self.obj();
 
             let lookahead = obj
