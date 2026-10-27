@@ -285,16 +285,15 @@ mod imp {
             let toc_changed = toc.len() != new_toc.len()
                 || toc.iter().zip(new_toc.iter()).any(|(old, new)| old != new);
 
-            for h in toc.drain(..) {
-                obj.delete_mark(&h.mark);
+            if !toc_changed {
+                new_toc.drain(..).for_each(|h| obj.delete_mark(&h.mark));
+                return;
             }
 
+            toc.drain(..).for_each(|h| obj.delete_mark(&h.mark));
             *toc = new_toc;
             drop(toc);
-
-            if toc_changed {
-                obj.emit_by_name::<()>("toc-changed", &[]);
-            }
+            obj.emit_by_name::<()>("toc-changed", &[]);
         }
     }
 
