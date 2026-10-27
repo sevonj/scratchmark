@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-27 16:20+0200\n"
-"PO-Revision-Date: 2026-10-27 15:04+0000\n"
-"Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-10-28 15:27+0000\n"
+"Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
 "app/es/>\n"
 "Language: es\n"
@@ -451,20 +451,19 @@ msgid "Preferences"
 msgstr "Preferencias"
 
 #: data/resources/ui/shortcuts.ui:15
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
-msgstr "Atajos del teclado"
+msgstr "Atajos de teclado"
 
 #: data/resources/ui/shortcuts.ui:21
 msgctxt "shortcut window"
 msgid "Quit"
-msgstr ""
+msgstr "Salir"
 
 #: data/resources/ui/shortcuts.ui:29
 msgctxt "shortcut window"
 msgid "View"
-msgstr ""
+msgstr "ver"
 
 #: data/resources/ui/shortcuts.ui:32
 msgctxt "shortcut window"
@@ -489,7 +488,7 @@ msgstr "Acercar"
 #: data/resources/ui/shortcuts.ui:51
 msgctxt "shortcut window"
 msgid "Increase font size"
-msgstr ""
+msgstr "tamaño de letra más grande"
 
 #: data/resources/ui/shortcuts.ui:57
 msgctxt "shortcut window"
@@ -499,7 +498,7 @@ msgstr "Alejar"
 #: data/resources/ui/shortcuts.ui:58
 msgctxt "shortcut window"
 msgid "Decrease font size"
-msgstr ""
+msgstr "tamaño de letra más pequeño"
 
 #: data/resources/ui/shortcuts.ui:64
 msgctxt "shortcut window"
@@ -509,7 +508,7 @@ msgstr "Restablecer ampliación"
 #: data/resources/ui/shortcuts.ui:72
 msgctxt "shortcut window"
 msgid "File"
-msgstr ""
+msgstr "Archivo"
 
 #: data/resources/ui/shortcuts.ui:75
 msgctxt "shortcut window"
@@ -517,10 +516,9 @@ msgid "New Document"
 msgstr "Nuevo documento"
 
 #: data/resources/ui/shortcuts.ui:81
-#, fuzzy
 msgctxt "shortcut window"
 msgid "New Folder"
-msgstr "Carpeta nueva"
+msgstr "Nueva carpeta"
 
 #: data/resources/ui/shortcuts.ui:87
 msgctxt "shortcut window"
@@ -615,19 +613,19 @@ msgstr "Librería"
 #: data/resources/ui/shortcuts.ui:192
 msgctxt "shortcut window"
 msgid "Refresh Library Contents"
-msgstr ""
+msgstr "Actualizar el contenido de la biblioteca"
 
 #: data/resources/ui/theme_selector.ui:13
 msgid "Follow System Style"
-msgstr ""
+msgstr "Predeterminado del sistema"
 
 #: data/resources/ui/theme_selector.ui:20
 msgid "Light Style"
-msgstr ""
+msgstr "Claro"
 
 #: data/resources/ui/theme_selector.ui:27
 msgid "Dark Style"
-msgstr ""
+msgstr "Oscuro"
 
 #: data/resources/ui/window.ui:27 data/resources/ui/window.ui:201
 msgid "Sort"
@@ -767,15 +765,15 @@ msgstr "Ruta no válida"
 
 #: src/widgets/editor/text_view.rs:362
 msgid "Ctrl+Click"
-msgstr ""
+msgstr "Ctrl+Click"
 
 #: src/widgets/editor/text_view.rs:370
 msgid "Uncheck"
-msgstr ""
+msgstr "Desmarcar"
 
 #: src/widgets/editor/text_view.rs:372
 msgid "Check"
-msgstr ""
+msgstr "Marcar"
 
 #: src/widgets/library/library_view.rs:426
 #: src/widgets/library/library_view.rs:446
