@@ -6,6 +6,7 @@
 
   <styles>
     <!-- Basic Syntax -->
+    <style id="h" _name="Heading" />
     <style id="h1" _name="Heading 1" />
     <style id="h2" _name="Heading 2" />
     <style id="h3" _name="Heading 3" />
@@ -46,22 +47,40 @@
 
     <!-- Basic Syntax -->
     <context id="h1" style-ref="h1">
-      <match>^ {0,3}#($| +.*)</match>
+      <match>^ {0,3}(?P&lt;h1h&gt;#)($| +.*)</match>
+       <include>
+         <context sub-pattern="h1h" style-ref="h" />
+       </include>
     </context>
     <context id="h2" style-ref="h2">
-      <match>^ {0,3}##($| +.*)</match>
+      <match>^ {0,3}(?P&lt;h2h&gt;#{2})($| +.*)</match>
+       <include>
+         <context sub-pattern="h2h" style-ref="h" />
+       </include>
     </context>
     <context id="h3" style-ref="h3">
-      <match>^ {0,3}###($| +.*)</match>
+      <match>^ {0,3}(?P&lt;h3h&gt;#{3})($| +.*)</match>
+       <include>
+         <context sub-pattern="h3h" style-ref="h" />
+       </include>
     </context>
     <context id="h4" style-ref="h4">
-      <match>^ {0,3}####($| +.*)</match>
+      <match>^ {0,3}(?P&lt;h4h&gt;#{4})($| +.*)</match>
+       <include>
+         <context sub-pattern="h4h" style-ref="h" />
+       </include>
     </context>
     <context id="h5" style-ref="h5">
-      <match>^ {0,3}#####($| +.*)</match>
+      <match>^ {0,3}(?P&lt;h5h&gt;#{5})($| +.*)</match>
+       <include>
+         <context sub-pattern="h5h" style-ref="h" />
+       </include>
     </context>
     <context id="h6" style-ref="h6">
-      <match>^ {0,3}######($| +.*)</match>
+      <match>^ {0,3}(?P&lt;h6h&gt;#{6})($| +.*)</match>
+       <include>
+         <context sub-pattern="h6h" style-ref="h" />
+       </include>
     </context>
     <context id="italic-asterisk" style-ref="italic">
       <match>(?&lt;!\*)\*(?!\\|\*| |\t).*?(?&lt;!\\|\*| |\t)\*(?!\*)</match>
