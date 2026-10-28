@@ -100,8 +100,11 @@
     <context id="bold-italic-underscore" style-ref="bold-italic">
       <match>(?&lt;!_)___(?!\\|_| |\t).*?(?&lt;!\\|_| |\t)___(?!_)</match>
     </context>
-    <context id="blockquote" style-ref="blockquote">
-      <match>^\&gt;.*</match>
+    <context id="blockquote" end-at-line-end="true" style-ref="blockquote">
+      <start>^ {0,3}&gt;</start>
+      <include>
+        <context ref="markdown-inlines" />
+      </include>
     </context>
     <context id="ol" style-ref="list">
       <match>^\s*\d+\.\s+</match>
