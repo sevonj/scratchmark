@@ -121,7 +121,7 @@
     <context id="horizontal-rule" style-ref="horizontal-rule">
       <match>(?m)^ {0,3}((-([ \t])*){3,}|(_([ \t])*){3,}|(\*([ \t])*){3,})$</match>
     </context>
-    <context id="link" style-ref="link">
+    <context id="inline-link" style-ref="link">
       <match>\[(?P&lt;text&gt;[^\[\]]*)]\((?P&lt;url&gt;.*?)\)</match>
       <include>
         <context sub-pattern="text" style-ref="link-text" />
@@ -136,13 +136,14 @@
     <context id="strikethrough" style-ref="strikethrough">
       <match>(?&lt;!~)~~(?!\\|~| |\t).*?(?&lt;!\\|~| |\t)~~(?!~)</match>
     </context>
-    <context id="task-list" style-ref="task-list">
-      <match>^( {0,3})(?P&lt;task_list&gt;-) (?P&lt;task_box&gt;\[(?P&lt;task_check&gt;[ xX])]) +(?P&lt;task_text&gt;\S.*)$</match>
-       <include>
-         <context sub-pattern="task_list" style-ref="list" />
-         <context sub-pattern="task_check" style-ref="task-check" />
-         <context sub-pattern="task_box" style-ref="task-box" />
-       </include>
+    <context id="task-list" end-at-line-end="true">
+      <start>^( {0,3})(?P&lt;task_list&gt;-) (?P&lt;task_box&gt;\[(?P&lt;task_check&gt;[ xX])]) +</start>
+      <include>
+        <context sub-pattern="task_list" where="start" style-ref="list" />
+        <context sub-pattern="task_check" where="start" style-ref="task-check" />
+        <context sub-pattern="task_box" where="start" style-ref="task-box" />
+        <context ref="markdown-inlines" />
+      </include>
     </context>
     <context id="highlight" style-ref="highlight">
       <match>(?&lt;!=)==(?!\\|=| |\t).*?(?&lt;!\\|=| |\t)==(?!=)</match>
@@ -152,6 +153,26 @@
     </context>
     <context id="superscript" style-ref="superscript">
       <match>(?&lt;!\^)\^(?!\\|\^| |\t).*?(?&lt;!\\|\^| |\t)\^(?!\^)</match>
+    </context>
+
+    <context id="markdown-inlines">
+      <include>
+        <context ref="italic-asterisk" />
+        <context ref="italic-underscore" />
+        <context ref="bold-asterisk" />
+        <context ref="bold-underscore" />
+        <context ref="bold-italic-asterisk" />
+        <context ref="bold-italic-underscore" />
+        <context ref="code1"/>
+        <context ref="code2"/>
+        <context ref="code3"/>
+        <context ref="inline-link"/>
+
+        <context ref="strikethrough" />
+        <context ref="highlight" />
+        <context ref="subscript" />
+        <context ref="superscript" />
+      </include>
     </context>
 
     <context id="markdown">
@@ -178,7 +199,7 @@
         <context ref="code2" />
         <context ref="code3" />
         <context ref="horizontal-rule" />
-        <context ref="link" />
+        <context ref="inline-link" />
         <context ref="escape" />
 
         <context ref="strikethrough" />
