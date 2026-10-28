@@ -6,7 +6,6 @@ edition = "2024"
 
 [dependencies]
 adw = { version = "0.9.2", package = "libadwaita", features = ["v1_9"] }
-async-channel = "2.5.0"
 gtk = { version = "0.11.4", package = "gtk4", features = ["v4_22"] }
 sourceview5 = "0.11.2"
 gettext-rs = { version = "0.8.0", features = ["gettext-system"] }
