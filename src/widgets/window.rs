@@ -184,6 +184,8 @@ mod imp {
             }
             #[cfg(feature = "generatescreenshots")]
             {
+                let settings = settings.clone();
+
                 use gtk::EventControllerKey;
                 use gtk::gdk::Key;
 
