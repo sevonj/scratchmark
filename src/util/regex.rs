@@ -11,7 +11,7 @@ pub static ATX_H_OPENING: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^ {0,3}#{1,6}($| +)").unwrap());
 
 pub static INLINE_LINK: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"\[(?P<text>.*?)]\((?P<url>.*?)\)").unwrap());
+    LazyLock::new(|| Regex::new(r"\[(?P<text>[^\[\]]*)]\((?P<url>.*?)\)").unwrap());
 
 pub static TASK_LIST: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(
@@ -144,6 +144,13 @@ mod tests {
         assert_eq!(
             INLINE_LINK.find("[link](uri)").unwrap().as_str(),
             "[link](uri)"
+        );
+        assert_eq!(
+            INLINE_LINK
+                .find("- [x] Visit [the Scratchmark website](https://scratchmark.org)")
+                .unwrap()
+                .as_str(),
+            "[the Scratchmark website](https://scratchmark.org)"
         );
     }
 
