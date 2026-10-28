@@ -570,7 +570,6 @@ use crate::data::DocumentStats;
 use crate::data::MarkdownBuffer;
 use crate::error::ScratchmarkError;
 use crate::util::file_actions;
-use crate::widgets::editor::text_view::EditorTextView;
 
 glib::wrapper! {
     pub struct EditorView(ObjectSubclass<imp::EditorView>)
@@ -704,22 +703,6 @@ impl EditorView {
 
     pub fn document_stats(&self) -> DocumentStats {
         self.imp().stats.get()
-    }
-
-    pub fn scroll_to_line(&self, line: i32) {
-        let source_view: &EditorTextView = self.imp().source_view.as_ref();
-        let Some(mut iter) = source_view.buffer().iter_at_line(line) else {
-            return;
-        };
-        source_view.scroll_to_iter(&mut iter, 0., false, 0., 0.);
-    }
-
-    pub fn scroll_to_top(&self) {
-        let vadjustment = self.imp().scrolled_window.vadjustment();
-        vadjustment.set_value(vadjustment.lower());
-        self.imp()
-            .scrolled_window
-            .set_vadjustment(Some(&vadjustment));
     }
 
     pub fn max_width_px(&self) -> i32 {

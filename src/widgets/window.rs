@@ -185,6 +185,8 @@ mod imp {
             #[cfg(feature = "generatescreenshots")]
             {
                 let settings = settings.clone();
+                const PROJECT_ROOT: &str = env!("CARGO_MANIFEST_DIR");
+                let project_root = PathBuf::from(PROJECT_ROOT);
 
                 use gtk::EventControllerKey;
                 use gtk::gdk::Key;
@@ -209,6 +211,16 @@ mod imp {
                         let format_bar: &MarkdownFormatBar = imp.format_bar.as_ref();
                         match key {
                             Key::KP_1 => {
+                                let filepath = project_root
+                                    .join("data/demo/Demo Project/Down the Rabbit Hole.md");
+                                if imp
+                                    .editor
+                                    .borrow()
+                                    .as_ref()
+                                    .is_none_or(|e| e.path() != filepath)
+                                {
+                                    imp.load_document(filepath);
+                                }
                                 obj.set_size_request(
                                     settings.default_value("win-width").unwrap().get().unwrap(),
                                     settings.default_value("win-height").unwrap().get().unwrap(),
@@ -216,15 +228,29 @@ mod imp {
                                 sidebar_toggle.set_active(true);
                                 obj.set_show_sidebar(true);
                                 obj.set_focus_mode(false);
+                                imp.settings()
+                                    .set_boolean("typewriter-mode", false)
+                                    .unwrap();
                                 editor_sidebar_toggle.set_active(false);
                                 format_bar.set_visible(false);
-                                if let Some(editor) = imp.editor.borrow().as_ref() {
-                                    editor.activate_action("editor.hide-search", None).unwrap();
-                                    editor.set_scroll_pos(0.);
-                                }
+                                let editor_bind = imp.editor.borrow();
+                                let editor = editor_bind.as_ref().unwrap();
+                                editor.activate_action("editor.hide-search", None).unwrap();
+                                editor.set_scroll_pos(0.);
+
                                 glib::Propagation::Stop
                             }
                             Key::KP_2 => {
+                                let filepath = project_root
+                                    .join("data/demo/Demo Project/Down the Rabbit Hole.md");
+                                if imp
+                                    .editor
+                                    .borrow()
+                                    .as_ref()
+                                    .is_none_or(|e| e.path() != filepath)
+                                {
+                                    imp.load_document(filepath);
+                                }
                                 obj.set_size_request(
                                     settings.default_value("win-width").unwrap().get().unwrap(),
                                     settings.default_value("win-height").unwrap().get().unwrap(),
@@ -232,16 +258,40 @@ mod imp {
                                 sidebar_toggle.set_active(false);
                                 obj.set_show_sidebar(false);
                                 obj.set_focus_mode(true);
+                                imp.settings().set_boolean("typewriter-mode", true).unwrap();
                                 editor_sidebar_toggle.set_active(false);
                                 format_bar.set_visible(false);
-                                if let Some(editor) = imp.editor.borrow().as_ref() {
-                                    editor.activate_action("editor.hide-search", None).unwrap();
-                                    editor.set_scroll_pos(0.);
-                                    editor.scroll_to_line(20);
-                                }
+
+                                let editor_bind = imp.editor.borrow();
+                                let editor = editor_bind.as_ref().unwrap();
+                                editor
+                                    .activate_action(
+                                        "editor.show-search-with-text",
+                                        Some(&"turn".to_variant()),
+                                    )
+                                    .unwrap();
+                                editor
+                                    .activate_action("editor.show-search-replace", None)
+                                    .unwrap();
+                                editor
+                                    .activate_action("editor.show-search-replace", None)
+                                    .unwrap();
+                                editor.set_scroll_pos(300.);
+
                                 glib::Propagation::Stop
                             }
                             Key::KP_3 => {
+                                let filepath = project_root.join(
+                                    "data/demo/Demo Project/Projects/Scratchmark/Showcase.md",
+                                );
+                                if imp
+                                    .editor
+                                    .borrow()
+                                    .as_ref()
+                                    .is_none_or(|e| e.path() != filepath)
+                                {
+                                    imp.load_document(filepath);
+                                }
                                 obj.set_size_request(
                                     settings.default_value("win-width").unwrap().get().unwrap(),
                                     settings.default_value("win-height").unwrap().get().unwrap(),
@@ -249,23 +299,28 @@ mod imp {
                                 sidebar_toggle.set_active(true);
                                 obj.set_show_sidebar(true);
                                 obj.set_focus_mode(false);
+                                imp.settings()
+                                    .set_boolean("typewriter-mode", false)
+                                    .unwrap();
                                 editor_sidebar_toggle.set_active(true);
                                 format_bar.set_visible(true);
-                                if let Some(editor) = imp.editor.borrow().as_ref() {
-                                    editor
-                                        .activate_action(
-                                            "editor.show-search-with-text",
-                                            Some(&"turn".to_variant()),
-                                        )
-                                        .unwrap();
-                                    editor
-                                        .activate_action("editor.show-search-replace", None)
-                                        .unwrap();
-                                    editor.set_scroll_pos(0.);
-                                    editor
-                                        .activate_action("editor.show-search-replace", None)
-                                        .unwrap();
-                                }
+                                let editor_bind = imp.editor.borrow();
+                                let editor = editor_bind.as_ref().unwrap();
+                                editor.activate_action("editor.hide-search", None).unwrap();
+                                editor.set_scroll_pos(80.);
+
+                                glib::Propagation::Stop
+                            }
+                            Key::KP_4 => {
+                                imp.settings().set_string("theme", "system").unwrap();
+                                glib::Propagation::Stop
+                            }
+                            Key::KP_5 => {
+                                imp.settings().set_string("theme", "light").unwrap();
+                                glib::Propagation::Stop
+                            }
+                            Key::KP_6 => {
+                                imp.settings().set_string("theme", "dark").unwrap();
                                 glib::Propagation::Stop
                             }
                             _ => glib::Propagation::Proceed,
@@ -995,10 +1050,6 @@ mod imp {
                     .make_visible(&project_root.join("data/demo/drafts/Notes"));
                 self.library_view.make_visible(
                     &project_root.join("data/demo/Demo Project/Projects/Scratchmark"),
-                );
-
-                self.load_document(
-                    project_root.join("data/demo/Demo Project/Down the Rabbit Hole.md"),
                 );
             }
             self.library_view.refresh_content();
