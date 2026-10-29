@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-29 15:21+0000\n"
-"PO-Revision-Date: 2026-10-28 15:27+0000\n"
+"PO-Revision-Date: 2026-10-30 10:59+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/scratchmark/"
 "app/fi/>\n"
@@ -740,7 +740,7 @@ msgstr "Ensin avattu"
 
 #: src/data/folder.rs:170
 msgid "Drafts"
-msgstr ""
+msgstr "Luonnokset"
 
 #: src/error.rs:25
 msgid "Couldn't create file"
