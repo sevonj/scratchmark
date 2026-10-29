@@ -80,6 +80,7 @@ use std::path::PathBuf;
 use std::time::SystemTime;
 
 use adw::subclass::prelude::*;
+use gettextrs::gettext;
 use gtk::glib;
 use gtk::glib::CollationKey;
 use gtk::glib::Object;
@@ -166,7 +167,7 @@ impl Folder {
         let obj: Self = Object::builder()
             .property("path", path)
             .property("depth", 0_u32)
-            .property("name", "Drafts")
+            .property("name", gettext("Drafts"))
             .build();
 
         let imp = obj.imp();
