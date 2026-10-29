@@ -12,12 +12,12 @@ It uses Markdown, which means that ==all text formatting can be done by typing.=
 - [x] Redesign color schemes
 - [x] Fix overview so it can be included in the release
 - [ ] Prepare for next release
-- [x] Test *inline formatting* with task lists
-- [ ] Write a changelog
-- [ ] Take new screenshots
-- [x] Write a new sample document
-- [x] Add headings to demonstrate overview
-- [x] Wait for translators
+ - [x] Test *inline formatting* with task lists
+ - [ ] Write a changelog
+ - [ ] Take new screenshots
+ - [x] Write a new sample document
+ - [x] Add headings to demonstrate overview
+ - [x] Wait for translators
 - [x] **Bleaugh**
 
 ## Links
@@ -27,10 +27,9 @@ It uses Markdown, which means that ==all text formatting can be done by typing.=
 
 # Table of Contents
 ## Your headings will
-### appear in the sidebar
+### appear here
 ## You can navigate
 ### the document by
-#### clicking the titles
-##### Heading 5
-###### Heading 6
+#### clicking the
+##### titles
 
