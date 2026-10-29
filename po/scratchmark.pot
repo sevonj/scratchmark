@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-27 16:20+0200\n"
+"POT-Creation-Date: 2026-10-29 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -713,6 +713,10 @@ msgstr ""
 msgid "First Accessed"
 msgstr ""
 
+#: src/data/folder.rs:170
+msgid "Drafts"
+msgstr ""
+
 #: src/error.rs:25
 msgid "Couldn't create file"
 msgstr ""
@@ -741,15 +745,15 @@ msgstr ""
 msgid "Invalid path"
 msgstr ""
 
-#: src/widgets/editor/text_view.rs:362
+#: src/widgets/editor/text_view.rs:350
 msgid "Ctrl+Click"
 msgstr ""
 
-#: src/widgets/editor/text_view.rs:370
+#: src/widgets/editor/text_view.rs:358
 msgid "Uncheck"
 msgstr ""
 
-#: src/widgets/editor/text_view.rs:372
+#: src/widgets/editor/text_view.rs:360
 msgid "Check"
 msgstr ""
 
@@ -779,15 +783,15 @@ msgstr ""
 msgid "Folder deleted"
 msgstr ""
 
-#: src/widgets/window.rs:422
+#: src/widgets/window.rs:479
 msgid "Couldn't move file"
 msgstr ""
 
-#: src/widgets/window.rs:668
+#: src/widgets/window.rs:725
 msgid "Saved"
 msgstr ""
 
-#: src/widgets/window.rs:980
+#: src/widgets/window.rs:1037
 msgid "Open document has been moved or deleted"
 msgstr ""
 
