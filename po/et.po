@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-27 16:20+0200\n"
+"POT-Creation-Date: 2026-10-29 15:21+0000\n"
 "PO-Revision-Date: 2026-10-28 15:27+0000\n"
 "Last-Translator: Priit Jõerüüt <jrtcdbrg@noreply.codeberg.org>\n"
 "Language-Team: Estonian <https://translate.codeberg.org/projects/scratchmark/"
@@ -735,6 +735,10 @@ msgstr "Viimati avatud"
 msgid "First Accessed"
 msgstr "Varem avatud"
 
+#: src/data/folder.rs:170
+msgid "Drafts"
+msgstr ""
+
 #: src/error.rs:25
 msgid "Couldn't create file"
 msgstr "Faili loomine ei õnnestunud"
@@ -763,15 +767,15 @@ msgstr "Fail on andmekandjal muutunud"
 msgid "Invalid path"
 msgstr "Vigane asukoht"
 
-#: src/widgets/editor/text_view.rs:362
+#: src/widgets/editor/text_view.rs:350
 msgid "Ctrl+Click"
 msgstr "Control + Klõps"
 
-#: src/widgets/editor/text_view.rs:370
+#: src/widgets/editor/text_view.rs:358
 msgid "Uncheck"
 msgstr "Klõpsa märkeruut tühjaks"
 
-#: src/widgets/editor/text_view.rs:372
+#: src/widgets/editor/text_view.rs:360
 msgid "Check"
 msgstr "Klõpsa märkeruut märgituks"
 
@@ -801,15 +805,15 @@ msgstr "Kausta kustutamine ei õnnestunud"
 msgid "Folder deleted"
 msgstr "Kaust on kustutatud"
 
-#: src/widgets/window.rs:422
+#: src/widgets/window.rs:479
 msgid "Couldn't move file"
 msgstr "Faili teisaldamine ei õnnestunud"
 
-#: src/widgets/window.rs:668
+#: src/widgets/window.rs:725
 msgid "Saved"
 msgstr "Salvestatud"
 
-#: src/widgets/window.rs:980
+#: src/widgets/window.rs:1037
 msgid "Open document has been moved or deleted"
 msgstr "Avatud dokument on kas tõstetud teise kohta või kustutatud"
 

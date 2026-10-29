@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-27 16:20+0200\n"
+"POT-Creation-Date: 2026-10-29 15:21+0000\n"
 "PO-Revision-Date: 2026-10-28 15:27+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/scratchmark/"
@@ -738,6 +738,10 @@ msgstr "Viimeksi avattu"
 msgid "First Accessed"
 msgstr "Ensin avattu"
 
+#: src/data/folder.rs:170
+msgid "Drafts"
+msgstr ""
+
 #: src/error.rs:25
 msgid "Couldn't create file"
 msgstr "Tiedoston luonti epäonnistui"
@@ -766,15 +770,15 @@ msgstr "Tiedosto on muuttunut levyllä"
 msgid "Invalid path"
 msgstr "Virheellinen polku"
 
-#: src/widgets/editor/text_view.rs:362
+#: src/widgets/editor/text_view.rs:350
 msgid "Ctrl+Click"
 msgstr "Ctrl+napsautus"
 
-#: src/widgets/editor/text_view.rs:370
+#: src/widgets/editor/text_view.rs:358
 msgid "Uncheck"
 msgstr "Poista valinta"
 
-#: src/widgets/editor/text_view.rs:372
+#: src/widgets/editor/text_view.rs:360
 msgid "Check"
 msgstr "Valitse"
 
@@ -804,15 +808,15 @@ msgstr "Kansion poisto epäonnistui"
 msgid "Folder deleted"
 msgstr "Kansio poistettu"
 
-#: src/widgets/window.rs:422
+#: src/widgets/window.rs:479
 msgid "Couldn't move file"
 msgstr "Tiedoston siirtäminen epäonnistui"
 
-#: src/widgets/window.rs:668
+#: src/widgets/window.rs:725
 msgid "Saved"
 msgstr "Tallennettu"
 
-#: src/widgets/window.rs:980
+#: src/widgets/window.rs:1037
 msgid "Open document has been moved or deleted"
 msgstr "Avoin tiedosto on siirretty tai poistettu"
 

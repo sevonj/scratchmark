@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-27 16:20+0200\n"
+"POT-Creation-Date: 2026-10-29 15:21+0000\n"
 "PO-Revision-Date: 2026-08-05 12:35+0000\n"
 "Last-Translator: sevon <sevon@noreply.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/scratchmark/"
@@ -749,6 +749,10 @@ msgstr ""
 msgid "First Accessed"
 msgstr ""
 
+#: src/data/folder.rs:170
+msgid "Drafts"
+msgstr ""
+
 #: src/error.rs:25
 #, fuzzy
 msgid "Couldn't create file"
@@ -782,15 +786,15 @@ msgstr "Файл был изменён на диске."
 msgid "Invalid path"
 msgstr ""
 
-#: src/widgets/editor/text_view.rs:362
+#: src/widgets/editor/text_view.rs:350
 msgid "Ctrl+Click"
 msgstr ""
 
-#: src/widgets/editor/text_view.rs:370
+#: src/widgets/editor/text_view.rs:358
 msgid "Uncheck"
 msgstr ""
 
-#: src/widgets/editor/text_view.rs:372
+#: src/widgets/editor/text_view.rs:360
 msgid "Check"
 msgstr ""
 
@@ -824,17 +828,17 @@ msgstr "Документ"
 msgid "Folder deleted"
 msgstr ""
 
-#: src/widgets/window.rs:422
+#: src/widgets/window.rs:479
 #, fuzzy
 msgid "Couldn't move file"
 msgstr "Переместить в корзину"
 
-#: src/widgets/window.rs:668
+#: src/widgets/window.rs:725
 #, fuzzy
 msgid "Saved"
 msgstr "Сохранить"
 
-#: src/widgets/window.rs:980
+#: src/widgets/window.rs:1037
 #, fuzzy
 msgid "Open document has been moved or deleted"
 msgstr "Возможно проект перемещён или удалён."

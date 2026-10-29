@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-27 16:20+0200\n"
+"POT-Creation-Date: 2026-10-29 15:21+0000\n"
 "PO-Revision-Date: 2026-10-28 15:27+0000\n"
 "Last-Translator: gallegonovato <gallegonovato@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/scratchmark/"
@@ -735,6 +735,10 @@ msgstr "Última consulta"
 msgid "First Accessed"
 msgstr "Primera consulta"
 
+#: src/data/folder.rs:170
+msgid "Drafts"
+msgstr ""
+
 #: src/error.rs:25
 msgid "Couldn't create file"
 msgstr "Error al crear el archivo"
@@ -763,15 +767,15 @@ msgstr "El archivo ha cambiado en el disco"
 msgid "Invalid path"
 msgstr "Ruta no válida"
 
-#: src/widgets/editor/text_view.rs:362
+#: src/widgets/editor/text_view.rs:350
 msgid "Ctrl+Click"
 msgstr "Ctrl+Click"
 
-#: src/widgets/editor/text_view.rs:370
+#: src/widgets/editor/text_view.rs:358
 msgid "Uncheck"
 msgstr "Desmarcar"
 
-#: src/widgets/editor/text_view.rs:372
+#: src/widgets/editor/text_view.rs:360
 msgid "Check"
 msgstr "Marcar"
 
@@ -801,15 +805,15 @@ msgstr "No se ha podido eliminar la carpeta"
 msgid "Folder deleted"
 msgstr "Carpeta eliminada"
 
-#: src/widgets/window.rs:422
+#: src/widgets/window.rs:479
 msgid "Couldn't move file"
 msgstr "No se ha podido mover el archivo"
 
-#: src/widgets/window.rs:668
+#: src/widgets/window.rs:725
 msgid "Saved"
 msgstr "Guardado"
 
-#: src/widgets/window.rs:980
+#: src/widgets/window.rs:1037
 msgid "Open document has been moved or deleted"
 msgstr "El documento abierto se ha movido o eliminado"
 

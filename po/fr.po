@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-27 16:20+0200\n"
+"POT-Creation-Date: 2026-10-29 15:21+0000\n"
 "PO-Revision-Date: 2026-08-30 14:25+0000\n"
 "Last-Translator: Poulopeau <poulopeau@noreply.codeberg.org>\n"
 "Language-Team: French <https://translate.codeberg.org/projects/scratchmark/"
@@ -740,6 +740,10 @@ msgstr ""
 msgid "First Accessed"
 msgstr ""
 
+#: src/data/folder.rs:170
+msgid "Drafts"
+msgstr ""
+
 #: src/error.rs:25
 #, fuzzy
 msgid "Couldn't create file"
@@ -773,15 +777,15 @@ msgstr ""
 msgid "Invalid path"
 msgstr "Emplacement invalide"
 
-#: src/widgets/editor/text_view.rs:362
+#: src/widgets/editor/text_view.rs:350
 msgid "Ctrl+Click"
 msgstr ""
 
-#: src/widgets/editor/text_view.rs:370
+#: src/widgets/editor/text_view.rs:358
 msgid "Uncheck"
 msgstr ""
 
-#: src/widgets/editor/text_view.rs:372
+#: src/widgets/editor/text_view.rs:360
 msgid "Check"
 msgstr ""
 
@@ -813,16 +817,16 @@ msgstr "Impossible de supprimer le dossier"
 msgid "Folder deleted"
 msgstr "Dossier supprimé"
 
-#: src/widgets/window.rs:422
+#: src/widgets/window.rs:479
 #, fuzzy
 msgid "Couldn't move file"
 msgstr "Impossible de déplacer le fichier"
 
-#: src/widgets/window.rs:668
+#: src/widgets/window.rs:725
 msgid "Saved"
 msgstr "Enregistré"
 
-#: src/widgets/window.rs:980
+#: src/widgets/window.rs:1037
 #, fuzzy
 msgid "Open document has been moved or deleted"
 msgstr "Le coument ouvert a été déplacé ou supprimé"

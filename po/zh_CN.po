@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-27 16:20+0200\n"
+"POT-Creation-Date: 2026-10-29 15:21+0000\n"
 "PO-Revision-Date: 2026-08-06 13:08+0000\n"
 "Last-Translator: Outbreak2096 <outbreak2096@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
@@ -729,6 +729,10 @@ msgstr "最后访问"
 msgid "First Accessed"
 msgstr "首次访问"
 
+#: src/data/folder.rs:170
+msgid "Drafts"
+msgstr ""
+
 #: src/error.rs:25
 msgid "Couldn't create file"
 msgstr "无法创建文件"
@@ -757,15 +761,15 @@ msgstr "文件在磁盘上已更改"
 msgid "Invalid path"
 msgstr "路径无效"
 
-#: src/widgets/editor/text_view.rs:362
+#: src/widgets/editor/text_view.rs:350
 msgid "Ctrl+Click"
 msgstr ""
 
-#: src/widgets/editor/text_view.rs:370
+#: src/widgets/editor/text_view.rs:358
 msgid "Uncheck"
 msgstr ""
 
-#: src/widgets/editor/text_view.rs:372
+#: src/widgets/editor/text_view.rs:360
 msgid "Check"
 msgstr ""
 
@@ -795,15 +799,15 @@ msgstr "无法删除文件夹"
 msgid "Folder deleted"
 msgstr "文件夹已删除"
 
-#: src/widgets/window.rs:422
+#: src/widgets/window.rs:479
 msgid "Couldn't move file"
 msgstr "无法移动文件"
 
-#: src/widgets/window.rs:668
+#: src/widgets/window.rs:725
 msgid "Saved"
 msgstr "已保存"
 
-#: src/widgets/window.rs:980
+#: src/widgets/window.rs:1037
 msgid "Open document has been moved or deleted"
 msgstr "打开的文档已被移动或删除"
 
