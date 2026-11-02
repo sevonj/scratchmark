@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-29 15:21+0000\n"
-"PO-Revision-Date: 2026-10-28 15:27+0000\n"
+"PO-Revision-Date: 2026-11-03 22:41+0000\n"
 "Last-Translator: Priit Jõerüüt <jrtcdbrg@noreply.codeberg.org>\n"
 "Language-Team: Estonian <https://translate.codeberg.org/projects/scratchmark/"
 "app/et/>\n"
@@ -737,7 +737,7 @@ msgstr "Varem avatud"
 
 #: src/data/folder.rs:170
 msgid "Drafts"
-msgstr ""
+msgstr "Kavandid"
 
 #: src/error.rs:25
 msgid "Couldn't create file"
