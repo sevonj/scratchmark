@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: scratchmark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-29 15:21+0000\n"
-"PO-Revision-Date: 2026-10-28 15:27+0000\n"
+"PO-Revision-Date: 2026-11-03 22:41+0000\n"
 "Last-Translator: Łukasz Horodecki <lukasz@horodecki.net>\n"
 "Language-Team: Polish <https://translate.codeberg.org/projects/scratchmark/"
 "app/pl/>\n"
@@ -743,7 +743,7 @@ msgstr "Od najdawniej otwieranego"
 
 #: src/data/folder.rs:170
 msgid "Drafts"
-msgstr ""
+msgstr "Szkice"
 
 #: src/error.rs:25
 msgid "Couldn't create file"
