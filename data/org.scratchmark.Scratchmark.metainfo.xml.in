@@ -48,15 +48,29 @@
   <url type="vcs-browser">https://github.com/sevonj/scratchmark</url>
   <url type="translate">https://translate.codeberg.org/projects/scratchmark/app/</url>
   <releases>
+    <release version="v1.11.0" date="2026-11-4">
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.11.0</url>
+      <description translate="no">
+        <ul>
+          <li>Feature: Table of contents navigation</li>
+          <li>Feature: Dark and light mode settings</li>
+          <li>Feature: Clickable links</li>
+          <li>Feature: Task lists</li>
+          <li>Fix: Inline formatting within blockquotes</li>
+          <li>Design: Different editor colors for dark and light mode</li>
+          <li>Misc: Rebuilt deprecated shortcuts dialog</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.10.0" date="2026-09-5">
-    <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.10.0</url>
-    <description translate="no">
-      <ul>
-        <li>Feature: Typewriter scrolling</li>
-        <li>fix: Broken focus mode behavior</li>
-      </ul>
-    </description>
-  </release>
+      <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.10.0</url>
+      <description translate="no">
+        <ul>
+          <li>Feature: Typewriter scrolling</li>
+          <li>fix: Broken focus mode behavior</li>
+        </ul>
+      </description>
+    </release>
     <release version="v1.9.1" date="2026-07-31">
       <url type="details">https://github.com/sevonj/scratchmark/releases/tag/v1.9.1</url>
       <description translate="no">
