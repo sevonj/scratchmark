@@ -1,6 +1,6 @@
 id: org.scratchmark.Scratchmark
 runtime: org.gnome.Platform
-runtime-version: "50"
+runtime-version: '51'
 sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
@@ -27,8 +27,8 @@ modules:
       - -Ddocs=false
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/libspelling/0.4/libspelling-0.4.10.tar.xz
-        sha256: 56e3f01a3a18b575beea4c34349f99cdaba316e1f7c271b1231f7bcf5d9af73b
+        url: https://download.gnome.org/sources/libspelling/0.4/libspelling-0.4.11.tar.xz
+        sha256: 52e53ec3fba0f604cfd0931e26af7f7241a0d4f0208dd5574f43b3589f6d28b2
         x-checker-data:
           type: gnome
           version-scheme: odd-minor-is-unstable
