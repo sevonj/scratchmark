@@ -61,7 +61,7 @@ mod imp {
         // We can modify or cancel it here and do other things, like move the cursor
         fn insert_text(&self, iter: &mut TextIter, new_text: &str) {
             if self.paste_in_progress.get() || self.formatting_action_in_progress.get() {
-                self.parent_insert_text(iter, &new_text);
+                self.parent_insert_text(iter, new_text);
                 return;
             }
 
@@ -74,7 +74,7 @@ mod imp {
             } else if self.is_cursor_at_line_end_ignore_whitespace() {
                 end_of_line = true;
                 iter.forward_to_line_end();
-                obj.place_cursor(&iter);
+                obj.place_cursor(iter);
             } else {
                 end_of_line = false;
             }
