@@ -107,10 +107,10 @@
       </include>
     </context>
     <context id="ol" style-ref="list">
-      <match>^\s*\d+\.\s+</match>
+      <match>^( *|\t*)(\d{1,9})(\)|.)([^\S\r\n]+|$)</match>
     </context>
     <context id="ul" style-ref="list">
-      <match>^\s*-\s+</match>
+      <match>^( *|\t*)[-+*]([^\S\r\n]+|$)</match>
     </context>
     <context id="code1" style-ref="code">
       <match>(?&lt;!\`)\`[^\`]+\`(?!\`)</match>
@@ -140,7 +140,7 @@
       <match>(?&lt;!~)~~(?!\\|~| |\t).*?(?&lt;!\\|~| |\t)~~(?!~)</match>
     </context>
     <context id="task-list" end-at-line-end="true">
-      <start>^( {0,3})(?P&lt;task_list&gt;-) (?P&lt;task_box&gt;\[(?P&lt;task_check&gt;[ xX])]) +</start>
+      <start>^( *|\t*)(?P&lt;task_list&gt;[-+*]) (?P&lt;task_box&gt;\[(?P&lt;task_check&gt;[ xX])])([^\S\r\n]+|$)</start>
       <include>
         <context sub-pattern="task_list" where="start" style-ref="list" />
         <context sub-pattern="task_check" where="start" style-ref="task-check" />
