@@ -14,7 +14,10 @@ pub static INLINE_LINK: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"\[(?P<text>[^\[\]]*)]\((?P<url>.*?)\)").unwrap());
 
 pub static TASK_LIST: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"^( {0,3})(?P<task_list>-) (?P<task_box>\[(?P<task_check>[ xX])]) +").unwrap()
+    Regex::new(
+        r"^( *|\t*)(?P<task_list>[-+*]) (?P<task_box>\[(?P<task_check>[ xX])])([^\S\r\n]+|$)",
+    )
+    .unwrap()
 });
 
 #[cfg(test)]
@@ -189,9 +192,9 @@ mod tests {
         assert_eq!(TASK_LIST.find(indent1).unwrap().as_str(), " - [x] ");
         assert_eq!(TASK_LIST.find(indent2).unwrap().as_str(), "  - [x] ");
         assert_eq!(TASK_LIST.find(indent3).unwrap().as_str(), "   - [x] ");
-        assert!(TASK_LIST.find(indent4).is_none());
-        assert!(TASK_LIST.find(indent5).is_none());
-        assert!(TASK_LIST.find(indent6).is_none());
+        assert_eq!(TASK_LIST.find(indent4).unwrap().as_str(), "    - [x] ");
+        assert_eq!(TASK_LIST.find(indent5).unwrap().as_str(), "     - [x] ");
+        assert_eq!(TASK_LIST.find(indent6).unwrap().as_str(), "      - [x] ");
 
         let space_no_text = "- [x] ";
         let repeats = "- [x] Task list - [x] Task list - [x] Task list";
@@ -200,7 +203,7 @@ mod tests {
 
         let no_space_no_text = "- [x]";
         let no_space_text = "- [x]text";
-        assert!(TASK_LIST.find(no_space_no_text).is_none());
+        assert_eq!(TASK_LIST.find(no_space_no_text).unwrap().as_str(), "- [x]");
         assert!(TASK_LIST.find(no_space_text).is_none());
     }
 }

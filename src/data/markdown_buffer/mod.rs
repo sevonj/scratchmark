@@ -58,21 +58,73 @@ mod imp {
 
     impl TextBufferImpl for MarkdownBuffer {
         // Inserted text passes through here
-        // We can modify or cancel it here, and do other things, like move the cursor
+        // We can modify or cancel it here and do other things, like move the cursor
         fn insert_text(&self, iter: &mut TextIter, new_text: &str) {
-            let mut process_text = Some(new_text.to_owned());
-            let cursor_move;
-
-            (process_text, cursor_move) = self.process_auto_close_formatting(iter, process_text);
-
-            if let Some(new_text) = process_text {
-                self.parent_insert_text(iter, &new_text)
+            if self.paste_in_progress.get() || self.formatting_action_in_progress.get() {
+                self.parent_insert_text(iter, &new_text);
+                return;
             }
 
             let obj = self.obj();
-            let mut cursor = obj.iter_at_offset(obj.cursor_position());
-            cursor.forward_cursor_positions(cursor_move);
-            obj.place_cursor(&cursor);
+
+            let cancel = false;
+            let end_of_line;
+            if self.is_cursor_at_line_end() {
+                end_of_line = true;
+            } else if self.is_cursor_at_line_end_ignore_whitespace() {
+                end_of_line = true;
+                iter.forward_to_line_end();
+                obj.place_cursor(&iter);
+            } else {
+                end_of_line = false;
+            }
+
+            if new_text == "\n" && end_of_line && !cancel {
+                let cursor = obj.iter_at_offset(obj.cursor_position());
+                let line = cursor.line();
+                let line_start = obj.iter_at_line(line).unwrap();
+                let line_end = obj.iter_at_line(line + 1).unwrap_or_else(|| obj.end_iter());
+
+                match parse_list(obj.text(&line_start, &line_end, false).as_str()) {
+                    ListType::None => (),
+                    ListType::Unordered {
+                        indent,
+                        tabs,
+                        marker: m,
+                    } => {
+                        if tabs {
+                            self.parent_insert_text(iter, &format!("\n{:\t>1$}{m} ", "", indent));
+                        } else {
+                            self.parent_insert_text(iter, &format!("\n{: >1$}{m} ", "", indent));
+                        }
+                        return;
+                    }
+                    ListType::Task {
+                        indent: i,
+                        tabs,
+                        marker: m,
+                    } => {
+                        if tabs {
+                            self.parent_insert_text(iter, &format!("\n{:\t>1$}{m} [ ] ", "", i));
+                        } else {
+                            self.parent_insert_text(iter, &format!("\n{: >1$}{m} [ ] ", "", i));
+                        }
+                        return;
+                    }
+                }
+            }
+
+            if let (Some(auto_formatted_text), cursor_move) =
+                self.process_auto_close_formatting(iter, new_text.to_owned())
+            {
+                self.parent_insert_text(iter, &auto_formatted_text);
+                let mut cursor = obj.iter_at_offset(obj.cursor_position());
+                cursor.forward_cursor_positions(cursor_move);
+                obj.place_cursor(&cursor);
+                return;
+            }
+
+            self.parent_insert_text(iter, new_text);
         }
 
         fn paste_done(&self, clipboard: &gtk::gdk::Clipboard) {
@@ -88,15 +140,8 @@ mod imp {
         pub(super) fn process_auto_close_formatting(
             &self,
             iter: &mut TextIter,
-            process_text: Option<String>,
+            process_text: String,
         ) -> (Option<String>, i32) {
-            if self.paste_in_progress.get() || self.formatting_action_in_progress.get() {
-                return (process_text, 0);
-            }
-            let Some(process_text) = process_text else {
-                return (process_text, 0);
-            };
-
             let obj = self.obj();
 
             let lookahead = obj
@@ -183,6 +228,20 @@ mod imp {
             }
 
             (Some(process_text), 0)
+        }
+
+        fn is_cursor_at_line_end(&self) -> bool {
+            let obj = self.obj();
+            obj.iter_at_offset(obj.cursor_position()).ends_line()
+        }
+
+        fn is_cursor_at_line_end_ignore_whitespace(&self) -> bool {
+            let obj = self.obj();
+            let start = obj.iter_at_offset(obj.cursor_position());
+            let mut end = start;
+            end.forward_to_line_end();
+
+            obj.text(&start, &end, false).trim().is_empty()
         }
 
         fn lookback(&self, iter: &TextIter) -> Option<char> {
@@ -295,6 +354,67 @@ mod imp {
             drop(toc);
             obj.emit_by_name::<()>("toc-changed", &[]);
         }
+    }
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub(super) enum ListType {
+        None,
+        Unordered {
+            indent: usize,
+            tabs: bool,
+            marker: char,
+        },
+        Task {
+            indent: usize,
+            tabs: bool,
+            marker: char,
+        },
+    }
+
+    pub(super) fn parse_list(line: &str) -> ListType {
+        let num_tabs = line.chars().take_while(|&c| c == '\t').count();
+        let tabs = num_tabs > 0;
+        let indent = if tabs {
+            num_tabs
+        } else {
+            line.chars().take_while(|&c| c == ' ').count()
+        };
+        let after_indent = &line[indent..];
+
+        if after_indent == "-" || after_indent == "*" || after_indent == "+" {
+            return ListType::Unordered {
+                indent,
+                tabs,
+                marker: after_indent.chars().next().unwrap(),
+            };
+        }
+
+        if after_indent.starts_with("- ")
+            || after_indent.starts_with("* ")
+            || after_indent.starts_with("+ ")
+        {
+            let marker = after_indent.chars().next().unwrap();
+
+            let after_list = &line[(indent + 2)..];
+            if after_list.starts_with("[ ]")
+                || after_list.starts_with("[x]")
+                || after_list.starts_with("[X]")
+            {
+                return ListType::Task {
+                    indent,
+                    tabs,
+                    marker,
+                };
+            }
+
+            return ListType::Unordered {
+                indent,
+                tabs,
+                marker,
+            };
+        }
+
+        ListType::None
     }
 
     /// Start must be trimmed
@@ -477,11 +597,163 @@ impl MarkdownBuffer {
     }
 }
 
-/*
 #[cfg(test)]
 mod tests {
     use super::*;
+    use imp::ListType;
 
+    #[test]
+    fn test_parse_list() {
+        assert_eq!(
+            imp::parse_list("-"),
+            ListType::Unordered {
+                indent: 0,
+                tabs: false,
+                marker: '-'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("*"),
+            ListType::Unordered {
+                indent: 0,
+                tabs: false,
+                marker: '*'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("+"),
+            ListType::Unordered {
+                indent: 0,
+                tabs: false,
+                marker: '+'
+            }
+        );
+        assert_eq!(
+            imp::parse_list(" -"),
+            ListType::Unordered {
+                indent: 1,
+                tabs: false,
+                marker: '-'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("  *"),
+            ListType::Unordered {
+                indent: 2,
+                tabs: false,
+                marker: '*'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("   +"),
+            ListType::Unordered {
+                indent: 3,
+                tabs: false,
+                marker: '+'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("    +"),
+            ListType::Unordered {
+                indent: 4,
+                tabs: false,
+                marker: '+'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("          +"),
+            ListType::Unordered {
+                indent: 10,
+                tabs: false,
+                marker: '+'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("          + "),
+            ListType::Unordered {
+                indent: 10,
+                tabs: false,
+                marker: '+'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("          +     \t"),
+            ListType::Unordered {
+                indent: 10,
+                tabs: false,
+                marker: '+'
+            }
+        );
+        assert_eq!(imp::parse_list(" \t+"), ListType::None);
+        assert_eq!(imp::parse_list("\t +"), ListType::None);
+        assert_eq!(
+            imp::parse_list("\t-"),
+            ListType::Unordered {
+                indent: 1,
+                tabs: true,
+                marker: '-'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("\t\t*"),
+            ListType::Unordered {
+                indent: 2,
+                tabs: true,
+                marker: '*'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("\t\t\t* [x]"),
+            ListType::Task {
+                indent: 3,
+                tabs: true,
+                marker: '*'
+            }
+        );
+        assert_eq!(imp::parse_list("\t\t\t*[x]"), ListType::None);
+        assert_eq!(
+            imp::parse_list("\t\t\t* [*]"),
+            ListType::Unordered {
+                indent: 3,
+                tabs: true,
+                marker: '*'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("\t\t\t+  [x]"),
+            ListType::Unordered {
+                indent: 3,
+                tabs: true,
+                marker: '+'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("\t\t\t* [x]  "),
+            ListType::Task {
+                indent: 3,
+                tabs: true,
+                marker: '*'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("\t\t\t- [x] task text"),
+            ListType::Task {
+                indent: 3,
+                tabs: true,
+                marker: '-'
+            }
+        );
+        assert_eq!(
+            imp::parse_list("\t\t\t* [x]    task text"),
+            ListType::Task {
+                indent: 3,
+                tabs: true,
+                marker: '*'
+            }
+        );
+    }
+}
+/*
     macro_rules! init {
         () => {
             if !gtk::is_initialized() {
